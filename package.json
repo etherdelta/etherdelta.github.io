@@ -1,0 +1,28 @@
+{
+  "name": "EtherDelta",
+  "version": "1.0.0",
+  "description": "EtherDelta is a decentralized trading platform for Ethereum tokens.",
+  "main": "index.html",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/etherdelta/etherdelta.github.io.git"
+  },
+  "author": "etherdollar",
+  "license": "MIT",
+  "homepage": "https://etherdollar.github.io",
+  "dependencies": {
+    "request": "^2.72.0",
+    "async": "^2.0.0-rc.5",
+    "gaussian": "^1.1.0",
+    "web3": "^0.17.0-alpha",
+    "assert": "^1.4.1",
+    "ethereumjs-testrpc": "^1.2.1",
+    "fs": "^0.0.2",
+    "js-sha256": "^0.3.0",
+    "ethereumjs-tx": "^1.1.1",
+    "keythereum": "^0.2.6",
+    "ethereumjs-util": "^4.4.1"
+  },
+  "width": 800,
+  "height": 600
+}

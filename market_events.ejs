@@ -1,0 +1,90 @@
+<div class="box-container">
+  <div class="row">
+    <div class="col-xs-6">
+      <h3>Offers</h3>
+      <div class="scroll-container" style="height: 300px;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Price (<%= selectedToken.name+'/'+selectedBase.name %>)</th>
+              <th><%= selectedToken.name %></th>
+              <th><%= selectedBase.name %></th>
+              <th>Buy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% sell_orders.forEach(function(order){ %>
+            <tr>
+              <td><%= order.price.toNumber().toFixed(3) %></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume)) %></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber()) %></td>
+              <td>
+                <button type="button" class="btn btn-primary btn-xs" style="width:50px;" data-toggle="modal" data-target="#buy_cross_modal" data-order='<%= JSON.stringify(order) %>'>Buy</button>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <h3>Bids</h3>
+      <div class="scroll-container" style="height: 300px;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Price (<%= selectedToken.name+'/'+selectedBase.name %>)</th>
+              <th><%= selectedToken.name %></th>
+              <th><%= selectedBase.name %></th>
+              <th>Sell</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% buy_orders.forEach(function(order){ %>
+            <tr>
+              <td><%= order.price.toNumber().toFixed(3) %></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume)) %></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber()) %></td>
+              <td>
+                <button type="button" class="btn btn-primary btn-xs" style="width:50px;" data-toggle="modal" data-target="#sell_cross_modal" data-order='<%= JSON.stringify(order) %>'>Sell</button>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="box-container">
+  <div class="scroll-container" style="height: 300px;">
+    <h3>Trades</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Block</th>
+          <th>Type</th>
+          <th>Price (<%= selectedToken.name+'/'+selectedBase.name %>)</th>
+          <th><%= selectedToken.name %></th>
+          <th><%= selectedBase.name %></th>
+          <th>Buyer</th>
+          <th>Seller</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% trades.forEach(function(trade){ %>
+          <tr>
+            <td><%= trade.blockNumber %> <a href="<%= trade.tx_link %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+            <td><%= trade.amount>0 ? 'Buy' : 'Sell' %></td>
+            <td><%= trade.price.toNumber().toFixed(3) %></td>
+            <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)) %></td>
+            <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price) %></td>
+            <td><%= trade.buyer.substring(0,12) %>...</td>
+            <td><%= trade.seller.substring(0,12) %>...</td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>

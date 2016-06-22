@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="favicon.ico">
+    <link href="//getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <title>EtherDelta</title>
+  </head>
+
+  <body>
+
+    <div id="family">
+      <div class="inside">
+        <button type="button" class="btn btn-default btn-xs"><a href="https://etherboost.github.io"><img src="//etherboost.github.io/images/logo.svg" style="height: 25px;" /> The Etherboost Family</a></button>
+        <button type="button" class="btn btn-default btn-xs"><a href="https://etherdelta.github.io"><img src="//etherboost.github.io/images/etherdelta_logo.svg" style="height: 25px;" /> EtherDelta &#8212; decentralized token exchange</a></button>
+        <button type="button" class="btn btn-default btn-xs"><a href="https://ethereumdollar.github.io"><img src="//etherboost.github.io/images/ethereumdollar_logo.svg" style="height: 25px;" /> EthereumDollar &#8212; stable dollar token</a></button>
+        <button type="button" class="btn btn-default btn-xs"><a href="https://etheropt.github.io"><img src="//etherboost.github.io/images/etheropt_logo.svg" style="height: 25px;" /> Etheropt &#8212; decentralized options exchange</a></button>
+      </div>
+    </div>
+
+    <div id="title">
+      <img src="title.png" />
+    </div>
+
+    <div id="description">
+      EtherDelta is a decentralized trading platform for Ethereum tokens.
+    </div>
+
+    <div id="page">
+      <div id="content">
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">
+                <img src="/logo.png" style="height: 100%;" />
+              </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li class="dropdown" id="tokens">
+                </li>
+                <li class="dropdown" id="bases">
+                </li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" id="addresses">
+                </li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+
+        <div id="market_form"></div>
+
+        <div id="market_events"></div>
+
+        <div class="box-container padding-top">
+          <div id="notifications-container" class="scroll-container">
+            <button type="button" class="btn btn-default btn-xs" id="clear-log" style="float: right;">Clear log</button>
+            <div id="notifications"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+      <div id="connection">
+      </div>
+    </div>
+
+    <div id="loading">
+      <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
+    </div>
+
+    <!-- Address -->
+    <div class="modal fade" id="address_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Add account</h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="address_addr">Address</label>
+                <input type="text" class="form-control" id="address_addr" placeholder="Address (0x.....)" />
+              </div>
+              <div id="pk_div">
+                <div class="form-group">
+                  <label for="address_addr">Private key</label>
+                  <input type="text" class="form-control" id="address_pk" placeholder="Private key (0x.....)" />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="address_submit">Add account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buy -->
+    <div class="modal fade" id="buy_cross_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Buy</h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="buy_cross_desc">Order</label>
+                <div id="buy_cross_desc"></div>
+              </div>
+              <div class="form-group">
+                <label for="buy_cross_amount">Amount</label>
+                <input type="text" class="form-control" id="buy_cross_amount" placeholder="Amount" />
+              </div>
+            </form>
+          </div>
+          <input type="hidden" id="buy_cross_order" />
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="buy_cross_submit">Buy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sell -->
+    <div class="modal fade" id="sell_cross_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Sell</h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="sell_cross_desc">Order</label>
+                <div id="sell_cross_desc"></div>
+              </div>
+              <div class="form-group">
+                <label for="sell_cross_amount">Amount</label>
+                <input type="text" class="form-control" id="sell_cross_amount" placeholder="Amount" />
+              </div>
+            </form>
+          </div>
+          <input type="hidden" id="sell_cross_order" />
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="sell_cross_submit">Sell</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="//code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/sticky-table-headers/0.1.19/js/jquery.stickytableheaders.min.js" type="text/javascript"></script>
+    <script src="ejs_production.js" type="text/javascript"></script>
+    <script src="bundle.js" type="text/javascript"></script>
+    <script src="script.js" type="text/javascript"></script>
+  </body>
+</html>
