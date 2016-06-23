@@ -1,7 +1,7 @@
 var config = {};
 
 config.home_url = 'https://etherdelta.github.io';
-config.home_url = 'http://localhost:8080';
+// config.home_url = 'http://localhost:8080';
 config.contract_etherdelta = 'etherdelta.sol';
 config.contract_token = 'reservetoken.sol';
 config.contract_etherdelta_addr = '0xffb1d106ad0c25b49275a1a1ee8330a4acab11d3';

@@ -7,9 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/etherdelta/etherdelta.github.io.git"
   },
-  "author": "etherdollar",
+  "author": "etherdelta",
   "license": "MIT",
-  "homepage": "https://etherdollar.github.io",
+  "homepage": "https://etherdelta.github.io",
   "dependencies": {
     "request": "^2.72.0",
     "async": "^2.0.0-rc.5",
