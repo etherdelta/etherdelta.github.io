@@ -32,7 +32,7 @@
       if (code) {
         $.ajax({
           url: gitterHost+'/login/oauth/token?client_id='+clientId+'&client_secret='+clientSecret+'&code='+code+'&redirect_uri='+redirectURI+'&grant_type=authorization_code',
-          type: 'GET',
+          type: 'POST',
           dataType: 'json',
           success: function(result) {
             console.log(result);
