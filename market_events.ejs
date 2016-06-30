@@ -13,7 +13,7 @@
             </tr>
           </thead>
           <tbody>
-            <% sell_orders.forEach(function(order){ %>
+            <% sellOrders.forEach(function(order){ %>
             <tr>
               <td><%= order.price.toNumber().toFixed(3) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume)) %></td>
@@ -40,7 +40,7 @@
             </tr>
           </thead>
           <tbody>
-            <% buy_orders.forEach(function(order){ %>
+            <% buyOrders.forEach(function(order){ %>
             <tr>
               <td><%= order.price.toNumber().toFixed(3) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume)) %></td>
@@ -75,7 +75,7 @@
       <tbody>
         <% trades.forEach(function(trade){ %>
           <tr>
-            <td><%= trade.blockNumber %> <a href="<%= trade.tx_link %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+            <td><%= trade.blockNumber %> <a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
             <td><%= trade.amount>0 ? 'Buy' : 'Sell' %></td>
             <td><%= trade.price.toNumber().toFixed(3) %></td>
             <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)) %></td>

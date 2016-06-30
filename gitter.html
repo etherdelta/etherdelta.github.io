@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="favicon.ico">
+    <title>Gitter</title>
+  </head>
+
+  <body>
+
+    <script type="text/javascript">
+    var gitterHost = 'https://gitter.im';
+    var clientId = '44215f8a0d8ebad80ca99d16f6cc0d860959389d';
+    var clientSecret = '80bea00809f19d201e53fb9280b2294179706a53';
+    var redirectURI = 'https://etherdelta.github.io/gitter.html';
+
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    $(document).ready(function() {
+      var code = getParameterByName('code');
+      if (code) {
+        $.ajax({
+          url: gitterHost+'/login/oauth/token?client_id='+clientId+'&client_secret='+clientSecret+'&code='+code+'&redirect_uri='+redirectURI+'&grant_type=authorization_code',
+          type: 'GET',
+          dataType: 'json',
+          success: function(result) {
+            console.log(result);
+            console.log(result.access_token);
+          },
+          error: function() {
+            console.log('Error');
+          },
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader('Accept', 'application/json');
+          }
+        });
+      }
+    });
+    </script>
+
+    <script src="//code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+
+  </body>
+</html>

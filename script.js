@@ -2,7 +2,7 @@ $(function () {
   $('body').on('click', '#address_submit', function (e) {
     e.preventDefault();
     $('#address_modal').modal('hide');
-    bundle.Main.addAddress($('#address_addr').val(), $('#address_pk').val());
+    bundle.Main.addAccount($('#address_addr').val(), $('#address_pk').val());
   });
 });
 $(function() {

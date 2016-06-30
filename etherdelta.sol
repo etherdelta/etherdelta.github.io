@@ -96,10 +96,9 @@ contract ReserveToken is StandardToken {
         totalSupply += amount;
     }
     function destroy(address account, uint amount) onlyMinter {
-        if (balances[account]>=amount) {
-            balances[account] -= amount;
-            totalSupply -= amount;
-        }
+        if (balances[account] < amount) throw;
+        balances[account] -= amount;
+        totalSupply -= amount;
     }
 }
 
@@ -136,7 +135,7 @@ contract EtherDelta {
     if (msg.value>0) throw;
     if (tokens[0][msg.sender] < amount) throw;
     tokens[0][msg.sender] -= amount;
-    msg.sender.call.value(amount)();
+    if (!msg.sender.call.value(amount)()) throw;
     Withdraw(0, msg.sender, amount, tokens[0][msg.sender]);
   }
 
