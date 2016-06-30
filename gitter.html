@@ -14,8 +14,10 @@
     <script type="text/javascript">
     var gitterHost = 'https://api.gitter.im';
     var token = '7e7772f3f3b2b715122f0d1789cf173ef49238da';
+    var roomID = '57756375c2f0db084a20cf77';
 
-    var url = gitterHost + '/v1/rooms?access_token='+token;
+https://api.gitter.im/v1/rooms/:roomId/chatMessages?access_token=7e7772f3f3b2b715122f0d1789cf173ef49238da
+    var url = gitterHost + '/v1/rooms/'+roomID+'/chatMessages?access_token='+token;
     $.ajax({
       url: url,
       type: 'GET',
