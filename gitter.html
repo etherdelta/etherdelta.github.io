@@ -30,6 +30,7 @@
     $(document).ready(function() {
       var code = getParameterByName('code');
       if (code) {
+        document.domain = 'gitter.im';
         $.ajax({
           url: gitterHost+'/login/oauth/token',
           type: 'POST',
