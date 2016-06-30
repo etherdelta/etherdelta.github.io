@@ -31,12 +31,13 @@
       var code = getParameterByName('code');
       if (code) {
         $.ajax({
-          url: gitterHost+'/login/oauth/token?client_id='+clientId+'&client_secret='+clientSecret+'&code='+code+'&redirect_uri='+redirectURI+'&grant_type=authorization_code',
+          url: gitterHost+'/login/oauth/token',
           type: 'POST',
+          data: {client_id: clientId, client_secret: clientSecret, code: code, redirect_uri: redirectURI, grant_type: 'authorization_code'},
           dataType: 'json',
-          success: function(result) {
-            console.log(result);
-            console.log(result.access_token);
+          success: function(data) {
+            console.log(data);
+            console.log(data.access_token);
           },
           error: function() {
             console.log('Error');
