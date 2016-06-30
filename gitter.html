@@ -15,7 +15,7 @@
     var gitterHost = 'https://api.gitter.im';
     var token = '7e7772f3f3b2b715122f0d1789cf173ef49238da';
 
-    var url = gitterHost + '/v1/rooms';
+    var url = gitterHost + '/v1/rooms?access_token='+token;
     $.ajax({
       url: url,
       type: 'GET',
@@ -26,10 +26,6 @@
       },
       error: function() {
         console.log('Error');
-      },
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader('Accept', 'application/json');
-        xhr.setRequestHeader('Authorization', 'Bearer '+token);
       }
     });
     </script>
