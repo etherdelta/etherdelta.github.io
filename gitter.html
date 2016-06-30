@@ -12,41 +12,24 @@
   <body>
 
     <script type="text/javascript">
-    var gitterHost = 'https://gitter.im';
-    var clientId = '44215f8a0d8ebad80ca99d16f6cc0d860959389d';
-    var clientSecret = '80bea00809f19d201e53fb9280b2294179706a53';
-    var redirectURI = 'https://etherdelta.github.io/gitter.html';
+    var gitterHost = 'https://api.gitter.im';
+    var token = '7e7772f3f3b2b715122f0d1789cf173ef49238da';
 
-    function getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-
-    $(document).ready(function() {
-      var code = getParameterByName('code');
-      if (code) {
-        document.domain = 'gitter.im';
-        $.ajax({
-          url: gitterHost+'/login/oauth/token',
-          type: 'POST',
-          data: {client_id: clientId, client_secret: clientSecret, code: code, redirect_uri: redirectURI, grant_type: 'authorization_code'},
-          dataType: 'json',
-          success: function(data) {
-            console.log(data);
-            console.log(data.access_token);
-          },
-          error: function() {
-            console.log('Error');
-          },
-          beforeSend: function(xhr) {
-            xhr.setRequestHeader('Accept', 'application/json');
-          }
-        });
+    var url = gitterHost + '/v1/rooms';
+    $.ajax({
+      url: url,
+      type: 'GET',
+      // data: {client_id: clientId, client_secret: clientSecret, code: code, redirect_uri: redirectURI, grant_type: 'authorization_code'},
+      // dataType: 'json',
+      success: function(data) {
+        console.log(data);
+      },
+      error: function() {
+        console.log('Error');
+      },
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.setRequestHeader('Authorization', 'Bearer '+token);
       }
     });
     </script>
