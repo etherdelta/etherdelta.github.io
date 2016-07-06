@@ -123,8 +123,8 @@ contract EtherDelta {
   //ether balances are held in the token=0 account
   mapping (bytes32 => uint) orderFills;
   address public feeAccount;
-  uint public feeMake; //percentage times 1000000000000000000
-  uint public feeTake; //percentage times 1000000000000000000
+  uint public feeMake; //percentage times (1 ether)
+  uint public feeTake; //percentage times (1 ether)
 
   event Order(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, address user, uint8 v, bytes32 r, bytes32 s);
   event Trade(address tokenGet, uint amountGet, address tokenGive, uint amountGive, address get, address give);
@@ -191,11 +191,11 @@ contract EtherDelta {
       tokens[tokenGive][user] >= amountGive * amount / amountGet
     )) throw;
     tokens[tokenGet][msg.sender] -= amount;
-    tokens[tokenGet][user] += amount * (1000000000000000000 - feeMake) / 1000000000000000000;
-    tokens[tokenGet][feeAccount] += amount * feeMake / 1000000000000000000;
+    tokens[tokenGet][user] += amount * ((1 ether) - feeMake) / (1 ether);
+    tokens[tokenGet][feeAccount] += amount * feeMake / (1 ether);
     tokens[tokenGive][user] -= amountGive * amount / amountGet;
-    tokens[tokenGive][msg.sender] += (1000000000000000000 - feeTake) * amountGive * amount / amountGet / 1000000000000000000;
-    tokens[tokenGive][feeAccount] += feeTake * amountGive * amount / amountGet / 1000000000000000000;
+    tokens[tokenGive][msg.sender] += ((1 ether) - feeTake) * amountGive * amount / amountGet / (1 ether);
+    tokens[tokenGive][feeAccount] += feeTake * amountGive * amount / amountGet / (1 ether);
     orderFills[hash] += amount;
     Trade(tokenGet, amount, tokenGive, amountGive * amount / amountGet, user, msg.sender);
   }
