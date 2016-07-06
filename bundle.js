@@ -4,20 +4,37 @@ var Web3 = _dereq_('web3');
 var utility = _dereq_('./common/utility.js');
 var request = _dereq_('request');
 var sha256 = _dereq_('js-sha256').sha256;
+var BigNumber = _dereq_('bignumber.js');
 _dereq_('datejs');
 var async = (typeof(window) === 'undefined') ? _dereq_('async') : _dereq_('async/dist/async.min.js');
 
 function Main() {
 }
 Main.alertInfo = function(message) {
-  $('#notifications').prepend($('<p>' + message + '</p>').hide().fadeIn(2000));
   console.log(message);
+  alertify.message(message);
+}
+Main.alertDialog = function(message) {
+  console.log(message);
+  alertify.alert('Alert', message, function(){});
+}
+Main.alertWarning = function(message) {
+  console.log(message);
+  alertify.warning(message);
+}
+Main.alertError = function(message) {
+  console.log(message);
+  alertify.error(message);
+}
+Main.alertSuccess = function(message) {
+  console.log(message);
+  alertify.success(message);
 }
 Main.alertTxResult = function(err, result) {
   if (result.txHash) {
-    Main.alertInfo('You just created an Ethereum transaction. Track its progress here: <a href="http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+result.txHash+'" target="_blank">'+result.txHash+'</a>.');
+    Main.alertDialog('You just created an Ethereum transaction. Track its progress here: <a href="http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+result.txHash+'" target="_blank">'+result.txHash+'</a>.');
   } else {
-    Main.alertInfo('You tried to send an Ethereum transaction but there was an error: '+err);
+    Main.alertError('You tried to send an Ethereum transaction but there was an error: '+err);
   }
 }
 Main.enableTooltips = function() {
@@ -62,7 +79,9 @@ Main.logout = function() {
   pks = [config.ethAddrPrivateKey];
   selectedAccount = 0;
   nonce = undefined;
-  Main.displayMarket(function(){});
+  Main.displayMarket(function(){
+
+  });
   Main.refresh(function(){});
 }
 Main.createAccount = function() {
@@ -70,7 +89,7 @@ Main.createAccount = function() {
   var addr = newAccount.address;
   var pk = newAccount.privateKey;
   Main.addAccount(addr, pk);
-  Main.alertInfo('You just created an Ethereum account: '+addr+'.');
+  Main.alertDialog('You just created an Ethereum account: '+addr+'.');
 }
 Main.deleteAccount = function() {
   addrs.splice(selectedAccount, 1);
@@ -91,9 +110,9 @@ Main.addAccount = function(addr, pk) {
   if (pk.slice(0,2)=='0x') pk = pk.slice(2);
   addr = utility.toChecksumAddress(addr);
   if (pk!=undefined && pk!='' && !utility.verifyPrivateKey(addr, pk)) {
-    Main.alertInfo('For account '+addr+', the private key is invalid.');
+    Main.alertDialog('For account '+addr+', the private key is invalid.');
   } else if (!web3.isAddress(addr)) {
-    Main.alertInfo('The specified address, '+addr+', is invalid.');
+    Main.alertDialog('The specified address, '+addr+', is invalid.');
   } else {
     addrs.push(addr);
     pks.push(pk);
@@ -107,9 +126,9 @@ Main.showPrivateKey = function() {
   var addr = addrs[selectedAccount];
   var pk = pks[selectedAccount];
   if (pk==undefined || pk=='') {
-    Main.alertInfo('For account '+addr+', there is no private key available. You can still transact if you are connected to Geth and the account is unlocked.');
+    Main.alertDialog('For account '+addr+', there is no private key available. You can still transact if you are connected to Geth and the account is unlocked.');
   } else {
-    Main.alertInfo('For account '+addr+', the private key is '+pk+'.');
+    Main.alertDialog('For account '+addr+', the private key is '+pk+'.');
   }
 }
 Main.addressLink = function(address) {
@@ -153,56 +172,112 @@ Main.loadAccounts = function(callback) {
 Main.loadEvents = function(callback) {
   // var startBlock = blockNumber-5760;
   var startBlock = 0;
-  utility.blockNumber(web3, function(blockNumber) {
+  utility.blockNumber(web3, function(err, blockNumber) {
     utility.logs(web3, contractEtherDelta, config.contractEtherDeltaAddr, startBlock, 'latest', function(err, event) {
       event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
       eventsCache[event.transactionHash+event.logIndex] = event;
-      Main.displayEvents(function(){});
-      Main.displayBalances(function(){});
+      Main.displayEvents(function(){
+        Main.displayBalances(function(){
+          Main.displayMyEvents(function(){
+          });
+        });
+      });
     });
     callback();
   });
 }
+Main.displayMyEvents = function(callback) {
+  var myEvents = [];
+  var events = Object.values(eventsCache);
+  events.forEach(function(event){
+    if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr && (event.args.get.toLowerCase()==addrs[selectedAccount].toLowerCase() || event.args.give.toLowerCase()==addrs[selectedAccount].toLowerCase())) {
+      var trade;
+      if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
+        //sell
+        trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet), buyer: event.args.get, seller: event.args.give};
+      } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
+        //buy
+        trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive), buyer: event.args.give, seller: event.args.get};
+      }
+      if (trade) {
+        var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+        myEvents.push({trade: trade, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+      }
+    } else if (event.event=='Deposit' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
+      var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+      var deposit = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
+      myEvents.push({deposit: deposit, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+    } else if (event.event=='Withdraw' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
+      var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+      var withdraw = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
+      myEvents.push({withdraw: withdraw, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+    }
+  });
+  myEvents.sort(function(a,b){ return b.id - a.id });
+  //display the template
+  new EJS({url: config.homeURL+'/'+'my_events.ejs'}).update('my_events', {selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents});
+  $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
+  callback();
+}
 Main.displayEvents = function(callback) {
-  utility.blockNumber(web3, function(blockNumber) {
-    var events = Object.values(eventsCache);
-    //get the order book
-    async.reduce(events, [],
-      function(orders, event, callbackReduce) {
-        if (event.event=='Order' && event.address==config.contractEtherDeltaAddr) {
-          var order;
-          if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
-            //buy
-            order = {amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
-          } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
-            //sell
-            order = {amount: -event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
-          }
-          if (order) {
-            utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-              if (order.amount>=0) {
-                order.availableVolume = result;
-              } else {
-                order.availableVolume = result.div(order.price);
-              }
-              if (order.availableVolume>0) {
-                orders.push(order);
-              }
-              callbackReduce(null, orders);
-            });
-          } else {
-            callbackReduce(null, orders);
-          }
-        } else {
-          callbackReduce(null, orders);
+  utility.blockNumber(web3, function(err, blockNumber) {
+    var orders = [];
+    //get orders from gitter messages
+    var expectedKeys = JSON.stringify(['amountGet','amountGive','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
+    for(id in gitterMessagesCache) {
+      var message = gitterMessagesCache[id];
+      for (key in message) {
+        if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
+      }
+      if (typeof(message)=='object' && JSON.stringify(Object.keys(message).sort())==expectedKeys) {
+        var order;
+        if (message.tokenGet==selectedToken.addr && message.tokenGive==selectedBase.addr) {
+          //buy
+          order = {amount: message.amountGet, price: message.amountGive.div(message.amountGet), id: id, order: message};
+        } else if (message.tokenGet==selectedBase.addr && message.tokenGive==selectedToken.addr) {
+          //sell
+          order = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive), id: id, order: message};
         }
+        if (order) orders.push(order);
+      }
+    }
+    //get orders from events
+    var events = Object.values(eventsCache);
+    events.forEach(function(event){
+      if (event.event=='Order' && event.address==config.contractEtherDeltaAddr) {
+        var order;
+        if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
+          //buy
+          order = {amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
+        } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
+          //sell
+          order = {amount: -event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
+        }
+        if (order) orders.push(order);
+      }
+    });
+    //get available volumes
+    async.reduce(orders, [],
+      function(orders, order, callbackReduce) {
+        utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
+          if (order.amount>=0) {
+            order.availableVolume = result;
+          } else {
+            order.availableVolume = result.div(order.price);
+          }
+          if (order.availableVolume>0) {
+            orders.push(order);
+          }
+          callbackReduce(null, orders);
+        });
       },
       function(err, orders){
+        //final order filtering and sorting
         var buyOrders = orders.filter(function(x){return x.amount>0});
         var sellOrders = orders.filter(function(x){return x.amount<0});
         buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
         sellOrders.sort(function(a,b){ return a.price - b.price || a.id - b.id });
-        //now get the trade list
+        //get the trade list
         var trades = [];
         events.forEach(function(event){
           if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr) {
@@ -244,11 +319,27 @@ Main.selectBase = function(addr, name) {
   Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
+Main.otherToken = function(addr, name) {
+  if (addr.slice(0,2)!="0x") addr = '0x'+addr;
+  if (!name || name=='') name = addr.slice(3,6);
+  selectedToken = {addr: addr, name: name};
+  Main.refresh(function(){});
+  Main.displayMarket(function(){});
+}
+Main.otherBase = function(addr, name) {
+  if (addr.slice(0,2)!="0x") addr = '0x'+addr;
+  if (!name || name=='') name = addr.slice(3,6);
+  selectedBase = {addr: addr, name: name};
+  Main.refresh(function(){});
+  Main.displayMarket(function(){});
+}
 Main.displayMarket = function(callback) {
   new EJS({url: config.homeURL+'/'+'market_form.ejs'}).update('market_form', {selectedToken: selectedToken, selectedBase: selectedBase});
   Main.displayBalances(function(){
     Main.displayEvents(function(){
-      callback();
+      Main.displayMyEvents(function(){
+        callback();
+      });
     });
   });
 }
@@ -311,7 +402,7 @@ Main.withdraw = function(addr, amount) {
   }
 }
 Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
-  utility.blockNumber(web3, function(blockNumber) {
+  utility.blockNumber(web3, function(err, blockNumber) {
     var tokenGet = undefined;
     var tokenGive = undefined;
     var amountGet = undefined;
@@ -333,12 +424,20 @@ Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
     }
     var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
     var hash = sha256(new Buffer(condensed,'hex'));
-    utility.sign(web3, addrs[selectedAccount], hash, undefined, function(sig) {
-      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'order', [tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce, sig.v, sig.r, sig.s, {gas: 1000000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-        txHash = result.txHash;
-        nonce = result.nonce;
-        Main.alertTxResult(err, result);
-      });
+    utility.sign(web3, addrs[selectedAccount], hash, undefined, function(err, sig) {
+      if (err) {
+        Main.alertError('Could not sign order because of an error: '+err);
+      } else {
+        // Send order to Gitter channel:
+        var order = {tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
+        utility.postGitterMessage(JSON.stringify(order), function(err, result){
+          if (!err) {
+            Main.alertSuccess('You sent an order to the order book!');
+          } else {
+            Main.alertError('You tried sending an order to the order book but there was an error.');
+          }
+        });
+      }
     });
   });
 }
@@ -352,8 +451,20 @@ Main.trade = function(order, amount) {
         Main.alertTxResult(err, result);
       });
     } else {
-      Main.alertInfo("You tried placing an order, but the order failed. Either the order already traded or you or the counterparty do not have enough funds.");
+      Main.alertError("You tried placing an order, but the order failed. Either the order already traded or you or the counterparty do not have enough funds.");
     }
+  });
+}
+Main.getGitterMessages = function(callback) {
+  utility.getGitterMessages(gitterMessagesCache, function(err, result){
+    if (!err) {
+      gitterMessagesCache = result.gitterMessages;
+      if (result.newMessagesFound) {
+        Main.displayEvents(function(){
+        });
+      }
+    }
+    callback();
   });
 }
 Main.refresh = function(callback) {
@@ -362,11 +473,13 @@ Main.refresh = function(callback) {
     Main.createCookie("EtherDelta", JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
     Main.connectionTest();
     Main.loadAccounts(function(){
-      Main.loadTokensAndBases(function(){
-        $('#loading').hide();
-        refreshing = false;
-        lastRefresh = Date.now();
-        callback();
+      Main.getGitterMessages(function(){
+        Main.loadTokensAndBases(function(){
+          $('#loading').hide();
+          refreshing = false;
+          lastRefresh = Date.now();
+          callback();
+        });
       });
     });
   }
@@ -380,7 +493,9 @@ Main.init = function() {
   Main.displayMarket(function(){
     Main.loadEvents(function(){
       Main.displayEvents(function(){
-        mainLoop();
+        Main.displayMyEvents(function(){
+          mainLoop();
+        });
       });
     });
   });
@@ -410,6 +525,7 @@ var price = undefined;
 var priceUpdated = Date.now();
 var contractEtherDelta = undefined;
 var contractToken = undefined;
+var gitterMessagesCache = {};
 //web3
 var web3 = new Web3();
 web3.eth.defaultAccount = config.ethAddr;
@@ -427,7 +543,7 @@ utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaA
 module.exports = {Main: Main, utility: utility};
 
 }).call(this,_dereq_("buffer").Buffer)
-},{"./common/utility.js":2,"async":11,"async/dist/async.min.js":12,"buffer":359,"datejs":299,"js-sha256":144,"request":188,"web3":249}],2:[function(_dereq_,module,exports){
+},{"./common/utility.js":2,"async":11,"async/dist/async.min.js":12,"bignumber.js":16,"buffer":359,"datejs":299,"js-sha256":144,"request":188,"web3":249}],2:[function(_dereq_,module,exports){
 (function (global,Buffer){
 var config = (typeof(global.config) == 'undefined' && typeof(config) == 'undefined') ? _dereq_('../config.js') : global.config;
 var fs = _dereq_('fs');
@@ -711,7 +827,7 @@ function estimateGas(web3, contract, address, functionName, args, fromAddress, p
   if (args.length > inputTypes.length && utils.isObject(args[args.length-1])) {
       options = args[args.length-1];
   }
-  getNextNonce(web3, fromAddress, function(nextNonce){
+  getNextNonce(web3, fromAddress, function(err, nextNonce){
     if (nonce==undefined) {
       nonce = nextNonce;
     }
@@ -720,7 +836,7 @@ function estimateGas(web3, contract, address, functionName, args, fromAddress, p
     var typeName = inputTypes.join();
     options.data = '0x' + sha3(functionName+'('+typeName+')').slice(0, 8) + coder.encodeParams(inputTypes, args);
     var tx = new Tx(options);
-    signTx(web3, fromAddress, tx, privateKey, function(tx){
+    signTx(web3, fromAddress, tx, privateKey, function(err, tx){
       if (tx) {
         var serializedTx = tx.serialize().toString('hex');
         if (web3.currentProvider) {
@@ -1103,9 +1219,15 @@ function decToHex(dec, length) {
     // return convertBase((Math.pow(2, length) + decStr).toString(), 10, 16);
     return (new BigNumber(2)).pow(length).add(new BigNumber(dec)).toString(16);
   } else {
+    var result = null;
     try {
-      return convertBase(dec.toString(), 10, 16);
+      result = convertBase(dec.toString(), 10, 16);
     } catch (err) {
+      result = null;
+    }
+    if (result) {
+      return result;
+    } else {
       return (new BigNumber(dec)).toString(16);
     }
   }
@@ -1129,12 +1251,16 @@ function hexToDec(hexStr, length) { //length implies this is a two's complement 
 function pack(data, lengths) {
   packed = "";
   for (var i=0; i<lengths.length; i++) {
-    // if (typeof(data[i])=='string') {
-    //   if (data[i].substring(0,2)=='0x') data[i] = data[i].substring(2);
-    //   packed += data[i];
-    // } else {
-    packed += zeroPad(decToHex(data[i], lengths[i]), lengths[i]/4);
-    // }
+    if (typeof(data[i])=='string' && data[i].substring(0,2)=='0x') {
+      if (data[i].substring(0,2)=='0x') data[i] = data[i].substring(2);
+      packed += zeroPad(data[i], lengths[i]/4);
+    } else if (typeof(data[i])!='number' && /[a-f]/.test(data[i])) {
+      if (data[i].substring(0,2)=='0x') data[i] = data[i].substring(2);
+      packed += zeroPad(data[i], lengths[i]/4);
+    } else {
+      // packed += zeroPad(new BigNumber(data[i]).toString(16), lengths[i]/4);
+      packed += zeroPad(decToHex(data[i], lengths[i]), lengths[i]/4);
+    }
   }
   return packed;
 }
@@ -1213,6 +1339,62 @@ function multiplyByNumber(num, x, base) {
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function getGitterMessages(gitterMessages, callback) {
+  var numMessages = undefined;
+  var beforeId = undefined;
+  var messages = [];
+  var limit = 10;
+  var newMessagesFound = false;
+  async.until(
+    function () { return numMessages <= 0 || limit <= 0; },
+    function (callbackUntil) {
+      limit -= 1;
+      var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken+'&limit=50';
+      if (beforeId) url += '&beforeId='+beforeId;
+      request.get(url, function(err, httpResponse, body){
+        if (!err) {
+          var data = JSON.parse(body);
+          numMessages = data.length;
+          if (data.length>0) beforeId = data[0].id;
+          data.forEach(function(message){
+            if (gitterMessages[message.id]) {
+              numMessages = 0;
+            } else {
+              newMessagesFound = true;
+            }
+            try {
+              gitterMessages[message.id] = JSON.parse(message.text);
+            } catch (err) {
+            }
+          });
+          callbackUntil(null);
+        } else {
+          numMessages = 0;
+          callbackUntil(null);
+        }
+      });
+    },
+    function (err) {
+      if (err) {
+        callback(err, undefined);
+      } else {
+        callback(undefined, {gitterMessages: gitterMessages, newMessagesFound: newMessagesFound});
+      }
+    }
+  );
+}
+
+function postGitterMessage(message, callback) {
+  var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken;
+  request.post({url: url, form: {text: message}}, function(err, httpResponse, body){
+    if (!err) {
+      if (callback) callback(undefined, true);
+    } else {
+      if (callback) callback('Failure', false);
+    }
+  });
 }
 
 if (!Object.prototype.find) {
@@ -1338,6 +1520,8 @@ exports.ethToWei = ethToWei;
 exports.loadContract = loadContract;
 exports.deployContract = deployContract;
 exports.getRandomInt = getRandomInt;
+exports.getGitterMessages = getGitterMessages;
+exports.postGitterMessage = postGitterMessage;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer)
 },{"../config.js":3,"async":11,"async/dist/async.min.js":12,"bignumber.js":16,"buffer":359,"ethereumjs-tx":90,"ethereumjs-util":93,"fs":312,"keythereum":152,"request":188,"web3":249,"web3/lib/solidity/coder.js":256,"web3/lib/utils/sha3.js":268,"web3/lib/utils/utils.js":269,"web3/lib/web3/event.js":276,"web3/lib/web3/function.js":280}],3:[function(_dereq_,module,exports){
@@ -1347,7 +1531,7 @@ var config = {};
 config.homeURL = 'https://etherdelta.github.io';
 config.homeURL = 'http://localhost:8080';
 config.contractEtherDelta = 'etherdelta.sol';
-config.contractToken = 'reservetoken.sol';
+config.contractToken = 'token.sol';
 config.contractEtherDeltaAddr = '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d';
 config.ethTestnet = true;
 config.ethProvider = 'http://localhost:8545';
@@ -1359,6 +1543,9 @@ config.tokens = [
   {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD'},
   {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR'},
 ];
+config.gitterHost = 'https://api.gitter.im';
+config.gitterToken = '7e7772f3f3b2b715122f0d1789cf173ef49238da';
+config.gitterRoomID = '57756375c2f0db084a20cf77';
 
 try {
   global.config = config;

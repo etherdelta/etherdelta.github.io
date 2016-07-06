@@ -1,0 +1,44 @@
+<div class="box-container">
+  <div class="scroll-container" style="height: 300px;">
+    <h3>My transactions</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Block</th>
+          <th>Type</th>
+          <th>Amount</th>
+          <th>Price (<%= selectedToken.name+'/'+selectedBase.name %>)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% myEvents.forEach(function(event){ %>
+          <% if (event.trade) { %>
+            <% trade = event.trade %>
+            <tr>
+              <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+              <td><%= selectedAddr.toLowerCase()==trade.buyer.toLowerCase() ? 'Buy' : 'Sell' %></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)) %> <%= selectedToken.name %> (<%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price) %> <%= selectedBase.name %>)</td>
+              <td><%= trade.price.toNumber().toFixed(3) %></td>
+            </tr>
+          <% } else if (event.deposit) { %>
+            <% deposit = event.deposit %>
+            <tr>
+              <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+              <td>Deposit</td>
+              <td><%= bundle.utility.weiToEth(deposit.amount) %> <%= deposit.token.name %></td>
+              <td></td>
+            </tr>
+          <% } else if (event.withdraw) { %>
+            <% withdraw = event.withdraw %>
+            <tr>
+              <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+              <td>Withdraw</td>
+              <td><%= bundle.utility.weiToEth(withdraw.amount) %> <%= withdraw.token.name %></td>
+              <td></td>
+            </tr>
+          <% } %>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>

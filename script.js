@@ -82,3 +82,17 @@ $(function () {
     bundle.Main.trade(JSON.parse($('#sell_cross_order').val()), $('#sell_cross_amount').val());
   });
 });
+$(function () {
+  $('body').on('click', '#other_token_submit', function (e) {
+    e.preventDefault();
+    $('#other_token_modal').modal('hide');
+    bundle.Main.otherToken($('#other_token_addr').val(), $('#other_token_name').val());
+  });
+});
+$(function () {
+  $('body').on('click', '#other_base_submit', function (e) {
+    e.preventDefault();
+    $('#other_base_modal').modal('hide');
+    bundle.Main.otherBase($('#other_base_addr').val(), $('#other_base_name').val());
+  });
+});
