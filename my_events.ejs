@@ -1,6 +1,6 @@
 <div class="box-container">
-  <div class="scroll-container" style="height: 300px;">
-    <h3>My transactions</h3>
+  <h3>My transactions</h3>
+  <div class="scroll-container" style="height: 200px;">
     <table class="table">
       <thead>
         <tr>
@@ -17,7 +17,7 @@
             <tr>
               <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
               <td><%= selectedAddr.toLowerCase()==trade.buyer.toLowerCase() ? 'Buy' : 'Sell' %></td>
-              <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)) %> <%= selectedToken.name %> (<%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price) %> <%= selectedBase.name %>)</td>
+              <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %> <%= selectedToken.name %> (<%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price, bundle.Main.getDivisor(selectedBase)) %> <%= selectedBase.name %>)</td>
               <td><%= trade.price.toNumber().toFixed(3) %></td>
             </tr>
           <% } else if (event.deposit) { %>
@@ -25,7 +25,7 @@
             <tr>
               <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
               <td>Deposit</td>
-              <td><%= bundle.utility.weiToEth(deposit.amount) %> <%= deposit.token.name %></td>
+              <td><%= bundle.utility.weiToEth(deposit.amount, bundle.Main.getDivisor(deposit.token)) %> <%= deposit.token.name %></td>
               <td></td>
             </tr>
           <% } else if (event.withdraw) { %>
@@ -33,7 +33,7 @@
             <tr>
               <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
               <td>Withdraw</td>
-              <td><%= bundle.utility.weiToEth(withdraw.amount) %> <%= withdraw.token.name %></td>
+              <td><%= bundle.utility.weiToEth(withdraw.amount, bundle.Main.getDivisor(withdraw.token)) %> <%= withdraw.token.name %></td>
               <td></td>
             </tr>
           <% } %>

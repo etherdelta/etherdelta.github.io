@@ -5,17 +5,16 @@ config.homeURL = 'http://localhost:8080';
 config.contractEtherDelta = 'etherdelta.sol';
 config.contractToken = 'token.sol';
 config.contractReserveToken = 'reservetoken.sol';
-config.contractEtherDeltaAddr = '0xc6b330df38d6ef288c953f1f2835723531073ce2';
-config.ethTestnet = false;
+config.contractEtherDeltaAddr = '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d';
+config.ethTestnet = true;
 config.ethProvider = 'http://localhost:8545';
 config.ethGasPrice = 20000000000;
 config.ethAddr = '0x0000000000000000000000000000000000000000';
 config.ethAddrPrivateKey = '';
 config.tokens = [
   {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000},
-  {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 1000000000000000000},
-  {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', divisor: 1000000000000000000},
-  {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', divisor: 1000000000},
+  {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', divisor: 1000000000000000000},
+  {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR', divisor: 1000000000000000000},
 ];
 config.gitterHost = 'https://api.gitter.im';
 config.gitterStream = 'stream.gitter.im';

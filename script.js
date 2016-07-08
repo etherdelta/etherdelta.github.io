@@ -86,13 +86,13 @@ $(function () {
   $('body').on('click', '#other_token_submit', function (e) {
     e.preventDefault();
     $('#other_token_modal').modal('hide');
-    bundle.Main.otherToken($('#other_token_addr').val(), $('#other_token_name').val());
+    bundle.Main.otherToken($('#other_token_addr').val(), $('#other_token_name').val(), $('#other_token_divisor').val());
   });
 });
 $(function () {
   $('body').on('click', '#other_base_submit', function (e) {
     e.preventDefault();
     $('#other_base_modal').modal('hide');
-    bundle.Main.otherBase($('#other_base_addr').val(), $('#other_base_name').val());
+    bundle.Main.otherBase($('#other_base_addr').val(), $('#other_base_name').val(), $('#other_base_divisor').val());
   });
 });

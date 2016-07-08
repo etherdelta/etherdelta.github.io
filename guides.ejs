@@ -1,0 +1,43 @@
+<div class="box-container" style="padding-top: 20px;">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#fees" aria-controls="fees" role="tab" data-toggle="tab">Fees</a></li>
+    <li role="presentation"><a href="#connect-ethereum" aria-controls="connect-ethereum" role="tab" data-toggle="tab">Connect to Ethereum</a></li>
+    <li role="presentation"><a href="#create-account" aria-controls="create-account" role="tab" data-toggle="tab">Create/import an account</a></li>
+  </ul>
+  <div class="tab-content list-spacing padding">
+    <div role="tabpanel" class="tab-pane active" id="fees">
+      <h3>Fees</h3>
+      <table class="table">
+        <tr>
+          <th>Transaction</th>
+          <th>Fee</th>
+        </tr>
+        <tr>
+          <td>Add liquidity</td>
+          <td>0.0%</td>
+        </tr>
+        <tr>
+          <td>Take liquidity</td>
+          <td>0.3%</td>
+        </tr>
+      </table>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="connect-ethereum">
+      <h3>How to connect to Ethereum</h3>
+      <ol>
+        <li>The recommended way to connect to the Ethereum network is by running Geth on your computer. When you do this, EtherDelta will connect to Geth to query the smart contracts and send transactions on your behalf. If you do not wish to use Geth, EtherDelta will automatically use the Etherscan API to connect to the Ethereum network and send transactions on your behalf.</li>
+        <li>To run Geth locally in such a way that EtherDelta can connect to it, run Geth with these options: <code>geth --rpc --rpccorsdomain 'https://etherdelta.github.io' console</code>. Once the Geth console has started up, run <code>personal.unlockAccount("YOUR_ETHEREUM_ACCOUNT", "YOUR_PASSWORD")</code> to unlock your account so that EtherDelta can send transactions on your behalf.</li>
+        <li>Your current connection will be shown in the "Connection" tab, so you can tell if you are connected to Geth or the Etherscan proxy.</li>
+      </ol>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="create-account">
+      <h3>How to create/import an account</h3>
+      <ol>
+        <li>If you already have an account you want to use, you can import it. Click the account dropdown (upper right) and choose "Import account."</li>
+        <li>If you want to make a new Ethereum account to use with EtherDelta, click the account dropdown (upper right) and choose "Create account." If you prefer, you can also use <a href="http://www.myetherwallet.com/" target="_blank">MyEtherWallet</a> to create a new Ethereum account, then use "Import account" to add your new address and its private key.</li>
+        <li>Click the account dropdown and choose "Export private key." Write your private key down somewhere safe.</li>
+      </ol>
+    </div>
+    <p>Need help? Join the <a href="https://gitter.im/etherdelta/etherdelta.github.io" target="_blank"><img src="https://badges.gitter.im/etherdelta/etherdelta.github.io.svg" alt="Chat on Gitter" />.</a></p>
+  </div>
+</div>

@@ -8,7 +8,8 @@ var commandLineArgs = require('command-line-args');
 
 var cli = commandLineArgs([
 	{ name: 'help', alias: 'h', type: Boolean },
-	{ name: 'address', type: String }
+	{ name: 'address', type: String },
+	{ name: 'feeAddress', type: String }
 ]);
 var cliOptions = cli.parse()
 
@@ -19,7 +20,7 @@ if (cliOptions.help) {
 	web3.eth.defaultAccount = cliOptions.address;
 	web3.setProvider(new web3.providers.HttpProvider(config.ethProvider));
 
-  var feeAddress = cliOptions.address;
+  var feeAddress = cliOptions.feeAddress;
   var feeMake = new BigNumber(utility.ethToWei(0));
   var feeTake = new BigNumber(utility.ethToWei(0.003));
 	utility.deployContract(web3, config.contractEtherDelta, 'EtherDelta', [feeAddress, feeMake, feeTake], cliOptions.address, function(err, contractEtherDeltaAddr){

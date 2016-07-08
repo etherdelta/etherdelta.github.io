@@ -143,7 +143,7 @@ Main.connectionTest = function() {
   } catch(err) {
     web3.setProvider(undefined);
   }
-  new EJS({url: config.homeURL+'/'+'connection_description.ejs'}).update('connection', {connection: connection});
+  new EJS({url: config.homeURL+'/'+'connection_description.ejs'}).update('connection', {connection: connection, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
   return connection;
 }
 Main.loadAccounts = function(callback) {
@@ -192,10 +192,10 @@ Main.displayMyEvents = function(callback) {
       var trade;
       if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
         //sell
-        trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet), buyer: event.args.get, seller: event.args.give};
+        trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), buyer: event.args.get, seller: event.args.give};
       } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
         //buy
-        trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive), buyer: event.args.give, seller: event.args.get};
+        trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), buyer: event.args.give, seller: event.args.get};
       }
       if (trade) {
         var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
@@ -223,7 +223,7 @@ Main.displayEvents = function(callback) {
     //get orders from gitter messages
     var expectedKeys = JSON.stringify(['amountGet','amountGive','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
     for(id in gitterMessagesCache) {
-      var message = gitterMessagesCache[id];
+      var message = JSON.parse(JSON.stringify(gitterMessagesCache[id]));
       for (key in message) {
         if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
       }
@@ -231,12 +231,12 @@ Main.displayEvents = function(callback) {
         var order;
         if (message.tokenGet==selectedToken.addr && message.tokenGive==selectedBase.addr) {
           //buy
-          order = {amount: message.amountGet, price: message.amountGive.div(message.amountGet), id: id, order: message};
+          order = {amount: message.amountGet, price: message.amountGive.div(message.amountGet).mul(Main.getDivisor(message.tokenGet)).div(Main.getDivisor(message.tokenGive)), id: id, order: message};
         } else if (message.tokenGet==selectedBase.addr && message.tokenGive==selectedToken.addr) {
           //sell
-          order = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive), id: id, order: message};
+          order = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive).mul(Main.getDivisor(message.tokenGive)).div(Main.getDivisor(message.tokenGet)), id: id, order: message};
         }
-        if (order) orders.push(order);
+        if (order && !deadOrders[order.id]) orders.push(order);
       }
     }
     //get orders from events
@@ -246,12 +246,12 @@ Main.displayEvents = function(callback) {
         var order;
         if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
           //buy
-          order = {amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
+          order = {amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
         } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
           //sell
-          order = {amount: -event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
+          order = {amount: -event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
         }
-        if (order) orders.push(order);
+        if (order && !deadOrders[order.id]) orders.push(order);
       }
     });
     //get available volumes
@@ -265,6 +265,8 @@ Main.displayEvents = function(callback) {
           }
           if (order.availableVolume>0) {
             orders.push(order);
+          } else {
+            deadOrders[order.id] = true;
           }
           callbackReduce(null, orders);
         });
@@ -282,10 +284,10 @@ Main.displayEvents = function(callback) {
             var trade;
             if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
               //sell
-              trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give};
+              trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give};
             } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
               //buy
-              trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.give, seller: event.args.get};
+              trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.give, seller: event.args.get};
             }
             if (trade) {
               trade.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
@@ -295,7 +297,7 @@ Main.displayEvents = function(callback) {
         });
         trades.sort(function(a,b){ return b.id - a.id });
         //display the template
-        new EJS({url: config.homeURL+'/'+'market_events.ejs'}).update('market_events', {selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, trades: trades});
+        new EJS({url: config.homeURL+'/'+'market_events.ejs'}).update('market_events', {selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, trades: trades});
         $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
         callback();
       }
@@ -320,14 +322,16 @@ Main.selectBase = function(addr, name) {
 Main.otherToken = function(addr, name) {
   if (addr.slice(0,2)!="0x") addr = '0x'+addr;
   if (!name || name=='') name = addr.slice(3,6);
-  selectedToken = {addr: addr, name: name};
+  divisor = Number(divisor);
+  selectedToken = {addr: addr, name: name, divisor: divisor};
   Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
-Main.otherBase = function(addr, name) {
+Main.otherBase = function(addr, name, divisor) {
   if (addr.slice(0,2)!="0x") addr = '0x'+addr;
   if (!name || name=='') name = addr.slice(3,6);
-  selectedBase = {addr: addr, name: name};
+  divisor = Number(divisor);
+  selectedBase = {addr: addr, name: name, divisor: divisor};
   Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
@@ -362,8 +366,26 @@ Main.displayBalances = function(callback) {
     });
   });
 }
+Main.getDivisor = function(tokenOrAddress) {
+  var result = 1000000000000000000;
+  if (typeof(tokenOrAddress)=='object') {
+    result = tokenOrAddress.divisor;
+  } else {
+    if (selectedToken.addr==tokenOrAddress) {
+      result = selectedToken.divisor;
+    } else if (selectedBase.addr==tokenOrAddress) {
+      result = selectedBase.divisor;
+    } else {
+      var matchingTokens = config.tokens.filter(function(x){return x.addr==tokenOrAddress});
+      if (matchingTokens.length>0) {
+        result = matchingTokens[0].divisor;
+      }
+    }
+  }
+  return new BigNumber(result);
+}
 Main.deposit = function(addr, amount) {
-  amount = utility.ethToWei(amount);
+  amount = utility.ethToWei(amount, Main.getDivisor(addr));
   if (addr=='0x0000000000000000000000000000000000000000') {
     utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'deposit', [{gas: 150000, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
@@ -384,7 +406,7 @@ Main.deposit = function(addr, amount) {
   }
 }
 Main.withdraw = function(addr, amount) {
-  amount = utility.ethToWei(amount);
+  amount = utility.ethToWei(amount, Main.getDivisor(addr));
   if (addr=='0x0000000000000000000000000000000000000000') {
     utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: 150000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
@@ -410,13 +432,13 @@ Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
     if (direction=='buy') {
       tokenGet = tokenAddr;
       tokenGive = baseAddr;
-      amountGet = utility.ethToWei(amount);
-      amountGive = utility.ethToWei(amount * price);
+      amountGet = utility.ethToWei(amount, tokenAddr);
+      amountGive = utility.ethToWei(amount * price, baseAddr);
     } else if (direction=='sell') {
       tokenGet = baseAddr;
       tokenGive = tokenAddr;
-      amountGet = utility.ethToWei(amount * price);
-      amountGive = utility.ethToWei(amount);
+      amountGet = utility.ethToWei(amount * price, baseAddr);
+      amountGive = utility.ethToWei(amount, tokenAddr);
     } else {
       return;
     }
@@ -440,7 +462,7 @@ Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
   });
 }
 Main.trade = function(order, amount) {
-  amount = utility.ethToWei(amount);
+  amount = utility.ethToWei(amount, order.tokenGet);
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, addrs[selectedAccount]], function(err, result) {
     if (result) {
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: 1000000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
@@ -457,13 +479,17 @@ Main.getGitterMessages = function(callback) {
   utility.getGitterMessages(gitterMessagesCache, function(err, result){
     if (!err) {
       gitterMessagesCache = result.gitterMessages;
-      if (result.newMessagesFound) {
+      if (result.newMessagesFound>0) {
         Main.displayEvents(function(){
         });
       }
     }
     callback();
   });
+}
+Main.displayGuides = function(callback) {
+  new EJS({url: config.homeURL+'/'+'guides.ejs'}).update('guides', {});
+  callback();
 }
 Main.refresh = function(callback) {
   if (!refreshing || Date.now()-lastRefresh>60*1000) {
@@ -472,11 +498,13 @@ Main.refresh = function(callback) {
     Main.connectionTest();
     Main.loadAccounts(function(){
       Main.getGitterMessages(function(){
-        Main.loadTokensAndBases(function(){
-          $('#loading').hide();
-          refreshing = false;
-          lastRefresh = Date.now();
-          callback();
+        Main.displayEvents(function(){
+          Main.loadTokensAndBases(function(){
+            $('#loading').hide();
+            refreshing = false;
+            lastRefresh = Date.now();
+            callback();
+          });
         });
       });
     });
@@ -488,15 +516,17 @@ Main.init = function() {
       setTimeout(mainLoop, 10*1000);
     });
   }
-  Main.displayMarket(function(){
-    Main.loadEvents(function(){
-      Main.displayEvents(function(){
-        Main.displayMyEvents(function(){
-          mainLoop();
+  Main.displayGuides(function(){
+    Main.displayMarket(function(){
+      Main.loadEvents(function(){
+        Main.displayEvents(function(){
+          Main.displayMyEvents(function(){
+            mainLoop();
+          });
         });
       });
     });
-  });
+  })
 }
 
 //globals
@@ -524,6 +554,8 @@ var priceUpdated = Date.now();
 var contractEtherDelta = undefined;
 var contractToken = undefined;
 var gitterMessagesCache = {};
+var deadOrders = {};
+var defaultDivisor = new BigNumber(1000000000000000000);
 //web3
 var web3 = new Web3();
 web3.eth.defaultAccount = config.ethAddr;

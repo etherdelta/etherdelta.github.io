@@ -15,9 +15,9 @@
           <tbody>
             <% sellOrders.forEach(function(order){ %>
             <tr>
-              <td><%= order.price.toNumber().toFixed(3) %></td>
-              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume)) %></td>
-              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber()) %></td>
+              <td><span style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(3) %></span></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber(), bundle.Main.getDivisor(selectedBase)) %></td>
               <td>
                 <button type="button" class="btn btn-primary btn-xs" style="width:50px;" data-toggle="modal" data-target="#buy_cross_modal" data-order='<%= JSON.stringify(order) %>'>Buy</button>
               </td>
@@ -42,9 +42,9 @@
           <tbody>
             <% buyOrders.forEach(function(order){ %>
             <tr>
-              <td><%= order.price.toNumber().toFixed(3) %></td>
-              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume)) %></td>
-              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber()) %></td>
+              <td><span style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(3) %></span></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber(), bundle.Main.getDivisor(selectedBase)) %></td>
               <td>
                 <button type="button" class="btn btn-primary btn-xs" style="width:50px;" data-toggle="modal" data-target="#sell_cross_modal" data-order='<%= JSON.stringify(order) %>'>Sell</button>
               </td>
@@ -58,8 +58,8 @@
 </div>
 
 <div class="box-container">
+  <h3>Trades</h3>
   <div class="scroll-container" style="height: 300px;">
-    <h3>Trades</h3>
     <table class="table">
       <thead>
         <tr>
@@ -78,8 +78,8 @@
             <td><%= trade.blockNumber %> <a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
             <td><%= trade.amount>0 ? 'Buy' : 'Sell' %></td>
             <td><%= trade.price.toNumber().toFixed(3) %></td>
-            <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)) %></td>
-            <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price) %></td>
+            <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %></td>
+            <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price, bundle.Main.getDivisor(selectedBase)) %></td>
             <td><%= trade.buyer.substring(0,12) %>...</td>
             <td><%= trade.seller.substring(0,12) %>...</td>
           </tr>

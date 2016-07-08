@@ -1,3 +1,5 @@
+//last compiled with v0.3.5-2016-07-01-48238c9
+
 contract Token {
 
     /// @return total amount of tokens
