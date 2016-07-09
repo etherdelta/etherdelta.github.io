@@ -370,17 +370,17 @@ Main.displayBalances = function(callback) {
 }
 Main.getDivisor = function(tokenOrAddress) {
   var result = 1000000000000000000;
-  if (typeof(tokenOrAddress)=='object') {
+  if (typeof(tokenOrAddress)=='object' && tokenOrAddress.divisor) {
     result = tokenOrAddress.divisor;
   } else {
-    if (selectedToken.addr==tokenOrAddress) {
-      result = selectedToken.divisor;
-    } else if (selectedBase.addr==tokenOrAddress) {
-      result = selectedBase.divisor;
+    var matchingTokens = config.tokens.filter(function(x){return x.addr==tokenOrAddress});
+    if (matchingTokens.length>0) {
+      result = matchingTokens[0].divisor;
     } else {
-      var matchingTokens = config.tokens.filter(function(x){return x.addr==tokenOrAddress});
-      if (matchingTokens.length>0) {
-        result = matchingTokens[0].divisor;
+      if (selectedToken.addr==tokenOrAddress) {
+        result = selectedToken.divisor;
+      } else if (selectedBase.addr==tokenOrAddress) {
+        result = selectedBase.divisor;
       }
     }
   }
@@ -552,8 +552,8 @@ if (cookie) {
   addrs = cookie["addrs"];
   pks = cookie["pks"];
   selectedAccount = cookie["selectedAccount"];
-  selectedToken = cookie["selectedToken"];
-  selectedBase = cookie["selectedBase"];
+  if (selectedToken.divisor) selectedToken = cookie["selectedToken"];
+  if (selectedBase.divisor) selectedBase = cookie["selectedBase"];
 }
 var connection = undefined;
 var nonce = undefined;
