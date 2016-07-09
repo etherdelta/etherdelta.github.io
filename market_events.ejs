@@ -16,8 +16,8 @@
             <% sellOrders.forEach(function(order){ %>
             <tr>
               <td><span style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(3) %></span></td>
-              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %></td>
-              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedBase)) %></td>
+              <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedToken)/bundle.Main.getDivisor(selectedBase), bundle.Main.getDivisor(selectedToken)) %></td>
               <td>
                 <button type="button" class="btn btn-primary btn-xs" style="width:50px;" data-toggle="modal" data-target="#buy_cross_modal" data-order='<%= JSON.stringify(order) %>'>Buy</button>
               </td>
