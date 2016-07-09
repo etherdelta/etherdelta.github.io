@@ -552,8 +552,8 @@ if (cookie) {
   addrs = cookie["addrs"];
   pks = cookie["pks"];
   selectedAccount = cookie["selectedAccount"];
-  if (selectedToken.divisor) selectedToken = cookie["selectedToken"];
-  if (selectedBase.divisor) selectedBase = cookie["selectedBase"];
+  if (cookie["selectedToken"].divisor) selectedToken = cookie["selectedToken"];
+  if (cookie["selectedBase"].divisor) selectedBase = cookie["selectedBase"];
 }
 var connection = undefined;
 var nonce = undefined;
