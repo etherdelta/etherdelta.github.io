@@ -1,7 +1,7 @@
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= selectedBase.name %> <span class="caret"></span></a>
 <ul class="dropdown-menu">
   <% tokens.forEach(function(token, i, array) { %>
-    <li><a href="#" onclick="bundle.Main.selectBase('<%= token.addr %>','<%= token.name %>');"><%= token.name %></a></li>
+    <li><a href="#" onclick="bundle.Main.selectBase('<%= token.addr %>','<%= token.name %>','<%= token.divisor %>');"><%= token.name %></a></li>
   <% }); %>
   <li role="separator" class="divider"></li>
   <li><a href="#" data-toggle="modal" data-target="#other_base_modal">Other</a></li>

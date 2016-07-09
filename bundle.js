@@ -311,13 +311,15 @@ Main.loadTokensAndBases = function(callback) {
   new EJS({url: config.homeURL+'/'+'bases.ejs'}).update('bases', {tokens: config.tokens, selectedBase: selectedBase});
   callback();
 }
-Main.selectToken = function(addr, name) {
-  selectedToken = {addr: addr, name: name};
+Main.selectToken = function(addr, name, divisor) {
+  divisor = Number(divisor);
+  selectedToken = {addr: addr, name: name, divisor: divisor};
   Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
-Main.selectBase = function(addr, name) {
-  selectedBase = {addr: addr, name: name};
+Main.selectBase = function(addr, name, divisor) {
+  divisor = Number(divisor);
+  selectedBase = {addr: addr, name: name, divisor: divisor};
   Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
