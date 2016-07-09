@@ -170,9 +170,9 @@ Main.loadAccounts = function(callback) {
   );
 }
 Main.loadEvents = function(callback) {
-  // var startBlock = blockNumber-5760;
-  var startBlock = 0;
   utility.blockNumber(web3, function(err, blockNumber) {
+    var startBlock = 0;
+    startBlock = blockNumber-15000;
     utility.logs(web3, contractEtherDelta, config.contractEtherDeltaAddr, startBlock, 'latest', function(err, event) {
       event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
       eventsCache[event.transactionHash+event.logIndex] = event;
