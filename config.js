@@ -13,7 +13,7 @@ config.ethAddr = '0x0000000000000000000000000000000000000000';
 config.ethAddrPrivateKey = '';
 config.tokens = [
   {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000},
-  {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 1000000000000000000},
+  {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 10000000000000000},
   {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', divisor: 1000000000000000000},
   {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', divisor: 1000000000},
 ];

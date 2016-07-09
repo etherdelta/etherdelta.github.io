@@ -17,7 +17,7 @@
             <tr>
               <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
               <td><%= selectedAddr.toLowerCase()==trade.buyer.toLowerCase() ? 'Buy' : 'Sell' %></td>
-              <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %> <%= selectedToken.name %> (<%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price, bundle.Main.getDivisor(selectedBase)) %> <%= selectedBase.name %>)</td>
+              <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %> <%= selectedToken.name %> (<%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %> <%= selectedBase.name %>)</td>
               <td><%= trade.price.toNumber().toFixed(3) %></td>
             </tr>
           <% } else if (event.deposit) { %>

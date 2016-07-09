@@ -222,7 +222,7 @@ Main.displayEvents = function(callback) {
     var orders = [];
     //get orders from gitter messages
     var expectedKeys = JSON.stringify(['amountGet','amountGive','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
-    for(id in gitterMessagesCache) {
+    Object.keys(gitterMessagesCache).forEach(function(id) {
       var message = JSON.parse(JSON.stringify(gitterMessagesCache[id]));
       for (key in message) {
         if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
@@ -237,8 +237,9 @@ Main.displayEvents = function(callback) {
           order = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive).mul(Main.getDivisor(message.tokenGive)).div(Main.getDivisor(message.tokenGet)), id: id, order: message};
         }
         if (order && !deadOrders[order.id]) orders.push(order);
+        if (order && !deadOrders[order.id]) console.log(order, orders);
       }
-    }
+    });
     //get orders from events
     var events = Object.values(eventsCache);
     events.forEach(function(event){
@@ -256,7 +257,7 @@ Main.displayEvents = function(callback) {
     });
     //get available volumes
     async.reduce(orders, [],
-      function(orders, order, callbackReduce) {
+      function(memo, order, callbackReduce) {
         utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
           if (order.amount>=0) {
             order.availableVolume = result;
@@ -264,17 +265,17 @@ Main.displayEvents = function(callback) {
             order.availableVolume = result.div(order.price);
           }
           if (order.availableVolume>0) {
-            orders.push(order);
+            memo.push(order);
           } else {
             deadOrders[order.id] = true;
           }
-          callbackReduce(null, orders);
+          callbackReduce(null, memo);
         });
       },
-      function(err, orders){
+      function(err, ordersReduced){
         //final order filtering and sorting
-        var buyOrders = orders.filter(function(x){return x.amount>0});
-        var sellOrders = orders.filter(function(x){return x.amount<0});
+        var buyOrders = ordersReduced.filter(function(x){return x.amount>0});
+        var sellOrders = ordersReduced.filter(function(x){return x.amount<0});
         buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
         sellOrders.sort(function(a,b){ return a.price - b.price || a.id - b.id });
         //get the trade list
@@ -432,13 +433,13 @@ Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
     if (direction=='buy') {
       tokenGet = tokenAddr;
       tokenGive = baseAddr;
-      amountGet = utility.ethToWei(amount, tokenAddr);
-      amountGive = utility.ethToWei(amount * price, baseAddr);
+      amountGet = utility.ethToWei(amount, Main.getDivisor(tokenGet));
+      amountGive = utility.ethToWei(amount * price, Main.getDivisor(tokenGive));
     } else if (direction=='sell') {
       tokenGet = baseAddr;
       tokenGive = tokenAddr;
-      amountGet = utility.ethToWei(amount * price, baseAddr);
-      amountGive = utility.ethToWei(amount, tokenAddr);
+      amountGet = utility.ethToWei(amount * price, Main.getDivisor(tokenGet));
+      amountGive = utility.ethToWei(amount, Main.getDivisor(tokenGive));
     } else {
       return;
     }
@@ -462,7 +463,7 @@ Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
   });
 }
 Main.trade = function(order, amount) {
-  amount = utility.ethToWei(amount, order.tokenGet);
+  amount = utility.ethToWei(amount, Main.getDivisor(order.tokenGet));
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, addrs[selectedAccount]], function(err, result) {
     if (result) {
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: 1000000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
@@ -533,8 +534,8 @@ Main.init = function() {
 var addrs = [config.ethAddr];
 var pks = [config.ethAddrPrivateKey];
 var selectedAccount = 0;
-var selectedToken = config.tokens[0];
-var selectedBase = config.tokens[1];
+var selectedToken = config.tokens[1];
+var selectedBase = config.tokens[0];
 var cookie = Main.readCookie("EtherDelta");
 if (cookie) {
   cookie = JSON.parse(cookie);
