@@ -523,6 +523,8 @@ Main.init = function() {
       setTimeout(mainLoop, 10*1000);
     });
   }
+  Main.createCookie("user", JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount}), 999);
+  Main.connectionTest();
   Main.displayGuides(function(){
     Main.displayMarket(function(){
       Main.loadEvents(function(){

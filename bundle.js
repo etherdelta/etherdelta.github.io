@@ -525,6 +525,8 @@ Main.init = function() {
       setTimeout(mainLoop, 10*1000);
     });
   }
+  Main.createCookie("user", JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount}), 999);
+  Main.connectionTest();
   Main.displayGuides(function(){
     Main.displayMarket(function(){
       Main.loadEvents(function(){
@@ -973,6 +975,8 @@ function logs(web3, contract, address, fromBlock, toBlock, callback) {
       web3.eth.filter(options, function(error, item){
         if (!error) {
           decodeEvent(item);
+        } else {
+          proxy(1);
         }
       });
     } else {
