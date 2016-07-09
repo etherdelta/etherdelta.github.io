@@ -15,7 +15,7 @@
           <tbody>
             <% sellOrders.forEach(function(order){ %>
             <tr>
-              <td><span style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(3) %></span></td>
+              <td><span style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(5) %></span></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedBase)) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedToken)/bundle.Main.getDivisor(selectedBase), bundle.Main.getDivisor(selectedToken)) %></td>
               <td>
@@ -42,7 +42,7 @@
           <tbody>
             <% buyOrders.forEach(function(order){ %>
             <tr>
-              <td><span style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(3) %></span></td>
+              <td><span style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(5) %></span></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
               <td>
@@ -77,7 +77,7 @@
           <tr>
             <td><%= trade.blockNumber %> <a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
             <td><%= trade.amount>0 ? 'Buy' : 'Sell' %></td>
-            <td><%= trade.price.toNumber().toFixed(3) %></td>
+            <td><%= trade.price.toNumber().toFixed(5) %></td>
             <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %></td>
             <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
             <td><%= trade.buyer.substring(0,12) %>...</td>
