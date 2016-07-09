@@ -239,7 +239,6 @@ Main.displayEvents = function(callback) {
           order = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive).mul(Main.getDivisor(message.tokenGive)).div(Main.getDivisor(message.tokenGet)), id: id, order: message};
         }
         if (order && !deadOrders[order.id]) orders.push(order);
-        if (order && !deadOrders[order.id]) console.log(order, orders);
       }
     });
     //get orders from events
@@ -445,19 +444,26 @@ Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
     } else {
       return;
     }
-    var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
-    var hash = sha256(new Buffer(condensed,'hex'));
-    utility.sign(web3, addrs[selectedAccount], hash, undefined, function(err, sig) {
-      if (err) {
-        Main.alertError('Could not sign order because of an error: '+err);
+    utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [tokenGive, addrs[selectedAccount]], function(err, result) {
+      var balance = result;
+      if (balance.lt(new BigNumber(amountGive))) {
+        Main.alertError('You do not have enough balance to send this order.');
       } else {
-        // Send order to Gitter channel:
-        var order = {tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
-        utility.postGitterMessage(JSON.stringify(order), function(err, result){
-          if (!err) {
-            Main.alertSuccess('You sent an order to the order book!');
+        var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
+        var hash = sha256(new Buffer(condensed,'hex'));
+        utility.sign(web3, addrs[selectedAccount], hash, undefined, function(err, sig) {
+          if (err) {
+            Main.alertError('Could not sign order because of an error: '+err);
           } else {
-            Main.alertError('You tried sending an order to the order book but there was an error.');
+            // Send order to Gitter channel:
+            var order = {tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
+            utility.postGitterMessage(JSON.stringify(order), function(err, result){
+              if (!err) {
+                Main.alertSuccess('You sent an order to the order book!');
+              } else {
+                Main.alertError('You tried sending an order to the order book but there was an error.');
+              }
+            });
           }
         });
       }
