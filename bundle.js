@@ -472,8 +472,18 @@ Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
     });
   });
 }
-Main.trade = function(order, amount) {
-  amount = utility.ethToWei(amount, Main.getDivisor(order.tokenGet));
+Main.trade = function(kind, order, amount) {
+  if (kind=='sell') {
+    //if I'm selling a bid, the buyer is getting the token
+    amount = utility.ethToWei(amount, Main.getDivisor(order.tokenGet));
+  } else if (kind=='buy') {
+    //if I'm buying an offer, the seller is getting the base and giving the token, so must convert
+    amount = utility.ethToWei(amount * Number(order.amountGet) / Number(order.amountGive), Main.getDivisor(order.tokenGive));
+    console.log(order);
+    console.log(amount);
+  } else {
+    return;
+  }
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, addrs[selectedAccount]], function(err, result) {
     if (result) {
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: 1000000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
@@ -503,19 +513,20 @@ Main.displayGuides = function(callback) {
   callback();
 }
 Main.refresh = function(callback) {
-  if (!refreshing || Date.now()-lastRefresh>60*1000) {
-    refreshing = true;
+  if (refreshing<=0 || Date.now()-lastRefresh>60*1000) {
+    refreshing = 2;
     Main.createCookie("EtherDelta", JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
     Main.connectionTest();
     Main.loadAccounts(function(){
-      Main.getGitterMessages(function(){
-        Main.displayEvents(function(){
-          Main.loadTokensAndBases(function(){
-            $('#loading').hide();
-            refreshing = false;
-            lastRefresh = Date.now();
-            callback();
-          });
+      refreshing--;
+    });
+    Main.getGitterMessages(function(){
+      Main.displayEvents(function(){
+        Main.loadTokensAndBases(function(){
+          $('#loading').hide();
+          refreshing--;
+          lastRefresh = Date.now();
+          callback();
         });
       });
     });
@@ -560,7 +571,7 @@ if (cookie) {
 var connection = undefined;
 var nonce = undefined;
 var eventsCache = {};
-var refreshing = false;
+var refreshing = 0;
 var lastRefresh = Date.now();
 var price = undefined;
 var priceUpdated = Date.now();
