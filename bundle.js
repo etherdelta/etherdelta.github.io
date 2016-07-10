@@ -172,7 +172,7 @@ Main.loadAccounts = function(callback) {
 Main.loadEvents = function(callback) {
   utility.blockNumber(web3, function(err, blockNumber) {
     var startBlock = 0;
-    startBlock = blockNumber-15000;
+    // startBlock = blockNumber-15000;
     utility.logs(web3, contractEtherDelta, config.contractEtherDeltaAddr, startBlock, 'latest', function(err, event) {
       event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
       eventsCache[event.transactionHash+event.logIndex] = event;
@@ -453,7 +453,7 @@ Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
       } else {
         var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
         var hash = sha256(new Buffer(condensed,'hex'));
-        utility.sign(web3, addrs[selectedAccount], hash, undefined, function(err, sig) {
+        utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
           if (err) {
             Main.alertError('Could not sign order because of an error: '+err);
           } else {
@@ -479,8 +479,6 @@ Main.trade = function(kind, order, amount) {
   } else if (kind=='buy') {
     //if I'm buying an offer, the seller is getting the base and giving the token, so must convert
     amount = utility.ethToWei(amount * Number(order.amountGet) / Number(order.amountGive), Main.getDivisor(order.tokenGive));
-    console.log(order);
-    console.log(amount);
   } else {
     return;
   }
