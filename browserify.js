@@ -388,6 +388,10 @@ Main.getDivisor = function(tokenOrAddress) {
 }
 Main.deposit = function(addr, amount) {
   amount = utility.ethToWei(amount, Main.getDivisor(addr));
+  if (amount<=0) {
+    Main.alertError('You must specify a valid amount to deposit.');
+    return;
+  }
   if (addr=='0x0000000000000000000000000000000000000000') {
     utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'deposit', [{gas: 150000, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
@@ -409,6 +413,10 @@ Main.deposit = function(addr, amount) {
 }
 Main.withdraw = function(addr, amount) {
   amount = utility.ethToWei(amount, Main.getDivisor(addr));
+  if (amount<=0) {
+    Main.alertError('You must specify a valid amount to withdraw.');
+    return;
+  }
   if (addr=='0x0000000000000000000000000000000000000000') {
     utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: 150000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;

@@ -3,6 +3,8 @@
     <li role="presentation" class="active"><a href="#fees" aria-controls="fees" role="tab" data-toggle="tab">Fees</a></li>
     <li role="presentation"><a href="#connect-ethereum" aria-controls="connect-ethereum" role="tab" data-toggle="tab">Connect to Ethereum</a></li>
     <li role="presentation"><a href="#create-account" aria-controls="create-account" role="tab" data-toggle="tab">Create/import an account</a></li>
+    <li role="presentation"><a href="#deposit-withdraw" aria-controls="deposit-withdraw" role="tab" data-toggle="tab">Deposit and withdraw</a></li>
+    <li role="presentation"><a href="#trade" aria-controls="trade" role="tab" data-toggle="tab">Trade</a></li>
   </ul>
   <div class="tab-content list-spacing padding">
     <div role="tabpanel" class="tab-pane active" id="fees">
@@ -11,6 +13,14 @@
         <tr>
           <th>Transaction</th>
           <th>Fee</th>
+        </tr>
+        <tr>
+          <td>Deposit</td>
+          <td>0.0%</td>
+        </tr>
+        <tr>
+          <td>Withdraw</td>
+          <td>0.0%</td>
         </tr>
         <tr>
           <td>Add liquidity</td>
@@ -23,19 +33,44 @@
       </table>
     </div>
     <div role="tabpanel" class="tab-pane" id="connect-ethereum">
-      <h3>How to connect to Ethereum</h3>
+      <h3>Connect to Ethereum</h3>
       <ol>
         <li>The recommended way to connect to the Ethereum network is by running Geth on your computer. When you do this, EtherDelta will connect to Geth to query the smart contracts and send transactions on your behalf. If you do not wish to use Geth, EtherDelta will automatically use the Etherscan API to connect to the Ethereum network and send transactions on your behalf.</li>
-        <li>To run Geth locally in such a way that EtherDelta can connect to it, run Geth with these options: <code>geth --rpc --rpccorsdomain 'https://etherdelta.github.io' console</code>. Once the Geth console has started up, run <code>personal.unlockAccount("YOUR_ETHEREUM_ACCOUNT", "YOUR_PASSWORD")</code> to unlock your account so that EtherDelta can send transactions on your behalf.</li>
-        <li>Your current connection will be shown in the "Connection" tab, so you can tell if you are connected to Geth or the Etherscan proxy.</li>
+        <li>To run Geth locally in such a way that EtherDelta can connect to it, run Geth with these options: <code>geth --rpc --rpccorsdomain 'https://etherdelta.github.io' console</code>. Once the Geth console has started up, run <code>personal.unlockAccount("0xYOUR_ETHEREUM_ACCOUNT")</code> to unlock your account so that EtherDelta can send transactions on your behalf.</li>
+        <li>If you are using a local version of Geth not secured by an SSL connection, you may need to force your browser to load content over unsecured connections. In Google Chrome, click the shield in the address bar and click "Load unsafe scripts."</li>
+        <li>Your current connection will be shown at the bottom of the page, so you can tell if you are connected to Geth or the Etherscan proxy.</li>
       </ol>
     </div>
     <div role="tabpanel" class="tab-pane" id="create-account">
-      <h3>How to create/import an account</h3>
+      <h3>Create/import an account</h3>
       <ol>
         <li>If you already have an account you want to use, you can import it. Click the account dropdown (upper right) and choose "Import account."</li>
         <li>If you want to make a new Ethereum account to use with EtherDelta, click the account dropdown (upper right) and choose "Create account." If you prefer, you can also use <a href="http://www.myetherwallet.com/" target="_blank">MyEtherWallet</a> to create a new Ethereum account, then use "Import account" to add your new address and its private key.</li>
         <li>Click the account dropdown and choose "Export private key." Write your private key down somewhere safe.</li>
+      </ol>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="deposit-withdraw">
+      <h3>Deposit and withdraw</h3>
+      <ol>
+        <li>In the top left, you will find two dropdowns you can use to select the currency pair you want to trade. For example, select "DAO" and "ETH" to trade the "DAO/ETH" currency pair.</li>
+        <li>Under "Balances," you will see your balance for each of the two currencies you selected. This is the balance you have deposited to EtherDelta from your Ethereum account.</li>
+        <li>If you hover over the balance number, you will see the amount you have available "off exchange" (in your Ethereum account but not deposited to EtherDelta).</li>
+        <li>To deposit, simply enter an amount you would like to deposit from your Ethereum account into EtherDelta and click "Deposit."</li>
+        <li>To withdraw, enter an amount and click "Withdraw."</li>
+        <li>Once the Ethereum transaction has been confirmed, your balance will automatically update. If you don't have the necessary funds available for the deposit or withdraw transaction, then the Ethereum transaction will fail.</li>
+      </ol>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="trade">
+      <h3>Trade</h3>
+      <ol>
+        <li>In the top left, you will find two dropdowns you can use to select the currency pair you want to trade. For example, select "DAO" and "ETH" to trade the "DAO/ETH" currency pair.</li>
+        <li>If you want to trade a token that doesn't appear in the list, you can choose "Other" and fill out the form. Different tokens have different multipliers, so fill out this form carefully.</li>
+        <li>EtherDelta supports resting orders (adding liquidity) and trading against existing resting orders (taking liquidity).</li>
+        <li>To create a resting order, fill out the "Buy" or "Sell" form at the top of the page. The order expires in the number of blocks you specify (1 block &#8776; 15 seconds).</li>
+        <li>When you submit a resting order, it gets broadcast to the world. The current broadcast channel is a Gitter chat room, but EtherDelta also supports using Ethereum events as a fallback broadcast mechanism.</li>
+        <li>The GUI scans for new orders being broadcast and displays them in the order book (offers on the left, bids on the right).</li>
+        <li>A resting order represents a cryptographically signed intent to trade. Up until your order expires, anyone who has seen it can trade against it, assuming both traders have enough funds in their EtherDelta accounts. The GUI filters out orders that do not have funds to back them up. Partial fills are supported.</li>
+        <li>To trade against an existing resting order, click "Buy" or "Sell" next to it in the order book and type in the volume you want to trade. The GUI will do one last check that the trade can cross (the funds are there and the order hasn't already traded), but if someone submits a transaction right before you do, your Ethereum transaction will fail because the order already traded.</li>
       </ol>
     </div>
     <p>Need help? Join the <a href="https://gitter.im/etherdelta/etherdelta.github.io" target="_blank"><img src="https://badges.gitter.im/etherdelta/etherdelta.github.io.svg" alt="Chat on Gitter" />.</a></p>
