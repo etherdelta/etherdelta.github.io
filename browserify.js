@@ -257,19 +257,24 @@ Main.displayEvents = function(callback) {
     //get available volumes
     async.reduce(orders, [],
       function(memo, order, callbackReduce) {
-        utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-          if (order.amount>=0) {
-            order.availableVolume = result;
-          } else {
-            order.availableVolume = result.div(order.price);
-          }
-          if (order.availableVolume>0) {
-            memo.push(order);
-          } else {
-            deadOrders[order.id] = true;
-          }
+        if (blockNumber<Number(order.order.expires)) {
+          utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
+            if (order.amount>=0) {
+              order.availableVolume = result;
+            } else {
+              order.availableVolume = result.div(order.price);
+            }
+            if (order.availableVolume>0) {
+              memo.push(order);
+            } else {
+              deadOrders[order.id] = true;
+            }
+            callbackReduce(null, memo);
+          });
+        } else {
+          deadOrders[order.id] = true;
           callbackReduce(null, memo);
-        });
+        }
       },
       function(err, ordersReduced){
         //final order filtering and sorting
