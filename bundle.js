@@ -587,9 +587,13 @@ var gitterMessagesCache = {};
 var deadOrders = {};
 var defaultDivisor = new BigNumber(1000000000000000000);
 //web3
-var web3 = new Web3();
+if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
+    web3 = new Web3(web3.currentProvider);
+} else if (typeof Web3 !== 'undefined') {
+    web3 = new Web3(new Web3.providers.HttpProvider(config.ethProvider));
+} else if(typeof web3 == 'undefined' && typeof Web3 == 'undefined') {
+}
 web3.eth.defaultAccount = config.ethAddr;
-web3.setProvider(new web3.providers.HttpProvider(config.ethProvider));
 
 utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
   contractEtherDelta = contract;
@@ -1629,7 +1633,7 @@ exports.postGitterMessage = postGitterMessage;
 var config = {};
 
 config.homeURL = 'https://etherdelta.github.io';
-config.homeURL = 'http://localhost:8080';
+// config.homeURL = 'http://localhost:8080';
 config.contractEtherDelta = 'etherdelta.sol';
 config.contractToken = 'token.sol';
 config.contractReserveToken = 'reservetoken.sol';
