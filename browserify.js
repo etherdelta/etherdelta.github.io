@@ -168,12 +168,26 @@ Main.loadAccounts = function(callback) {
   );
 }
 Main.loadEvents = function(callback) {
+  var cookie = Main.readCookie("EtherDelta_eventsCache");
+  if (cookie) eventsCache = JSON.parse(cookie);
   utility.blockNumber(web3, function(err, blockNumber) {
     var startBlock = 0;
     // startBlock = blockNumber-15000;
+    for (id in eventsCache) {
+      var event = eventsCache[id];
+      if (event.blockNumber>startBlock) {
+        startBlock = event.blockNumber;
+      }
+      for (arg in event.args) {
+        if (typeof(event.args[arg])=='string' && event.args[arg].slice(0,2)!='0x') {
+          event.args[arg] = new BigNumber(event.args[arg]);
+        }
+      }
+    }
     utility.logs(web3, contractEtherDelta, config.contractEtherDeltaAddr, startBlock, 'latest', function(err, event) {
       event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
       eventsCache[event.transactionHash+event.logIndex] = event;
+      Main.createCookie("EtherDelta_eventsCache", JSON.stringify(eventsCache), 999);
       Main.displayEvents(function(){
         Main.displayBalances(function(){
           Main.displayMyEvents(function(){
@@ -597,6 +611,16 @@ if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
 } else if(typeof web3 == 'undefined' && typeof Web3 == 'undefined') {
 }
 web3.eth.defaultAccount = config.ethAddr;
+web3.eth.getAccounts(function(e,accounts){
+  if (!e) {
+    accounts.forEach(function(addr){
+      if(addrs.indexOf(addr)<0) {
+        addrs.push(addr);
+        pks.push(undefined);
+      }
+    });
+  }
+ });
 
 utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
   contractEtherDelta = contract;
