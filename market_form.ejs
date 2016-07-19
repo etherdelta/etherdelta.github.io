@@ -10,25 +10,31 @@
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon" style="width: 100px;"><%= selectedToken.name %></div>
-            <input type="text" class="form-control" style="width: 175px;" id="buy_amount" onchange="buy_change()" placeholder="Amount to buy (<%= selectedToken.name %>)">
+            <input type="text" class="form-control" style="width: 175px;" id="buy_amount" onchange="buy_change()" placeholder="Amount to buy (<%= selectedToken.name %>)" />
           </div>
         </div>
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon" style="width: 100px;"><%= selectedToken.name+'/'+selectedBase.name %></div>
-            <input type="text" class="form-control" style="width: 175px;" id="buy_price" onchange="buy_change()" placeholder="Price (<%= selectedToken.name+'/'+selectedBase.name %>)">
+            <input type="text" class="form-control" style="width: 175px;" id="buy_price" onchange="buy_change()" placeholder="Price (<%= selectedToken.name+'/'+selectedBase.name %>)" />
           </div>
         </div>
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon" style="width: 100px;"><%= selectedBase.name %></div>
-            <input type="text" class="form-control" style="width: 175px;" id="buy_total" onchange="buy_change()" placeholder="Total (<%= selectedBase.name %>)">
+            <input type="text" class="form-control" style="width: 175px;" id="buy_total" onchange="buy_change()" placeholder="Total (<%= selectedBase.name %>)" />
           </div>
         </div>
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon" style="width: 100px;">Expires</div>
-            <input type="text" class="form-control" style="width: 175px;" id="buy_expires" placeholder="Number of blocks" value="100">
+            <input type="text" class="form-control" style="width: 175px;" id="buy_expires" placeholder="Number of blocks" value="100" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon" style="width: 100px;">Auto refresh</div>
+            <input type="checkbox" class="form-control" style="width: 175px;" id="buy_refresh" />
           </div>
         </div>
         <button type="submit" class="btn btn-primary" style="width: 275px;" id="buy_submit">Buy</button>
@@ -44,7 +50,7 @@
           <form class="form-inline">
             <div class="form-group">
               <div class="input-group">
-                <input type="text" class="form-control"  style="width:75px;" id="token_amount" placeholder="Amount">
+                <input type="text" class="form-control"  style="width:75px;" id="token_amount" placeholder="Amount" />
               </div>
             </div>
             <button type="submit" class="btn btn-primary" id="deposit_token_submit" style="width:85px;">Deposit</button>
@@ -58,7 +64,7 @@
           <form class="form-inline">
             <div class="form-group">
               <div class="input-group">
-                <input type="text" class="form-control"  style="width:75px;" id="base_amount" placeholder="Amount">
+                <input type="text" class="form-control"  style="width:75px;" id="base_amount" placeholder="Amount" />
               </div>
             </div>
             <button type="submit" class="btn btn-primary" id="deposit_base_submit" style="width:85px;">Deposit</button>
@@ -73,25 +79,31 @@
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon" style="width: 100px;"><%= selectedToken.name %></div>
-            <input type="text" class="form-control" style="width: 175px;" id="sell_amount" onchange="sell_change()" placeholder="Amount to sell (<%= selectedToken.name %>)">
+            <input type="text" class="form-control" style="width: 175px;" id="sell_amount" onchange="sell_change()" placeholder="Amount to sell (<%= selectedToken.name %>)" />
           </div>
         </div>
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon" style="width: 100px;"><%= selectedToken.name+'/'+selectedBase.name %></div>
-            <input type="text" class="form-control" style="width: 175px;" id="sell_price" onchange="sell_change()" placeholder="Price (<%= selectedToken.name+'/'+selectedBase.name %>)">
+            <input type="text" class="form-control" style="width: 175px;" id="sell_price" onchange="sell_change()" placeholder="Price (<%= selectedToken.name+'/'+selectedBase.name %>)" />
           </div>
         </div>
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon" style="width: 100px;"><%= selectedBase.name %></div>
-            <input type="text" class="form-control" style="width: 175px;" id="sell_total" onchange="sell_change()" placeholder="Total (<%= selectedBase.name %>)">
+            <input type="text" class="form-control" style="width: 175px;" id="sell_total" onchange="sell_change()" placeholder="Total (<%= selectedBase.name %>)" />
           </div>
         </div>
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon" style="width: 100px;">Expires</div>
-            <input type="text" class="form-control" style="width: 175px;" id="sell_expires" placeholder="Number of blocks" value="100">
+            <input type="text" class="form-control" style="width: 175px;" id="sell_expires" placeholder="Number of blocks" value="100" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon" style="width: 100px;">Auto refresh</div>
+            <input type="checkbox" class="form-control" style="width: 175px;" id="sell_refresh" />
           </div>
         </div>
         <button type="submit" class="btn btn-primary" style="width: 275px;" id="sell_submit">Sell</button>

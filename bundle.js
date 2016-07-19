@@ -170,7 +170,7 @@ Main.loadAccounts = function(callback) {
   );
 }
 Main.loadEvents = function(callback) {
-  var cookie = Main.readCookie("EtherDelta_eventsCache");
+  var cookie = Main.readCookie(config.eventsCacheCookie);
   if (cookie) eventsCache = JSON.parse(cookie);
   utility.blockNumber(web3, function(err, blockNumber) {
     var startBlock = 0;
@@ -189,7 +189,7 @@ Main.loadEvents = function(callback) {
     utility.logs(web3, contractEtherDelta, config.contractEtherDeltaAddr, startBlock, 'latest', function(err, event) {
       event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
       eventsCache[event.transactionHash+event.logIndex] = event;
-      Main.createCookie("EtherDelta_eventsCache", JSON.stringify(eventsCache), 999);
+      Main.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
       Main.displayEvents(function(){
         Main.displayBalances(function(){
           Main.displayMyEvents(function(){
@@ -293,6 +293,14 @@ Main.displayEvents = function(callback) {
         }
       },
       function(err, ordersReduced){
+        //attach working orders if they exist
+        for (var i=0; i<ordersReduced.length; i++) {
+          var order = ordersReduced[i];
+          var matchingWorkingOrders = workingOrders.filter(function(workingOrder){if (workingOrder.nonce == order.order.nonce && order.order.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) return true;});
+          if (matchingWorkingOrders.length==1) {
+            order.workingOrder = matchingWorkingOrders[0];
+          }
+        }
         //final order filtering and sorting
         var buyOrders = ordersReduced.filter(function(x){return x.amount>0});
         var sellOrders = ordersReduced.filter(function(x){return x.amount<0});
@@ -318,8 +326,19 @@ Main.displayEvents = function(callback) {
         });
         trades.sort(function(a,b){ return b.id - a.id });
         //display the template
-        new EJS({url: config.homeURL+'/'+'market_events.ejs'}).update('market_events', {selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, trades: trades});
+        new EJS({url: config.homeURL+'/'+'market_events.ejs'}).update('market_events', {selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, trades: trades, blockNumber: blockNumber});
         $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
+        $("[data-toggle=popover]").popover({
+          html : true,
+          content: function() {
+            var content = $(this).attr("data-popover-content");
+            return $(content).children(".popover-body").html();
+          },
+          title: function() {
+            var title = $(this).attr("data-popover-content");
+            return $(title).children(".popover-heading").html();
+          }
+        });
         callback();
       }
     );
@@ -346,7 +365,7 @@ Main.otherToken = function(addr, name) {
   if (addr.slice(0,2)!="0x") addr = '0x'+addr;
   if (!name || name=='') name = addr.slice(3,6);
   divisor = Number(divisor);
-  selectedToken = {addr: addr, name: name, divisor: divisor};
+  selectedToken = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
   Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
@@ -354,7 +373,7 @@ Main.otherBase = function(addr, name, divisor) {
   if (addr.slice(0,2)!="0x") addr = '0x'+addr;
   if (!name || name=='') name = addr.slice(3,6);
   divisor = Number(divisor);
-  selectedBase = {addr: addr, name: name, divisor: divisor};
+  selectedBase = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
   Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
@@ -389,6 +408,20 @@ Main.displayBalances = function(callback) {
     });
   });
 }
+Main.getToken = function(address) {
+  var result = undefined;
+  var matchingTokens = config.tokens.filter(function(x){return x.addr==address});
+  if (matchingTokens.length>0) {
+    result = matchingTokens[0];
+  } else {
+    if (selectedToken.addr==token) {
+      result = selectedToken;
+    } else if (selectedBase.addr==token) {
+      result = selectedBase;
+    }
+  }
+  return result;
+}
 Main.getDivisor = function(tokenOrAddress) {
   var result = 1000000000000000000;
   if (typeof(tokenOrAddress)=='object' && tokenOrAddress.divisor) {
@@ -409,22 +442,23 @@ Main.getDivisor = function(tokenOrAddress) {
 }
 Main.deposit = function(addr, amount) {
   amount = utility.ethToWei(amount, Main.getDivisor(addr));
+  var token = Main.getToken(addr);
   if (amount<=0) {
     Main.alertError('You must specify a valid amount to deposit.');
     return;
   }
   if (addr=='0x0000000000000000000000000000000000000000') {
-    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'deposit', [{gas: 150000, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'deposit', [{gas: token.gasDeposit, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
       Main.alertTxResult(err, result);
     });
   } else {
-    utility.send(web3, contractToken, addr, 'approve', [config.contractEtherDeltaAddr, amount, {gas: 150000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+    utility.send(web3, contractToken, addr, 'approve', [config.contractEtherDeltaAddr, amount, {gas: token.gasApprove, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
       Main.alertTxResult(err, result);
-      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'depositToken', [addr, amount, {gas: 150000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'depositToken', [addr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
         Main.alertTxResult(err, result);
@@ -434,70 +468,109 @@ Main.deposit = function(addr, amount) {
 }
 Main.withdraw = function(addr, amount) {
   amount = utility.ethToWei(amount, Main.getDivisor(addr));
+  var token = Main.getToken(addr);
   if (amount<=0) {
     Main.alertError('You must specify a valid amount to withdraw.');
     return;
   }
   if (addr=='0x0000000000000000000000000000000000000000') {
-    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: 150000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
       Main.alertTxResult(err, result);
     });
   } else {
-    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdrawToken', [addr, amount, {gas: 150000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdrawToken', [addr, amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
       Main.alertTxResult(err, result);
     });
   }
 }
-Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires) {
+Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires, refresh) {
   utility.blockNumber(web3, function(err, blockNumber) {
-    var tokenGet = undefined;
-    var tokenGive = undefined;
-    var amountGet = undefined;
-    var amountGive = undefined;
-    expires = Number(expires) + blockNumber;
-    var orderNonce = utility.getRandomInt(0,Math.pow(2,32));
-    if (direction=='buy') {
-      tokenGet = tokenAddr;
-      tokenGive = baseAddr;
-      amountGet = utility.ethToWei(amount, Main.getDivisor(tokenGet));
-      amountGive = utility.ethToWei(amount * price, Main.getDivisor(tokenGive));
-    } else if (direction=='sell') {
-      tokenGet = baseAddr;
-      tokenGive = tokenAddr;
-      amountGet = utility.ethToWei(amount * price, Main.getDivisor(tokenGet));
-      amountGive = utility.ethToWei(amount, Main.getDivisor(tokenGive));
-    } else {
-      return;
-    }
-    utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [tokenGive, addrs[selectedAccount]], function(err, result) {
-      var balance = result;
-      if (balance.lt(new BigNumber(amountGive))) {
-        Main.alertError('You do not have enough balance to send this order.');
-      } else {
-        var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
-        var hash = sha256(new Buffer(condensed,'hex'));
-        utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
-          if (err) {
-            Main.alertError('Could not sign order because of an error: '+err);
-          } else {
-            // Send order to Gitter channel:
-            var order = {tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
-            utility.postGitterMessage(JSON.stringify(order), function(err, result){
-              if (!err) {
-                Main.alertSuccess('You sent an order to the order book!');
-              } else {
-                Main.alertError('You tried sending an order to the order book but there was an error.');
-              }
-            });
-          }
-        });
-      }
-    });
+    var order = {baseAddr: baseAddr, tokenAddr: tokenAddr, direction: direction, amount: amount, price: price, expires: expires, refresh: refresh, nextExpiration: 0};
+    workingOrders.push(order);
+    Main.publishOrders(function(){});
   });
+}
+Main.publishOrders = function(callback) {
+  if (!publishingOrders) {
+    publishingOrders = true;
+    utility.blockNumber(web3, function(err, blockNumber) {
+      async.eachSeries(workingOrders,
+        function(order, callbackEach) {
+          if (blockNumber>=order.nextExpiration) {
+            if (order.nextExpiration==0 || order.refresh) {
+              order.nextExpiration = Number(order.expires) + blockNumber;
+              order.nonce = utility.getRandomInt(0,Math.pow(2,32));
+              Main.publishOrder(order.baseAddr, order.tokenAddr, order.direction, order.amount, order.price, order.nextExpiration, order.nonce);
+            } else {
+              order = undefined;
+            }
+          }
+          callbackEach();
+        },
+        function(err) {
+          workingOrders = workingOrders.filter(function(x){return x}); //filter out cleared orders
+          publishingOrders = false;
+          callback();
+        }
+      );
+    });
+  }
+}
+Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expires, orderNonce) {
+  var tokenGet = undefined;
+  var tokenGive = undefined;
+  var amountGet = undefined;
+  var amountGive = undefined;
+  if (direction=='buy') {
+    tokenGet = tokenAddr;
+    tokenGive = baseAddr;
+    amountGet = utility.ethToWei(amount, Main.getDivisor(tokenGet));
+    amountGive = utility.ethToWei(amount * price, Main.getDivisor(tokenGive));
+  } else if (direction=='sell') {
+    tokenGet = baseAddr;
+    tokenGive = tokenAddr;
+    amountGet = utility.ethToWei(amount * price, Main.getDivisor(tokenGet));
+    amountGive = utility.ethToWei(amount, Main.getDivisor(tokenGive));
+  } else {
+    return;
+  }
+  utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [tokenGive, addrs[selectedAccount]], function(err, result) {
+    var balance = result;
+    if (balance.lt(new BigNumber(amountGive))) {
+      Main.alertError('You do not have enough balance to send this order.');
+    } else {
+      var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
+      var hash = sha256(new Buffer(condensed,'hex'));
+      utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
+        if (err) {
+          Main.alertError('Could not sign order because of an error: '+err);
+        } else {
+          // Send order to Gitter channel:
+          var order = {tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
+          utility.postGitterMessage(JSON.stringify(order), function(err, result){
+            if (!err) {
+              Main.alertSuccess('You sent an order to the order book!');
+            } else {
+              Main.alertError('You tried sending an order to the order book but there was an error.');
+            }
+          });
+        }
+      });
+    }
+  });
+}
+Main.cancelOrderRefresh = function(orderNonce) {
+  var len = workingOrders.length;
+  workingOrders = workingOrders.filter(function(order){
+    order.nonce==orderNonce ? false : true;
+  });
+  if (workingOrders.length<len) {
+    Main.displayEvents(function(){});
+  }
 }
 Main.trade = function(kind, order, amount) {
   if (kind=='sell') {
@@ -509,9 +582,10 @@ Main.trade = function(kind, order, amount) {
   } else {
     return;
   }
+  var token = Main.getToken(order.tokenGet);
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, addrs[selectedAccount]], function(err, result) {
     if (result) {
-      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: 1000000, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
         Main.alertTxResult(err, result);
@@ -539,10 +613,13 @@ Main.displayGuides = function(callback) {
 }
 Main.refresh = function(callback) {
   if (refreshing<=0 || Date.now()-lastRefresh>60*1000) {
-    refreshing = 2;
-    Main.createCookie("EtherDelta", JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
+    refreshing = 3;
+    Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
     Main.connectionTest();
     Main.loadAccounts(function(){
+      refreshing--;
+    });
+    Main.publishOrders(function(){
       refreshing--;
     });
     Main.getGitterMessages(function(){
@@ -563,7 +640,7 @@ Main.init = function() {
       setTimeout(mainLoop, 10*1000);
     });
   }
-  Main.createCookie("user", JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount}), 999);
+  Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
   Main.connectionTest();
   Main.displayGuides(function(){
     Main.displayMarket(function(){
@@ -579,20 +656,12 @@ Main.init = function() {
 }
 
 //globals
-var addrs = [config.ethAddr];
-var pks = [config.ethAddrPrivateKey];
+var addrs;
+var pks;
 var selectedAccount = 0;
-var selectedToken = config.tokens[1];
-var selectedBase = config.tokens[0];
-var cookie = Main.readCookie("EtherDelta");
-if (cookie) {
-  cookie = JSON.parse(cookie);
-  addrs = cookie["addrs"];
-  pks = cookie["pks"];
-  selectedAccount = cookie["selectedAccount"];
-  if (cookie["selectedToken"].divisor) selectedToken = cookie["selectedToken"];
-  if (cookie["selectedBase"].divisor) selectedBase = cookie["selectedBase"];
-}
+var selectedToken;
+var selectedBase;
+var cookie;
 var connection = undefined;
 var nonce = undefined;
 var eventsCache = {};
@@ -604,6 +673,8 @@ var contractEtherDelta = undefined;
 var contractToken = undefined;
 var gitterMessagesCache = {};
 var deadOrders = {};
+var workingOrders = [];
+var publishingOrders = false;
 var defaultDivisor = new BigNumber(1000000000000000000);
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
@@ -612,26 +683,47 @@ if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
     web3 = new Web3(new Web3.providers.HttpProvider(config.ethProvider));
 } else if(typeof web3 == 'undefined' && typeof Web3 == 'undefined') {
 }
-web3.eth.defaultAccount = config.ethAddr;
-web3.eth.getAccounts(function(e,accounts){
-  if (!e) {
-    accounts.forEach(function(addr){
-      if(addrs.indexOf(addr)<0) {
-        addrs.push(addr);
-        pks.push(undefined);
-      }
-    });
-  }
- });
 
-utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
-  contractEtherDelta = contract;
-  utility.loadContract(web3, config.contractToken, '0x0000000000000000000000000000000000000000', function(err, contract){
-    contractToken = contract;
-    Main.init();
+web3.version.getNetwork(function(error, version){
+  //check mainnet vs testnet
+  if (version in configs) config = configs[version];
+  //default selected token and base
+  selectedToken = config.tokens[config.defaultToken];
+  selectedBase = config.tokens[config.defaultBase];
+  //default addr, pk
+  addrs = [config.ethAddr];
+  pks = [config.ethAddrPrivateKey];
+  //get cookie
+  var cookie = Main.readCookie(config.userCookie);
+  if (cookie) {
+    cookie = JSON.parse(cookie);
+    addrs = cookie["addrs"];
+    pks = cookie["pks"];
+    selectedAccount = cookie["selectedAccount"];
+    // selectedToken = cookie["selectedToken"];
+    // selectedBase = cookie["selectedBase"];
+  }
+  //get accounts
+  web3.eth.defaultAccount = config.ethAddr;
+  web3.eth.getAccounts(function(e,accounts){
+    if (!e) {
+      accounts.forEach(function(addr){
+        if(addrs.indexOf(addr)<0) {
+          addrs.push(addr);
+          pks.push(undefined);
+        }
+      });
+    }
+  });
+  //load contract
+  utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
+    contractEtherDelta = contract;
+    utility.loadContract(web3, config.contractToken, '0x0000000000000000000000000000000000000000', function(err, contract){
+      contractToken = contract;
+      Main.init();
+    });
   });
 });
-
 
 module.exports = {Main: Main, utility: utility};
 
@@ -1659,32 +1751,71 @@ exports.postGitterMessage = postGitterMessage;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer)
 },{"../config.js":3,"async":11,"async/dist/async.min.js":12,"bignumber.js":16,"buffer":359,"ethereumjs-tx":90,"ethereumjs-util":93,"fs":312,"https":405,"keythereum":152,"request":188,"web3":249,"web3/lib/solidity/coder.js":256,"web3/lib/utils/sha3.js":268,"web3/lib/utils/utils.js":269,"web3/lib/web3/event.js":276,"web3/lib/web3/function.js":280}],3:[function(_dereq_,module,exports){
 (function (global){
-var config = {};
+var configs = {};
 
-config.homeURL = 'https://etherdelta.github.io';
-// config.homeURL = 'http://localhost:8080';
-config.contractEtherDelta = 'etherdelta.sol';
-config.contractToken = 'token.sol';
-config.contractReserveToken = 'reservetoken.sol';
-config.contractEtherDeltaAddr = '0xc6b330df38d6ef288c953f1f2835723531073ce2';
-config.ethTestnet = false;
-config.ethProvider = 'http://localhost:8545';
-config.ethGasPrice = 20000000000;
-config.ethAddr = '0x0000000000000000000000000000000000000000';
-config.ethAddrPrivateKey = '';
-config.tokens = [
-  {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000},
-  {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 10000000000000000},
-  {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', divisor: 1000000000000000000},
-  {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', divisor: 1000000000},
-];
-config.gitterHost = 'https://api.gitter.im';
-config.gitterStream = 'stream.gitter.im';
-config.gitterToken = '7e7772f3f3b2b715122f0d1789cf173ef49238da';
-config.gitterRoomID = '57756375c2f0db084a20cf77';
+//mainnet
+configs["1"] = {
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://localhost:8080',
+  contractEtherDelta: 'etherdelta.sol',
+  contractToken: 'token.sol',
+  contractReserveToken: 'reservetoken.sol',
+  contractEtherDeltaAddr: '0xc6b330df38d6ef288c953f1f2835723531073ce2',
+  ethTestnet: false,
+  ethProvider: 'http://localhost:8545',
+  ethGasPrice: 20000000000,
+  ethAddr: '0x0000000000000000000000000000000000000000',
+  ethAddrPrivateKey: '',
+  tokens: [
+    {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 10000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', divisor: 1000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+  ],
+  gitterHost: 'https://api.gitter.im',
+  gitterStream: 'stream.gitter.im',
+  gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
+  gitterRoomID: '57756375c2f0db084a20cf77',
+  userCookie: 'EtherDelta',
+  eventsCacheCookie: 'EtherDelta_eventsCache',
+  defaultToken: 1,
+  defaultBase: 0
+};
+
+//testnet
+configs["2"] = {
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://localhost:8080',
+  contractEtherDelta: 'etherdelta.sol',
+  contractToken: 'token.sol',
+  contractReserveToken: 'reservetoken.sol',
+  contractEtherDeltaAddr: '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d',
+  ethTestnet: true,
+  ethProvider: 'http://localhost:8545',
+  ethGasPrice: 20000000000,
+  ethAddr: '0x0000000000000000000000000000000000000000',
+  ethAddrPrivateKey: '',
+  tokens: [
+    {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+  ],
+  gitterHost: 'https://api.gitter.im',
+  gitterStream: 'stream.gitter.im',
+  gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
+  gitterRoomID: '57756375c2f0db084a20cf77',
+  userCookie: 'EtherDelta_testnet',
+  eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
+  defaultToken: 0,
+  defaultBase: 1
+};
+
+//default config
+var config = configs["1"]; //mainnet
 
 try {
   global.config = config;
+  global.configs = configs;
   module.exports = config;
 } catch (err) {}
 

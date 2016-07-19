@@ -15,7 +15,24 @@
           <tbody>
             <% sellOrders.forEach(function(order){ %>
             <tr>
-              <td><span style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(5) %></span></td>
+              <td>
+                <a data-placement="top" data-popover-content="#tooltip_<%= order.order.user+order.order.nonce %>" data-toggle="popover" data-trigger="focus" tabindex="0" style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(5) %></a>
+                <div class="hidden" id="tooltip_<%= order.order.user+order.order.nonce %>">
+                  <div class="popover-heading">
+                    Order details
+                  </div>
+                  <div class="popover-body">
+                    <ul class="list-group">
+                      <li class="list-group-item"><% if (Number(order.order.expires) > blockNumber){ %>Expires in <%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? 'block' : 'blocks' %><% } else { %>Expired<% } %></li>
+                      <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase() && order.workingOrder && order.workingOrder.refresh) { %>
+                        <li class="list-group-item">
+                          This order will refresh when it expires unless you <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrderRefresh(<%= order.order.nonce %>);">Cancel</button> or refresh/close the page.
+                        </li>
+                      <% } %>
+                    </ul>
+                  </div>
+                </div>
+              </td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedBase)) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedToken)/bundle.Main.getDivisor(selectedBase), bundle.Main.getDivisor(selectedToken)) %></td>
               <td>
@@ -42,7 +59,24 @@
           <tbody>
             <% buyOrders.forEach(function(order){ %>
             <tr>
-              <td><span style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(5) %></span></td>
+              <td>
+                <a data-placement="top" data-popover-content="#tooltip_<%= order.order.user+order.order.nonce %>" data-toggle="popover" data-trigger="focus" tabindex="0" style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(5) %></a>
+                <div class="hidden" id="tooltip_<%= order.order.user+order.order.nonce %>">
+                  <div class="popover-heading">
+                    Order details
+                  </div>
+                  <div class="popover-body">
+                    <ul class="list-group">
+                      <li class="list-group-item"><% if (Number(order.order.expires) > blockNumber){ %>Expires in <%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? 'block' : 'blocks' %><% } else { %>Expired<% } %></li>
+                      <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase() && order.workingOrder && order.workingOrder.refresh) { %>
+                        <li class="list-group-item">
+                          This order will refresh when it expires unless you <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrderRefresh(<%= order.order.nonce %>);">Cancel</button> or refresh/close the page.
+                        </li>
+                      <% } %>
+                    </ul>
+                  </div>
+                </div>
+              </td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
               <td>
