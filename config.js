@@ -2,12 +2,14 @@ var configs = {};
 
 //mainnet
 configs["1"] = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://localhost:8080',
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://localhost:8080',
   contractEtherDelta: 'etherdelta.sol',
   contractToken: 'token.sol',
   contractReserveToken: 'reservetoken.sol',
-  contractEtherDeltaAddr: '0xc6b330df38d6ef288c953f1f2835723531073ce2',
+  contractEtherDeltaAddrs: [
+    {addr: '0xc6b330df38d6ef288c953f1f2835723531073ce2', info: 'Deployed 07/08/2016'}
+  ],
   ethTestnet: false,
   ethProvider: 'http://localhost:8545',
   ethGasPrice: 20000000000,
@@ -36,7 +38,10 @@ configs["2"] = {
   contractEtherDelta: 'etherdelta.sol',
   contractToken: 'token.sol',
   contractReserveToken: 'reservetoken.sol',
-  contractEtherDeltaAddr: '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d',
+  contractEtherDeltaAddrs: [
+    {addr: '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d', info: 'Deployed 06/30/2016'},
+    {addr: '0x0000000000000000000000000000000000000000', info: 'Zero contract'}
+  ],
   ethTestnet: true,
   ethProvider: 'http://localhost:8545',
   ethGasPrice: 20000000000,

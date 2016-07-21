@@ -132,6 +132,10 @@ Main.showPrivateKey = function() {
 Main.addressLink = function(address) {
   return 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+address;
 }
+Main.contractAddr = function(addr) {
+  config.contractEtherDeltaAddr = addr;
+  Main.init(function(){});
+}
 Main.connectionTest = function() {
   if (connection) return connection;
   connection = {connection: 'Proxy', provider: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io', testnet: config.ethTestnet};
@@ -143,7 +147,7 @@ Main.connectionTest = function() {
   } catch(err) {
     web3.setProvider(undefined);
   }
-  new EJS({url: config.homeURL+'/'+'connection_description.ejs'}).update('connection', {connection: connection, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
+  new EJS({url: config.homeURL+'/'+'connection_description.ejs'}).update('connection', {connection: connection, contracts: config.contractEtherDeltaAddrs, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
   return connection;
 }
 Main.loadAccounts = function(callback) {
@@ -175,7 +179,7 @@ Main.loadEvents = function(callback) {
     // startBlock = blockNumber-15000;
     for (id in eventsCache) {
       var event = eventsCache[id];
-      if (event.blockNumber>startBlock) {
+      if (event.blockNumber>startBlock && event.address==config.contractEtherDeltaAddr) {
         startBlock = event.blockNumber;
       }
       for (arg in event.args) {
@@ -471,19 +475,25 @@ Main.withdraw = function(addr, amount) {
     Main.alertError('You must specify a valid amount to withdraw.');
     return;
   }
-  if (addr=='0x0000000000000000000000000000000000000000') {
-    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-      txHash = result.txHash;
-      nonce = result.nonce;
-      Main.alertTxResult(err, result);
-    });
-  } else {
-    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdrawToken', [addr, amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-      txHash = result.txHash;
-      nonce = result.nonce;
-      Main.alertTxResult(err, result);
-    });
-  }
+  utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [addr, addrs[selectedAccount]], function(err, result) {
+    var balance = result;
+    if (amount>balance) { //if you try to withdraw more than your balance, the amount will be modified so that you withdraw your exact balance
+      amount = balance;
+    }
+    if (addr=='0x0000000000000000000000000000000000000000') {
+      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+        txHash = result.txHash;
+        nonce = result.nonce;
+        Main.alertTxResult(err, result);
+      });
+    } else {
+      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdrawToken', [addr, amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+        txHash = result.txHash;
+        nonce = result.nonce;
+        Main.alertTxResult(err, result);
+      });
+    }
+  });
 }
 Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires, refresh) {
   utility.blockNumber(web3, function(err, blockNumber) {
@@ -632,12 +642,16 @@ Main.refresh = function(callback) {
     });
   }
 }
-Main.init = function() {
-  function mainLoop() {
+Main.refreshLoop = function() {
+  function loop() {
     Main.refresh(function(){
-      setTimeout(mainLoop, 10*1000);
+      setTimeout(loop, 10*1000);
     });
   }
+  loop();
+}
+Main.init = function(callback) {
+  connection = undefined;
   Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
   Main.connectionTest();
   Main.displayGuides(function(){
@@ -645,7 +659,7 @@ Main.init = function() {
       Main.loadEvents(function(){
         Main.displayEvents(function(){
           Main.displayMyEvents(function(){
-            mainLoop();
+            callback();
           });
         });
       });
@@ -714,11 +728,14 @@ web3.version.getNetwork(function(error, version){
     }
   });
   //load contract
+  config.contractEtherDeltaAddr = config.contractEtherDeltaAddrs[0].addr;
   utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
     contractEtherDelta = contract;
     utility.loadContract(web3, config.contractToken, '0x0000000000000000000000000000000000000000', function(err, contract){
       contractToken = contract;
-      Main.init();
+      Main.init(function(){
+        Main.refreshLoop();
+      });
     });
   });
 });

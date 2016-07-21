@@ -1,2 +1,14 @@
 <p>Connection: <%= connection.connection %> (<%= connection.provider %>) <%= connection.testnet ? 'TESTNET' : ''%></p>
-<p>Smart contract: <a href="<%= contractLink%>" target="_blank"><%= contractAddr %></a></p>
+
+<div class="btn-group dropup">
+  <a class="btn btn-default" href="<%= contractLink%>" target="_blank"><i class="fa fa-file-text"></i> <%= contractAddr %></a>
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <span class="caret"></span>
+    <span class="sr-only">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu pull-right">
+    <% contracts.forEach(function(contract){ %>
+      <li><a href="#" onclick="bundle.Main.contractAddr('<%= contract.addr %>');"><%= contract.addr %> (<%= contract.info %>)</a></li>
+    <%}) %>
+  </ul>
+</div>

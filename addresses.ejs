@@ -1,4 +1,4 @@
-<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= addresses[selectedAccount].addr.substring(0,12) %>... <span class="badge"><%= bundle.utility.weiToEth(addresses[selectedAccount].balance) %> eth</span> <span class="caret"></span></a>
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> <%= addresses[selectedAccount].addr.substring(0,12) %>... <span class="badge"><%= bundle.utility.weiToEth(addresses[selectedAccount].balance) %> eth</span> <span class="caret"></span></a>
 <ul class="dropdown-menu">
   <% addresses.forEach(function(address, i, array) { %>
     <li><a href="#" onclick="bundle.Main.selectAccount(<%= i%>);"><%= address.addr %> <span class="badge"><%= bundle.utility.weiToEth(address.balance) %> eth</span></a></li>
