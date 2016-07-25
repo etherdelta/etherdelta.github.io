@@ -34,30 +34,6 @@ $(function () {
     bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'sell', $('#sell_amount').val(), $('#sell_price').val(), $('#sell_expires').val(), $('#sell_refresh').is(':checked'));
   });
 });
-$(function () {
-  $('body').on('click', '#deposit_token_submit', function (e) {
-    e.preventDefault();
-    bundle.Main.deposit($('#token_addr').val(), $('#token_amount').val());
-  });
-});
-$(function () {
-  $('body').on('click', '#deposit_base_submit', function (e) {
-    e.preventDefault();
-    bundle.Main.deposit($('#base_addr').val(), $('#base_amount').val());
-  });
-});
-$(function () {
-  $('body').on('click', '#withdraw_token_submit', function (e) {
-    e.preventDefault();
-    bundle.Main.withdraw($('#token_addr').val(), $('#token_amount').val());
-  });
-});
-$(function () {
-  $('body').on('click', '#withdraw_base_submit', function (e) {
-    e.preventDefault();
-    bundle.Main.withdraw($('#base_addr').val(), $('#base_amount').val());
-  });
-});
 $('#buy_cross_modal').on('show.bs.modal', function(e) {
   var order = $(e.relatedTarget).data('order');
   console.log(order);
@@ -99,3 +75,12 @@ $(function () {
     bundle.Main.otherBase($('#other_base_addr').val(), $('#other_base_name').val(), $('#other_base_divisor').val());
   });
 });
+function deposit_click(addr) {
+  bundle.Main.deposit(addr, $('#deposit_amount_'+addr).val());
+}
+function withdraw_click(addr) {
+  bundle.Main.withdraw(addr, $('#withdraw_amount_'+addr).val());
+}
+function transfer_click(addr) {
+  bundle.Main.transfer(addr, $('#transfer_amount_'+addr).val(), $('#transfer_to_'+addr).val());
+}

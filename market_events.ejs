@@ -1,12 +1,12 @@
 <div class="box-container">
   <div class="row">
-    <div class="col-xs-6">
+    <div class="col-xs-4">
       <h3>Offers</h3>
       <div class="scroll-container" style="height: 300px;">
         <table class="table">
           <thead>
             <tr>
-              <th>Price (<%= selectedToken.name+'/'+selectedBase.name %>)</th>
+              <th><%= selectedToken.name+'/'+selectedBase.name %></th>
               <th><%= selectedToken.name %></th>
               <th><%= selectedBase.name %></th>
               <th>Buy</th>
@@ -36,7 +36,7 @@
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedBase)) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedToken)/bundle.Main.getDivisor(selectedBase), bundle.Main.getDivisor(selectedToken)) %></td>
               <td>
-                <button type="button" class="btn btn-primary btn-xs" style="width:50px;" data-toggle="modal" data-target="#buy_cross_modal" data-order='<%= JSON.stringify(order) %>'>Buy</button>
+                <button type="button" class="btn btn-success btn-xs" style="width:35px;" data-toggle="modal" data-target="#buy_cross_modal" data-order='<%= JSON.stringify(order) %>'>Buy</button>
               </td>
             </tr>
             <% }); %>
@@ -44,13 +44,36 @@
         </table>
       </div>
     </div>
-    <div class="col-xs-6">
+    <div class="col-xs-4">
+      <h3>Trades</h3>
+      <div class="scroll-container" style="height: 300px;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><%= selectedToken.name+'/'+selectedBase.name %></th>
+              <th><%= selectedToken.name %></th>
+              <th><%= selectedBase.name %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% trades.forEach(function(trade){ %>
+              <tr>
+                <td><%= trade.price.toNumber().toFixed(5) %> <a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+                <td><span class="label <%= trade.amount>0 ? 'label-success' : 'label-danger' %>"><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %></span></td>
+                <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-xs-4">
       <h3>Bids</h3>
       <div class="scroll-container" style="height: 300px;">
         <table class="table">
           <thead>
             <tr>
-              <th>Price (<%= selectedToken.name+'/'+selectedBase.name %>)</th>
+              <th><%= selectedToken.name+'/'+selectedBase.name %></th>
               <th><%= selectedToken.name %></th>
               <th><%= selectedBase.name %></th>
               <th>Sell</th>
@@ -80,7 +103,7 @@
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
               <td>
-                <button type="button" class="btn btn-primary btn-xs" style="width:50px;" data-toggle="modal" data-target="#sell_cross_modal" data-order='<%= JSON.stringify(order) %>'>Sell</button>
+                <button type="button" class="btn btn-danger btn-xs" style="width:35px;" data-toggle="modal" data-target="#sell_cross_modal" data-order='<%= JSON.stringify(order) %>'>Sell</button>
               </td>
             </tr>
             <% }); %>
@@ -88,37 +111,5 @@
         </table>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="box-container">
-  <h3>Trades</h3>
-  <div class="scroll-container" style="height: 300px;">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Block</th>
-          <th>Type</th>
-          <th>Price (<%= selectedToken.name+'/'+selectedBase.name %>)</th>
-          <th><%= selectedToken.name %></th>
-          <th><%= selectedBase.name %></th>
-          <th>Buyer</th>
-          <th>Seller</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% trades.forEach(function(trade){ %>
-          <tr>
-            <td><%= trade.blockNumber %> <a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
-            <td><%= trade.amount>0 ? 'Buy' : 'Sell' %></td>
-            <td><%= trade.price.toNumber().toFixed(5) %></td>
-            <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %></td>
-            <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
-            <td><%= trade.buyer.substring(0,12) %>...</td>
-            <td><%= trade.seller.substring(0,12) %>...</td>
-          </tr>
-        <% }); %>
-      </tbody>
-    </table>
   </div>
 </div>

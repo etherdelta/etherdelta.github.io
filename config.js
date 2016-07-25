@@ -21,6 +21,11 @@ configs["1"] = {
     {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', divisor: 1000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
   ],
+  pairs: [
+    {token: 1, base: 0},
+    {token: 2, base: 0},
+    {token: 3, base: 0},
+  ],
   gitterHost: 'https://api.gitter.im',
   gitterStream: 'stream.gitter.im',
   gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
@@ -51,6 +56,10 @@ configs["2"] = {
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+  ],
+  pairs: [
+    {token: 0, base: 1},
+    {token: 2, base: 0},
   ],
   gitterHost: 'https://api.gitter.im',
   gitterStream: 'stream.gitter.im',

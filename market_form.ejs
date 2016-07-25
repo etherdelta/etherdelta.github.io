@@ -37,41 +37,29 @@
             <input type="checkbox" class="form-control" style="width: 175px;" id="buy_refresh" />
           </div>
         </div>
-        <button type="submit" class="btn btn-primary" style="width: 275px;" id="buy_submit">Buy</button>
+        <button type="submit" class="btn btn-success" style="width: 275px;" id="buy_submit">Buy</button>
       </form>
     </div>
     <div class="col-xs-4">
       <h3>Balances</h3>
-      <ul class="list-group">
-        <li class="list-group-item" id="balance_token">
-          <i class="fa fa-circle-o-notch fa-spin"></i>
-        </li>
-        <li class="list-group-item">
-          <form class="form-inline">
-            <div class="form-group">
-              <div class="input-group">
-                <input type="text" class="form-control"  style="width:75px;" id="token_amount" placeholder="Amount" />
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary" id="deposit_token_submit" style="width:85px;">Deposit</button>
-            <button type="submit" class="btn btn-primary" id="withdraw_token_submit" style="width:85px;">Withdraw</button>
-          </form>
-        </li>
-        <li class="list-group-item" id="balance_base">
-          <i class="fa fa-circle-o-notch fa-spin"></i>
-        </li>
-        <li class="list-group-item">
-          <form class="form-inline">
-            <div class="form-group">
-              <div class="input-group">
-                <input type="text" class="form-control"  style="width:75px;" id="base_amount" placeholder="Amount" />
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary" id="deposit_base_submit" style="width:85px;">Deposit</button>
-            <button type="submit" class="btn btn-primary" id="withdraw_base_submit" style="width:85px;">Withdraw</button>
-          </form>
-        </li>
-      </ul>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= selectedToken.name %></td>
+            <td><div id="balance_token"></div></td>
+          </tr>
+          <tr>
+            <td><%= selectedBase.name %></td>
+            <td><div id="balance_base"></div></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="col-xs-4">
       <h3>Sell</h3>
@@ -106,7 +94,7 @@
             <input type="checkbox" class="form-control" style="width: 175px;" id="sell_refresh" />
           </div>
         </div>
-        <button type="submit" class="btn btn-primary" style="width: 275px;" id="sell_submit">Sell</button>
+        <button type="submit" class="btn btn-danger" style="width: 275px;" id="sell_submit">Sell</button>
       </form>
     </div>
   </div>

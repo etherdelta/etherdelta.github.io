@@ -133,6 +133,7 @@ Main.addressLink = function(address) {
   return 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+address;
 }
 Main.contractAddr = function(addr) {
+  gitterMessagesCache = {}; //clear gitter message cache
   config.contractEtherDeltaAddr = addr;
   Main.init(function(){});
 }
@@ -193,7 +194,7 @@ Main.loadEvents = function(callback) {
       eventsCache[event.transactionHash+event.logIndex] = event;
       Main.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
       Main.displayEvents(function(){
-        Main.displayBalances(function(){
+        Main.displayAllBalances(function(){
           Main.displayMyEvents(function(){
           });
         });
@@ -230,10 +231,25 @@ Main.displayMyEvents = function(callback) {
     }
   });
   myEvents.sort(function(a,b){ return b.id - a.id });
-  //display the template
-  new EJS({url: config.homeURL+'/'+'my_events.ejs'}).update('my_events', {selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents});
-  $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
-  callback();
+  //pending transactions
+  async.map(pendingTransactions,
+    function(tx, callbackMap) {
+      utility.txReceipt(web3, tx.txHash, function(err, result){
+        if (result && !err) {
+          callbackMap(null, undefined);
+        } else {
+          callbackMap(null, tx);
+        }
+      });
+    },
+    function(err, results) {
+      pendingTransactions = results.filter(function(x){return x!=undefined});
+      //display the template
+      new EJS({url: config.homeURL+'/'+'my_events.ejs'}).update('my_events', {selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents, pendingTransactions: pendingTransactions});
+      $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
+      callback();
+    }
+  );
 }
 Main.displayEvents = function(callback) {
   utility.blockNumber(web3, function(err, blockNumber) {
@@ -349,6 +365,7 @@ Main.displayEvents = function(callback) {
 Main.loadTokensAndBases = function(callback) {
   new EJS({url: config.homeURL+'/'+'tokens.ejs'}).update('tokens', {tokens: config.tokens, selectedToken: selectedToken});
   new EJS({url: config.homeURL+'/'+'bases.ejs'}).update('bases', {tokens: config.tokens, selectedBase: selectedBase});
+  new EJS({url: config.homeURL+'/'+'pairs.ejs'}).update('pairs', {tokens: config.tokens, pairs: config.pairs});
   callback();
 }
 Main.selectToken = function(addr, name, divisor) {
@@ -360,6 +377,12 @@ Main.selectToken = function(addr, name, divisor) {
 Main.selectBase = function(addr, name, divisor) {
   divisor = Number(divisor);
   selectedBase = {addr: addr, name: name, divisor: divisor};
+  Main.refresh(function(){});
+  Main.displayMarket(function(){});
+}
+Main.selectTokenAndBase = function(addrToken, nameToken, divisorToken, addrBase, nameBase, divisorBase) {
+  selectedToken = {addr: addrToken, name: nameToken, divisor: Number(divisorToken)};
+  selectedBase = {addr: addrBase, name: nameBase, divisor: Number(divisorBase)};
   Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
@@ -381,7 +404,7 @@ Main.otherBase = function(addr, name, divisor) {
 }
 Main.displayMarket = function(callback) {
   new EJS({url: config.homeURL+'/'+'market_form.ejs'}).update('market_form', {selectedToken: selectedToken, selectedBase: selectedBase});
-  Main.displayBalances(function(){
+  Main.displayAllBalances(function(){
     Main.displayEvents(function(){
       Main.displayMyEvents(function(){
         callback();
@@ -389,26 +412,43 @@ Main.displayMarket = function(callback) {
     });
   });
 }
-Main.displayBalances = function(callback) {
+Main.displayAllBalances = function(callback) {
   var zeroAddr = '0x0000000000000000000000000000000000000000';
-  utility.getBalance(web3, addrs[selectedAccount], function(err, balance) {
-    utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [selectedToken.addr, addrs[selectedAccount]], function(err, result) {
-      var balanceToken = result;
-      utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [selectedBase.addr, addrs[selectedAccount]], function(err, result) {
-        var balanceBase = result;
-        utility.call(web3, contractToken, selectedToken.addr, 'balanceOf', [addrs[selectedAccount]], function(err, result) {
-          var balanceTokenOutside = selectedToken.addr==zeroAddr ? balance : result;
-          utility.call(web3, contractToken, selectedBase.addr, 'balanceOf', [addrs[selectedAccount]], function(err, result) {
-            var balanceBaseOutside = selectedBase.addr==zeroAddr ? balance : result;
-            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update('balance_token', {selected: selectedToken, balanceOutside: balanceTokenOutside, balance: balanceToken});
-            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update('balance_base', {selected: selectedBase, balanceOutside: balanceBaseOutside, balance: balanceBase});
-            Main.enableTooltips();
-            callback();
+  async.reduce(config.tokens, [],
+    function(memo, token, callbackReduce) {
+      if (token.addr==zeroAddr) {
+        utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [token.addr, addrs[selectedAccount]], function(err, result) {
+          var balance = result;
+          utility.getBalance(web3, addrs[selectedAccount], function(err, result) {
+            var balanceOutside = result;
+            memo.push({token: token, balance: balance, balanceOutside: balanceOutside, tokenLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+addrs[selectedAccount]});
+            callbackReduce(null, memo);
           });
         });
+      } else {
+        utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [token.addr, addrs[selectedAccount]], function(err, result) {
+          var balance = result;
+          utility.call(web3, contractToken, token.addr, 'balanceOf', [addrs[selectedAccount]], function(err, result) {
+            var balanceOutside = result;
+            memo.push({token: token, balance: balance, balanceOutside: balanceOutside, tokenLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/token/'+token.addr});
+            callbackReduce(null, memo);
+          });
+        });
+      }
+    },
+    function(err, balances){
+      //show balances at top of page
+      balances.forEach(function(balance){
+        if (balance.token.name==selectedToken.name) {
+          new EJS({url: config.homeURL+'/'+'balance.ejs'}).update('balance_token', {selected: balance.token, balance: balance.balance, balanceOutside: balance.balanceOutside});
+        } else if (balance.token.name==selectedBase.name) {
+          new EJS({url: config.homeURL+'/'+'balance.ejs'}).update('balance_base', {selected: balance.token, balance: balance.balance, balanceOutside: balance.balanceOutside});
+        }
       });
-    });
-  });
+      new EJS({url: config.homeURL+'/'+'balances.ejs'}).update('balances', {balances: balances});
+      callback();
+    }
+  );
 }
 Main.getToken = function(address) {
   var result = undefined;
@@ -442,6 +482,24 @@ Main.getDivisor = function(tokenOrAddress) {
   }
   return new BigNumber(result);
 }
+Main.transfer = function(addr, amount, toAddr) {
+  amount = utility.ethToWei(amount, Main.getDivisor(addr));
+  var token = Main.getToken(addr);
+  if (amount<=0) {
+    Main.alertError('You must specify a valid amount to transfer.');
+    return;
+  }
+  if (addr=='0x0000000000000000000000000000000000000000') {
+    Main.alertError('Please use your wallet software to transfer plain Ether.');
+  } else {
+    utility.send(web3, contractToken, token.addr, 'transfer', [toAddr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+      txHash = result.txHash;
+      nonce = result.nonce;
+      Main.addPending({txHash: result.txHash});
+      Main.alertTxResult(err, result);
+    });
+  }
+}
 Main.deposit = function(addr, amount) {
   amount = utility.ethToWei(amount, Main.getDivisor(addr));
   var token = Main.getToken(addr);
@@ -453,16 +511,20 @@ Main.deposit = function(addr, amount) {
     utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'deposit', [{gas: token.gasDeposit, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
+      Main.addPending({txHash: result.txHash});
       Main.alertTxResult(err, result);
     });
   } else {
     utility.send(web3, contractToken, addr, 'approve', [config.contractEtherDeltaAddr, amount, {gas: token.gasApprove, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
+      // Main.addPending({txHash: result.txHash});
+      Main.addPending({txHash: result.txHash});
       Main.alertTxResult(err, result);
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'depositToken', [addr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
+        Main.addPending({txHash: result.txHash});
         Main.alertTxResult(err, result);
       });
     });
@@ -484,12 +546,14 @@ Main.withdraw = function(addr, amount) {
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
+        Main.addPending({txHash: result.txHash});
         Main.alertTxResult(err, result);
       });
     } else {
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdrawToken', [addr, amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
+        Main.addPending({txHash: result.txHash});
         Main.alertTxResult(err, result);
       });
     }
@@ -596,6 +660,7 @@ Main.trade = function(kind, order, amount) {
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
+        Main.addPending({txHash: result.txHash});
         Main.alertTxResult(err, result);
       });
     } else {
@@ -608,8 +673,7 @@ Main.getGitterMessages = function(callback) {
     if (!err) {
       gitterMessagesCache = result.gitterMessages;
       if (result.newMessagesFound>0) {
-        Main.displayEvents(function(){
-        });
+        Main.displayEvents(function(){});
       }
     }
     callback();
@@ -618,6 +682,11 @@ Main.getGitterMessages = function(callback) {
 Main.displayGuides = function(callback) {
   new EJS({url: config.homeURL+'/'+'guides.ejs'}).update('guides', {});
   callback();
+}
+Main.addPending = function(tx) {
+  tx.txLink = 'https://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash;
+  pendingTransactions.push(tx);
+  Main.displayMyEvents(function(){});
 }
 Main.refresh = function(callback) {
   if (refreshing<=0 || Date.now()-lastRefresh>60*1000) {
@@ -687,6 +756,7 @@ var gitterMessagesCache = {};
 var deadOrders = {};
 var workingOrders = [];
 var publishingOrders = false;
+var pendingTransactions = [];
 var defaultDivisor = new BigNumber(1000000000000000000);
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {

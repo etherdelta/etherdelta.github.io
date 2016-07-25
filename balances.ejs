@@ -1,0 +1,113 @@
+<div class="box-container">
+  <h3>Balances</h3>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#deposit" aria-controls="deposit" role="tab" data-toggle="tab">Deposit</a></li>
+    <li role="presentation"><a href="#withdraw" aria-controls="withdraw" role="tab" data-toggle="tab">Withdraw</a></li>
+    <li role="presentation"><a href="#transfer" aria-controls="transfer" role="tab" data-toggle="tab">Transfer</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="deposit">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Balance (in your wallet)</th>
+            <th>Balance (on EtherDelta)</th>
+            <th>Deposit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% balances.forEach(function(balance){ %>
+            <tr>
+              <td><a href="<%= balance.tokenLink %>" target="_blank"><%= balance.token.name %></a></td>
+              <td><%= bundle.utility.weiToEth(balance.balanceOutside) %></td>
+              <td><%= bundle.utility.weiToEth(balance.balance) %></td>
+              <td>
+                <form class="form-inline">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" class="form-control"  style="width:75px;" id="deposit_amount_<%= balance.token.addr %>" placeholder="Amount" />
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-primary" id="deposit_submit_<%= balance.token.addr %>" onclick="deposit_click('<%= balance.token.addr %>')" style="width:85px;">Deposit</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="withdraw">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Balance (in your wallet)</th>
+            <th>Balance (on EtherDelta)</th>
+            <th>Withdraw</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% balances.forEach(function(balance){ %>
+            <tr>
+              <td><a href="<%= balance.tokenLink %>" target="_blank"><%= balance.token.name %></a></td>
+              <td><%= bundle.utility.weiToEth(balance.balanceOutside) %></td>
+              <td><%= bundle.utility.weiToEth(balance.balance) %></td>
+              <td>
+                <form class="form-inline">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" class="form-control"  style="width:75px;" id="withdraw_amount_<%= balance.token.addr %>" placeholder="Amount" />
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-primary" id="withdraw_submit_<%= balance.token.addr %>" onclick="withdraw_click('<%= balance.token.addr %>')" style="width:85px;">Withdraw</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="transfer">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Balance (in your wallet)</th>
+            <th>Balance (on EtherDelta)</th>
+            <th>Transfer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% balances.forEach(function(balance){ %>
+            <tr>
+              <td><a href="<%= balance.tokenLink %>" target="_blank"><%= balance.token.name %></a></td>
+              <td><%= bundle.utility.weiToEth(balance.balanceOutside) %></td>
+              <td><%= bundle.utility.weiToEth(balance.balance) %></td>
+              <td>
+                <form class="form-inline">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" class="form-control"  style="width:75px;" id="transfer_amount_<%= balance.token.addr %>" placeholder="Amount" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" class="form-control"  style="width:200px;" id="transfer_to_<%= balance.token.addr %>" placeholder="0x..." />
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-primary" id="transfer_submit_<%= balance.token.addr %>" onclick="transfer_click('<%= balance.token.addr %>')" style="width:85px;">Transfer</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
