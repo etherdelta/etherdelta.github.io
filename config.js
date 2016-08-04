@@ -2,13 +2,14 @@ var configs = {};
 
 //mainnet
 configs["1"] = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://localhost:8080',
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://localhost:8080',
   contractEtherDelta: 'etherdelta.sol',
   contractToken: 'token.sol',
   contractReserveToken: 'reservetoken.sol',
   contractEtherDeltaAddrs: [
-    {addr: '0xc6b330df38d6ef288c953f1f2835723531073ce2', info: 'Deployed 07/08/2016'}
+    {addr: '0x2136bbba2edca21afdddee838fff19ea70d10f03', info: 'Deployed 08/03/2016'},
+    {addr: '0xc6b330df38d6ef288c953f1f2835723531073ce2', info: 'Deployed 07/08/2016 -- please withdraw'}
   ],
   ethTestnet: false,
   ethProvider: 'http://localhost:8545',
@@ -38,12 +39,13 @@ configs["1"] = {
 
 //testnet
 configs["2"] = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://localhost:8080',
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://localhost:8080',
   contractEtherDelta: 'etherdelta.sol',
   contractToken: 'token.sol',
   contractReserveToken: 'reservetoken.sol',
   contractEtherDeltaAddrs: [
+    {addr: '0x24b0ed7ba8d6d969bfe8409b4e6aeee3a40f8855', info: 'Deployed 08/03/2016'},
     {addr: '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d', info: 'Deployed 06/30/2016'},
     {addr: '0x0000000000000000000000000000000000000000', info: 'Zero contract'}
   ],
@@ -56,6 +58,7 @@ configs["2"] = {
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x60c35d72086a5551af09631f82876dbbc68e397b', name: 'HFYES', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
   ],
   pairs: [
     {token: 0, base: 1},

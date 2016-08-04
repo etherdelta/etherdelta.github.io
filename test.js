@@ -115,26 +115,20 @@ describe("Test", function(done) {
     });
     it("Should mint some tokens", function(done) {
       var amount = utility.ethToWei(10000);
-      utility.testSend(web3, contractToken1, contractToken1Addr, 'setMinter', [{gas: 1000000, value: 0}], accounts[0], undefined, 0, function(err, result) {
-        assert.equal(err, undefined);
-        utility.testSend(web3, contractToken2, contractToken2Addr, 'setMinter', [{gas: 1000000, value: 0}], accounts[0], undefined, 0, function(err, result) {
-          assert.equal(err, undefined);
-          async.each([1,2,3,4,5],
-            function(i, callback) {
-              utility.testSend(web3, contractToken1, contractToken1Addr, 'create', [accounts[i], amount, {gas: 1000000, value: 0}], accounts[0], undefined, 0, function(err, result) {
-                assert.equal(err, undefined);
-                utility.testSend(web3, contractToken2, contractToken2Addr, 'create', [accounts[i], amount, {gas: 1000000, value: 0}], accounts[0], undefined, 0, function(err, result) {
-                  assert.equal(err, undefined);
-                  callback(null);
-                });
-              });
-            },
-            function(err){
-              done();
-            }
-          );
-        });
-      });
+      async.each([1,2,3,4,5],
+        function(i, callback) {
+          utility.testSend(web3, contractToken1, contractToken1Addr, 'create', [accounts[i], amount, {gas: 1000000, value: 0}], accounts[0], undefined, 0, function(err, result) {
+            assert.equal(err, undefined);
+            utility.testSend(web3, contractToken2, contractToken2Addr, 'create', [accounts[i], amount, {gas: 1000000, value: 0}], accounts[0], undefined, 0, function(err, result) {
+              assert.equal(err, undefined);
+              callback(null);
+            });
+          });
+        },
+        function(err){
+          done();
+        }
+      );
     });
     it("Should add funds to etherdelta", function(done) {
       function addEtherFunds(amount, account, callback) {

@@ -24,8 +24,8 @@
           <% balances.forEach(function(balance){ %>
             <tr>
               <td><a href="<%= balance.tokenLink %>" target="_blank"><%= balance.token.name %></a></td>
-              <td><%= bundle.utility.weiToEth(balance.balanceOutside) %></td>
-              <td><%= bundle.utility.weiToEth(balance.balance) %></td>
+              <td><%= bundle.utility.weiToEth(balance.balanceOutside, bundle.Main.getDivisor(balance.token)) %></td>
+              <td><%= bundle.utility.weiToEth(balance.balance, bundle.Main.getDivisor(balance.token)) %></td>
               <td>
                 <form class="form-inline">
                   <div class="form-group">
@@ -55,8 +55,8 @@
           <% balances.forEach(function(balance){ %>
             <tr>
               <td><a href="<%= balance.tokenLink %>" target="_blank"><%= balance.token.name %></a></td>
-              <td><%= bundle.utility.weiToEth(balance.balanceOutside) %></td>
-              <td><%= bundle.utility.weiToEth(balance.balance) %></td>
+              <td><%= bundle.utility.weiToEth(balance.balanceOutside, bundle.Main.getDivisor(balance.token)) %></td>
+              <td><%= bundle.utility.weiToEth(balance.balance, bundle.Main.getDivisor(balance.token)) %></td>
               <td>
                 <form class="form-inline">
                   <div class="form-group">
@@ -86,8 +86,8 @@
           <% balances.forEach(function(balance){ %>
             <tr>
               <td><a href="<%= balance.tokenLink %>" target="_blank"><%= balance.token.name %></a></td>
-              <td><%= bundle.utility.weiToEth(balance.balanceOutside) %></td>
-              <td><%= bundle.utility.weiToEth(balance.balance) %></td>
+              <td><%= bundle.utility.weiToEth(balance.balanceOutside, bundle.Main.getDivisor(balance.token)) %></td>
+              <td><%= bundle.utility.weiToEth(balance.balance, bundle.Main.getDivisor(balance.token)) %></td>
               <td>
                 <form class="form-inline">
                   <div class="form-group">

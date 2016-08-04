@@ -386,9 +386,9 @@ Main.selectTokenAndBase = function(addrToken, nameToken, divisorToken, addrBase,
   Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
-Main.otherToken = function(addr, name) {
+Main.otherToken = function(addr, name, divisor) {
   if (addr.slice(0,2)!="0x") addr = '0x'+addr;
-  if (!name || name=='') name = addr.slice(3,6);
+  if (!name || name=='') name = addr.slice(2,6);
   divisor = Number(divisor);
   selectedToken = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
   Main.refresh(function(){});
@@ -396,7 +396,7 @@ Main.otherToken = function(addr, name) {
 }
 Main.otherBase = function(addr, name, divisor) {
   if (addr.slice(0,2)!="0x") addr = '0x'+addr;
-  if (!name || name=='') name = addr.slice(3,6);
+  if (!name || name=='') name = addr.slice(2,6);
   divisor = Number(divisor);
   selectedBase = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
   Main.refresh(function(){});
@@ -495,7 +495,7 @@ Main.transfer = function(addr, amount, toAddr) {
     utility.send(web3, contractToken, token.addr, 'transfer', [toAddr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
-      Main.addPending({txHash: result.txHash});
+      Main.addPending(err, {txHash: result.txHash});
       Main.alertTxResult(err, result);
     });
   }
@@ -511,20 +511,19 @@ Main.deposit = function(addr, amount) {
     utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'deposit', [{gas: token.gasDeposit, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
-      Main.addPending({txHash: result.txHash});
+      Main.addPending(err, {txHash: result.txHash});
       Main.alertTxResult(err, result);
     });
   } else {
     utility.send(web3, contractToken, addr, 'approve', [config.contractEtherDeltaAddr, amount, {gas: token.gasApprove, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
-      // Main.addPending({txHash: result.txHash});
-      Main.addPending({txHash: result.txHash});
+      Main.addPending(err, {txHash: result.txHash});
       Main.alertTxResult(err, result);
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'depositToken', [addr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
-        Main.addPending({txHash: result.txHash});
+        Main.addPending(err, {txHash: result.txHash});
         Main.alertTxResult(err, result);
       });
     });
@@ -546,14 +545,14 @@ Main.withdraw = function(addr, amount) {
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
-        Main.addPending({txHash: result.txHash});
+        Main.addPending(err, {txHash: result.txHash});
         Main.alertTxResult(err, result);
       });
     } else {
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdrawToken', [addr, amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
-        Main.addPending({txHash: result.txHash});
+        Main.addPending(err, {txHash: result.txHash});
         Main.alertTxResult(err, result);
       });
     }
@@ -635,6 +634,18 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
     }
   });
 }
+Main.cancelOrder = function(order) {
+  order = JSON.parse(decodeURIComponent(order));
+  var token = Main.getToken(order.tokenGet);
+  if (order.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
+    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'cancelOrder', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+      txHash = result.txHash;
+      nonce = result.nonce;
+      Main.addPending(err, {txHash: result.txHash});
+      Main.alertTxResult(err, result);
+    });
+  }
+}
 Main.cancelOrderRefresh = function(orderNonce) {
   var len = workingOrders.length;
   workingOrders = workingOrders.filter(function(order){
@@ -660,7 +671,7 @@ Main.trade = function(kind, order, amount) {
       utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
         txHash = result.txHash;
         nonce = result.nonce;
-        Main.addPending({txHash: result.txHash});
+        Main.addPending(err, {txHash: result.txHash});
         Main.alertTxResult(err, result);
       });
     } else {
@@ -683,10 +694,12 @@ Main.displayGuides = function(callback) {
   new EJS({url: config.homeURL+'/'+'guides.ejs'}).update('guides', {});
   callback();
 }
-Main.addPending = function(tx) {
-  tx.txLink = 'https://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash;
-  pendingTransactions.push(tx);
-  Main.displayMyEvents(function(){});
+Main.addPending = function(err, tx) {
+  if (!err) {
+    tx.txLink = 'https://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash;
+    pendingTransactions.push(tx);
+    Main.displayMyEvents(function(){});
+  }
 }
 Main.refresh = function(callback) {
   if (refreshing<=0 || Date.now()-lastRefresh>60*1000) {

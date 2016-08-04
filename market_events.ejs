@@ -26,7 +26,12 @@
                       <li class="list-group-item"><% if (Number(order.order.expires) > blockNumber){ %>Expires in <%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? 'block' : 'blocks' %><% } else { %>Expired<% } %></li>
                       <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase() && order.workingOrder && order.workingOrder.refresh) { %>
                         <li class="list-group-item">
-                          This order will refresh when it expires unless you <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrderRefresh(<%= order.order.nonce %>);">Cancel</button> or refresh/close the page.
+                          This order will refresh when it expires unless you press <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrderRefresh(<%= order.order.nonce %>);">Stop</button> or refresh/close the page.
+                        </li>
+                      <% } %>
+                      <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase()) { %>
+                        <li class="list-group-item">
+                          You can <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrder('<%= encodeURIComponent(JSON.stringify(order.order)) %>');">Cancel</button> this order with a blockchain transaction.
                         </li>
                       <% } %>
                     </ul>
@@ -93,7 +98,12 @@
                       <li class="list-group-item"><% if (Number(order.order.expires) > blockNumber){ %>Expires in <%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? 'block' : 'blocks' %><% } else { %>Expired<% } %></li>
                       <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase() && order.workingOrder && order.workingOrder.refresh) { %>
                         <li class="list-group-item">
-                          This order will refresh when it expires unless you <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrderRefresh(<%= order.order.nonce %>);">Cancel</button> or refresh/close the page.
+                          This order will refresh when it expires unless you press <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrderRefresh(<%= order.order.nonce %>);">Stop</button> or refresh/close the page.
+                        </li>
+                      <% } %>
+                      <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase()) { %>
+                        <li class="list-group-item">
+                          You can <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrder('<%= encodeURIComponent(JSON.stringify(order.order)) %>');">Cancel</button> this order with a blockchain transaction.
                         </li>
                       <% } %>
                     </ul>
