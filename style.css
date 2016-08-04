@@ -9,11 +9,10 @@ body {
   width: 100%;
   background: #fff;
   padding-top: 3px;
-  padding-bottom: 3px;
 }
 
 #family .inside {
-  width: 1000px;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
 }
@@ -21,6 +20,10 @@ body {
 #family a {
   text-decoration: none;
   color: #000;
+}
+
+#family button {
+  margin-bottom: 3px;
 }
 
 #title {
