@@ -30,7 +30,7 @@
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" class="form-control"  style="width:75px;" id="deposit_amount_<%= balance.token.addr %>" placeholder="Amount" />
+                      <input type="text" class="form-control"  style="width:279px;" id="deposit_amount_<%= balance.token.addr %>" placeholder="Amount" />
                     </div>
                   </div>
                   <button type="button" class="btn btn-primary" id="deposit_submit_<%= balance.token.addr %>" onclick="deposit_click('<%= balance.token.addr %>')" style="width:85px;">Deposit</button>
@@ -61,7 +61,7 @@
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" class="form-control"  style="width:75px;" id="withdraw_amount_<%= balance.token.addr %>" placeholder="Amount" />
+                      <input type="text" class="form-control"  style="width:279px;" id="withdraw_amount_<%= balance.token.addr %>" placeholder="Amount" />
                     </div>
                   </div>
                   <button type="button" class="btn btn-primary" id="withdraw_submit_<%= balance.token.addr %>" onclick="withdraw_click('<%= balance.token.addr %>')" style="width:85px;">Withdraw</button>
@@ -92,12 +92,12 @@
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" class="form-control"  style="width:75px;" id="transfer_amount_<%= balance.token.addr %>" placeholder="Amount" />
+                      <input type="text" class="form-control"  style="width:125px;" id="transfer_amount_<%= balance.token.addr %>" placeholder="Amount" />
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" class="form-control"  style="width:200px;" id="transfer_to_<%= balance.token.addr %>" placeholder="0x..." />
+                      <input type="text" class="form-control"  style="width:150px;" id="transfer_to_<%= balance.token.addr %>" placeholder="0x..." />
                     </div>
                   </div>
                   <button type="button" class="btn btn-primary" id="transfer_submit_<%= balance.token.addr %>" onclick="transfer_click('<%= balance.token.addr %>')" style="width:85px;">Transfer</button>
