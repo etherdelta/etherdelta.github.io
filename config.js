@@ -2,8 +2,8 @@ var configs = {};
 
 //mainnet
 configs["1"] = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://0.0.0.0:8080',
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://0.0.0.0:8080',
   contractEtherDelta: 'etherdelta.sol',
   contractToken: 'token.sol',
   contractReserveToken: 'reservetoken.sol',
@@ -45,8 +45,8 @@ configs["1"] = {
 
 //testnet
 configs["2"] = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://0.0.0.0:8080',
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://0.0.0.0:8080',
   contractEtherDelta: 'etherdelta.sol',
   contractToken: 'token.sol',
   contractReserveToken: 'reservetoken.sol',
