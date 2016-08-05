@@ -1,1 +1,1 @@
-browserify browserify.js --s bundle | derequire | uglifyjs --compress --mangle > bundle.js
+browserify browserify.js --s bundle | derequire > bundle.js
