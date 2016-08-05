@@ -447,7 +447,7 @@ Main.displayAllBalances = function(callback) {
           new EJS({url: config.homeURL+'/'+'balance.ejs'}).update('balance_base', {selected: balance.token, balance: balance.balance, balanceOutside: balance.balanceOutside});
         }
       });
-      new EJS({url: config.homeURL+'/'+'balances.ejs'}).update('balances', {balances: balances});
+      new EJS({url: config.homeURL+'/'+'balances.ejs'}).update('balances', {balances: balances, addr: addrs[selectedAccount]});
       callback();
     }
   );
@@ -491,7 +491,9 @@ Main.transfer = function(addr, amount, toAddr) {
     Main.alertError('You must specify a valid amount to transfer.');
     return;
   }
-  if (addr=='0x0000000000000000000000000000000000000000') {
+  if (!web3.isAddress(toAddr) || toAddr=='0x0000000000000000000000000000000000000000') {
+    Main.alertError('Please specify a valid address.');
+  } else if (addr=='0x0000000000000000000000000000000000000000') {
     Main.alertError('Please use your wallet software to transfer plain Ether.');
   } else {
     utility.send(web3, contractToken, token.addr, 'transfer', [toAddr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {

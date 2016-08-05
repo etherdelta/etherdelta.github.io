@@ -97,7 +97,7 @@
                   </div>
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" class="form-control"  style="width:150px;" id="transfer_to_<%= balance.token.addr %>" placeholder="0x..." />
+                      <input type="text" class="form-control"  style="width:150px;" id="transfer_to_<%= balance.token.addr %>" placeholder="0x..." value="<%= addr %>" />
                     </div>
                   </div>
                   <button type="button" class="btn btn-primary" id="transfer_submit_<%= balance.token.addr %>" onclick="transfer_click('<%= balance.token.addr %>')" style="width:85px;">Transfer</button>
