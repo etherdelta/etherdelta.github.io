@@ -8,7 +8,7 @@
   </button>
   <ul class="dropdown-menu pull-right">
     <% contracts.forEach(function(contract){ %>
-      <li><a href="#" onclick="bundle.Main.contractAddr('<%= contract.addr %>');"><%= contract.addr %> (<%= contract.info %>)</a></li>
+      <li><a href="javascript:;" onclick="bundle.Main.contractAddr('<%= contract.addr %>');"><%= contract.addr %> (<%= contract.info %>)</a></li>
     <%}) %>
   </ul>
 </div>

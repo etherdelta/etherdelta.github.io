@@ -142,7 +142,7 @@ Main.connectionTest = function() {
   connection = {connection: 'Proxy', provider: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io', testnet: config.ethTestnet};
   try {
     if (web3.currentProvider) {
-      web3.eth.getBalance('0x0000000000000000000000000000000000000000');
+      web3.eth.coinbase;
       connection = {connection: 'Geth', provider: config.ethProvider, testnet: config.ethTestnet};
     }
   } catch(err) {
@@ -701,11 +701,15 @@ Main.addPending = function(err, tx) {
     Main.displayMyEvents(function(){});
   }
 }
+Main.updateUrl = function() {
+  window.location.hash = '#'+selectedToken.name+'-'+selectedBase.name;
+}
 Main.refresh = function(callback) {
   if (refreshing<=0 || Date.now()-lastRefresh>60*1000) {
     refreshing = 3;
     Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
     Main.connectionTest();
+    Main.updateUrl();
     Main.loadAccounts(function(){
       refreshing--;
     });
@@ -773,9 +777,9 @@ var pendingTransactions = [];
 var defaultDivisor = new BigNumber(1000000000000000000);
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
-    web3 = new Web3(web3.currentProvider);
+  web3 = new Web3(web3.currentProvider);
 } else if (typeof Web3 !== 'undefined') {
-    web3 = new Web3(new Web3.providers.HttpProvider(config.ethProvider));
+  web3 = new Web3(new Web3.providers.HttpProvider(config.ethProvider));
 } else if(typeof web3 == 'undefined' && typeof Web3 == 'undefined') {
 }
 
@@ -810,6 +814,19 @@ web3.version.getNetwork(function(error, version){
       });
     }
   });
+  //select token and base
+  var hash = window.location.hash.substr(1);
+  if (hash && hash.length>0) {
+    var hashes = hash.split("-");
+    if (hashes.length==2) {
+      var matchesToken = config.tokens.filter(function(x){return x.name==hashes[0]});
+      var matchesBase = config.tokens.filter(function(x){return x.name==hashes[1]});
+      if (matchesToken.length>0 && matchesBase.length>0) {
+        selectedToken = matchesToken[0];
+        selectedBase = matchesBase[0];
+      }
+    }
+  }
   //load contract
   config.contractEtherDeltaAddr = config.contractEtherDeltaAddrs[0].addr;
   utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
