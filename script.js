@@ -25,13 +25,15 @@ function sell_change() {
 $(function () {
   $('body').on('click', '#buy_submit', function (e) {
     e.preventDefault();
-    bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'buy', $('#buy_amount').val(), $('#buy_price').val(), $('#buy_expires').val(), $('#buy_refresh').is(':checked'));
+    // bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'buy', $('#buy_amount').val(), $('#buy_price').val(), $('#buy_expires').val(), $('#buy_refresh').is(':checked'));
+    bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'buy', $('#buy_amount').val(), $('#buy_price').val(), $('#buy_expires').val(), false);
   });
 });
 $(function () {
   $('body').on('click', '#sell_submit', function (e) {
     e.preventDefault();
-    bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'sell', $('#sell_amount').val(), $('#sell_price').val(), $('#sell_expires').val(), $('#sell_refresh').is(':checked'));
+    // bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'sell', $('#sell_amount').val(), $('#sell_price').val(), $('#sell_expires').val(), $('#sell_refresh').is(':checked'));
+    bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'sell', $('#sell_amount').val(), $('#sell_price').val(), $('#sell_expires').val(), false);
   });
 });
 $('#buy_cross_modal').on('show.bs.modal', function(e) {
