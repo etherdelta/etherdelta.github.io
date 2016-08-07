@@ -91,9 +91,11 @@ function getParameterByName(name, url) {
 }
 //default config
 var index = "1"; //mainnet
-var network = getParameterByName("network");
-if (network) {
-  index = network;
+if (typeof(window)!='undefined') {
+  var network = getParameterByName("network");
+  if (network) {
+    index = network;
+  }
 }
 var config = configs[index];
 
