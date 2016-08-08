@@ -41,7 +41,7 @@
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedBase)) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedToken)/bundle.Main.getDivisor(selectedBase), bundle.Main.getDivisor(selectedToken)) %></td>
               <td>
-                <button type="button" class="btn btn-success btn-xs" style="width:35px;" data-toggle="modal" data-target="#buy_cross_modal" data-order='<%= JSON.stringify(order) %>'>Buy</button>
+                <button type="button" class="btn btn-success btn-xs" style="width:35px;" data-toggle="modal" data-target="#buy_cross_modal" data-order='<%= JSON.stringify(order) %>' data-desc='Sell order: <br /><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedBase)) %> <%= selectedToken.name %> @ <%= order.price.toNumber().toFixed(5) %> <%= selectedToken.name+'/'+selectedBase.name %>' data-amount='<%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedBase)) %>'>Buy</button>
               </td>
             </tr>
             <% }); %>
@@ -113,7 +113,7 @@
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %></td>
               <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
               <td>
-                <button type="button" class="btn btn-danger btn-xs" style="width:35px;" data-toggle="modal" data-target="#sell_cross_modal" data-order='<%= JSON.stringify(order) %>'>Sell</button>
+                <button type="button" class="btn btn-danger btn-xs" style="width:35px;" data-toggle="modal" data-target="#sell_cross_modal" data-order='<%= JSON.stringify(order) %>' data-desc='Buy order: <br /><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %> <%= selectedToken.name %> @ <%= order.price.toNumber().toFixed(5) %> <%= selectedToken.name+'/'+selectedBase.name %>' data-amount='<%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %>'>Sell</button>
               </td>
             </tr>
             <% }); %>

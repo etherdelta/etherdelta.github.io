@@ -14,7 +14,7 @@ configs["1"] = {
   ethTestnet: false,
   ethProvider: 'http://localhost:8545',
   ethGasPrice: 20000000000,
-  ethAddr: '0x0000000000000000000000000000000000000000',
+  ethAddr: '0x0000000000000000000000000000000000000123',
   ethAddrPrivateKey: '',
   tokens: [
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
@@ -58,7 +58,7 @@ configs["2"] = {
   ethTestnet: true,
   ethProvider: 'http://localhost:8545',
   ethGasPrice: 20000000000,
-  ethAddr: '0x0000000000000000000000000000000000000000',
+  ethAddr: '0x0000000000000000000000000000000000000123',
   ethAddrPrivateKey: '',
   tokens: [
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},

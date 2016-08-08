@@ -38,16 +38,19 @@ $(function () {
 });
 $('#buy_cross_modal').on('show.bs.modal', function(e) {
   var order = $(e.relatedTarget).data('order');
-  console.log(order);
+  var amount = $(e.relatedTarget).data('amount');
+  var desc = $(e.relatedTarget).data('desc');
   $('#buy_cross_order').val(JSON.stringify(order.order));
-  $('#buy_cross_desc').html('Sell order: '+bundle.utility.weiToEth(Math.abs(Number(order.availableVolume)), bundle.Main.getDivisor(order.order.tokenGet))+' @ '+Number(order.price).toFixed(5));
-  $('#buy_cross_amount').val(bundle.utility.weiToEth(Math.abs(Number(order.availableVolume)), bundle.Main.getDivisor(order.order.tokenGet)));
+  $('#buy_cross_amount').val(amount);
+  $('#buy_cross_desc').html(desc);
 });
 $('#sell_cross_modal').on('show.bs.modal', function(e) {
   var order = $(e.relatedTarget).data('order');
+  var amount = $(e.relatedTarget).data('amount');
+  var desc = $(e.relatedTarget).data('desc');
   $('#sell_cross_order').val(JSON.stringify(order.order));
-  $('#sell_cross_desc').html('Buy order: '+bundle.utility.weiToEth(Math.abs(Number(order.availableVolume)), bundle.Main.getDivisor(order.order.tokenGet))+' @ '+Number(order.price).toFixed(5));
-  $('#sell_cross_amount').val(bundle.utility.weiToEth(Math.abs(Number(order.availableVolume)), bundle.Main.getDivisor(order.order.tokenGet)));
+  $('#sell_cross_amount').val(amount);
+  $('#sell_cross_desc').html(desc);
 });
 $(function () {
   $('body').on('click', '#buy_cross_submit', function (e) {
