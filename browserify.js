@@ -701,6 +701,7 @@ Main.getGitterMessages = function(callback) {
   utility.getGitterMessages(gitterMessagesCache, function(err, result){
     if (!err) {
       gitterMessagesCache = result.gitterMessages;
+      Main.createCookie(config.gitterCacheCookie, JSON.stringify(gitterMessagesCache), 999);
       if (result.newMessagesFound>0) {
         Main.displayEvents(function(){});
       }
@@ -805,14 +806,19 @@ web3.version.getNetwork(function(error, version){
   addrs = [config.ethAddr];
   pks = [config.ethAddrPrivateKey];
   //get cookie
-  var cookie = Main.readCookie(config.userCookie);
-  if (cookie) {
-    cookie = JSON.parse(cookie);
-    addrs = cookie["addrs"];
-    pks = cookie["pks"];
-    selectedAccount = cookie["selectedAccount"];
-    // selectedToken = cookie["selectedToken"];
-    // selectedBase = cookie["selectedBase"];
+  var userCookie = Main.readCookie(config.userCookie);
+  if (userCookie) {
+    userCookie = JSON.parse(userCookie);
+    addrs = userCookie["addrs"];
+    pks = userCookie["pks"];
+    selectedAccount = userCookie["selectedAccount"];
+    // selectedToken = userCookie["selectedToken"];
+    // selectedBase = userCookie["selectedBase"];
+  }
+  //gitter messages cache
+  var gitterCookie = Main.readCookie(config.gitterCacheCookie);
+  if (gitterCookie) {
+    gitterMessagesCache = JSON.parse(gitterCookie);
   }
   //get accounts
   web3.eth.defaultAccount = config.ethAddr;

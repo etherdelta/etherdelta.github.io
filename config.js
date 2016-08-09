@@ -39,6 +39,7 @@ configs["1"] = {
   gitterRoomID: '57756375c2f0db084a20cf77',
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
+  gitterCacheCookie: 'EtherDelta_gitterCache',
   defaultToken: 1,
   defaultBase: 0
 };
@@ -76,6 +77,7 @@ configs["2"] = {
   gitterRoomID: '57756375c2f0db084a20cf77',
   userCookie: 'EtherDelta_testnet',
   eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
+  gitterCacheCookie: 'EtherDelta_gitterCache_testnet',
   defaultToken: 0,
   defaultBase: 1
 };
