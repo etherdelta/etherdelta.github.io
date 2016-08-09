@@ -293,17 +293,27 @@ Main.displayEvents = function(callback) {
       function(memo, order, callbackReduce) {
         if (blockNumber<Number(order.order.expires)) {
           utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-            if (order.amount>=0) {
-              order.availableVolume = result;
+            if (!err) {
+              if (order.amount>=0) {
+                order.availableVolume = result;
+              } else {
+                order.availableVolume = result.div(order.price);
+              }
+              var ethAvailableVolume = 0;
+              if (order.availableVolume>0) {
+                ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
+              } else if (order.availableVolume<0) {
+                ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedBase));
+              }
+              if (Number(ethAvailableVolume).toFixed(3)>=0.001) { //min order size is 0.001
+                memo.push(order);
+              } else {
+                deadOrders[order.id] = true;
+              }
+              callbackReduce(null, memo);
             } else {
-              order.availableVolume = result.div(order.price);
+              callbackReduce(null, memo);
             }
-            if (order.availableVolume>0) {
-              memo.push(order);
-            } else {
-              deadOrders[order.id] = true;
-            }
-            callbackReduce(null, memo);
           });
         } else {
           deadOrders[order.id] = true;
@@ -404,10 +414,12 @@ Main.otherBase = function(addr, name, divisor) {
 }
 Main.displayMarket = function(callback) {
   new EJS({url: config.homeURL+'/'+'market_form.ejs'}).update('market_form', {selectedToken: selectedToken, selectedBase: selectedBase});
-  Main.displayAllBalances(function(){
-    Main.displayEvents(function(){
-      Main.displayMyEvents(function(){
-        callback();
+  Main.loadTokensAndBases(function(){
+    Main.displayAllBalances(function(){
+      Main.displayEvents(function(){
+        Main.displayMyEvents(function(){
+          callback();
+        });
       });
     });
   });
@@ -614,7 +626,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [tokenGive, addrs[selectedAccount]], function(err, result) {
     var balance = result;
     if (balance.lt(new BigNumber(amountGive))) {
-      Main.alertError('You do not have enough balance to send this order.');
+      Main.alertError('You do not have enough funds to send this order.');
     } else {
       var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
       var hash = sha256(new Buffer(condensed,'hex'));
@@ -627,6 +639,10 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
           utility.postGitterMessage(JSON.stringify(order), function(err, result){
             if (!err) {
               Main.alertSuccess('You sent an order to the order book!');
+              Main.getGitterMessages(function(){
+                Main.displayEvents(function(){
+                });
+              });
             } else {
               Main.alertError('You tried sending an order to the order book but there was an error.');
             }
@@ -720,12 +736,10 @@ Main.refresh = function(callback) {
     });
     Main.getGitterMessages(function(){
       Main.displayEvents(function(){
-        Main.loadTokensAndBases(function(){
-          $('#loading').hide();
-          refreshing--;
-          lastRefresh = Date.now();
-          callback();
-        });
+        $('#loading').hide();
+        refreshing--;
+        lastRefresh = Date.now();
+        callback();
       });
     });
   }
@@ -743,16 +757,12 @@ Main.init = function(callback) {
   Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
   Main.connectionTest();
   Main.displayGuides(function(){
-    Main.displayMarket(function(){
-      Main.loadEvents(function(){
-        Main.displayEvents(function(){
-          Main.displayMyEvents(function(){
-            callback();
-          });
-        });
+    Main.loadEvents(function(){
+      Main.displayMarket(function(){
+        callback();
       });
     });
-  })
+  });
 }
 
 //globals

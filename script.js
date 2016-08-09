@@ -13,13 +13,13 @@ $(function() {
 function buy_change() {
   var amount = Number($('#buy_amount').val());
   var price = Number($('#buy_price').val());
-  var total = amount * price;
+  var total = (amount * price).toFixed(3);
   $('#buy_total').val(total);
 }
 function sell_change() {
   var amount = Number($('#sell_amount').val());
   var price = Number($('#sell_price').val());
-  var total = amount * price;
+  var total = (amount * price).toFixed(3);
   $('#sell_total').val(total);
 }
 $(function () {
