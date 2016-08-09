@@ -1718,13 +1718,13 @@ function getGitterMessages(gitterMessages, callback) {
   var numMessages = undefined;
   var beforeId = undefined;
   var messages = [];
-  var limit = 5;
+  var pages = 10;
   var newMessagesFound = 0;
   async.until(
-    function () { return limit <= 0; },
+    function () { return pages <= 0; },
     function (callbackUntil) {
-      limit -= 1;
-      var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken+'&limit=50';
+      pages -= 1;
+      var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken+'&limit=100';
       if (beforeId) url += '&beforeId='+beforeId;
       request.get(url, function(err, httpResponse, body){
         if (!err) {
@@ -1733,7 +1733,7 @@ function getGitterMessages(gitterMessages, callback) {
             beforeId = data[0].id;
             data.forEach(function(message){
               if (gitterMessages[message.id]) {
-                limit = 0;
+                pages = 0;
               } else {
                 newMessagesFound++;
               }
@@ -1743,7 +1743,7 @@ function getGitterMessages(gitterMessages, callback) {
               }
             });
           } else {
-            limit = 0;
+            pages = 0;
           }
           setTimeout(function(){callbackUntil(null)}, 1000);
         } else {
