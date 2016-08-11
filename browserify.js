@@ -678,23 +678,31 @@ Main.trade = function(kind, order, amount) {
     //if I'm selling a bid, the buyer is getting the token
     amount = utility.ethToWei(amount, Main.getDivisor(order.tokenGet));
   } else if (kind=='buy') {
-    //if I'm buying an offer, the seller is getting the base and giving the token, so must convert
+    //if I'm buying an offer, the seller is getting the base and giving the token, so must convert to get terms
     amount = utility.ethToWei(amount * Number(order.amountGet) / Number(order.amountGive), Main.getDivisor(order.tokenGive));
   } else {
     return;
   }
   var token = Main.getToken(order.tokenGet);
-  utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, addrs[selectedAccount]], function(err, result) {
-    if (result) {
-      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-        txHash = result.txHash;
-        nonce = result.nonce;
-        Main.addPending(err, {txHash: result.txHash});
-        Main.alertTxResult(err, result);
+  utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [order.tokenGet, addrs[selectedAccount]], function(err, result) {
+    var availableBalance = result;
+    utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s], function(err, result) {
+      var availableVolume = result;
+      if (amount>availableBalance) amount = availableBalance;
+      if (amount>availableVolume) amount = availableVolume;
+      utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, addrs[selectedAccount]], function(err, result) {
+        if (result) {
+          utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+            txHash = result.txHash;
+            nonce = result.nonce;
+            Main.addPending(err, {txHash: result.txHash});
+            Main.alertTxResult(err, result);
+          });
+        } else {
+          Main.alertError("You tried placing an order, but the order failed. Either the order already traded or you or the counterparty do not have enough funds.");
+        }
       });
-    } else {
-      Main.alertError("You tried placing an order, but the order failed. Either the order already traded or you or the counterparty do not have enough funds.");
-    }
+    });
   });
 }
 Main.getGitterMessages = function(callback) {
