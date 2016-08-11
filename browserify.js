@@ -173,8 +173,6 @@ Main.loadAccounts = function(callback) {
   );
 }
 Main.loadEvents = function(callback) {
-  var cookie = Main.readCookie(config.eventsCacheCookie);
-  if (cookie) eventsCache = JSON.parse(cookie);
   utility.blockNumber(web3, function(err, blockNumber) {
     var startBlock = 0;
     // startBlock = blockNumber-15000;
@@ -825,11 +823,14 @@ web3.version.getNetwork(function(error, version){
     // selectedToken = userCookie["selectedToken"];
     // selectedBase = userCookie["selectedBase"];
   }
-  //gitter messages cache
+  //gitter messages cache cookie
   var gitterCookie = Main.readCookie(config.gitterCacheCookie);
   if (gitterCookie) {
     gitterMessagesCache = JSON.parse(gitterCookie);
   }
+  //events cache cookie
+  var eventsCacheCookie = Main.readCookie(config.eventsCacheCookie);
+  if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
   //dead orders cookie
   var deadOrdersCookie = Main.readCookie(config.deadOrdersCookie);
   if (deadOrdersCookie) {
