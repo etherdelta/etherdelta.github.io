@@ -323,6 +323,8 @@ Main.displayEvents = function(callback) {
         }
       },
       function(err, ordersReduced){
+        //save dead orders to storage
+        Main.createCookie(config.deadOrdersCookie, JSON.stringify(deadOrders), 999);
         //attach working orders if they exist
         for (var i=0; i<ordersReduced.length; i++) {
           var order = ordersReduced[i];
@@ -829,6 +831,11 @@ web3.version.getNetwork(function(error, version){
   var gitterCookie = Main.readCookie(config.gitterCacheCookie);
   if (gitterCookie) {
     gitterMessagesCache = JSON.parse(gitterCookie);
+  }
+  //dead orders cookie
+  var deadOrdersCookie = Main.readCookie(config.deadOrdersCookie);
+  if (deadOrdersCookie) {
+    deadOrders = JSON.parse(deadOrdersCookie);
   }
   //get accounts
   web3.eth.defaultAccount = config.ethAddr;
@@ -1959,6 +1966,7 @@ configs["1"] = {
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   gitterCacheCookie: 'EtherDelta_gitterCache',
+  deadOrdersCookie: 'EtherDelta_deadOrders',
   defaultToken: 1,
   defaultBase: 0
 };
@@ -1997,6 +2005,7 @@ configs["2"] = {
   userCookie: 'EtherDelta_testnet',
   eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
   gitterCacheCookie: 'EtherDelta_gitterCache_testnet',
+  deadOrdersCookie: 'EtherDelta_deadOrders_testnet',
   defaultToken: 0,
   defaultBase: 1
 };

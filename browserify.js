@@ -321,6 +321,8 @@ Main.displayEvents = function(callback) {
         }
       },
       function(err, ordersReduced){
+        //save dead orders to storage
+        Main.createCookie(config.deadOrdersCookie, JSON.stringify(deadOrders), 999);
         //attach working orders if they exist
         for (var i=0; i<ordersReduced.length; i++) {
           var order = ordersReduced[i];
@@ -827,6 +829,11 @@ web3.version.getNetwork(function(error, version){
   var gitterCookie = Main.readCookie(config.gitterCacheCookie);
   if (gitterCookie) {
     gitterMessagesCache = JSON.parse(gitterCookie);
+  }
+  //dead orders cookie
+  var deadOrdersCookie = Main.readCookie(config.deadOrdersCookie);
+  if (deadOrdersCookie) {
+    deadOrders = JSON.parse(deadOrdersCookie);
   }
   //get accounts
   web3.eth.defaultAccount = config.ethAddr;

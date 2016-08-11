@@ -40,6 +40,7 @@ configs["1"] = {
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   gitterCacheCookie: 'EtherDelta_gitterCache',
+  deadOrdersCookie: 'EtherDelta_deadOrders',
   defaultToken: 1,
   defaultBase: 0
 };
@@ -78,6 +79,7 @@ configs["2"] = {
   userCookie: 'EtherDelta_testnet',
   eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
   gitterCacheCookie: 'EtherDelta_gitterCache_testnet',
+  deadOrdersCookie: 'EtherDelta_deadOrders_testnet',
   defaultToken: 0,
   defaultBase: 1
 };
