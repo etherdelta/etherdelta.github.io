@@ -340,17 +340,19 @@ Main.displayEvents = function(callback) {
         var trades = [];
         events.forEach(function(event){
           if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr) {
-            var trade;
-            if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
-              //sell
-              trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give};
-            } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
-              //buy
-              trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.give, seller: event.args.get};
-            }
-            if (trade) {
-              trade.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-              trades.push(trade);
+            if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
+              var trade;
+              if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
+                //sell
+                trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give};
+              } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
+                //buy
+                trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.give, seller: event.args.get};
+              }
+              if (trade) {
+                trade.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+                trades.push(trade);
+              }
             }
           }
         });
@@ -732,6 +734,12 @@ Main.addPending = function(err, tx) {
 }
 Main.updateUrl = function() {
   window.location.hash = '#'+selectedToken.name+'-'+selectedBase.name;
+}
+Main.resetCaches = function() {
+  Main.eraseCookie(config.eventsCacheCookie);
+  Main.eraseCookie(config.gitterCacheCookie);
+  Main.eraseCookie(config.deadOrdersCookie);
+  location.reload();
 }
 Main.refresh = function(callback) {
   if (refreshing<=0 || Date.now()-lastRefresh>60*1000) {
