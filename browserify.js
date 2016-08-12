@@ -299,8 +299,8 @@ Main.displayEvents = function(callback) {
                 order.availableVolume = result;
                 ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
               } else {
-                order.availableVolume = result.div(order.price);
-                ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedBase));
+                order.availableVolume = result.div(order.price).mul(Main.getDivisor(order.order.tokenGive)).div(Main.getDivisor(order.order.tokenGet));
+                ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
               }
               if (Number(ethAvailableVolume).toFixed(3)>=0.001) { //min order size is 0.001
                 memo.push(order);
@@ -624,6 +624,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   } else {
     return;
   }
+  console.log(tokenGet, tokenGive, amountGet/Math.pow(10,18), amountGive/Math.pow(10,18))
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [tokenGive, addrs[selectedAccount]], function(err, result) {
     var balance = result;
     if (balance.lt(new BigNumber(amountGive))) {

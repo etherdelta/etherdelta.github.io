@@ -64,7 +64,8 @@ configs["2"] = {
   ethAddrPrivateKey: '',
   tokens: [
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD100', divisor: 10000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    // {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xaf7d1722464786c0311d20ab7d98bee6a4b0f38d', name: 'HFYES', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
   ],
