@@ -292,15 +292,12 @@ Main.displayEvents = function(callback) {
         if (blockNumber<Number(order.order.expires)) {
           utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
             if (!err) {
+              var ethAvailableVolume = 0;
               if (order.amount>=0) {
                 order.availableVolume = result;
+                ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
               } else {
                 order.availableVolume = result.div(order.price);
-              }
-              var ethAvailableVolume = 0;
-              if (order.availableVolume>0) {
-                ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
-              } else if (order.availableVolume<0) {
                 ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedBase));
               }
               if (Number(ethAvailableVolume).toFixed(3)>=0.001) { //min order size is 0.001
