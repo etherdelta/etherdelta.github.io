@@ -643,10 +643,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
           utility.postGitterMessage(JSON.stringify(order), function(err, result){
             if (!err) {
               Main.alertSuccess('You sent an order to the order book!');
-              Main.getGitterMessages(function(){
-                Main.displayEvents(function(){
-                });
-              });
+              Main.refresh(function(){});
             } else {
               Main.alertError('You tried sending an order to the order book but there was an error.');
             }
@@ -1746,30 +1743,31 @@ function streamGitterMessages(gitterMessages, callback) {
 
 function getGitterMessages(gitterMessages, callback) {
   var numMessages = undefined;
-  var beforeId = undefined;
+  var skip = 0;
   var messages = [];
-  var pages = 10;
+  var pages = 20;
   var newMessagesFound = 0;
+  var perPage = 100;
   async.until(
     function () { return pages <= 0; },
     function (callbackUntil) {
       pages -= 1;
-      var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken+'&limit=100';
-      if (beforeId) url += '&beforeId='+beforeId;
+      var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken+'&limit='+perPage;
+      if (skip>0) url += '&skip='+skip;
       request.get(url, function(err, httpResponse, body){
         if (!err) {
           var data = JSON.parse(body);
           if (data && data.length>0) {
-            beforeId = data[0].id;
+            skip += perPage;
             data.forEach(function(message){
               if (gitterMessages[message.id]) {
                 pages = 0;
               } else {
-                newMessagesFound++;
-              }
-              try {
-                gitterMessages[message.id] = JSON.parse(message.text);
-              } catch (err) {
+                try {
+                  gitterMessages[message.id] = JSON.parse(message.text);
+                  newMessagesFound++;
+                } catch (err) {
+                }
               }
             });
           } else {

@@ -641,10 +641,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
           utility.postGitterMessage(JSON.stringify(order), function(err, result){
             if (!err) {
               Main.alertSuccess('You sent an order to the order book!');
-              Main.getGitterMessages(function(){
-                Main.displayEvents(function(){
-                });
-              });
+              Main.refresh(function(){});
             } else {
               Main.alertError('You tried sending an order to the order book but there was an error.');
             }
