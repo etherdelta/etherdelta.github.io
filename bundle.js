@@ -97,13 +97,11 @@ Main.deleteAccount = function() {
   selectedAccount = 0;
   nonce = undefined;
   Main.displayMarket(function(){});
-  Main.refresh(function(){});
 }
 Main.selectAccount = function(i) {
   selectedAccount = i;
   nonce = undefined;
   Main.displayMarket(function(){});
-  Main.refresh(function(){});
 }
 Main.addAccount = function(addr, pk) {
   if (addr.slice(0,2)!='0x') addr = '0x'+addr;
@@ -119,7 +117,6 @@ Main.addAccount = function(addr, pk) {
     selectedAccount = addrs.length-1;
     nonce = undefined;
     Main.displayMarket(function(){});
-    Main.refresh(function(){});
   }
 }
 Main.showPrivateKey = function() {
@@ -193,9 +190,8 @@ Main.loadEvents = function(callback) {
       event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
       eventsCache[event.transactionHash+event.logIndex] = event;
       Main.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
-      incomingEvents = true;
       Main.refresh(function(){
-      });
+      }, true);
     });
     callback();
   });
@@ -288,7 +284,7 @@ Main.displayEvents = function(callback) {
       }
     });
     //get available volumes
-    console.log(orders.filter(function(order){return blockNumber<Number(order.order.expires)}).length);
+    // console.log(orders.filter(function(order){return blockNumber<Number(order.order.expires)}).length);
     async.reduce(orders, [],
       function(memo, order, callbackReduce) {
         if (blockNumber<Number(order.order.expires)) {
@@ -382,19 +378,16 @@ Main.loadTokensAndBases = function(callback) {
 Main.selectToken = function(addr, name, divisor) {
   divisor = Number(divisor);
   selectedToken = {addr: addr, name: name, divisor: divisor};
-  Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
 Main.selectBase = function(addr, name, divisor) {
   divisor = Number(divisor);
   selectedBase = {addr: addr, name: name, divisor: divisor};
-  Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
 Main.selectTokenAndBase = function(addrToken, nameToken, divisorToken, addrBase, nameBase, divisorBase) {
   selectedToken = {addr: addrToken, name: nameToken, divisor: Number(divisorToken)};
   selectedBase = {addr: addrBase, name: nameBase, divisor: Number(divisorBase)};
-  Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
 Main.otherToken = function(addr, name, divisor) {
@@ -402,7 +395,6 @@ Main.otherToken = function(addr, name, divisor) {
   if (!name || name=='') name = addr.slice(2,6);
   divisor = Number(divisor);
   selectedToken = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
-  Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
 Main.otherBase = function(addr, name, divisor) {
@@ -410,54 +402,47 @@ Main.otherBase = function(addr, name, divisor) {
   if (!name || name=='') name = addr.slice(2,6);
   divisor = Number(divisor);
   selectedBase = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
-  Main.refresh(function(){});
   Main.displayMarket(function(){});
 }
 Main.displayMarket = function(callback) {
   new EJS({url: config.homeURL+'/'+'market_form.ejs'}).update('market_form', {selectedToken: selectedToken, selectedBase: selectedBase});
   Main.loadTokensAndBases(function(){
-    Main.displayAllBalances(function(){
-      Main.displayEvents(function(){
-        Main.displayMyEvents(function(){
-          callback();
-        });
-      });
-    });
+    Main.refresh(function(){
+      callback();
+    }, true);
   });
 }
 Main.displayAllBalances = function(callback) {
   var zeroAddr = '0x0000000000000000000000000000000000000000';
-  async.reduce(config.tokens, [],
-    function(memo, token, callbackReduce) {
+  async.map(config.tokens,
+    function(token, callbackMap) {
       if (token.addr==zeroAddr) {
         utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [token.addr, addrs[selectedAccount]], function(err, result) {
           var balance = result;
+          if (token.name==selectedToken.name || token.name==selectedBase.name) {
+            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {selected: token, balance: balance});
+          }
           utility.getBalance(web3, addrs[selectedAccount], function(err, result) {
             var balanceOutside = result;
-            memo.push({token: token, balance: balance, balanceOutside: balanceOutside, tokenLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+addrs[selectedAccount]});
-            callbackReduce(null, memo);
+            var balanceObj = {token: token, balance: balance, balanceOutside: balanceOutside, tokenLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+addrs[selectedAccount]};
+            callbackMap(null, balanceObj);
           });
         });
       } else {
         utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [token.addr, addrs[selectedAccount]], function(err, result) {
           var balance = result;
+          if (token.name==selectedToken.name || token.name==selectedBase.name) {
+            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {selected: token, balance: balance});
+          }
           utility.call(web3, contractToken, token.addr, 'balanceOf', [addrs[selectedAccount]], function(err, result) {
             var balanceOutside = result;
-            memo.push({token: token, balance: balance, balanceOutside: balanceOutside, tokenLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/token/'+token.addr});
-            callbackReduce(null, memo);
+            var balanceObj = {token: token, balance: balance, balanceOutside: balanceOutside, tokenLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/token/'+token.addr};
+            callbackMap(null, balanceObj);
           });
         });
       }
     },
     function(err, balances){
-      //show balances at top of page
-      balances.forEach(function(balance){
-        if (balance.token.name==selectedToken.name) {
-          new EJS({url: config.homeURL+'/'+'balance.ejs'}).update('balance_token', {selected: balance.token, balance: balance.balance, balanceOutside: balance.balanceOutside});
-        } else if (balance.token.name==selectedBase.name) {
-          new EJS({url: config.homeURL+'/'+'balance.ejs'}).update('balance_base', {selected: balance.token, balance: balance.balance, balanceOutside: balance.balanceOutside});
-        }
-      });
       new EJS({url: config.homeURL+'/'+'balances.ejs'}).update('balances', {balances: balances, addr: addrs[selectedAccount]});
       callback();
     }
@@ -624,7 +609,6 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   } else {
     return;
   }
-  console.log(tokenGet, tokenGive, amountGet/Math.pow(10,18), amountGive/Math.pow(10,18))
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [tokenGive, addrs[selectedAccount]], function(err, result) {
     var balance = result;
     if (balance.lt(new BigNumber(amountGive))) {
@@ -736,7 +720,7 @@ Main.resetCaches = function() {
   Main.eraseCookie(config.deadOrdersCookie);
   location.reload();
 }
-Main.refresh = function(callback) {
+Main.refresh = function(callback, updateData) {
   if (refreshing<=0 || Date.now()-lastRefresh>60*1000) {
     refreshing = 2;
     Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
@@ -745,18 +729,20 @@ Main.refresh = function(callback) {
     Main.publishOrders(function(){
       refreshing--;
     });
-    if (incomingEvents) {
+    if (updateData) {
       Main.loadAccounts(function(){
         Main.displayAllBalances(function(){
           Main.displayMyEvents(function(){
-            incomingEvents = false;
+            loadedBalances = true;
+            if (loadedBalances && loadedEvents) $('#loading').hide();
           });
         });
       });
     }
     Main.getGitterMessages(function(){
       Main.displayEvents(function(){
-        $('#loading').hide();
+        loadedEvents = true;
+        if (loadedBalances && loadedEvents) $('#loading').hide();
         refreshing--;
         lastRefresh = Date.now();
         callback();
@@ -798,7 +784,6 @@ var connection = undefined;
 var nonce = undefined;
 var eventsCache = {};
 var refreshing = 0;
-var incomingEvents = false;
 var lastRefresh = Date.now();
 var price = undefined;
 var priceUpdated = Date.now();
@@ -810,6 +795,8 @@ var workingOrders = [];
 var publishingOrders = false;
 var pendingTransactions = [];
 var defaultDivisor = new BigNumber(1000000000000000000);
+var loadedEvents = false;
+var loadedBalances = false;
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
