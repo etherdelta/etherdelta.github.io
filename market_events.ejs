@@ -13,6 +13,11 @@
             </tr>
           </thead>
           <tbody>
+            <% if (sellOrders.length==0) { %>
+              <tr>
+                <td colspan="4">There are no orders here. You might need to <a href="javascript:;" onclick="bundle.Main.resetCaches();">reset the cache</a>.</td>
+              </tr>
+            <% } %>
             <% sellOrders.forEach(function(order){ %>
             <tr>
               <td>
@@ -85,6 +90,11 @@
             </tr>
           </thead>
           <tbody>
+            <% if (buyOrders.length==0) { %>
+              <tr>
+                <td colspan="4">There are no orders here. You might need to <a href="javascript:;" onclick="bundle.Main.resetCaches();">reset the cache</a>.</td>
+              </tr>
+            <% } %>
             <% buyOrders.forEach(function(order){ %>
             <tr>
               <td>

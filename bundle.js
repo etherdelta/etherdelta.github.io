@@ -1752,8 +1752,7 @@ function getGitterMessages(gitterMessages, callback) {
     function () { return pages <= 0; },
     function (callbackUntil) {
       pages -= 1;
-      var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken+'&limit='+perPage;
-      if (skip>0) url += '&skip='+skip;
+      var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken+'&limit='+perPage+'&skip='+skip;
       request.get(url, function(err, httpResponse, body){
         if (!err) {
           var data = JSON.parse(body);
@@ -1773,11 +1772,10 @@ function getGitterMessages(gitterMessages, callback) {
           } else {
             pages = 0;
           }
-          setTimeout(function(){callbackUntil(null)}, 1000);
         } else {
           numMessages = 0;
-          callbackUntil(null);
         }
+        callbackUntil(null);
       });
     },
     function (err) {
@@ -1935,8 +1933,8 @@ var configs = {};
 
 //mainnet
 configs["1"] = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://0.0.0.0:8080',
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://0.0.0.0:8080',
   contractEtherDelta: 'etherdelta.sol',
   contractToken: 'token.sol',
   contractReserveToken: 'reservetoken.sol',
@@ -1980,8 +1978,8 @@ configs["1"] = {
 
 //testnet
 configs["2"] = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://0.0.0.0:8080',
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://0.0.0.0:8080',
   contractEtherDelta: 'etherdelta.sol',
   contractToken: 'token.sol',
   contractReserveToken: 'reservetoken.sol',
