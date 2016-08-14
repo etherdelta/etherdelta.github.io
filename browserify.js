@@ -191,11 +191,8 @@ Main.loadEvents = function(callback) {
       event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
       eventsCache[event.transactionHash+event.logIndex] = event;
       Main.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
-      Main.displayEvents(function(){
-        Main.displayAllBalances(function(){
-          Main.displayMyEvents(function(){
-          });
-        });
+      incomingEvents = true;
+      Main.refresh(function(){
       });
     });
     callback();
@@ -289,6 +286,7 @@ Main.displayEvents = function(callback) {
       }
     });
     //get available volumes
+    console.log(orders.filter(function(order){return blockNumber<Number(order.order.expires)}).length);
     async.reduce(orders, [],
       function(memo, order, callbackReduce) {
         if (blockNumber<Number(order.order.expires)) {
@@ -738,16 +736,22 @@ Main.resetCaches = function() {
 }
 Main.refresh = function(callback) {
   if (refreshing<=0 || Date.now()-lastRefresh>60*1000) {
-    refreshing = 3;
+    refreshing = 2;
     Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
     Main.connectionTest();
     Main.updateUrl();
-    Main.loadAccounts(function(){
-      refreshing--;
-    });
     Main.publishOrders(function(){
       refreshing--;
     });
+    if (incomingEvents) {
+      Main.loadAccounts(function(){
+        Main.displayAllBalances(function(){
+          Main.displayMyEvents(function(){
+            incomingEvents = false;
+          });
+        });
+      });
+    }
     Main.getGitterMessages(function(){
       Main.displayEvents(function(){
         $('#loading').hide();
@@ -772,8 +776,10 @@ Main.init = function(callback) {
   Main.connectionTest();
   Main.displayGuides(function(){
     Main.loadEvents(function(){
-      Main.displayMarket(function(){
-        callback();
+      Main.loadAccounts(function(){
+        Main.displayMarket(function(){
+          callback();
+        });
       });
     });
   });
@@ -790,6 +796,7 @@ var connection = undefined;
 var nonce = undefined;
 var eventsCache = {};
 var refreshing = 0;
+var incomingEvents = false;
 var lastRefresh = Date.now();
 var price = undefined;
 var priceUpdated = Date.now();
