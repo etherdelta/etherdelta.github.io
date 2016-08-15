@@ -1,11 +1,11 @@
-<p>Connection: <%= connection.connection %> (<%= connection.provider %>) <%= connection.testnet ? 'TESTNET' : ''%></p>
-<p>Connect using <a class="btn btn-default" href="https://metamask.io" target="_blank"><img src="metamask.png" style="height: 25px;" /> MetaMask</a> or <a class="btn btn-default" href="https://github.com/ethereum/mist" target="_blank"><img src="mist.png" style="height: 25px;" /> Mist Browser</a></p>
+<p><%= translation.connection %>: <%= connection.connection %> (<%= connection.provider %>) <%= connection.testnet ? translation.testnet : ''%></p>
+<p><%= translation.connect_using %> <a class="btn btn-default" href="https://metamask.io" target="_blank"><img src="metamask.png" style="height: 25px;" /> <%= translation.metamask %></a> or <a class="btn btn-default" href="https://github.com/ethereum/mist" target="_blank"><img src="mist.png" style="height: 25px;" /> <%= translation.mist_browser %></a></p>
 
 <div class="btn-group dropup">
   <a class="btn btn-default" href="<%= contractLink%>" target="_blank"><i class="fa fa-file-text"></i> <%= contractAddr %></a>
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <span class="caret"></span>
-    <span class="sr-only">Toggle Dropdown</span>
+    <span class="sr-only"><%= translation.toggle_dropdown %></span>
   </button>
   <ul class="dropdown-menu pull-right">
     <% contracts.forEach(function(contract){ %>

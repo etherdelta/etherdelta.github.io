@@ -1,5 +1,6 @@
 var Web3 = require('web3');
 var utility = require('./common/utility.js');
+var translations = require('./translations.js');
 var request = require('request');
 var sha256 = require('js-sha256').sha256;
 var BigNumber = require('bignumber.js');
@@ -145,10 +146,10 @@ Main.connectionTest = function() {
   } catch(err) {
     web3.setProvider(undefined);
   }
-  new EJS({url: config.homeURL+'/'+'connection_description.ejs'}).update('connection', {connection: connection, contracts: config.contractEtherDeltaAddrs, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
+  new EJS({url: config.homeURL+'/'+'connection_description.ejs'}).update('connection', {translation: translation, connection: connection, contracts: config.contractEtherDeltaAddrs, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
   return connection;
 }
-Main.loadAccounts = function(callback) {
+Main.displayAccounts = function(callback) {
   if (Main.connectionTest().connection=='Geth') {
     $('#pk_div').hide();
   }
@@ -164,10 +165,20 @@ Main.loadAccounts = function(callback) {
       });
     },
     function(err, addresses) {
-      new EJS({url: config.homeURL+'/'+'addresses.ejs'}).update('addresses', {addresses: addresses, selectedAccount: selectedAccount});
+      new EJS({url: config.homeURL+'/'+'addresses.ejs'}).update('addresses', {translation: translation, addresses: addresses, selectedAccount: selectedAccount});
       callback();
     }
   );
+}
+Main.displayLanguages = function(callback) {
+  var languages = Object.keys(translations);
+  new EJS({url: config.homeURL+'/'+'languages.ejs'}).update('languages', {translation: translation, languages: languages, language: language});
+  callback();
+}
+Main.selectLanguage = function(newLanguage) {
+  language = newLanguage;
+  translation = translations[language];
+  Main.init(function(){});
 }
 Main.loadEvents = function(callback) {
   utility.blockNumber(web3, function(err, blockNumber) {
@@ -238,7 +249,7 @@ Main.displayMyEvents = function(callback) {
     function(err, results) {
       pendingTransactions = results.filter(function(x){return x!=undefined});
       //display the template
-      new EJS({url: config.homeURL+'/'+'my_events.ejs'}).update('my_events', {selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents, pendingTransactions: pendingTransactions});
+      new EJS({url: config.homeURL+'/'+'my_events.ejs'}).update('my_events', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents, pendingTransactions: pendingTransactions});
       $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
       callback();
     }
@@ -349,7 +360,7 @@ Main.displayEvents = function(callback) {
         });
         trades.sort(function(a,b){ return b.id - a.id });
         //display the template
-        new EJS({url: config.homeURL+'/'+'market_events.ejs'}).update('market_events', {selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, trades: trades, blockNumber: blockNumber});
+        new EJS({url: config.homeURL+'/'+'market_events.ejs'}).update('market_events', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, trades: trades, blockNumber: blockNumber});
         $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
         $("[data-toggle=popover]").popover({
           html : true,
@@ -368,9 +379,9 @@ Main.displayEvents = function(callback) {
   });
 }
 Main.loadTokensAndBases = function(callback) {
-  new EJS({url: config.homeURL+'/'+'tokens.ejs'}).update('tokens', {tokens: config.tokens, selectedToken: selectedToken});
-  new EJS({url: config.homeURL+'/'+'bases.ejs'}).update('bases', {tokens: config.tokens, selectedBase: selectedBase});
-  new EJS({url: config.homeURL+'/'+'pairs.ejs'}).update('pairs', {tokens: config.tokens, pairs: config.pairs});
+  new EJS({url: config.homeURL+'/'+'tokens.ejs'}).update('tokens', {translation: translation, tokens: config.tokens, selectedToken: selectedToken});
+  new EJS({url: config.homeURL+'/'+'bases.ejs'}).update('bases', {translation: translation, tokens: config.tokens, selectedBase: selectedBase});
+  new EJS({url: config.homeURL+'/'+'pairs.ejs'}).update('pairs', {translation: translation, tokens: config.tokens, pairs: config.pairs});
   callback();
 }
 Main.selectToken = function(addr, name, divisor) {
@@ -403,7 +414,7 @@ Main.otherBase = function(addr, name, divisor) {
   Main.displayMarket(function(){});
 }
 Main.displayMarket = function(callback) {
-  new EJS({url: config.homeURL+'/'+'market_form.ejs'}).update('market_form', {selectedToken: selectedToken, selectedBase: selectedBase});
+  new EJS({url: config.homeURL+'/'+'market_form.ejs'}).update('market_form', {translation: translation, selectedToken: selectedToken, selectedBase: selectedBase});
   Main.loadTokensAndBases(function(){
     Main.refresh(function(){
       callback();
@@ -418,7 +429,7 @@ Main.displayAllBalances = function(callback) {
         utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [token.addr, addrs[selectedAccount]], function(err, result) {
           var balance = result;
           if (token.name==selectedToken.name || token.name==selectedBase.name) {
-            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {selected: token, balance: balance});
+            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {translation: translation, selected: token, balance: balance});
           }
           utility.getBalance(web3, addrs[selectedAccount], function(err, result) {
             var balanceOutside = result;
@@ -430,7 +441,7 @@ Main.displayAllBalances = function(callback) {
         utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [token.addr, addrs[selectedAccount]], function(err, result) {
           var balance = result;
           if (token.name==selectedToken.name || token.name==selectedBase.name) {
-            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {selected: token, balance: balance});
+            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {translation: translation, selected: token, balance: balance});
           }
           utility.call(web3, contractToken, token.addr, 'balanceOf', [addrs[selectedAccount]], function(err, result) {
             var balanceOutside = result;
@@ -441,7 +452,7 @@ Main.displayAllBalances = function(callback) {
       }
     },
     function(err, balances){
-      new EJS({url: config.homeURL+'/'+'balances.ejs'}).update('balances', {balances: balances, addr: addrs[selectedAccount]});
+      new EJS({url: config.homeURL+'/'+'balances.ejs'}).update('balances', {translation: translation, balances: balances, addr: addrs[selectedAccount]});
       callback();
     }
   );
@@ -698,8 +709,25 @@ Main.getGitterMessages = function(callback) {
     callback();
   });
 }
-Main.displayGuides = function(callback) {
-  new EJS({url: config.homeURL+'/'+'guides.ejs'}).update('guides', {});
+Main.displayContent = function(callback) {
+  window.title = translation.title;
+  $('#description').html(translation.description);
+  $('#toggle_navigation').html(translation.toggle_navigation);
+  $('.add_account_label').html(translation.add_account);
+  $('.address_label').html(translation.address);
+  $('.private_key_label').html(translation.private_key);
+  $('.cancel_label').html(translation.cancel);
+  $('.buy_label').html(translation.buy);
+  $('.sell_label').html(translation.sell);
+  $('.order_label').html(translation.order);
+  $('.amount_label').html(translation.amount);
+  $('.other_token_label').html(translation.other_token);
+  $('.other_base_label').html(translation.other_base);
+  $('.name_label').html(translation.name);
+  $('.divisor_label').html(translation.disivor);
+  $('.go_label').html(translation.go);
+  new EJS({url: config.homeURL+'/'+'family.ejs'}).update('family', {translation: translation});
+  new EJS({url: config.homeURL+'/'+'guides.ejs'}).update('guides', {translation: translation});
   callback();
 }
 Main.addPending = function(err, tx) {
@@ -728,7 +756,7 @@ Main.refresh = function(callback, updateData) {
       refreshing--;
     });
     if (updateData) {
-      Main.loadAccounts(function(){
+      Main.displayAccounts(function(){
         Main.displayAllBalances(function(){
           Main.displayMyEvents(function(){
             loadedBalances = true;
@@ -760,11 +788,13 @@ Main.init = function(callback) {
   connection = undefined;
   Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
   Main.connectionTest();
-  Main.displayGuides(function(){
-    Main.loadEvents(function(){
-      Main.loadAccounts(function(){
-        Main.displayMarket(function(){
-          callback();
+  Main.displayContent(function(){
+    Main.displayLanguages(function(){
+      Main.loadEvents(function(){
+        Main.displayAccounts(function(){
+          Main.displayMarket(function(){
+            callback();
+          });
         });
       });
     });
@@ -795,6 +825,8 @@ var pendingTransactions = [];
 var defaultDivisor = new BigNumber(1000000000000000000);
 var loadedEvents = false;
 var loadedBalances = false;
+var translation;
+var language = 'English';
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
@@ -819,9 +851,12 @@ web3.version.getNetwork(function(error, version){
     addrs = userCookie["addrs"];
     pks = userCookie["pks"];
     selectedAccount = userCookie["selectedAccount"];
+    if (userCookie["language"]) language = userCookie["language"];
     // selectedToken = userCookie["selectedToken"];
     // selectedBase = userCookie["selectedBase"];
   }
+  //translation
+  translation = translations[language];
   //gitter messages cache cookie
   var gitterCookie = Main.readCookie(config.gitterCacheCookie);
   if (gitterCookie) {

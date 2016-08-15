@@ -1,81 +1,81 @@
 <div class="box-container" style="padding-top: 20px;">
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#fees" aria-controls="fees" role="tab" data-toggle="tab">Fees</a></li>
-    <li role="presentation"><a href="#connect-ethereum" aria-controls="connect-ethereum" role="tab" data-toggle="tab">Connect to Ethereum</a></li>
-    <li role="presentation"><a href="#deposit-withdraw" aria-controls="deposit-withdraw" role="tab" data-toggle="tab">Deposit and withdraw</a></li>
-    <li role="presentation"><a href="#trade" aria-controls="trade" role="tab" data-toggle="tab">Trade</a></li>
+    <li role="presentation" class="active"><a href="#fees" aria-controls="fees" role="tab" data-toggle="tab"><%= translation.fees %></a></li>
+    <li role="presentation"><a href="#connect-ethereum" aria-controls="connect-ethereum" role="tab" data-toggle="tab"><%= translation.connect_ethereum %></a></li>
+    <li role="presentation"><a href="#deposit-withdraw" aria-controls="deposit-withdraw" role="tab" data-toggle="tab"><%= translation.deposit_withdraw %></a></li>
+    <li role="presentation"><a href="#trade" aria-controls="trade" role="tab" data-toggle="tab"><%= translation.trade %></a></li>
   </ul>
   <div class="tab-content list-spacing padding">
     <div role="tabpanel" class="tab-pane active" id="fees">
-      <h3>Fees</h3>
+      <h3><%= translation.fees %></h3>
       <table class="table">
         <tr>
-          <th>Transaction</th>
-          <th>Fee</th>
+          <th><%= translation.transaction %></th>
+          <th><%= translation.fee %></th>
         </tr>
         <tr>
-          <td>Deposit</td>
+          <td><%= translation.deposit %></td>
           <td>0.0%</td>
         </tr>
         <tr>
-          <td>Withdraw</td>
+          <td><%= translation.withdraw %></td>
           <td>0.0%</td>
         </tr>
         <tr>
-          <td>Maker</td>
+          <td><%= translation.maker %></td>
           <td>0.0%</td>
         </tr>
         <tr>
-          <td>Taker</td>
+          <td><%= translation.taker %></td>
           <td>0.3%</td>
         </tr>
       </table>
-      <h4>Maker vs taker</h4>
+      <h4><%= translation.maker_vs_taker %></h4>
       <p>
-        The only fee is a Taker fee. Deposit, withdraw, and maker transactions are all free.
+        <%= translation.only_fee_taker %>
       </p>
       <p>
-        A maker order is one that rests in the order book ("resting order"). To create a maker order, fill out the "Buy" or "Sell" form. Once you click "Buy" or "Sell," you will see your order appear in the order book. These orders are always free. This is to encourage market makers to add liquidity to the order book.
+        <%= translation.maker_fee_desc %>
       </p>
       <p>
-        A taker order is one that trades against a resting order. To create a taker order, pick an existing order from the order book, and click "Buy" or "Sell." A popup window will appear. Decide how much of the order you want to trade, and then click "Buy" or "Sell." These orders charge a fee of 0.30%.
+        <%= translation.taker_fee_desc %>
       </p>
     </div>
     <div role="tabpanel" class="tab-pane" id="connect-ethereum">
-      <h3>Connect to Ethereum</h3>
-      <p>There are three ways you can connect to the Ethereum network.
+      <h3><%= translation.connect_ethereum %></h3>
+      <p><%= translation.three_ways_connect %></p>
       <ol>
-        <li>Connect to the Ethereum network through <a href="https://metamask.io">MetaMask</a>. MetaMask is a Chrome plugin that lets you manage your Ethereum accounts and sign transactions on a case by case basis. If you are using MetaMask, your MetaMask account will automatically appear in the account dropdown.</li>
-        <li>Connect to Ethereum via the Mist browser. The only downside to doing this is that you will have to unlock your account manually in order to broadcast resting orders (other transactions will work). Mist will eventually support the eth.sign() function that is needed to individually approve resting orders, but for now you will need to unlock your account manually by running <code>geth attach</code> and then <code>personal.unlockAccount("0xYOUR_ETHEREUM_ACCOUNT")</code> from the command line.</li>
-        <li>Connect to Ethereum through the Etherscan API. This is the default option if you don't have MetaMask or Mist. You will need to create a new account by clicking "Create account" under the address dropdown. You should export the private key and write it down by clicking "Export private key" under the address dropdown. If you prefer, you can also use <a href="http://www.myetherwallet.com/" target="_blank">MyEtherWallet</a> to create a new Ethereum account, then use "Import account" to add your new address and its private key.</li>
+        <li><%= translation.connect_metamask %></li>
+        <li><%= translation.connect_mist %></li>
+        <li><%= translation.connect_etherscan %></li>
       </ol>
     </div>
     <div role="tabpanel" class="tab-pane" id="deposit-withdraw">
-      <h3>Deposit and withdraw</h3>
+      <h3><%= translation.deposit_withdraw %></h3>
       <ol>
-        <li>In the top left, you will find two dropdowns you can use to select the currency pair you want to trade. For example, select "DAO" and "ETH" to trade the "DAO/ETH" currency pair.</li>
-        <li>Under "Balances," you will see your balance for each of the two currencies you selected. This is the balance you have deposited to EtherDelta from your Ethereum account.</li>
-        <li>To deposit, withdraw, or transfer, scroll to the bottom of the page. Find the "Balances" section.</li>
-        <li>To deposit, click the "Deposit" tab, pick a token, enter an amount you would like to deposit from your Ethereum account into EtherDelta, and click "Deposit."</li>
-        <li>To withdraw, use the "Withdraw" tab.</li>
-        <li>To transfer tokens from your Ethereum address to another Ethereum address, use the "Transfer" tab.</li>
-        <li>Once the Ethereum transaction has been confirmed, your balance will automatically update. If you don't have the necessary funds available for the deposit or withdraw transaction, then the Ethereum transaction will fail.</li>
+        <li><%= translation.deposit_withdraw_1 %></li>
+        <li><%= translation.deposit_withdraw_2 %></li>
+        <li><%= translation.deposit_withdraw_3 %></li>
+        <li><%= translation.deposit_withdraw_4 %></li>
+        <li><%= translation.deposit_withdraw_5 %></li>
+        <li><%= translation.deposit_withdraw_6 %></li>
+        <li><%= translation.deposit_withdraw_7 %></li>
       </ol>
     </div>
     <div role="tabpanel" class="tab-pane" id="trade">
-      <h3>Trade</h3>
+      <h3><%= translation.trade %></h3>
       <ol>
-        <li>In the top left, you will find two dropdowns you can use to select the currency pair you want to trade. For example, select "DAO" and "ETH" to trade the "DAO/ETH" currency pair.</li>
-        <li>If you want to trade a token that doesn't appear in the list, you can choose "Other" and fill out the form. Different tokens have different multipliers, so fill out this form carefully.</li>
-        <li>EtherDelta supports resting orders (adding liquidity) and trading against existing resting orders (taking liquidity).</li>
-        <li>To create a resting order, fill out the "Buy" or "Sell" form at the top of the page. The order expires in the number of blocks you specify (1 block &#8776; 15 seconds).</li>
-        <li>If you need to cancel your order, you can click your order in the order book and press the "Cancel" button. This will send an Ethereum transaction that will, once confirmed, cancel your order. Note that this will cost gas (Ethereum transaction fee), whereas placing a resting order and letting it expire does not cost gas.</li>
-        <li>When you submit a resting order, it gets broadcast to the world. The current broadcast channel is a Gitter chat room, but EtherDelta also supports using Ethereum events as a fallback broadcast mechanism.</li>
-        <li>The GUI scans for new orders being broadcast and displays them in the order book (offers on the left, bids on the right).</li>
-        <li>A resting order represents a cryptographically signed intent to trade. Up until your order expires or is cancelled, anyone who has seen it can trade against it, assuming both traders have enough funds in their EtherDelta accounts. The GUI filters out orders that do not have funds to back them up. Partial fills are supported.</li>
-        <li>To trade against an existing resting order, click "Buy" or "Sell" next to it in the order book and type in the volume you want to trade. The GUI will do one last check that the trade can cross (the funds are there and the order hasn't already traded), but if someone submits a transaction right before you do, your Ethereum transaction will fail because the order already traded.</li>
+        <li><%= translation.trade_1 %></li>
+        <li><%= translation.trade_2 %></li>
+        <li><%= translation.trade_3 %></li>
+        <li><%= translation.trade_4 %></li>
+        <li><%= translation.trade_5 %></li>
+        <li><%= translation.trade_6 %></li>
+        <li><%= translation.trade_7 %></li>
+        <li><%= translation.trade_8 %></li>
+        <li><%= translation.trade_9 %></li>
       </ol>
     </div>
-    <p>Need help? Join the <a href="https://gitter.im/etherdelta/etherdelta.github.io" target="_blank"><img src="https://badges.gitter.im/etherdelta/etherdelta.github.io.svg" alt="Chat on Gitter" /></a></p>
+    <p><%= translation.need_help %> <a href="https://gitter.im/etherdelta/etherdelta.github.io" target="_blank"><img src="https://badges.gitter.im/etherdelta/etherdelta.github.io.svg" alt="<%= translation.chat_gitter %>" /></a></p>
   </div>
 </div>

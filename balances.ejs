@@ -1,11 +1,11 @@
 <div class="box-container">
-  <h3>Balances</h3>
+  <h3><%= translation.balances %></h3>
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#deposit" aria-controls="deposit" role="tab" data-toggle="tab">Deposit</a></li>
-    <li role="presentation"><a href="#withdraw" aria-controls="withdraw" role="tab" data-toggle="tab">Withdraw</a></li>
-    <li role="presentation"><a href="#transfer" aria-controls="transfer" role="tab" data-toggle="tab">Transfer</a></li>
+    <li role="presentation" class="active"><a href="#deposit" aria-controls="deposit" role="tab" data-toggle="tab"><%= translation.deposit %></a></li>
+    <li role="presentation"><a href="#withdraw" aria-controls="withdraw" role="tab" data-toggle="tab"><%= translation.withdraw %></a></li>
+    <li role="presentation"><a href="#transfer" aria-controls="transfer" role="tab" data-toggle="tab"><%= translation.transfer %></a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -14,10 +14,10 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Token</th>
-            <th>Balance (in your wallet)</th>
-            <th>Balance (on EtherDelta)</th>
-            <th>Deposit</th>
+            <th><%= translation.token %></th>
+            <th><%= translation.balance_in_your_wallet %></th>
+            <th><%= translation.balance_etherdelta %></th>
+            <th><%= translation.deposit %></th>
           </tr>
         </thead>
         <tbody>
@@ -30,10 +30,10 @@
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" class="form-control"  style="width:279px;" id="deposit_amount_<%= balance.token.addr %>" placeholder="Amount" />
+                      <input type="text" class="form-control"  style="width:279px;" id="deposit_amount_<%= balance.token.addr %>" placeholder="<%= translation.amount %>" />
                     </div>
                   </div>
-                  <button type="button" class="btn btn-primary" id="deposit_submit_<%= balance.token.addr %>" onclick="deposit_click('<%= balance.token.addr %>')" style="width:85px;">Deposit</button>
+                  <button type="button" class="btn btn-primary" id="deposit_submit_<%= balance.token.addr %>" onclick="deposit_click('<%= balance.token.addr %>')" style="width:85px;"><%= translation.deposit %></button>
                 </form>
               </td>
             </tr>
@@ -45,10 +45,10 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Token</th>
-            <th>Balance (in your wallet)</th>
-            <th>Balance (on EtherDelta)</th>
-            <th>Withdraw</th>
+            <th><%= translation.token %></th>
+            <th><%= translation.balance_in_your_wallet %></th>
+            <th><%= translation.balance_etherdelta %></th>
+            <th><%= translation.withdraw %></th>
           </tr>
         </thead>
         <tbody>
@@ -61,10 +61,10 @@
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" class="form-control"  style="width:279px;" id="withdraw_amount_<%= balance.token.addr %>" placeholder="Amount" />
+                      <input type="text" class="form-control"  style="width:279px;" id="withdraw_amount_<%= balance.token.addr %>" placeholder="<%= translation.amount %>" />
                     </div>
                   </div>
-                  <button type="button" class="btn btn-primary" id="withdraw_submit_<%= balance.token.addr %>" onclick="withdraw_click('<%= balance.token.addr %>')" style="width:85px;">Withdraw</button>
+                  <button type="button" class="btn btn-primary" id="withdraw_submit_<%= balance.token.addr %>" onclick="withdraw_click('<%= balance.token.addr %>')" style="width:85px;"><%= translation.withdraw %></button>
                 </form>
               </td>
             </tr>
@@ -76,10 +76,10 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Token</th>
-            <th>Balance (in your wallet)</th>
-            <th>Balance (on EtherDelta)</th>
-            <th>Transfer</th>
+            <th><%= translation.token %></th>
+            <th><%= translation.balance_in_your_wallet %></th>
+            <th><%= translation.balance_etherdelta %></th>
+            <th><%= translation.transfer %></th>
           </tr>
         </thead>
         <tbody>
@@ -92,7 +92,7 @@
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" class="form-control"  style="width:125px;" id="transfer_amount_<%= balance.token.addr %>" placeholder="Amount" />
+                      <input type="text" class="form-control"  style="width:125px;" id="transfer_amount_<%= balance.token.addr %>" placeholder="<%= translation.amount %>" />
                     </div>
                   </div>
                   <div class="form-group">
@@ -100,7 +100,7 @@
                       <input type="text" class="form-control"  style="width:150px;" id="transfer_to_<%= balance.token.addr %>" placeholder="0x..." value="<%= addr %>" />
                     </div>
                   </div>
-                  <button type="button" class="btn btn-primary" id="transfer_submit_<%= balance.token.addr %>" onclick="transfer_click('<%= balance.token.addr %>')" style="width:85px;">Transfer</button>
+                  <button type="button" class="btn btn-primary" id="transfer_submit_<%= balance.token.addr %>" onclick="transfer_click('<%= balance.token.addr %>')" style="width:85px;"><%= translation.transfer %></button>
                 </form>
               </td>
             </tr>

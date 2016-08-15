@@ -17,22 +17,13 @@
   <body>
 
     <div id="family">
-      <div class="inside">
-        <button type="button" class="btn btn-default btn-xs"><a href="https://etherboost.github.io"><img src="//etherboost.github.io/images/logo.svg" style="height: 25px;" /> Produced by Etherboost</a></button>
-        <button type="button" class="btn btn-default btn-xs"><a href="https://etherdelta.github.io"><img src="//etherboost.github.io/images/etherdelta_logo.svg" style="height: 25px;" /> EtherDelta &#8212; decentralized token exchange</a></button>
-        <button type="button" class="btn btn-default btn-xs"><a href="https://outcomecoin.github.io"><img src="//etherboost.github.io/images/outcomecoin_logo.svg" style="height: 25px;" /> OutcomeCoin &#8212; prediction market tokens</a></button>
-        <button type="button" class="btn btn-default btn-xs"><a href="https://ethereumdollar.github.io"><img src="//etherboost.github.io/images/ethereumdollar_logo.svg" style="height: 25px;" /> EthereumDollar &#8212; stable dollar token</a></button>
-        <button type="button" class="btn btn-default btn-xs"><a href="https://etheropt.github.io"><img src="//etherboost.github.io/images/etheropt_logo.svg" style="height: 25px;" /> Etheropt &#8212; decentralized options exchange</a></button>
-      </div>
     </div>
 
     <div id="title">
       <img src="title.png" />
     </div>
 
-    <div id="description">
-      EtherDelta is a decentralized trading platform for Ethereum tokens.
-    </div>
+    <div id="description"></div>
 
     <div id="page">
       <div id="content">
@@ -41,7 +32,7 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only" id="toggle_navigation">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -62,6 +53,8 @@
               <form class="navbar-form navbar-left" id="pairs">
               </form>
               <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" id="languages">
+                </li>
                 <li class="dropdown" id="addresses">
                 </li>
               </ul>
@@ -97,25 +90,25 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Add account</h4>
+            <h4 class="modal-title add_account_label">Add account</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="address_addr">Address</label>
-                <input type="text" class="form-control" id="address_addr" placeholder="Address (0x.....)" />
+                <label for="address_addr address_label">Address</label>
+                <input type="text" class="form-control" id="address_addr" placeholder="0x..." />
               </div>
               <div id="pk_div">
                 <div class="form-group">
-                  <label for="address_addr">Private key</label>
-                  <input type="text" class="form-control" id="address_pk" placeholder="Private key (0x.....)" />
+                  <label for="address_addr private_key_label">Private key</label>
+                  <input type="text" class="form-control" id="address_pk" placeholder="0x..." />
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" id="address_submit">Add account</button>
+            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary add_account_label" id="address_submit">Add account</button>
           </div>
         </div>
       </div>
@@ -127,24 +120,24 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Buy</h4>
+            <h4 class="modal-title buy_label" id="myModalLabel">Buy</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="buy_cross_desc">Order</label>
+                <label for="buy_cross_desc" class="order_label">Order</label>
                 <div id="buy_cross_desc"></div>
               </div>
               <div class="form-group">
-                <label for="buy_cross_amount">Amount</label>
-                <input type="text" class="form-control" id="buy_cross_amount" placeholder="Amount" />
+                <label for="buy_cross_amount" class="amount_label">Amount</label>
+                <input type="text" class="form-control" id="buy_cross_amount" placeholder="0.00" />
               </div>
             </form>
           </div>
           <input type="hidden" id="buy_cross_order" />
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" id="buy_cross_submit">Buy</button>
+            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary buy_label" id="buy_cross_submit">Buy</button>
           </div>
         </div>
       </div>
@@ -156,24 +149,24 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Sell</h4>
+            <h4 class="modal-title sell_label" id="myModalLabel">Sell</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="sell_cross_desc">Order</label>
+                <label for="sell_cross_desc" class="order_label">Order</label>
                 <div id="sell_cross_desc"></div>
               </div>
               <div class="form-group">
-                <label for="sell_cross_amount">Amount</label>
-                <input type="text" class="form-control" id="sell_cross_amount" placeholder="Amount" />
+                <label for="sell_cross_amount" class="amount_label">Amount</label>
+                <input type="text" class="form-control" id="sell_cross_amount" placeholder="0.00" />
               </div>
             </form>
           </div>
           <input type="hidden" id="sell_cross_order" />
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" id="sell_cross_submit">Sell</button>
+            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary sell_label" id="sell_cross_submit">Sell</button>
           </div>
         </div>
       </div>
@@ -185,27 +178,27 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Other token</h4>
+            <h4 class="modal-title other_token_label" id="myModalLabel">Other token</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="other_token_addr">Address</label>
+                <label for="other_token_addr" class="address_label">Address</label>
                 <input type="text" class="form-control" id="other_token_addr" placeholder="0x..." />
               </div>
               <div class="form-group">
-                <label for="other_token_name">Name</label>
+                <label for="other_token_name" class="name_label">Name</label>
                 <input type="text" class="form-control" id="other_token_name" placeholder="XYZ" />
               </div>
               <div class="form-group">
-                <label for="other_token_divisor">Divisor</label>
+                <label for="other_token_divisor" class="divisor_label">Divisor</label>
                 <input type="text" class="form-control" id="other_token_divisor" value="1000000000000000000" />
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" id="other_token_submit">Go</button>
+            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary go_label" id="other_token_submit">Go</button>
           </div>
         </div>
       </div>
@@ -217,27 +210,27 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Other base</h4>
+            <h4 class="modal-title other_base_label" id="myModalLabel">Other base</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="other_base_addr">Address</label>
+                <label for="other_base_addr" class="address_label">Address</label>
                 <input type="text" class="form-control" id="other_base_addr" placeholder="0x..." />
               </div>
               <div class="form-group">
-                <label for="other_base_name">Name</label>
+                <label for="other_base_name" class="name_label">Name</label>
                 <input type="text" class="form-control" id="other_base_name" placeholder="XYZ" />
               </div>
               <div class="form-group">
-                <label for="other_base_divisor">Divisor</label>
+                <label for="other_base_divisor" class="divisor_label">Divisor</label>
                 <input type="text" class="form-control" id="other_base_divisor" value="1000000000000000000" />
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" id="other_base_submit">Go</button>
+            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary go_label" id="other_base_submit">Go</button>
           </div>
         </div>
       </div>
