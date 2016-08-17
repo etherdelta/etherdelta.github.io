@@ -1316,23 +1316,21 @@ function logs(web3, contract, address, fromBlock, toBlock, callback) {
       }
     });
   }
-  // Geth/Mist/MetaMask web3.eth.filter is slow, so we'll just use the proxy for events
-  // try {
-  //   if (web3.currentProvider) {
-  //     web3.eth.filter(options, function(error, item){
-  //       if (!error) {
-  //         decodeEvent(item);
-  //       } else {
-  //         proxy(1);
-  //       }
-  //     });
-  //   } else {
-  //     proxy(1);
-  //   }
-  // } catch (err) {
-  //   proxy(1);
-  // }
-  proxy(1);
+  try {
+    if (web3.currentProvider) {
+      web3.eth.filter(options, function(error, item){
+        if (!error) {
+          decodeEvent(item);
+        } else {
+          proxy(1);
+        }
+      });
+    } else {
+      proxy(1);
+    }
+  } catch (err) {
+    proxy(1);
+  }
 }
 
 function getBalance(web3, address, callback) {

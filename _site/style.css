@@ -1,0 +1,122 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: #eee;
+}
+
+#family {
+  width: 100%;
+  background: #fff;
+  padding-top: 3px;
+}
+
+#family .inside {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#family a {
+  text-decoration: none;
+  color: #000;
+}
+
+#family button {
+  margin-bottom: 3px;
+}
+
+#title {
+  width: 1000px;
+  margin: 0 auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+#title img {
+  display: block;
+  margin: 0 auto;
+  width: 300px;
+  text-align: center;
+}
+
+#description {
+  width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+#page {
+  width: 1000px;
+  margin: 0 auto;
+  margin-bottom: 15px;
+  padding-top: 15px;
+  background: #fff;
+  border-radius: 10px;
+}
+
+#content {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.padding-top {
+  padding-top: 20px;
+}
+
+.box-container {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+}
+
+.scroll-container {
+  height: 200px;
+  overflow-y: scroll;
+}
+
+#footer {
+  margin: 0 auto;
+  text-align: center;
+  width: 1000px;
+  margin-bottom: 15px;
+}
+
+.table thead {
+  background: #fff;
+}
+
+/* Absolute Center Spinner */
+#loading {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* Transparent Overlay */
+#loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.5);
+}
+
+.tooltip_templates { display: none; }
