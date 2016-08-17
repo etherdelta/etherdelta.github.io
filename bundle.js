@@ -309,7 +309,7 @@ Main.displayEvents = function(callback) {
                 order.availableVolume = result.div(order.price).mul(Main.getDivisor(order.order.tokenGive)).div(Main.getDivisor(order.order.tokenGet));
                 ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
               }
-              if (Number(ethAvailableVolume).toFixed(3)>=0.001) { //min order size is 0.001
+              if (Number(ethAvailableVolume).toFixed(3)>=minOrderSize) { //min order size
                 memo.push(order);
               } else {
                 deadOrders[order.id] = true;
@@ -549,7 +549,8 @@ Main.withdraw = function(addr, amount) {
   }
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [addr, addrs[selectedAccount]], function(err, result) {
     var balance = result;
-    if (amount>balance) { //if you try to withdraw more than your balance, the amount will be modified so that you withdraw your exact balance
+    //if you try to withdraw more than your balance, the amount will be modified so that you withdraw your exact balance:
+    if (amount>balance) {
       amount = balance;
     }
     if (addr=='0x0000000000000000000000000000000000000000') {
@@ -607,6 +608,10 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   var tokenGive = undefined;
   var amountGet = undefined;
   var amountGive = undefined;
+  if (amount<minOrderSize) {
+    Main.alertError('The minimum order size is '+minOrderSize+'.');
+    return;
+  }
   if (direction=='buy') {
     tokenGet = tokenAddr;
     tokenGive = baseAddr;
@@ -829,6 +834,7 @@ var loadedEvents = false;
 var loadedBalances = false;
 var translation;
 var language = 'English';
+var minOrderSize = 0.1;
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
