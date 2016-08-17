@@ -338,6 +338,8 @@ Main.displayEvents = function(callback) {
         var sellOrders = ordersReduced.filter(function(x){return x.amount<0});
         buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
         sellOrders.sort(function(a,b){ return a.price - b.price || a.id - b.id });
+        buyOrders = buyOrders.slice(0,20); //show 20 best orders
+        sellOrders = sellOrders.slice(0,20); //show 20 best orders
         //get the trade list
         var trades = [];
         events.forEach(function(event){
