@@ -80,10 +80,7 @@ Main.logout = function() {
   pks = [config.ethAddrPrivateKey];
   selectedAccount = 0;
   nonce = undefined;
-  Main.displayMarket(function(){
-
-  });
-  Main.refresh(function(){});
+  Main.initMarket(function(){});
 }
 Main.createAccount = function() {
   var newAccount = utility.createAccount();
@@ -97,12 +94,12 @@ Main.deleteAccount = function() {
   pks.splice(selectedAccount, 1);
   selectedAccount = 0;
   nonce = undefined;
-  Main.displayMarket(function(){});
+  Main.initMarket(function(){});
 }
 Main.selectAccount = function(i) {
   selectedAccount = i;
   nonce = undefined;
-  Main.displayMarket(function(){});
+  Main.initMarket(function(){});
 }
 Main.addAccount = function(addr, pk) {
   if (addr.slice(0,2)!='0x') addr = '0x'+addr;
@@ -117,14 +114,14 @@ Main.addAccount = function(addr, pk) {
     pks.push(pk);
     selectedAccount = addrs.length-1;
     nonce = undefined;
-    Main.displayMarket(function(){});
+    Main.initMarket(function(){});
   }
 }
 Main.showPrivateKey = function() {
   var addr = addrs[selectedAccount];
   var pk = pks[selectedAccount];
   if (pk==undefined || pk=='') {
-    Main.alertDialog('For account '+addr+', there is no private key available. You can still transact if you are connected to Geth and the account is unlocked.');
+    Main.alertDialog('For account '+addr+', there is no private key available. You can still transact if you are connected to Ethereum and the account is unlocked.');
   } else {
     Main.alertDialog('For account '+addr+', the private key is '+pk+'.');
   }
@@ -136,6 +133,7 @@ Main.contractAddr = function(addr) {
   gitterMessagesCache = {}; //clear gitter message cache
   config.contractEtherDeltaAddr = addr;
   Main.init(function(){});
+  Main.initMarket(function(){});
 }
 Main.connectionTest = function() {
   if (connection) return connection;
@@ -143,16 +141,16 @@ Main.connectionTest = function() {
   try {
     if (web3.currentProvider) {
       web3.eth.coinbase;
-      connection = {connection: 'Geth', provider: config.ethProvider, testnet: config.ethTestnet};
+      connection = {connection: 'RPC', provider: config.ethProvider, testnet: config.ethTestnet};
     }
   } catch(err) {
     web3.setProvider(undefined);
   }
-  new EJS({url: config.homeURL+'/'+'connection_description.ejs'}).update('connection', {translation: translation, connection: connection, contracts: config.contractEtherDeltaAddrs, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
+  new EJS({url: config.homeURL+'/templates/'+'connection_description.ejs'}).update('connection', {translation: translation, connection: connection, contracts: config.contractEtherDeltaAddrs, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
   return connection;
 }
 Main.displayAccounts = function(callback) {
-  if (Main.connectionTest().connection=='Geth') {
+  if (Main.connectionTest().connection=='RPC') {
     $('#pk_div').hide();
   }
   if (addrs.length<=0 || addrs.length!=pks.length) {
@@ -167,14 +165,14 @@ Main.displayAccounts = function(callback) {
       });
     },
     function(err, addresses) {
-      new EJS({url: config.homeURL+'/'+'addresses.ejs'}).update('addresses', {translation: translation, addresses: addresses, selectedAccount: selectedAccount});
+      new EJS({url: config.homeURL+'/templates/'+'addresses.ejs'}).update('addresses', {translation: translation, addresses: addresses, selectedAccount: selectedAccount});
       callback();
     }
   );
 }
 Main.displayLanguages = function(callback) {
   var languages = Object.keys(translations);
-  new EJS({url: config.homeURL+'/'+'languages.ejs'}).update('languages', {translation: translation, languages: languages, language: language});
+  new EJS({url: config.homeURL+'/templates/'+'languages.ejs'}).update('languages', {translation: translation, languages: languages, language: language});
   callback();
 }
 Main.selectLanguage = function(newLanguage) {
@@ -184,6 +182,7 @@ Main.selectLanguage = function(newLanguage) {
 }
 Main.loadEvents = function(callback) {
   utility.blockNumber(web3, function(err, blockNumber) {
+    blockTimeSnapshot = {blockNumber: blockNumber, date: new Date()};
     var startBlock = 0;
     // startBlock = blockNumber-15000;
     for (id in eventsCache) {
@@ -197,14 +196,18 @@ Main.loadEvents = function(callback) {
         }
       }
     }
-    utility.logs(web3, contractEtherDelta, config.contractEtherDeltaAddr, startBlock, 'latest', function(err, event) {
-      event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-      eventsCache[event.transactionHash+event.logIndex] = event;
+    utility.logsOnce(web3, contractEtherDelta, config.contractEtherDeltaAddr, startBlock, 'latest', function(err, events) {
+      var newEvents = 0;
+      events.forEach(function(event){
+        if (!eventsCache[event.transactionHash+event.logIndex]) {
+          newEvents++;
+          event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+          eventsCache[event.transactionHash+event.logIndex] = event;
+        }
+      })
       Main.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
-      Main.refresh(function(){
-      }, true);
+      callback(newEvents);
     });
-    callback();
   });
 }
 Main.displayMyEvents = function(callback) {
@@ -251,13 +254,154 @@ Main.displayMyEvents = function(callback) {
     function(err, results) {
       pendingTransactions = results.filter(function(x){return x!=undefined});
       //display the template
-      new EJS({url: config.homeURL+'/'+'my_events.ejs'}).update('my_events', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents, pendingTransactions: pendingTransactions});
+      new EJS({url: config.homeURL+'/templates/'+'my_events.ejs'}).update('my_events', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents, pendingTransactions: pendingTransactions});
       $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
       callback();
     }
   );
 }
-Main.displayEvents = function(callback) {
+Main.displayVolume = function(callback) {
+  var events = Object.values(eventsCache);
+  var tokenVolumes = {};
+  var pairVolumes = {};
+  var timeFrame = 86400*1000*1;
+  var now = new Date();
+  events.forEach(function(event){
+    if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr) {
+      var tokenGet = Main.getToken(event.args.tokenGet);
+      var tokenGive = Main.getToken(event.args.tokenGive);
+      var amountGet = event.args.amountGet;
+      var amountGive = event.args.amountGive;
+      if (tokenGet && tokenGive) {
+        if (!tokenVolumes[tokenGet.name]) tokenVolumes[tokenGet.name] = {token: tokenGet, volume: 0};
+        if (!tokenVolumes[tokenGive.name]) tokenVolumes[tokenGive.name] = {token: tokenGive, volume: 0};
+        var token;
+        var base;
+        var volume;
+        if (tokenGive.name=='ETH' || (tokenGive.name>tokenGet.name && tokenGet.name!='ETH')) {
+          token = tokenGet;
+          base = tokenGive;
+          volume = amountGet;
+        } else {
+          token = tokenGive;
+          base = tokenGet;
+          volume = amountGive;
+        }
+        var pair = token.name+'/'+base.name;
+        if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volume: 0};
+        if (now-Main.blockTime(event.blockNumber)<timeFrame) {
+          tokenVolumes[tokenGet.name].volume += amountGet.toNumber();
+          tokenVolumes[tokenGive.name].volume += amountGive.toNumber();
+          pairVolumes[pair].volume += volume.toNumber();
+        }
+      }
+    }
+  });
+  tokenVolumes = Object.values(tokenVolumes);
+  tokenVolumes.sort(function(a,b){return b.volume-a.volume});
+  pairVolumes = Object.values(pairVolumes);
+  pairVolumes.sort(function(a,b){return b.volume-a.volume});
+  new EJS({url: config.homeURL+'/templates/'+'volume.ejs'}).update('volume', {translation: translation, tokenVolumes: tokenVolumes, pairVolumes: pairVolumes});
+  callback();
+}
+Main.displayTradesAndCharts = function(callback) {
+  //get the trade list
+  var events = Object.values(eventsCache);
+  var trades = [];
+  events.forEach(function(event){
+    if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr) {
+      if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
+        var trade;
+        if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
+          //sell
+          trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give};
+        } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
+          //buy
+          trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.give, seller: event.args.get};
+        }
+        if (trade) {
+          trade.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+          trades.push(trade);
+        }
+      }
+    }
+  });
+  trades.sort(function(a,b){ return b.id - a.id });
+  new EJS({url: config.homeURL+'/templates/'+'trades.ejs'}).update('trades', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, trades: trades});
+  $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
+
+  //charts
+  new EJS({url: config.homeURL+'/templates/'+'chart_price.ejs'}).update('chart_price', {translation: translation});
+
+  //line chart
+  var now = new Date();
+  // var data = trades.filter(function(trade){return now-Main.blockTime(trade.blockNumber)<86400*1000*7}).map(function(trade){return [Main.blockTime(trade.blockNumber), trade.price.toNumber()]});
+  var data = trades.slice(0,50).map(function(trade){return [Main.blockTime(trade.blockNumber), trade.price.toNumber()]});
+  Main.lineChart('chart_price_div', '', 'date', 'number', 'Time', 'Price', data);
+
+  //candlestick chart
+  // function getDay(d) {
+  //   return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d.getDay()];
+  // }
+  // var days = {};
+  // for (var i=trades.length-1; i>=0; i--) {
+  //   var trade = trades[i];
+  //   var date = Main.blockTime(trade.blockNumber);
+  //   if (now-date<86400*1000*7) {
+  //     if (!days[getDay(date)]) days[getDay(date)] = [];
+  //     days[getDay(date)].push(trade.price.toNumber());
+  //   }
+  // }
+  // var data = [];
+  // var date = new Date(now.getTime() - 86400*1000*7);
+  // while(date<now) {
+  //   var day = getDay(date);
+  //   var points = days[day];
+  //   if (points && points.length>0) {
+  //     if (points[points.length-1]>points[0]) {
+  //       data.push([day, points.min(),points[0],points[points.length-1],points.max()]);
+  //     } else {
+  //       data.push([day, points.max(),points[points.length-1],points[0],points.min()]);
+  //     }
+  //   }
+  //   date = new Date(date.getTime()+86400*1000);
+  // }
+  // Main.candlestickChart('chart_price_div', '', 'Day', 'Price', data);
+
+  callback();
+}
+Main.candlestickChart = function(elem, title, xtitle, ytitle, data) {
+  var dataTable = google.visualization.arrayToDataTable(data, true);
+  var options = {
+    hAxis: {title: xtitle},
+    vAxis: {title: ytitle},
+    legend:'none',
+    enableInteractivity: true,
+    title: title,
+    candlestick: {
+      fallingColor: { strokeWidth: 0, fill: '#cc0000' },
+      risingColor: { strokeWidth: 0, fill: '#00cc00' }
+    }
+  };
+  var chart = new google.visualization.CandlestickChart(document.getElementById(elem));
+  chart.draw(dataTable, options);
+}
+Main.lineChart = function(elem, title, xtype, ytype, xtitle, ytitle, data) {
+  var dataTable = new google.visualization.DataTable();
+  dataTable.addColumn(xtype, 'X');
+  dataTable.addColumn(ytype, ytitle);
+  dataTable.addRows(data);
+  var options = {
+    hAxis: {title: xtitle},
+    vAxis: {title: ytitle},
+    legend: {position: 'none'},
+    enableInteractivity: true,
+    title: title
+  };
+  var chart = new google.visualization.LineChart(document.getElementById(elem));
+  chart.draw(dataTable, options);
+}
+Main.displayOrderbook = function(callback) {
   utility.blockNumber(web3, function(err, blockNumber) {
     var orders = [];
     //get orders from gitter messages
@@ -338,34 +482,12 @@ Main.displayEvents = function(callback) {
         //final order filtering and sorting
         var buyOrders = ordersReduced.filter(function(x){return x.amount>0});
         var sellOrders = ordersReduced.filter(function(x){return x.amount<0});
+        sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
         buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
-        sellOrders.sort(function(a,b){ return a.price - b.price || a.id - b.id });
-        buyOrders = buyOrders.slice(0,20); //show 20 best orders
-        sellOrders = sellOrders.slice(0,20); //show 20 best orders
-        //get the trade list
-        var trades = [];
-        events.forEach(function(event){
-          if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr) {
-            if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
-              var trade;
-              if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
-                //sell
-                trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give};
-              } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
-                //buy
-                trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.give, seller: event.args.get};
-              }
-              if (trade) {
-                trade.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-                trades.push(trade);
-              }
-            }
-          }
-        });
-        trades.sort(function(a,b){ return b.id - a.id });
+        buyOrders = buyOrders.slice(0,25); //show 25 best orders
+        sellOrders = sellOrders.slice(0,25); //show 25 best orders
         //display the template
-        new EJS({url: config.homeURL+'/'+'market_events.ejs'}).update('market_events', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, trades: trades, blockNumber: blockNumber});
-        $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
+        new EJS({url: config.homeURL+'/templates/'+'order_book.ejs'}).update('order_book', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
         $("[data-toggle=popover]").popover({
           html : true,
           content: function() {
@@ -377,53 +499,52 @@ Main.displayEvents = function(callback) {
             return $(title).children(".popover-heading").html();
           }
         });
+        $('#order_book_scroll')[0].scrollTop = $('#order_book_mid').position().top-$('#order_book_scroll')[0].clientHeight/2-$('#order_book_mid')[0].clientHeight;
         callback();
       }
     );
   });
 }
 Main.loadTokensAndBases = function(callback) {
-  new EJS({url: config.homeURL+'/'+'tokens.ejs'}).update('tokens', {translation: translation, tokens: config.tokens, selectedToken: selectedToken});
-  new EJS({url: config.homeURL+'/'+'bases.ejs'}).update('bases', {translation: translation, tokens: config.tokens, selectedBase: selectedBase});
-  new EJS({url: config.homeURL+'/'+'pairs.ejs'}).update('pairs', {translation: translation, tokens: config.tokens, pairs: config.pairs});
+  new EJS({url: config.homeURL+'/templates/'+'tokens.ejs'}).update('tokens', {translation: translation, tokens: config.tokens, selectedToken: selectedToken});
+  new EJS({url: config.homeURL+'/templates/'+'bases.ejs'}).update('bases', {translation: translation, tokens: config.tokens, selectedBase: selectedBase});
   callback();
 }
 Main.selectToken = function(addr, name, divisor) {
   divisor = Number(divisor);
   selectedToken = {addr: addr, name: name, divisor: divisor};
-  Main.displayMarket(function(){});
+  Main.initMarket(function(){});
+  Main.updateUrl();
 }
 Main.selectBase = function(addr, name, divisor) {
   divisor = Number(divisor);
   selectedBase = {addr: addr, name: name, divisor: divisor};
-  Main.displayMarket(function(){});
+  Main.initMarket(function(){});
+  Main.updateUrl();
 }
-Main.selectTokenAndBase = function(addrToken, nameToken, divisorToken, addrBase, nameBase, divisorBase) {
-  selectedToken = {addr: addrToken, name: nameToken, divisor: Number(divisorToken)};
-  selectedBase = {addr: addrBase, name: nameBase, divisor: Number(divisorBase)};
-  Main.displayMarket(function(){});
+Main.selectTokenAndBase = function(token, base) {
+  token = Main.getToken(token);
+  base = Main.getToken(base);
+  if (token && base) {
+    selectedToken = token;
+    selectedBase = base;
+    Main.initMarket(function(){});
+    Main.updateUrl();
+  }
 }
 Main.otherToken = function(addr, name, divisor) {
   if (addr.slice(0,2)!="0x") addr = '0x'+addr;
   if (!name || name=='') name = addr.slice(2,6);
   divisor = Number(divisor);
   selectedToken = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
-  Main.displayMarket(function(){});
+  Main.initMarket(function(){});
 }
 Main.otherBase = function(addr, name, divisor) {
   if (addr.slice(0,2)!="0x") addr = '0x'+addr;
   if (!name || name=='') name = addr.slice(2,6);
   divisor = Number(divisor);
   selectedBase = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
-  Main.displayMarket(function(){});
-}
-Main.displayMarket = function(callback) {
-  new EJS({url: config.homeURL+'/'+'market_form.ejs'}).update('market_form', {translation: translation, selectedToken: selectedToken, selectedBase: selectedBase});
-  Main.loadTokensAndBases(function(){
-    Main.refresh(function(){
-      callback();
-    }, true);
-  });
+  Main.initMarket(function(){});
 }
 Main.displayAllBalances = function(callback) {
   var zeroAddr = '0x0000000000000000000000000000000000000000';
@@ -433,7 +554,7 @@ Main.displayAllBalances = function(callback) {
         utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [token.addr, addrs[selectedAccount]], function(err, result) {
           var balance = result;
           if (token.name==selectedToken.name || token.name==selectedBase.name) {
-            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {translation: translation, selected: token, balance: balance});
+            new EJS({url: config.homeURL+'/templates/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {translation: translation, selected: token, balance: balance});
           }
           utility.getBalance(web3, addrs[selectedAccount], function(err, result) {
             var balanceOutside = result;
@@ -445,7 +566,7 @@ Main.displayAllBalances = function(callback) {
         utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [token.addr, addrs[selectedAccount]], function(err, result) {
           var balance = result;
           if (token.name==selectedToken.name || token.name==selectedBase.name) {
-            new EJS({url: config.homeURL+'/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {translation: translation, selected: token, balance: balance});
+            new EJS({url: config.homeURL+'/templates/'+'balance.ejs'}).update(token.name==selectedToken.name ? 'balance_token' : 'balance_base', {translation: translation, selected: token, balance: balance});
           }
           utility.call(web3, contractToken, token.addr, 'balanceOf', [addrs[selectedAccount]], function(err, result) {
             var balanceOutside = result;
@@ -456,7 +577,7 @@ Main.displayAllBalances = function(callback) {
       }
     },
     function(err, balances){
-      new EJS({url: config.homeURL+'/'+'balances.ejs'}).update('balances', {translation: translation, balances: balances, addr: addrs[selectedAccount]});
+      new EJS({url: config.homeURL+'/templates/'+'balances.ejs'}).update('balances', {translation: translation, balances: balances, addr: addrs[selectedAccount]});
       callback();
     }
   );
@@ -505,11 +626,14 @@ Main.transfer = function(addr, amount, toAddr) {
   } else if (addr=='0x0000000000000000000000000000000000000000') {
     Main.alertError('Please use your wallet software to transfer plain Ether.');
   } else {
-    utility.send(web3, contractToken, token.addr, 'transfer', [toAddr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-      txHash = result.txHash;
-      nonce = result.nonce;
-      Main.addPending(err, {txHash: result.txHash});
-      Main.alertTxResult(err, result);
+    utility.call(web3, contractToken, token.addr, 'balanceOf', [addrs[selectedAccount]], function(err, result) {
+      if (amount>result) amount = result;
+      utility.send(web3, contractToken, token.addr, 'transfer', [toAddr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+        txHash = result.txHash;
+        nonce = result.nonce;
+        Main.addPending(err, {txHash: result.txHash});
+        Main.alertTxResult(err, result);
+      });
     });
   }
 }
@@ -521,24 +645,38 @@ Main.deposit = function(addr, amount) {
     return;
   }
   if (addr=='0x0000000000000000000000000000000000000000') {
-    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'deposit', [{gas: token.gasDeposit, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-      txHash = result.txHash;
-      nonce = result.nonce;
-      Main.addPending(err, {txHash: result.txHash});
-      Main.alertTxResult(err, result);
+    utility.getBalance(web3, addr, function(err, result) {
+      if (amount > result && amount < result * 1.1) amount = result;
+      if (amount <= result) {
+        utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'deposit', [{gas: token.gasDeposit, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+          txHash = result.txHash;
+          nonce = result.nonce;
+          Main.addPending(err, {txHash: result.txHash});
+          Main.alertTxResult(err, result);
+        });
+      } else {
+        Main.alertError("You don't have enough balance.")
+      }
     });
   } else {
-    utility.send(web3, contractToken, addr, 'approve', [config.contractEtherDeltaAddr, amount, {gas: token.gasApprove, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-      txHash = result.txHash;
-      nonce = result.nonce;
-      Main.addPending(err, {txHash: result.txHash});
-      Main.alertTxResult(err, result);
-      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'depositToken', [addr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-        txHash = result.txHash;
-        nonce = result.nonce;
-        Main.addPending(err, {txHash: result.txHash});
-        Main.alertTxResult(err, result);
-      });
+    utility.call(web3, contractToken, token.addr, 'balanceOf', [addrs[selectedAccount]], function(err, result) {
+      if (amount > result && amount < result * 1.1) amount = result;
+      if (amount <= result) {
+        utility.send(web3, contractToken, addr, 'approve', [config.contractEtherDeltaAddr, amount, {gas: token.gasApprove, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+          txHash = result.txHash;
+          nonce = result.nonce;
+          Main.addPending(err, {txHash: result.txHash});
+          Main.alertTxResult(err, result);
+          utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'depositToken', [addr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+            txHash = result.txHash;
+            nonce = result.nonce;
+            Main.addPending(err, {txHash: result.txHash});
+            Main.alertTxResult(err, result);
+          });
+        });
+      } else {
+        Main.alertError("You don't have enough balance.")
+      }
     });
   }
 }
@@ -671,7 +809,7 @@ Main.cancelOrderRefresh = function(orderNonce) {
     order.nonce==orderNonce ? false : true;
   });
   if (workingOrders.length<len) {
-    Main.displayEvents(function(){});
+    Main.displayOrderbook(function(){});
   }
 }
 Main.trade = function(kind, order, amount) {
@@ -707,21 +845,23 @@ Main.trade = function(kind, order, amount) {
   });
 }
 Main.getGitterMessages = function(callback) {
+  console.log('Getting Gitter');
   utility.getGitterMessages(gitterMessagesCache, function(err, result){
     if (!err) {
       gitterMessagesCache = result.gitterMessages;
       Main.createCookie(config.gitterCacheCookie, JSON.stringify(gitterMessagesCache), 999);
-      if (result.newMessagesFound>0) {
-        Main.displayEvents(function(){});
-      }
+      console.log('Done getting Gitter');
     }
     callback();
   });
 }
 Main.displayContent = function(callback) {
   window.title = translation.title;
-  $('#description').html(translation.description);
-  $('#toggle_navigation').html(translation.toggle_navigation);
+  new EJS({url: config.homeURL+'/templates/'+'family.ejs'}).update('family', {translation: translation});
+  new EJS({url: config.homeURL+'/templates/'+'guides.ejs'}).update('guides', {translation: translation});
+  new EJS({url: config.homeURL+'/templates/'+'announcements.ejs'}).update('announcements', {translation: translation});
+  $('.description_label').html(translation.description);
+  $('.toggle_navigation_label').html(translation.toggle_navigation);
   $('.add_account_label').html(translation.add_account);
   $('.address_label').html(translation.address);
   $('.private_key_label').html(translation.private_key);
@@ -735,9 +875,12 @@ Main.displayContent = function(callback) {
   $('.name_label').html(translation.name);
   $('.divisor_label').html(translation.disivor);
   $('.go_label').html(translation.go);
-  new EJS({url: config.homeURL+'/'+'family.ejs'}).update('family', {translation: translation});
-  new EJS({url: config.homeURL+'/'+'guides.ejs'}).update('guides', {translation: translation});
+  $('.chat_label').html(translation.chat);
+  $('.send_label').html(translation.send);
   callback();
+}
+Main.blockTime = function(block) {
+  return new Date(blockTimeSnapshot.date.getTime()+((block - blockTimeSnapshot.blockNumber)*1000*14));
 }
 Main.addPending = function(err, tx) {
   if (!err) {
@@ -747,7 +890,11 @@ Main.addPending = function(err, tx) {
   }
 }
 Main.updateUrl = function() {
-  window.location.hash = '#'+selectedToken.name+'-'+selectedBase.name;
+  var tokenName = selectedToken.name;
+  var baseName = selectedBase.name;
+  if (config.tokens.filter(function(x){return x.name==tokenName}).length==0) tokenName = selectedToken.addr;
+  if (config.tokens.filter(function(x){return x.name==baseName}).length==0) baseName = selectedBase.addr;
+  window.location.hash = '#'+tokenName+'-'+baseName;
 }
 Main.resetCaches = function() {
   Main.eraseCookie(config.eventsCacheCookie);
@@ -755,35 +902,30 @@ Main.resetCaches = function() {
   Main.eraseCookie(config.deadOrdersCookie);
   location.reload();
 }
-Main.refresh = function(callback, updateData) {
-  if (refreshing<=0 || Date.now()-lastRefresh>60*1000) {
-    refreshing = 2;
+Main.refresh = function(callback, force) {
+  if (!lastRefresh || Date.now()-lastRefresh>60*1000 || force) {
+    console.log('Refreshing');
+    if (!lastRefresh) force = true;
+    lastRefresh = Date.now();
     Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
     Main.connectionTest();
     Main.updateUrl();
-    Main.publishOrders(function(){
-      refreshing--;
+    Main.publishOrders(function(){});
+    Main.loadEvents(function(newEvents){
+      if (newEvents>0 || force) {
+        Main.displayAccounts(function(){});
+        Main.displayAllBalances(function(){});
+        Main.displayMyEvents(function(){});
+        Main.displayTradesAndCharts(function(){});
+        Main.displayVolume(function(){});
+      }
     });
-    if (updateData) {
-      Main.displayAccounts(function(){
-        Main.displayAllBalances(function(){
-          Main.displayMyEvents(function(){
-            loadedBalances = true;
-            if (loadedBalances && loadedEvents) $('#loading').hide();
-          });
-        });
-      });
-    }
     Main.getGitterMessages(function(){
-      Main.displayEvents(function(){
-        loadedEvents = true;
-        if (loadedBalances && loadedEvents) $('#loading').hide();
-        refreshing--;
-        lastRefresh = Date.now();
-        callback();
-      });
+      Main.displayOrderbook(function(){});
+      $('#loading').hide();
     });
   }
+  callback();
 }
 Main.refreshLoop = function() {
   function loop() {
@@ -793,21 +935,27 @@ Main.refreshLoop = function() {
   }
   loop();
 }
+Main.displayBuySell = function(callback) {
+  new EJS({url: config.homeURL+'/templates/'+'buy.ejs'}).update('buy', {translation: translation, selectedToken: selectedToken, selectedBase: selectedBase});
+  new EJS({url: config.homeURL+'/templates/'+'sell.ejs'}).update('sell', {translation: translation, selectedToken: selectedToken, selectedBase: selectedBase});
+  callback();
+}
+Main.initMarket = function(callback) {
+  Main.displayBuySell(function(){});
+  Main.loadTokensAndBases(function(){});
+  Main.refresh(function(){}, true);
+  callback();
+}
 Main.init = function(callback) {
+  console.log('Beginning init');
   connection = undefined;
   Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
   Main.connectionTest();
-  Main.displayContent(function(){
-    Main.displayLanguages(function(){
-      Main.loadEvents(function(){
-        Main.displayAccounts(function(){
-          Main.displayMarket(function(){
-            callback();
-          });
-        });
-      });
-    });
-  });
+  Main.displayLanguages(function(){});
+  Main.displayContent(function(){});
+  Main.displayBuySell(function(){});
+  Main.loadTokensAndBases(function(){});
+  callback();
 }
 
 //globals
@@ -820,8 +968,7 @@ var cookie;
 var connection = undefined;
 var nonce = undefined;
 var eventsCache = {};
-var refreshing = 0;
-var lastRefresh = Date.now();
+var lastRefresh = undefined;
 var price = undefined;
 var priceUpdated = Date.now();
 var contractEtherDelta = undefined;
@@ -837,6 +984,9 @@ var loadedBalances = false;
 var translation;
 var language = 'English';
 var minOrderSize = 0.1;
+var oauth = undefined;
+var messageToSend = undefined;
+var blockTimeSnapshot = undefined;
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
@@ -892,28 +1042,74 @@ web3.version.getNetwork(function(error, version){
       });
     }
   });
-  //select token and base
-  var hash = window.location.hash.substr(1);
-  if (hash && hash.length>0) {
-    var hashes = hash.split("-");
-    if (hashes.length==2) {
-      var matchesToken = config.tokens.filter(function(x){return x.name==hashes[0]});
-      var matchesBase = config.tokens.filter(function(x){return x.name==hashes[1]});
-      if (matchesToken.length>0 && matchesBase.length>0) {
-        selectedToken = matchesToken[0];
-        selectedBase = matchesBase[0];
-      }
-    }
-  }
+  //load Twitter and chat (not in init because we only want to load these scripts once)
+  new EJS({url: config.homeURL+'/templates/'+'twitter.ejs'}).update('twitter', {translation: translation});
+  new EJS({url: config.homeURL+'/templates/'+'chat.ejs'}).update('chat', {translation: translation, chatServer: config.chatServer});
   //load contract
   config.contractEtherDeltaAddr = config.contractEtherDeltaAddrs[0].addr;
   utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
     contractEtherDelta = contract;
     utility.loadContract(web3, config.contractToken, '0x0000000000000000000000000000000000000000', function(err, contract){
       contractToken = contract;
-      Main.init(function(){
-        Main.refreshLoop();
-      });
+      //select token and base
+      var hash = window.location.hash.substr(1);
+      if (hash && hash.length>0) {
+        var hashes = hash.split("-");
+        if (hashes.length==2) {
+          var matchesToken = config.tokens.filter(function(x){return x.name==hashes[0]});
+          var matchesBase = config.tokens.filter(function(x){return x.name==hashes[1]});
+          if (matchesToken.length>0) {
+            selectedToken = matchesToken[0];
+          }
+          if (matchesBase.length>0) {
+            selectedBase = matchesBase[0];
+          }
+          if (hashes[0].slice(0,2)=='0x') {
+            selectedToken = {addr: hashes[0]};
+          }
+          if (hashes[1].slice(0,2)=='0x') {
+            selectedBase = {addr: hashes[1]};
+          }
+        }
+      }
+      //init
+      async.parallel(
+        [
+          function(callback) {
+            utility.call(web3, contractToken, selectedToken.addr, 'decimals', [], function(err, result) {
+              if (result>0) selectedToken.divisor = result;
+              if (!selectedToken.divisor) selectedToken.divisor = config.tokens[0].divisor;
+              callback(null, true);
+            });
+          },
+          function(callback) {
+            utility.call(web3, contractToken, selectedToken.addr, 'name', [], function(err, result) {
+              if (result && result!="") selectedToken.name = result;
+              if (!selectedToken.name) selectedToken.name = selectedToken.addr.slice(2,8);
+              callback(null, true);
+            });
+          },
+          function(callback) {
+            utility.call(web3, contractToken, selectedBase.addr, 'decimals', [], function(err, result) {
+              if (result>0) selectedBase.divisor = result;
+              if (!selectedBase.divisor) selectedBase.divisor = config.tokens[0].divisor;
+              callback(null, true);
+            });
+          },
+          function(callback) {
+            utility.call(web3, contractToken, selectedBase.addr, 'name', [], function(err, result) {
+              if (result && result!="") selectedBase.name = result;
+              if (!selectedBase.name) selectedBase.name = selectedBase.addr.slice(2,8);
+              callback(null, true);
+            });
+          }
+        ],
+        function(err, results) {
+          Main.init(function(){
+            Main.refreshLoop();
+          });
+        }
+      );
     });
   });
 });
@@ -1340,6 +1536,49 @@ function logs(web3, contract, address, fromBlock, toBlock, callback) {
   // } catch (err) {
   //   proxy(1);
   // }
+  proxy(1);
+}
+
+function logsOnce(web3, contract, address, fromBlock, toBlock, callback) {
+  var options = {fromBlock: fromBlock, toBlock: toBlock, address: address};
+  function decodeEvent(item) {
+    eventAbis = contract.abi.filter(function(eventAbi){return eventAbi.type=='event' && item.topics[0]=='0x'+sha3(eventAbi.name+'('+eventAbi.inputs.map(function(x) {return x.type}).join()+')')});
+    if (eventAbis.length>0) {
+      var eventAbi = eventAbis[0];
+      var event = new SolidityEvent(web3, eventAbi, address);
+      var result = event.decode(item);
+      return result;
+    } else {
+      return undefined;
+    }
+  }
+  function proxy(retries) {
+    var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api?module=logs&action=getLogs&address='+address+'&fromBlock='+fromBlock+'&toBlock='+toBlock;
+    request.get(url, function(err, httpResponse, body){
+      if (!err) {
+        try {
+          var result = JSON.parse(body);
+          var items = result['result'];
+          async.map(items,
+            function(item, callbackMap){
+              item.blockNumber = hexToDec(item.blockNumber);
+              item.logIndex = hexToDec(item.logIndex);
+              item.transactionIndex = hexToDec(item.transactionIndex);
+              var event = decodeEvent(item);
+              callbackMap(null, event);
+            },
+            function(err, events){
+              callback(null, events);
+            }
+          );
+        } catch (err) {
+          if (retries>0) {
+            proxy(retries-1)
+          }
+        }
+      }
+    });
+  }
   proxy(1);
 }
 
@@ -1948,6 +2187,7 @@ exports.testCall = testCall;
 exports.estimateGas = estimateGas;
 exports.txReceipt = txReceipt;
 exports.logs = logs;
+exports.logsOnce = logsOnce;
 exports.blockNumber = blockNumber;
 exports.sign = sign;
 exports.verify = verify;
@@ -1973,10 +2213,10 @@ var configs = {};
 //mainnet
 configs["1"] = {
   homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://0.0.0.0:8080',
-  contractEtherDelta: 'etherdelta.sol',
-  contractToken: 'token.sol',
-  contractReserveToken: 'reservetoken.sol',
+  // homeURL: 'http://localhost:8080',
+  contractEtherDelta: 'smart_contract/etherdelta.sol',
+  contractToken: 'smart_contract/token.sol',
+  contractReserveToken: 'smart_contract/reservetoken.sol',
   contractEtherDeltaAddrs: [
     {addr: '0x2136bbba2edca21afdddee838fff19ea70d10f03', info: 'Deployed 08/03/2016'},
     {addr: '0xc6b330df38d6ef288c953f1f2835723531073ce2', info: 'Deployed 07/08/2016 -- please withdraw'}
@@ -1991,12 +2231,12 @@ configs["1"] = {
     {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 10000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', divisor: 1000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd', name: 'EPOSY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0', name: 'EPOSN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x0105d415be226a6edbdbfe5bc31e6f4b2b1d2698', name: 'ETCWY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x1f0dc965d1dcdd8ad0559d170123a92dfc7e111f', name: 'ETCWN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
   ],
   pairs: [
     {token: 1, base: 0},
@@ -2007,6 +2247,7 @@ configs["1"] = {
   gitterStream: 'stream.gitter.im',
   gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
   gitterRoomID: '57756375c2f0db084a20cf77',
+  chatServer: 'https://etherdeltachat.herokuapp.com:443',
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   gitterCacheCookie: 'EtherDelta_gitterCache',
@@ -2018,10 +2259,10 @@ configs["1"] = {
 //testnet
 configs["2"] = {
   homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://0.0.0.0:8080',
-  contractEtherDelta: 'etherdelta.sol',
-  contractToken: 'token.sol',
-  contractReserveToken: 'reservetoken.sol',
+  // homeURL: 'http://localhost:8080',
+  contractEtherDelta: 'smart_contract/etherdelta.sol',
+  contractToken: 'smart_contract/token.sol',
+  contractReserveToken: 'smart_contract/reservetoken.sol',
   contractEtherDeltaAddrs: [
     {addr: '0x24b0ed7ba8d6d969bfe8409b4e6aeee3a40f8855', info: 'Deployed 08/03/2016'},
     {addr: '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d', info: 'Deployed 06/30/2016'},
@@ -2047,6 +2288,7 @@ configs["2"] = {
   gitterStream: 'stream.gitter.im',
   gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
   gitterRoomID: '57756375c2f0db084a20cf77',
+  chatServer: 'https://etherdeltachat.herokuapp.com:443',
   userCookie: 'EtherDelta_testnet',
   eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
   gitterCacheCookie: 'EtherDelta_gitterCache_testnet',
@@ -91609,10 +91851,17 @@ var translations = {
   'English': {
     'title': 'EtherDelta',
     'description': 'EtherDelta is a decentralized trading platform for Ethereum tokens.',
+    'announcements': 'Announcements',
+    'order_book': 'Order book',
+    'follow_twitter': 'Follow us on Twitter',
+    'chat': 'Chat',
+    'send': 'Send',
+    'volume': 'Volume',
+    'pair': 'Pair',
     'produced_etherboost': 'Produced by Etherboost',
     'etherdelta_desc': 'EtherDelta &#8212; decentralized token exchange',
     'etheropt_desc': 'Etheropt &#8212; decentralized options exchange',
-    'outcomecoin_desc': 'OutcomeCoin &#8212; prediction market tokens',
+    'predictiontoken_desc': 'PredictionToken &#8212; prediction market tokens',
     'ethereumdollar_desc': 'EthereumDollar &#8212; stable dollar token',
     'toggle_navigation': 'Toggle navigation',
     'name': 'Name',
@@ -91644,8 +91893,8 @@ var translations = {
     'deposit': 'Deposit',
     'withdraw': 'Withdraw',
     'transfer': 'Transfer',
-    'balance_in_your_wallet': 'Balance (in your wallet)',
-    'balance_etherdelta': 'Balance (on EtherDelta)',
+    'balance_in_your_wallet': 'Wallet',
+    'balance_etherdelta': 'EtherDelta',
     'amount': 'Amount',
     'other': 'Other',
     'other_token': 'Other token',
@@ -91718,10 +91967,17 @@ var translations = {
   'Chinese (中文)': {
     'title': 'EtherDelta',
     'description': 'EtherDelta是无中心的以太坊交易平台。',
+    'announcements': '公告',
+    'order_book': '订单簿',
+    'follow_twitter': '跟Twitter',
+    'chat': '聊',
+    'send': '发送',
+    'volume': '卷',
+    'pair': 'pair',
     'produced_etherboost': 'Etherboost制作',
     'etherdelta_desc': 'EtherDelta &#8212; 无中心交易',
     'etheropt_desc': 'Etheropt &#8212; 无中心期权交易',
-    'outcomecoin_desc': 'OutcomeCoin &#8212; 预测市场币',
+    'predictiontoken_desc': 'PredictionToken &#8212; 预测市场币',
     'ethereumdollar_desc': 'EthereumDollar &#8212; 稳定美元币',
     'toggle_navigation': '切换导航',
     'name': '币名称',
@@ -91753,8 +92009,8 @@ var translations = {
     'deposit': '充值',
     'withdraw': '提取',
     'transfer': '转移',
-    'balance_in_your_wallet': '钱包余额',
-    'balance_etherdelta': 'EtherDelta余额',
+    'balance_in_your_wallet': '钱包',
+    'balance_etherdelta': 'EtherDelta',
     'amount': '数量',
     'other': '其它币',
     'other_token': '其它币',
@@ -91808,7 +92064,6 @@ var translations = {
     'Block': '块',
     'block': '块',
     'blocks': '块',
-
     'expired': 'Expired',
     'order_will_refresh': '这单到期会刷新，除非你按',
     'stop': '停止',

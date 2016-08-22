@@ -1,0 +1,45 @@
+<input type="hidden" id="token_addr" value="<%= selectedToken.addr %>" />
+<input type="hidden" id="base_addr" value="<%= selectedBase.addr %>" />
+
+<h3><%= translation.buy %></h3>
+<div class="scroll-container" style="height: 300px;" id="offer_scroll">
+  <ul class="list-group" style="width: 250px;">
+    <li class="list-group-item">
+      <span class="badge"><span id="balance_base"></span> <%= selectedBase.name %></span>
+      <%= translation.balance %>
+    </li>
+  </ul>
+  <form class="form">
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width: 125px;"><%= selectedToken.name %></div>
+        <input type="text" class="form-control" style="width: 125px;" id="buy_amount" onchange="buy_change()" placeholder="<%= translation.amount_to_buy %>" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width: 125px;"><%= selectedToken.name+'/'+selectedBase.name %></div>
+        <input type="text" class="form-control" style="width: 125px;" id="buy_price" onchange="buy_change()" placeholder="<%= translation.price %>" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width: 125px;"><%= selectedBase.name %></div>
+        <input type="text" class="form-control" style="width: 125px;" id="buy_total" onchange="buy_change()" placeholder="<%= translation.total %>" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width: 125px;"><%= translation.expires %></div>
+        <input type="text" class="form-control" style="width: 125px;" id="buy_expires" placeholder="<%= translation.number_of_blocks %>" value="2500" />
+      </div>
+    </div>
+    <!-- <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width: 125px;"><%= translation.auto_refresh %></div>
+        <input type="checkbox" class="form-control" style="width: 125px;" id="buy_refresh" />
+      </div>
+    </div> -->
+    <button type="submit" class="btn btn-success" style="width: 250px;" id="buy_submit"><%= translation.buy %></button>
+  </form>
+</div>

@@ -89,3 +89,5 @@ function withdraw_click(addr) {
 function transfer_click(addr) {
   bundle.Main.transfer(addr, $('#transfer_amount_'+addr).val(), $('#transfer_to_'+addr).val());
 }
+$(function(){
+})

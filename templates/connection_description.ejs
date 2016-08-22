@@ -1,5 +1,5 @@
 <p><%= translation.connection %>: <%= connection.connection %> (<%= connection.provider %>) <%= connection.testnet ? translation.testnet : ''%></p>
-<p><%= translation.connect_using %> <a class="btn btn-default" href="https://metamask.io" target="_blank"><img src="metamask.png" style="height: 25px;" /> <%= translation.metamask %></a> or <a class="btn btn-default" href="https://github.com/ethereum/mist" target="_blank"><img src="mist.png" style="height: 25px;" /> <%= translation.mist_browser %></a></p>
+<p><%= translation.connect_using %> <a class="btn btn-default" href="https://metamask.io" target="_blank"><img src="/images/metamask.png" style="height: 25px;" /> <%= translation.metamask %></a> <%= translation.or %> <a class="btn btn-default" href="https://github.com/ethereum/mist" target="_blank"><img src="/images/mist.png" style="height: 25px;" /> <%= translation.mist_browser %></a></p>
 
 <div class="btn-group dropup">
   <a class="btn btn-default" href="<%= contractLink%>" target="_blank"><i class="fa fa-file-text"></i> <%= contractAddr %></a>

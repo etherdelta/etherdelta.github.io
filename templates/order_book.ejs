@@ -1,0 +1,80 @@
+<h3><%= translation.order_book %></h3>
+<div class="scroll-container" style="height: 660px;" id="order_book_scroll">
+  <table class="table">
+    <% sellOrders.forEach(function(order){ %>
+    <tr>
+      <td>
+        <a data-placement="top" data-popover-content="#tooltip_<%= order.order.user+order.order.nonce %>" data-toggle="popover" data-trigger="focus" tabindex="0" style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(5) %></a>
+        <div class="hidden" id="tooltip_<%= order.order.user+order.order.nonce %>">
+          <div class="popover-heading">
+            <%= translation.order_details %>
+          </div>
+          <div class="popover-body">
+            <ul class="list-group">
+              <li class="list-group-item"><% if (Number(order.order.expires) > blockNumber){ %><%= translation.expires_in %> <%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? translation.block : translation.blocks %><% } else { %><%= translation.expired %><% } %></li>
+              <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase() && order.workingOrder && order.workingOrder.refresh) { %>
+                <li class="list-group-item">
+                  <%= translation.order_will_refresh %> <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrderRefresh(<%= order.order.nonce %>);"><%= translation.stop %></button> <%= translation.or_refresh %>
+                </li>
+              <% } %>
+              <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase()) { %>
+                <li class="list-group-item">
+                  <%= translation.you_can %> <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrder('<%= encodeURIComponent(JSON.stringify(order.order)) %>');"><%= translation.cancel %></button> <%= translation.cancel_blockchain %>
+                </li>
+              <% } %>
+            </ul>
+          </div>
+        </div>
+      </td>
+      <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %></td>
+      <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
+      <td>
+        <button type="button" class="btn btn-success btn-xs" style="width:35px;" data-toggle="modal" data-target="#buy_cross_modal" data-order='<%= JSON.stringify(order) %>' data-desc='<%= translation.sell_order %>: <br /><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %> <%= selectedToken.name %> @ <%= order.price.toNumber().toFixed(5) %> <%= selectedToken.name+'/'+selectedBase.name %>' data-amount='<%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %>'><%= translation.buy %></button>
+      </td>
+    </tr>
+    <% }); %>
+    <tr id="order_book_mid">
+      <th><%= translation.price %></th>
+      <th><%= selectedToken.name %></th>
+      <th><%= selectedBase.name %></th>
+      <th><%= translation.buy %></th>
+    </tr>
+    <% buyOrders.forEach(function(order){ %>
+    <tr>
+      <td>
+        <a data-placement="top" data-popover-content="#tooltip_<%= order.order.user+order.order.nonce %>" data-toggle="popover" data-trigger="focus" tabindex="0" style="<%= selectedAddr.toLowerCase()==order.order.user.toLowerCase() ? 'background: #9ff' : '' %>"><%= order.price.toNumber().toFixed(5) %></a>
+        <div class="hidden" id="tooltip_<%= order.order.user+order.order.nonce %>">
+          <div class="popover-heading">
+            <%= translation.order_details %>
+          </div>
+          <div class="popover-body">
+            <ul class="list-group">
+              <li class="list-group-item"><% if (Number(order.order.expires) > blockNumber){ %><%= translation.expires_in %> <%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? translation.block : translation.blocks %><% } else { %><%= translation.expired %><% } %></li>
+              <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase() && order.workingOrder && order.workingOrder.refresh) { %>
+                <li class="list-group-item">
+                  <%= translation.order_will_refresh %> <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrderRefresh(<%= order.order.nonce %>);"><%= translation.stop %></button> <%= translation.or_refresh %>
+                </li>
+              <% } %>
+              <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase()) { %>
+                <li class="list-group-item">
+                  <%= translation.you_can %> <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrder('<%= encodeURIComponent(JSON.stringify(order.order)) %>');"><%= translation.cancel %></button> <%= translation.cancel_blockchain %>
+                </li>
+              <% } %>
+            </ul>
+          </div>
+        </div>
+      </td>
+      <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %></td>
+      <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume) * order.price.toNumber() * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
+      <td>
+        <button type="button" class="btn btn-danger btn-xs" style="width:35px;" data-toggle="modal" data-target="#sell_cross_modal" data-order='<%= JSON.stringify(order) %>' data-desc='<%= translation.buy_order %>: <br /><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %> <%= selectedToken.name %> @ <%= order.price.toNumber().toFixed(5) %> <%= selectedToken.name+'/'+selectedBase.name %>' data-amount='<%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %>'><%= translation.sell %></button>
+      </td>
+    </tr>
+    <% }); %>
+    <% if (buyOrders.length==0 && sellOrders.length==0) { %>
+      <tr>
+        <td colspan="4"><%= translation.no_orders %> <a href="javascript:;" onclick="bundle.Main.resetCaches();"><%= translation.no_orders_reset %></a>.</td>
+      </tr>
+    <% } %>
+  </table>
+</div>

@@ -1,0 +1,15 @@
+<h3><%= translation.volume %></h3>
+<div style="height: 300px; overflow-y: scroll">
+  <table class="table">
+    <tr><th><%= translation.pair %></th><th><%= translation.volume %></th></tr>
+    <% pairVolumes.forEach(function(pairVolume){ %>
+      <tr><td><a href="javascript:;" onclick="bundle.Main.selectTokenAndBase('<%= pairVolume.token.addr %>','<%= pairVolume.base.addr %>');"><%= pairVolume.token.name+'/'+pairVolume.base.name %></a></td><td><%= bundle.utility.weiToEth(pairVolume.volume, pairVolume.token.divisor) %></td></tr>
+    <% }) %>
+  </table>
+  <table class="table">
+    <tr><th><%= translation.token %></th><th><%= translation.volume %></th></tr>
+    <% tokenVolumes.forEach(function(tokenVolume){ %>
+      <tr><td><%= tokenVolume.token.name %></td><td><%= bundle.utility.weiToEth(tokenVolume.volume, tokenVolume.token.divisor) %></td></tr>
+    <% }) %>
+  </table>
+</div>

@@ -3,10 +3,10 @@ var configs = {};
 //mainnet
 configs["1"] = {
   homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://0.0.0.0:8080',
-  contractEtherDelta: 'etherdelta.sol',
-  contractToken: 'token.sol',
-  contractReserveToken: 'reservetoken.sol',
+  // homeURL: 'http://localhost:8080',
+  contractEtherDelta: 'smart_contract/etherdelta.sol',
+  contractToken: 'smart_contract/token.sol',
+  contractReserveToken: 'smart_contract/reservetoken.sol',
   contractEtherDeltaAddrs: [
     {addr: '0x2136bbba2edca21afdddee838fff19ea70d10f03', info: 'Deployed 08/03/2016'},
     {addr: '0xc6b330df38d6ef288c953f1f2835723531073ce2', info: 'Deployed 07/08/2016 -- please withdraw'}
@@ -21,12 +21,12 @@ configs["1"] = {
     {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 10000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', divisor: 1000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd', name: 'EPOSY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0', name: 'EPOSN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x0105d415be226a6edbdbfe5bc31e6f4b2b1d2698', name: 'ETCWY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x1f0dc965d1dcdd8ad0559d170123a92dfc7e111f', name: 'ETCWN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
   ],
   pairs: [
     {token: 1, base: 0},
@@ -37,6 +37,7 @@ configs["1"] = {
   gitterStream: 'stream.gitter.im',
   gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
   gitterRoomID: '57756375c2f0db084a20cf77',
+  chatServer: 'https://etherdeltachat.herokuapp.com:443',
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   gitterCacheCookie: 'EtherDelta_gitterCache',
@@ -48,10 +49,10 @@ configs["1"] = {
 //testnet
 configs["2"] = {
   homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://0.0.0.0:8080',
-  contractEtherDelta: 'etherdelta.sol',
-  contractToken: 'token.sol',
-  contractReserveToken: 'reservetoken.sol',
+  // homeURL: 'http://localhost:8080',
+  contractEtherDelta: 'smart_contract/etherdelta.sol',
+  contractToken: 'smart_contract/token.sol',
+  contractReserveToken: 'smart_contract/reservetoken.sol',
   contractEtherDeltaAddrs: [
     {addr: '0x24b0ed7ba8d6d969bfe8409b4e6aeee3a40f8855', info: 'Deployed 08/03/2016'},
     {addr: '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d', info: 'Deployed 06/30/2016'},
@@ -77,6 +78,7 @@ configs["2"] = {
   gitterStream: 'stream.gitter.im',
   gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
   gitterRoomID: '57756375c2f0db084a20cf77',
+  chatServer: 'https://etherdeltachat.herokuapp.com:443',
   userCookie: 'EtherDelta_testnet',
   eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
   gitterCacheCookie: 'EtherDelta_gitterCache_testnet',

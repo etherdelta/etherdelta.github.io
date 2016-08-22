@@ -1,3 +1,0 @@
-<% pairs.forEach(function(pair){ %>
-  <button type="button" class="btn btn-default" onclick="bundle.Main.selectTokenAndBase('<%= tokens[pair.token].addr %>','<%= tokens[pair.token].name %>','<%= tokens[pair.token].divisor %>','<%= tokens[pair.base].addr %>','<%= tokens[pair.base].name %>','<%= tokens[pair.base].divisor %>');"><%= tokens[pair.token].name %>/<%= tokens[pair.base].name %></button>
-<% }) %>

@@ -1,0 +1,53 @@
+<h3 class="chat_label"><%= translation.chat %></h3>
+<div style="height: 280px; overflow-y: scroll" id="chat_scroll">
+
+  <ul id="chat_messages"></ul>
+
+</div>
+
+<div style="height: 20px;">
+  <form class="form-inline">
+    <input id="chat_message" autocomplete="off" class="form-control" style="width: 190px;" /><button class="btn btn-default send_label" style="width: 60px;" id="chat_send"><%= translation.send %></button>
+  </form>
+</div>
+
+<%
+var oauth = undefined;
+var messageToSend = undefined;
+hello.init({google: '212764572906-juigt8scrm0n4q7n5e39a8ni319q8b2v.apps.googleusercontent.com'}, {});
+hello.on('auth.login', function(auth) {
+  hello(auth.network).api('me').then(function(r) {
+    oauth = {
+      username: r.displayName,
+      access_token: auth.authResponse.access_token
+    }
+    sendMessage();
+  });
+});
+if (typeof(socket)=='undefined'){
+  var socket = io.connect(chatServer);
+  $('body').on('click', '#chat_send', function (e) {
+    e.preventDefault();
+    messageToSend = $('#chat_message').val();
+    if (oauth) {
+      sendMessage();
+    } else {
+      hello('google').login();
+    }
+  });
+  function sendMessage() {
+    if (messageToSend && oauth) {
+      var data = {message: messageToSend, oauth: oauth};
+      socket.emit('message', data);
+      $('#chat_message').val('');
+    }
+  }
+  socket.on('messages', function(messages){
+    messages.forEach(function(message){
+      html = message.username+': '+message.message;
+      $('#chat_messages').append($('<li>').text(html));
+    });
+    $('#chat_scroll')[0].scrollTop = $('#chat_scroll')[0].scrollHeight;
+  });
+}
+%>

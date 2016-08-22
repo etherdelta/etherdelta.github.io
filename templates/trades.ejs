@@ -1,0 +1,21 @@
+<h3><%= translation.trades %></h3>
+<div class="scroll-container" style="height: 300px;">
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= translation.price %></th>
+        <th><%= selectedToken.name %></th>
+        <th><%= selectedBase.name %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% trades.forEach(function(trade){ %>
+        <tr>
+          <td><%= trade.price.toNumber().toFixed(5) %> <a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+          <td><span class="label <%= trade.amount>0 ? 'label-success' : 'label-danger' %>"><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %></span></td>
+          <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
