@@ -124,7 +124,7 @@ var translations = {
     'chat': '聊',
     'send': '发送',
     'volume': '卷',
-    'pair': 'pair',
+    'pair': '名称',
     'produced_etherboost': 'Etherboost制作',
     'etherdelta_desc': 'EtherDelta &#8212; 无中心交易',
     'etheropt_desc': 'Etheropt &#8212; 无中心期权交易',

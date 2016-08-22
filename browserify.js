@@ -177,6 +177,7 @@ Main.selectLanguage = function(newLanguage) {
   language = newLanguage;
   translation = translations[language];
   Main.init(function(){});
+  Main.refresh(function(){}, true);
 }
 Main.loadEvents = function(callback) {
   utility.blockNumber(web3, function(err, blockNumber) {
