@@ -1057,19 +1057,21 @@ web3.version.getNetwork(function(error, version){
       if (hash && hash.length>0) {
         var hashes = hash.split("-");
         if (hashes.length==2) {
-          var matchesToken = config.tokens.filter(function(x){return x.name==hashes[0]});
-          var matchesBase = config.tokens.filter(function(x){return x.name==hashes[1]});
+          var matchesToken = config.tokens.filter(function(x){return x.name==hashes[0] || x.addr==hashes[0]});
+          var matchesBase = config.tokens.filter(function(x){return x.name==hashes[1] || x.addr==hashes[1]});
           if (matchesToken.length>0) {
             selectedToken = matchesToken[0];
+          } else if (hashes[0].slice(0,2)=='0x') {
+            selectedToken = {addr: hashes[0]};
+          } else {
+            selectedToken = config.tokens[config.defaultToken];
           }
           if (matchesBase.length>0) {
             selectedBase = matchesBase[0];
-          }
-          if (hashes[0].slice(0,2)=='0x') {
-            selectedToken = {addr: hashes[0]};
-          }
-          if (hashes[1].slice(0,2)=='0x') {
+          } else if (hashes[1].slice(0,2)=='0x') {
             selectedBase = {addr: hashes[1]};
+          } else {
+            selectedBase = config.tokens[config.defaultBase];
           }
         }
       }
@@ -1077,35 +1079,59 @@ web3.version.getNetwork(function(error, version){
       async.parallel(
         [
           function(callback) {
-            utility.call(web3, contractToken, selectedToken.addr, 'decimals', [], function(err, result) {
-              if (result>0) selectedToken.divisor = result;
-              if (!selectedToken.divisor) selectedToken.divisor = config.tokens[0].divisor;
+            if (!selectedToken.divisor) {
+              utility.call(web3, contractToken, selectedToken.addr, 'decimals', [], function(err, result) {
+                if (!err && result>=0) selectedToken.divisor = Math.pow(10,result.toNumber());
+                if (!selectedToken.divisor) selectedToken.divisor = config.tokens[0].divisor;
+                callback(null, true);
+              });
+            } else {
               callback(null, true);
-            });
+            }
           },
           function(callback) {
-            utility.call(web3, contractToken, selectedToken.addr, 'name', [], function(err, result) {
-              if (result && result!="") selectedToken.name = result;
-              if (!selectedToken.name) selectedToken.name = selectedToken.addr.slice(2,8);
+            if (!selectedToken.name) {
+              utility.call(web3, contractToken, selectedToken.addr, 'name', [], function(err, result) {
+                if (!err && result && result!="") selectedToken.name = result;
+                if (!selectedToken.name) selectedToken.name = selectedToken.addr.slice(2,8);
+                callback(null, true);
+              });
+            } else {
               callback(null, true);
-            });
+            }
           },
           function(callback) {
-            utility.call(web3, contractToken, selectedBase.addr, 'decimals', [], function(err, result) {
-              if (result>0) selectedBase.divisor = result;
-              if (!selectedBase.divisor) selectedBase.divisor = config.tokens[0].divisor;
+            if (!selectedBase.divisor) {
+              utility.call(web3, contractToken, selectedBase.addr, 'decimals', [], function(err, result) {
+                if (!err && result>=0) selectedBase.divisor = Math.pow(10,result.toNumber());
+                if (!selectedBase.divisor) selectedBase.divisor = config.tokens[0].divisor;
+                callback(null, true);
+              });
+            } else {
               callback(null, true);
-            });
+            }
           },
           function(callback) {
-            utility.call(web3, contractToken, selectedBase.addr, 'name', [], function(err, result) {
-              if (result && result!="") selectedBase.name = result;
-              if (!selectedBase.name) selectedBase.name = selectedBase.addr.slice(2,8);
+            if (!selectedBase.name) {
+              utility.call(web3, contractToken, selectedBase.addr, 'name', [], function(err, result) {
+                if (!err && result && result!="") selectedBase.name = result;
+                if (!selectedBase.name) selectedBase.name = selectedBase.addr.slice(2,8);
+                callback(null, true);
+              });
+            } else {
               callback(null, true);
-            });
+            }
           }
         ],
         function(err, results) {
+          //add selected token and base to config.tokens
+          if (config.tokens.filter(function(x){return x.addr==selectedToken.addr}).length==0) {
+            config.tokens.push(selectedToken);
+          }
+          if (config.tokens.filter(function(x){return x.addr==selectedBase.addr}).length==0) {
+            config.tokens.push(selectedBase);
+          }
+          //init
           Main.init(function(){
             Main.refreshLoop();
           });
@@ -2213,8 +2239,8 @@ var configs = {};
 
 //mainnet
 configs["1"] = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://localhost:8080',
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://localhost:8080',
   contractEtherDelta: 'smart_contract/etherdelta.sol',
   contractToken: 'smart_contract/token.sol',
   contractReserveToken: 'smart_contract/reservetoken.sol',
@@ -2260,8 +2286,8 @@ configs["1"] = {
 
 //testnet
 configs["2"] = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://localhost:8080',
+  // homeURL: 'https://etherdelta.github.io',
+  homeURL: 'http://localhost:8080',
   contractEtherDelta: 'smart_contract/etherdelta.sol',
   contractToken: 'smart_contract/token.sol',
   contractReserveToken: 'smart_contract/reservetoken.sol',
