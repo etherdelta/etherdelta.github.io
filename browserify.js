@@ -547,7 +547,15 @@ Main.otherBase = function(addr, name, divisor) {
 }
 Main.displayAllBalances = function(callback) {
   var zeroAddr = '0x0000000000000000000000000000000000000000';
-  async.map(config.tokens,
+  //add selected token and base to config.tokens
+  var tempTokens = config.tokens;
+  if (config.tokens.filter(function(x){return x.addr==selectedToken.addr}).length==0) {
+    tempTokens.push(selectedToken);
+  }
+  if (config.tokens.filter(function(x){return x.addr==selectedBase.addr}).length==0) {
+    tempTokens.push(selectedBase);
+  }
+  async.map(tempTokens,
     function(token, callbackMap) {
       if (token.addr==zeroAddr) {
         utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [token.addr, addrs[selectedAccount]], function(err, result) {
@@ -1122,13 +1130,6 @@ web3.version.getNetwork(function(error, version){
           }
         ],
         function(err, results) {
-          //add selected token and base to config.tokens
-          if (config.tokens.filter(function(x){return x.addr==selectedToken.addr}).length==0) {
-            config.tokens.push(selectedToken);
-          }
-          if (config.tokens.filter(function(x){return x.addr==selectedBase.addr}).length==0) {
-            config.tokens.push(selectedBase);
-          }
           //init
           Main.init(function(){
             Main.refreshLoop();
