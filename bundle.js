@@ -912,7 +912,7 @@ Main.resetCaches = function() {
   location.reload();
 }
 Main.refresh = function(callback, force) {
-  if (!lastRefresh || Date.now()-lastRefresh>60*1000 || force) {
+  if (!lastRefresh || Date.now()-lastRefresh>15*1000 || force) {
     console.log('Refreshing');
     if (!lastRefresh) force = true;
     lastRefresh = Date.now();
