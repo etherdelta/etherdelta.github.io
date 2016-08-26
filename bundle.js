@@ -1129,6 +1129,21 @@ web3.version.getNetwork(function(error, version){
             } else {
               callback(null, true);
             }
+          },
+          function(callback) {
+            if (!selectedToken.gasApprove) {
+              selectedToken.gasApprove = config.tokens[0].gasApprove;
+              selectedToken.gasDeposit = config.tokens[0].gasDeposit;
+              selectedToken.gasWithdraw = config.tokens[0].gasWithdraw;
+              selectedToken.gasTrade = config.tokens[0].gasTrade;
+            }
+            if (!selectedBase.gasApprove) {
+              selectedBase.gasApprove = config.tokens[0].gasApprove;
+              selectedBase.gasDeposit = config.tokens[0].gasDeposit;
+              selectedBase.gasWithdraw = config.tokens[0].gasWithdraw;
+              selectedBase.gasTrade = config.tokens[0].gasTrade;
+            }
+            callback(null, true);
           }
         ],
         function(err, results) {
