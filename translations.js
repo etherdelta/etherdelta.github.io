@@ -1,7 +1,7 @@
 var translations = {
   'English': {
     'title': 'EtherDelta',
-    'description': 'EtherDelta is a decentralized trading platform for Ethereum tokens.',
+    'description': 'EtherDelta is a decentralized exchange for Ethereum tokens.',
     'announcements': 'Announcements',
     'order_book': 'Order book',
     'follow_twitter': 'Follow us on Twitter',

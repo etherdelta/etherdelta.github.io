@@ -91894,7 +91894,7 @@ module.exports = transfer;
 var translations = {
   'English': {
     'title': 'EtherDelta',
-    'description': 'EtherDelta is a decentralized trading platform for Ethereum tokens.',
+    'description': 'EtherDelta is a decentralized exchange for Ethereum tokens.',
     'announcements': 'Announcements',
     'order_book': 'Order book',
     'follow_twitter': 'Follow us on Twitter',
@@ -91904,7 +91904,7 @@ var translations = {
     'pair': 'Pair',
     'produced_etherboost': 'Produced by Etherboost',
     'etherdelta_desc': 'EtherDelta &#8212; decentralized token exchange',
-    'etheropt_desc': 'Etheropt &#8212; decentralized options exchange',
+    'etheropt_desc': 'EtherOpt &#8212; decentralized options exchange',
     'predictiontoken_desc': 'PredictionToken &#8212; prediction market tokens',
     'ethereumdollar_desc': 'EthereumDollar &#8212; stable dollar token',
     'toggle_navigation': 'Toggle navigation',
@@ -92020,7 +92020,7 @@ var translations = {
     'pair': '名称',
     'produced_etherboost': 'Etherboost制作',
     'etherdelta_desc': 'EtherDelta &#8212; 无中心交易',
-    'etheropt_desc': 'Etheropt &#8212; 无中心期权交易',
+    'etheropt_desc': 'EtherOpt &#8212; 无中心期权交易',
     'predictiontoken_desc': 'PredictionToken &#8212; 预测市场币',
     'ethereumdollar_desc': 'EthereumDollar &#8212; 稳定美元币',
     'toggle_navigation': '切换导航',
