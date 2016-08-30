@@ -260,11 +260,19 @@ Main.displayMyEvents = function(callback) {
   );
 }
 Main.displayVolume = function(callback) {
-  var events = Object.values(eventsCache);
   var tokenVolumes = {};
   var pairVolumes = {};
   var timeFrame = 86400*1000*1;
   var now = new Date();
+  //the default pairs
+  for (var i=1; i<config.tokens.length; i++) {
+    var token = config.tokens[i];
+    var base = config.tokens[0];
+    var pair = token.name+'/'+base.name;
+    if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volume: 0};
+  }
+  //get trading volume
+  var events = Object.values(eventsCache);
   events.forEach(function(event){
     if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr) {
       var tokenGet = Main.getToken(event.args.tokenGet);
@@ -438,7 +446,6 @@ Main.displayOrderbook = function(callback) {
       }
     });
     //get available volumes
-    // console.log(orders.filter(function(order){return blockNumber<Number(order.order.expires)}).length);
     async.reduce(orders, [],
       function(memo, order, callbackReduce) {
         if (blockNumber<Number(order.order.expires)) {
@@ -595,9 +602,9 @@ Main.getToken = function(address) {
   if (matchingTokens.length>0) {
     result = matchingTokens[0];
   } else {
-    if (selectedToken.addr==token) {
+    if (selectedToken.addr==address) {
       result = selectedToken;
-    } else if (selectedBase.addr==token) {
+    } else if (selectedBase.addr==address) {
       result = selectedBase;
     }
   }

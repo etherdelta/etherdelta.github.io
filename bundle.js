@@ -262,11 +262,19 @@ Main.displayMyEvents = function(callback) {
   );
 }
 Main.displayVolume = function(callback) {
-  var events = Object.values(eventsCache);
   var tokenVolumes = {};
   var pairVolumes = {};
   var timeFrame = 86400*1000*1;
   var now = new Date();
+  //the default pairs
+  for (var i=1; i<config.tokens.length; i++) {
+    var token = config.tokens[i];
+    var base = config.tokens[0];
+    var pair = token.name+'/'+base.name;
+    if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volume: 0};
+  }
+  //get trading volume
+  var events = Object.values(eventsCache);
   events.forEach(function(event){
     if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr) {
       var tokenGet = Main.getToken(event.args.tokenGet);
@@ -440,7 +448,6 @@ Main.displayOrderbook = function(callback) {
       }
     });
     //get available volumes
-    // console.log(orders.filter(function(order){return blockNumber<Number(order.order.expires)}).length);
     async.reduce(orders, [],
       function(memo, order, callbackReduce) {
         if (blockNumber<Number(order.order.expires)) {
@@ -597,9 +604,9 @@ Main.getToken = function(address) {
   if (matchingTokens.length>0) {
     result = matchingTokens[0];
   } else {
-    if (selectedToken.addr==token) {
+    if (selectedToken.addr==address) {
       result = selectedToken;
-    } else if (selectedBase.addr==token) {
+    } else if (selectedBase.addr==address) {
       result = selectedBase;
     }
   }
@@ -2262,7 +2269,7 @@ configs["1"] = {
   contractReserveToken: 'smart_contract/reservetoken.sol',
   contractEtherDeltaAddrs: [
     {addr: '0x4aea7cf559f67cedcad07e12ae6bc00f07e8cf65', info: 'Deployed 08/30/2016'},
-    {addr: '0x2136bbba2edca21afdddee838fff19ea70d10f03', info: 'Deployed 08/03/2016'},
+    {addr: '0x2136bbba2edca21afdddee838fff19ea70d10f03', info: 'Deployed 08/03/2016 -- please withdraw'},
     {addr: '0xc6b330df38d6ef288c953f1f2835723531073ce2', info: 'Deployed 07/08/2016 -- please withdraw'}
   ],
   ethTestnet: false,
@@ -2273,15 +2280,15 @@ configs["1"] = {
   tokens: [
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
-    {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 10000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', divisor: 1000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x19e035fae8230982349f65e461c52ef47da89013', name: 'P+', divisor: 1, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd', name: 'EPOSY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0', name: 'EPOSN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x0105d415be226a6edbdbfe5bc31e6f4b2b1d2698', name: 'ETCWY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
     {addr: '0x1f0dc965d1dcdd8ad0559d170123a92dfc7e111f', name: 'ETCWN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 10000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x55E7C4a77821d5C50B4570b08F9f92896a25E012', name: 'P+', divisor: 1, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
   ],
   pairs: [
     {token: 1, base: 0},
