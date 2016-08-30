@@ -1,4 +1,4 @@
-//last compiled with soljson-v0.3.5-2016-07-21-6610add.js
+//last compiled with soljson-v0.3.6-2016-08-29-b8060c5.js
 
 contract SafeMath {
   //internals
@@ -236,10 +236,10 @@ contract EtherDelta is SafeMath {
     return available2;
   }
 
-  function cancelOrder(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, address user, uint8 v, bytes32 r, bytes32 s) {
+  function cancelOrder(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, uint8 v, bytes32 r, bytes32 s) {
     if (msg.value>0) throw;
     bytes32 hash = sha256(tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
-    if (user!=msg.sender) throw;
+    if (ecrecover(hash,v,r,s) != msg.sender) throw;
     orderFills[hash] = amountGet;
     Cancel(tokenGet, amountGet, tokenGive, amountGive, expires, nonce, msg.sender, v, r, s);
   }

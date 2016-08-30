@@ -804,7 +804,7 @@ Main.cancelOrder = function(order) {
   order = JSON.parse(decodeURIComponent(order));
   var token = Main.getToken(order.tokenGet);
   if (order.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
-    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'cancelOrder', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+    utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'cancelOrder', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), Number(order.v), order.r, order.s, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
       txHash = result.txHash;
       nonce = result.nonce;
       Main.addPending(err, {txHash: result.txHash});
@@ -2261,6 +2261,7 @@ configs["1"] = {
   contractToken: 'smart_contract/token.sol',
   contractReserveToken: 'smart_contract/reservetoken.sol',
   contractEtherDeltaAddrs: [
+    {addr: '0x4aea7cf559f67cedcad07e12ae6bc00f07e8cf65', info: 'Deployed 08/30/2016'},
     {addr: '0x2136bbba2edca21afdddee838fff19ea70d10f03', info: 'Deployed 08/03/2016'},
     {addr: '0xc6b330df38d6ef288c953f1f2835723531073ce2', info: 'Deployed 07/08/2016 -- please withdraw'}
   ],
@@ -91928,6 +91929,8 @@ var translations = {
     'token': 'Token',
     'aug032016': 'August 3, 2016',
     'aug032016_announcement': 'EtherDelta has moved to a new smart contract. Go to the bottom of the page and switch to the old one if you have a balance there you need to withdraw.',
+    'aug302016': 'August 30, 2016',
+    'aug302016_announcement': 'EtherDelta has moved to a new smart contract. Go to the bottom of the page and switch to the old one if you have a balance there you need to withdraw.',
     'new_account': 'New account',
     'import_account': 'Import account',
     'export_private_key': 'Export private key',
@@ -92044,6 +92047,8 @@ var translations = {
     'token': '币',
     'aug032016': '2016年8月3日',
     'aug032016_announcement': 'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。',
+    'aug302016': '2016年8月3日',
+    'aug302016_announcement': 'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。',
     'new_account': '新账号',
     'import_account': '导入账号',
     'export_private_key': '导出私钥',
