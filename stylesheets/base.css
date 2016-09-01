@@ -79,7 +79,13 @@ body {
 
 .scroll-container {
   height: 200px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.noscroll-container {
+  height: 200px;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 #footer {

@@ -876,6 +876,7 @@ Main.displayContent = function(callback) {
   new EJS({url: config.homeURL+'/templates/'+'family.ejs'}).update('family', {translation: translation});
   new EJS({url: config.homeURL+'/templates/'+'guides.ejs'}).update('guides', {translation: translation});
   new EJS({url: config.homeURL+'/templates/'+'announcements.ejs'}).update('announcements', {translation: translation});
+  new EJS({url: config.homeURL+'/templates/'+'videos.ejs'}).update('videos', {translation: translation});
   $('.description_label').html(translation.description);
   $('.toggle_navigation_label').html(translation.toggle_navigation);
   $('.add_account_label').html(translation.add_account);
@@ -891,7 +892,7 @@ Main.displayContent = function(callback) {
   $('.name_label').html(translation.name);
   $('.divisor_label').html(translation.disivor);
   $('.go_label').html(translation.go);
-  $('.chat_label').html(translation.chat);
+  // $('.chat_label').html(translation.chat);
   $('.send_label').html(translation.send);
   callback();
 }
@@ -1060,7 +1061,7 @@ web3.version.getNetwork(function(error, version){
   });
   //load Twitter and chat (not in init because we only want to load these scripts once)
   new EJS({url: config.homeURL+'/templates/'+'twitter.ejs'}).update('twitter', {translation: translation});
-  new EJS({url: config.homeURL+'/templates/'+'chat.ejs'}).update('chat', {translation: translation, chatServer: config.chatServer});
+  // new EJS({url: config.homeURL+'/templates/'+'chat.ejs'}).update('chat', {translation: translation, chatServer: config.chatServer});
   //load contract
   config.contractEtherDeltaAddr = config.contractEtherDeltaAddrs[0].addr;
   utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
@@ -91903,6 +91904,7 @@ var translations = {
   'English': {
     'title': 'EtherDelta',
     'description': 'EtherDelta is a decentralized exchange for Ethereum tokens.',
+    'howto_videos': 'How-to videos',
     'announcements': 'Announcements',
     'order_book': 'Order book',
     'follow_twitter': 'Follow us on Twitter',
@@ -92021,6 +92023,7 @@ var translations = {
   'Chinese (中文)': {
     'title': 'EtherDelta',
     'description': 'EtherDelta是无中心的以太坊交易平台。',
+    'howto_videos': '说明视频',
     'announcements': '公告',
     'order_book': '订单簿',
     'follow_twitter': '跟Twitter',

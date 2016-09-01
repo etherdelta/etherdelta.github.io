@@ -2,6 +2,7 @@ var translations = {
   'English': {
     'title': 'EtherDelta',
     'description': 'EtherDelta is a decentralized exchange for Ethereum tokens.',
+    'howto_videos': 'How-to videos',
     'announcements': 'Announcements',
     'order_book': 'Order book',
     'follow_twitter': 'Follow us on Twitter',
@@ -120,6 +121,7 @@ var translations = {
   'Chinese (中文)': {
     'title': 'EtherDelta',
     'description': 'EtherDelta是无中心的以太坊交易平台。',
+    'howto_videos': '说明视频',
     'announcements': '公告',
     'order_book': '订单簿',
     'follow_twitter': '跟Twitter',
