@@ -70,14 +70,14 @@ $(function () {
   $('body').on('click', '#other_token_submit', function (e) {
     e.preventDefault();
     $('#other_token_modal').modal('hide');
-    bundle.Main.otherToken($('#other_token_addr').val(), $('#other_token_name').val(), $('#other_token_divisor').val());
+    bundle.Main.selectToken($('#other_token_addr').val(), $('#other_token_name').val(), $('#other_token_decimals').val());
   });
 });
 $(function () {
   $('body').on('click', '#other_base_submit', function (e) {
     e.preventDefault();
     $('#other_base_modal').modal('hide');
-    bundle.Main.otherBase($('#other_base_addr').val(), $('#other_base_name').val(), $('#other_base_divisor').val());
+    bundle.Main.selectBase($('#other_base_addr').val(), $('#other_base_name').val(), $('#other_base_decimals').val());
   });
 });
 function deposit_click(addr) {

@@ -513,46 +513,10 @@ Main.displayOrderbook = function(callback) {
     );
   });
 }
-Main.loadTokensAndBases = function(callback) {
+Main.displayTokensAndBases = function(callback) {
   new EJS({url: config.homeURL+'/templates/'+'tokens.ejs'}).update('tokens', {translation: translation, tokens: config.tokens, selectedToken: selectedToken});
   new EJS({url: config.homeURL+'/templates/'+'bases.ejs'}).update('bases', {translation: translation, tokens: config.tokens, selectedBase: selectedBase});
   callback();
-}
-Main.selectToken = function(addr, name, divisor) {
-  divisor = Number(divisor);
-  selectedToken = {addr: addr, name: name, divisor: divisor};
-  Main.initMarket(function(){});
-  Main.updateUrl();
-}
-Main.selectBase = function(addr, name, divisor) {
-  divisor = Number(divisor);
-  selectedBase = {addr: addr, name: name, divisor: divisor};
-  Main.initMarket(function(){});
-  Main.updateUrl();
-}
-Main.selectTokenAndBase = function(token, base) {
-  token = Main.getToken(token);
-  base = Main.getToken(base);
-  if (token && base) {
-    selectedToken = token;
-    selectedBase = base;
-    Main.initMarket(function(){});
-    Main.updateUrl();
-  }
-}
-Main.otherToken = function(addr, name, divisor) {
-  if (addr.slice(0,2)!="0x") addr = '0x'+addr;
-  if (!name || name=='') name = addr.slice(2,6);
-  divisor = Number(divisor);
-  selectedToken = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
-  Main.initMarket(function(){});
-}
-Main.otherBase = function(addr, name, divisor) {
-  if (addr.slice(0,2)!="0x") addr = '0x'+addr;
-  if (!name || name=='') name = addr.slice(2,6);
-  divisor = Number(divisor);
-  selectedBase = {addr: addr, name: name, divisor: divisor, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000};
-  Main.initMarket(function(){});
 }
 Main.displayAllBalances = function(callback) {
   var zeroAddr = '0x0000000000000000000000000000000000000000';
@@ -597,38 +561,6 @@ Main.displayAllBalances = function(callback) {
       callback();
     }
   );
-}
-Main.getToken = function(address) {
-  var result = undefined;
-  var matchingTokens = config.tokens.filter(function(x){return x.addr==address});
-  if (matchingTokens.length>0) {
-    result = matchingTokens[0];
-  } else {
-    if (selectedToken.addr==address) {
-      result = selectedToken;
-    } else if (selectedBase.addr==address) {
-      result = selectedBase;
-    }
-  }
-  return result;
-}
-Main.getDivisor = function(tokenOrAddress) {
-  var result = 1000000000000000000;
-  if (typeof(tokenOrAddress)=='object' && tokenOrAddress.divisor) {
-    result = tokenOrAddress.divisor;
-  } else {
-    var matchingTokens = config.tokens.filter(function(x){return x.addr==tokenOrAddress});
-    if (matchingTokens.length>0) {
-      result = matchingTokens[0].divisor;
-    } else {
-      if (selectedToken.addr==tokenOrAddress) {
-        result = selectedToken.divisor;
-      } else if (selectedBase.addr==tokenOrAddress) {
-        result = selectedBase.divisor;
-      }
-    }
-  }
-  return new BigNumber(result);
 }
 Main.transfer = function(addr, amount, toAddr) {
   amount = utility.ethToWei(amount, Main.getDivisor(addr));
@@ -890,7 +822,7 @@ Main.displayContent = function(callback) {
   $('.other_token_label').html(translation.other_token);
   $('.other_base_label').html(translation.other_base);
   $('.name_label').html(translation.name);
-  $('.divisor_label').html(translation.disivor);
+  $('.decimals_label').html(translation.disivor);
   $('.go_label').html(translation.go);
   // $('.chat_label').html(translation.chat);
   $('.send_label').html(translation.send);
@@ -912,6 +844,80 @@ Main.updateUrl = function() {
   if (config.tokens.filter(function(x){return x.name==tokenName}).length==0) tokenName = selectedToken.addr;
   if (config.tokens.filter(function(x){return x.name==baseName}).length==0) baseName = selectedBase.addr;
   window.location.hash = '#'+tokenName+'-'+baseName;
+}
+Main.getDivisor = function(tokenOrAddress) {
+  var result = 1000000000000000000;
+  var token = Main.getToken(tokenOrAddress);
+  if (token && token.decimals) {
+    result = Math.pow(10,token.decimals);
+  }
+  return new BigNumber(result);
+}
+Main.getToken = function(addrOrToken, name, decimals) {
+  var result = undefined;
+  var matchingTokens = config.tokens.filter(function(x){return x.addr==addrOrToken || x.name==addrOrToken});
+  var expectedKeys = JSON.stringify(['addr','decimals','gasApprove','gasDeposit','gasTrade','gasWithdraw','name']);
+  if (matchingTokens.length>0) {
+    result = matchingTokens[0];
+  } else if (selectedToken.addr==addrOrToken) {
+    result = selectedToken;
+  } else if (selectedBase.addr==addrOrToken) {
+    result = selectedBase;
+  } else if (addrOrToken.addr && JSON.stringify(Object.keys(addrOrToken).sort())==expectedKeys) {
+    result = addrOrToken;
+  } else if (addrOrToken.slice(0,2)=='0x' && name!='' && decimals>=0) {
+    result = JSON.parse(JSON.stringify(config.tokens[0]));
+    result.addr = addrOrToken;
+    result.name = name;
+    result.decimals = decimals;
+  }
+  return result;
+}
+Main.loadToken = function(addr, callback) {
+  var token = Main.getToken(addr);
+  if (token) {
+    callback(null, token);
+  } else {
+    token = JSON.parse(JSON.stringify(config.tokens[0]));
+    token.addr = addr;
+    utility.call(web3, contractToken, token.addr, 'decimals', [], function(err, result) {
+      if (!err && result>=0) token.decimals = result.toNumber();
+      utility.call(web3, contractToken, token.addr, 'name', [], function(err, result) {
+        if (!err && result && result!='') {
+          token.name = result;
+        } else {
+          token.name = token.addr.slice(2,6);
+        }
+        callback(null, token);
+      });
+    });
+  }
+}
+Main.selectToken = function(addrOrToken, name, decimals) {
+  var token = Main.getToken(addrOrToken, name, decimals);
+  if (token) {
+    selectedToken = token;
+    Main.initMarket(function(){});
+    Main.updateUrl();
+  }
+}
+Main.selectBase = function(addrOrToken, name, decimals) {
+  var token = Main.getToken(addrOrToken, name, decimals);
+  if (token) {
+    selectedBase = token;
+    Main.initMarket(function(){});
+    Main.updateUrl();
+  }
+}
+Main.selectTokenAndBase = function(tokenAddr, baseAddr) {
+  token = Main.getToken(tokenAddr);
+  base = Main.getToken(baseAddr);
+  if (token && base) {
+    selectedToken = token;
+    selectedBase = base;
+    Main.initMarket(function(){});
+    Main.updateUrl();
+  }
 }
 Main.resetCaches = function() {
   Main.eraseCookie(config.eventsCacheCookie);
@@ -959,7 +965,7 @@ Main.displayBuySell = function(callback) {
 }
 Main.initMarket = function(callback) {
   Main.displayBuySell(function(){});
-  Main.loadTokensAndBases(function(){});
+  Main.displayTokensAndBases(function(){});
   Main.refresh(function(){}, true);
   callback();
 }
@@ -971,7 +977,7 @@ Main.init = function(callback) {
   Main.displayLanguages(function(){});
   Main.displayContent(function(){});
   Main.displayBuySell(function(){});
-  Main.loadTokensAndBases(function(){});
+  Main.displayTokensAndBases(function(){});
   callback();
 }
 
@@ -995,7 +1001,7 @@ var deadOrders = {};
 var workingOrders = [];
 var publishingOrders = false;
 var pendingTransactions = [];
-var defaultDivisor = new BigNumber(1000000000000000000);
+var defaultdecimals = new BigNumber(1000000000000000000);
 var loadedEvents = false;
 var loadedBalances = false;
 var translation;
@@ -1070,35 +1076,14 @@ web3.version.getNetwork(function(error, version){
       contractToken = contract;
       //select token and base
       var hash = window.location.hash.substr(1);
-      if (hash && hash.length>0) {
-        var hashes = hash.split("-");
-        if (hashes.length==2) {
-          var matchesToken = config.tokens.filter(function(x){return x.name==hashes[0] || x.addr==hashes[0]});
-          var matchesBase = config.tokens.filter(function(x){return x.name==hashes[1] || x.addr==hashes[1]});
-          if (matchesToken.length>0) {
-            selectedToken = matchesToken[0];
-          } else if (hashes[0].slice(0,2)=='0x') {
-            selectedToken = {addr: hashes[0]};
-          } else {
-            selectedToken = config.tokens[config.defaultToken];
-          }
-          if (matchesBase.length>0) {
-            selectedBase = matchesBase[0];
-          } else if (hashes[1].slice(0,2)=='0x') {
-            selectedBase = {addr: hashes[1]};
-          } else {
-            selectedBase = config.tokens[config.defaultBase];
-          }
-        }
-      }
-      //init
+      var hashSplit = hash.split('-');
+      //get token and base from hash
       async.parallel(
         [
           function(callback) {
-            if (!selectedToken.divisor) {
-              utility.call(web3, contractToken, selectedToken.addr, 'decimals', [], function(err, result) {
-                if (!err && result>=0) selectedToken.divisor = Math.pow(10,result.toNumber());
-                if (!selectedToken.divisor) selectedToken.divisor = config.tokens[0].divisor;
+            if (hashSplit.length==2) {
+              Main.loadToken(hashSplit[0], function(err, result){
+                if (!err && result) selectedToken = result;
                 callback(null, true);
               });
             } else {
@@ -1106,52 +1091,14 @@ web3.version.getNetwork(function(error, version){
             }
           },
           function(callback) {
-            if (!selectedToken.name) {
-              utility.call(web3, contractToken, selectedToken.addr, 'name', [], function(err, result) {
-                if (!err && result && result!="") selectedToken.name = result;
-                if (!selectedToken.name) selectedToken.name = selectedToken.addr.slice(2,8);
+            if (hashSplit.length==2) {
+              Main.loadToken(hashSplit[1], function(err, result){
+                if (!err && result) selectedBase = result;
                 callback(null, true);
               });
             } else {
               callback(null, true);
             }
-          },
-          function(callback) {
-            if (!selectedBase.divisor) {
-              utility.call(web3, contractToken, selectedBase.addr, 'decimals', [], function(err, result) {
-                if (!err && result>=0) selectedBase.divisor = Math.pow(10,result.toNumber());
-                if (!selectedBase.divisor) selectedBase.divisor = config.tokens[0].divisor;
-                callback(null, true);
-              });
-            } else {
-              callback(null, true);
-            }
-          },
-          function(callback) {
-            if (!selectedBase.name) {
-              utility.call(web3, contractToken, selectedBase.addr, 'name', [], function(err, result) {
-                if (!err && result && result!="") selectedBase.name = result;
-                if (!selectedBase.name) selectedBase.name = selectedBase.addr.slice(2,8);
-                callback(null, true);
-              });
-            } else {
-              callback(null, true);
-            }
-          },
-          function(callback) {
-            if (!selectedToken.gasApprove) {
-              selectedToken.gasApprove = config.tokens[0].gasApprove;
-              selectedToken.gasDeposit = config.tokens[0].gasDeposit;
-              selectedToken.gasWithdraw = config.tokens[0].gasWithdraw;
-              selectedToken.gasTrade = config.tokens[0].gasTrade;
-            }
-            if (!selectedBase.gasApprove) {
-              selectedBase.gasApprove = config.tokens[0].gasApprove;
-              selectedBase.gasDeposit = config.tokens[0].gasDeposit;
-              selectedBase.gasWithdraw = config.tokens[0].gasWithdraw;
-              selectedBase.gasTrade = config.tokens[0].gasTrade;
-            }
-            callback(null, true);
           }
         ],
         function(err, results) {
@@ -2279,17 +2226,17 @@ configs["1"] = {
   ethAddr: '0x0000000000000000000000000000000000000123',
   ethAddrPrivateKey: '',
   tokens: [
-    {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
-    {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', divisor: 1000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd', name: 'EPOSY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0', name: 'EPOSN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x0105d415be226a6edbdbfe5bc31e6f4b2b1d2698', name: 'ETCWY', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x1f0dc965d1dcdd8ad0559d170123a92dfc7e111f', name: 'ETCWN', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', divisor: 10000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x55E7C4a77821d5C50B4570b08F9f92896a25E012', name: 'P+', divisor: 1, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', decimals: 9, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd', name: 'EPOSY', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0', name: 'EPOSN', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x0105d415be226a6edbdbfe5bc31e6f4b2b1d2698', name: 'ETCWY', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x1f0dc965d1dcdd8ad0559d170123a92dfc7e111f', name: 'ETCWN', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', decimals: 16, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x55E7C4a77821d5C50B4570b08F9f92896a25E012', name: 'P+', decimals: 0, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
   ],
   pairs: [
     {token: 1, base: 0},
@@ -2327,11 +2274,11 @@ configs["2"] = {
   ethAddr: '0x0000000000000000000000000000000000000123',
   ethAddrPrivateKey: '',
   tokens: [
-    {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD100', divisor: 10000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    // {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0xaf7d1722464786c0311d20ab7d98bee6a4b0f38d', name: 'HFYES', divisor: 1000000000000000000, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD100', decimals: 16, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    // {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xaf7d1722464786c0311d20ab7d98bee6a4b0f38d', name: 'HFYES', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
   ],
   pairs: [
     {token: 0, base: 1},
