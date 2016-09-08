@@ -9,12 +9,18 @@ var sha256 = require('js-sha256').sha256;
 function API(){
 }
 
-API.init = function(callback, allContracts) {
+API.init = function(callback, allContracts, path) {
   var self = this;
 
   //self.config, utility
   self.config = config;
   self.utility = utility;
+
+  //path
+  if (path) {
+    self.config.contractEtherDelta = path + self.config.contractEtherDelta;
+    self.config.contractToken= path + self.config.contractToken;
+  }
 
   //web3
   self.web3 = new Web3();
