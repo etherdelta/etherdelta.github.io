@@ -1,1 +1,1 @@
-browserify browserify.js --s bundle | derequire > bundle.js
+browserify browserify.js --s bundle | derequire > js/bundle.js

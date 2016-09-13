@@ -264,12 +264,16 @@ API.getUSDBalance = function(addr, tokenPrices, callback) {
               var tokenBalance = balance[name];
               var token = API.getToken(name);
               var price = 0;
-              if (token.name in tokenPrices) {
-                price = tokenPrices[token.name];
+              var tokenMatches = tokenPrices.filter(function(x){return x.name==token.name});
+              if (tokenMatches.length==1) {
+                price = tokenMatches[0].price;
               } else {
                 if (token.name.slice(-1)=='N') {
                   var yesVersion = token.name.replace(/N$/, 'Y');
-                  price = 1.0 - tokenPrices[yesVersion];
+                  var tokenYesMatches = tokenPrices.filter(function(x){return x.name==yesVersion});
+                  if (tokenYesMatches.length==1) {
+                    price = 1.0 - tokenYesMatches[0].price;
+                  }
                 }
               }
               totalBalance += tokenBalance * price * Math.pow(10,ethToken.decimals) / Math.pow(10,token.decimals);
