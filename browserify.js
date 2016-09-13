@@ -934,6 +934,7 @@ Main.refresh = function(callback, force) {
     Main.publishOrders(function(){});
     Main.loadEvents(function(newEvents){
       if (newEvents>0 || force) {
+        console.log('Loaded new events:', newEvents.length);
         Main.displayAccounts(function(){});
         Main.displayAllBalances(function(){});
         Main.displayMyEvents(function(){});
