@@ -48,7 +48,6 @@ API.init = function(callback, allContracts, path) {
     self.gitterMessagesCache = {};
     self.eventsCache = {};
     self.deadOrders = {};
-    self.workingOrders = [];
     self.blockTimeSnapshot = undefined;
 
     async.series(
@@ -388,8 +387,9 @@ API.getOrderBook = function(callback) {
                 }
                 if (Number(ethAvailableVolume).toFixed(3)>=0.001) { //min order size is 0.001
                   memo.push(order);
-                } else {
-                  self.deadOrders[order.id] = true;
+                //an order isn't truly dead until it expires, because the volume might be unavailable due to funds needing to be deposited
+                // } else {
+                //   self.deadOrders[order.id] = true;
                 }
                 callbackReduce(null, memo);
               } else {
@@ -404,14 +404,6 @@ API.getOrderBook = function(callback) {
         function(err, ordersReduced){
           //store dead orders
           utility.writeFile('storage_deadOrders', JSON.stringify(self.deadOrders), function(err, result){});
-          //attach working orders if they exist
-          for (var i=0; i<ordersReduced.length; i++) {
-            var order = ordersReduced[i];
-            var matchingWorkingOrders = self.workingOrders.filter(function(workingOrder){if (workingOrder.nonce == order.order.nonce && order.order.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) return true;});
-            if (matchingWorkingOrders.length==1) {
-              order.workingOrder = matchingWorkingOrders[0];
-            }
-          }
           //final order filtering and sorting
           var buyOrders = ordersReduced.filter(function(x){return x.amount>0});
           var sellOrders = ordersReduced.filter(function(x){return x.amount<0});

@@ -463,8 +463,9 @@ Main.displayOrderbook = function(callback) {
               }
               if (Number(ethAvailableVolume).toFixed(3)>=minOrderSize) { //min order size
                 memo.push(order);
-              } else {
-                deadOrders[order.id] = true;
+              //an order isn't truly dead until it expires, because the volume might be unavailable due to funds needing to be deposited
+              // } else {
+              //   deadOrders[order.id] = true;
               }
               callbackReduce(null, memo);
             } else {
@@ -479,14 +480,6 @@ Main.displayOrderbook = function(callback) {
       function(err, ordersReduced){
         //save dead orders to storage
         Main.createCookie(config.deadOrdersCookie, JSON.stringify(deadOrders), 999);
-        //attach working orders if they exist
-        for (var i=0; i<ordersReduced.length; i++) {
-          var order = ordersReduced[i];
-          var matchingWorkingOrders = workingOrders.filter(function(workingOrder){if (workingOrder.nonce == order.order.nonce && order.order.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) return true;});
-          if (matchingWorkingOrders.length==1) {
-            order.workingOrder = matchingWorkingOrders[0];
-          }
-        }
         //final order filtering and sorting
         var buyOrders = ordersReduced.filter(function(x){return x.amount>0});
         var sellOrders = ordersReduced.filter(function(x){return x.amount<0});
@@ -661,35 +654,16 @@ Main.withdraw = function(addr, amount) {
 Main.order = function(baseAddr, tokenAddr, direction, amount, price, expires, refresh) {
   utility.blockNumber(web3, function(err, blockNumber) {
     var order = {baseAddr: baseAddr, tokenAddr: tokenAddr, direction: direction, amount: amount, price: price, expires: expires, refresh: refresh, nextExpiration: 0};
-    workingOrders.push(order);
-    Main.publishOrders(function(){});
+    if (blockNumber>=order.nextExpiration) {
+      if (order.nextExpiration==0) {
+        order.nextExpiration = Number(order.expires) + blockNumber;
+        order.nonce = utility.getRandomInt(0,Math.pow(2,32));
+        Main.publishOrder(order.baseAddr, order.tokenAddr, order.direction, order.amount, order.price, order.nextExpiration, order.nonce);
+      } else {
+        order = undefined;
+      }
+    }
   });
-}
-Main.publishOrders = function(callback) {
-  if (!publishingOrders) {
-    publishingOrders = true;
-    utility.blockNumber(web3, function(err, blockNumber) {
-      async.eachSeries(workingOrders,
-        function(order, callbackEach) {
-          if (blockNumber>=order.nextExpiration) {
-            if (order.nextExpiration==0 || order.refresh) {
-              order.nextExpiration = Number(order.expires) + blockNumber;
-              order.nonce = utility.getRandomInt(0,Math.pow(2,32));
-              Main.publishOrder(order.baseAddr, order.tokenAddr, order.direction, order.amount, order.price, order.nextExpiration, order.nonce);
-            } else {
-              order = undefined;
-            }
-          }
-          callbackEach();
-        },
-        function(err) {
-          workingOrders = workingOrders.filter(function(x){return x}); //filter out cleared orders
-          publishingOrders = false;
-          callback();
-        }
-      );
-    });
-  }
 }
 Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expires, orderNonce) {
   var tokenGet = undefined;
@@ -749,15 +723,6 @@ Main.cancelOrder = function(order) {
       Main.addPending(err, {txHash: result.txHash});
       Main.alertTxResult(err, result);
     });
-  }
-}
-Main.cancelOrderRefresh = function(orderNonce) {
-  var len = workingOrders.length;
-  workingOrders = workingOrders.filter(function(order){
-    order.nonce==orderNonce ? false : true;
-  });
-  if (workingOrders.length<len) {
-    Main.displayOrderbook(function(){});
   }
 }
 Main.trade = function(kind, order, amount) {
@@ -933,7 +898,6 @@ Main.refresh = function(callback, force) {
     Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
     Main.connectionTest();
     Main.updateUrl();
-    Main.publishOrders(function(){});
     Main.loadEvents(function(newEvents){
       if (newEvents>0 || force) {
         console.log('Loaded new events:', newEvents.length);
@@ -999,7 +963,6 @@ var contractEtherDelta = undefined;
 var contractToken = undefined;
 var gitterMessagesCache = {};
 var deadOrders = {};
-var workingOrders = [];
 var publishingOrders = false;
 var pendingTransactions = [];
 var defaultdecimals = new BigNumber(1000000000000000000);
@@ -2260,7 +2223,8 @@ configs["1"] = {
   gitterCacheCookie: 'EtherDelta_gitterCache',
   deadOrdersCookie: 'EtherDelta_deadOrders',
   defaultToken: 1,
-  defaultBase: 0
+  defaultBase: 0,
+  etherscanAPIKey: '44JPUFZGPI8GUIG8XR5ZRRF7WSE2XJVS1T',
 };
 
 //testnet
@@ -2301,7 +2265,8 @@ configs["2"] = {
   gitterCacheCookie: 'EtherDelta_gitterCache_testnet',
   deadOrdersCookie: 'EtherDelta_deadOrders_testnet',
   defaultToken: 0,
-  defaultBase: 1
+  defaultBase: 1,
+  etherscanAPIKey: '44JPUFZGPI8GUIG8XR5ZRRF7WSE2XJVS1T',
 };
 
 function getParameterByName(name, url) {

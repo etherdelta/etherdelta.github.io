@@ -47,7 +47,8 @@ configs["1"] = {
   gitterCacheCookie: 'EtherDelta_gitterCache',
   deadOrdersCookie: 'EtherDelta_deadOrders',
   defaultToken: 1,
-  defaultBase: 0
+  defaultBase: 0,
+  etherscanAPIKey: '44JPUFZGPI8GUIG8XR5ZRRF7WSE2XJVS1T',
 };
 
 //testnet
@@ -88,7 +89,8 @@ configs["2"] = {
   gitterCacheCookie: 'EtherDelta_gitterCache_testnet',
   deadOrdersCookie: 'EtherDelta_deadOrders_testnet',
   defaultToken: 0,
-  defaultBase: 1
+  defaultBase: 1,
+  etherscanAPIKey: '44JPUFZGPI8GUIG8XR5ZRRF7WSE2XJVS1T',
 };
 
 function getParameterByName(name, url) {
