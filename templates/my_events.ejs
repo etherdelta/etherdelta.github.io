@@ -1,50 +1,97 @@
 <h3><%= translation.my_transactions %></h3>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active"><a href="#my_trades" aria-controls="my_trades" role="tab" data-toggle="tab"><%= translation.trades %></a></li>
+  <li role="presentation"><a href="#my_orders" aria-controls="my_orders" role="tab" data-toggle="tab"><%= translation.orders %></a></li>
+</ul>
+
 <div class="scroll-container" style="height: 400px;">
-  <table class="table">
-    <thead>
-      <tr>
-        <th><%= translation.Block %></th>
-        <th><%= translation.type %></th>
-        <th><%= translation.amount %></th>
-        <th><%= translation.price %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% pendingTransactions.forEach(function(pendingTransaction){ %>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="my_trades">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= translation.Block %></th>
+            <th><%= translation.type %></th>
+            <th><%= translation.amount %></th>
+            <th><%= translation.price %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% pendingTransactions.forEach(function(pendingTransaction){ %>
+            <tr>
+              <td><%= translation.question_mark %> <a href="<%= pendingTransaction.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+              <td><span class="label label-warning"><%= translation.pending %></span></td>
+              <td></td>
+              <td></td>
+            </tr>
+          <% }) %>
+          <% myEvents.forEach(function(event){ %>
+            <% if (event.trade) { %>
+              <% trade = event.trade %>
+              <tr>
+                <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+                <td><span class="label <%= selectedAddr.toLowerCase()==trade.buyer.toLowerCase() ? 'label-success' : 'label-danger' %>"><%= selectedAddr.toLowerCase()==trade.buyer.toLowerCase() ? translation.buy : translation.sell %></span></td>
+                <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %> <%= selectedToken.name %> (<%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %> <%= selectedBase.name %>)</td>
+                <td><%= trade.price.toNumber().toFixed(5) %></td>
+              </tr>
+            <% } else if (event.deposit) { %>
+              <% deposit = event.deposit %>
+              <tr>
+                <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+                <td><span class="label label-info"><%= translation.deposit %></span></td>
+                <td><%= bundle.utility.weiToEth(deposit.amount, bundle.Main.getDivisor(deposit.token)) %> <%= deposit.token.name %></td>
+                <td></td>
+              </tr>
+            <% } else if (event.withdraw) { %>
+              <% withdraw = event.withdraw %>
+              <tr>
+                <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+                <td><span class="label label-info"><%= translation.withdraw %></span></td>
+                <td><%= bundle.utility.weiToEth(withdraw.amount, bundle.Main.getDivisor(withdraw.token)) %> <%= withdraw.token.name %></td>
+                <td></td>
+              </tr>
+            <% } %>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="my_orders">
+      <table class="table">
         <tr>
-          <td><%= translation.question_mark %> <a href="<%= pendingTransaction.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
-          <td><span class="label label-warning"><%= translation.pending %></span></td>
-          <td></td>
-          <td></td>
+          <th><%= translation.price %></th>
+          <th><%= selectedToken.name %></th>
+          <th><%= translation.trade %></th>
+          <th><%= translation.expires_in %></th>
+          <th><%= translation.cancel %></th>
         </tr>
-      <% }) %>
-      <% myEvents.forEach(function(event){ %>
-        <% if (event.trade) { %>
-          <% trade = event.trade %>
+        <% sellOrders.forEach(function(order){ %>
+        <tr>
+          <td><%= order.price.toNumber().toFixed(5) %></td>
+          <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %> / <%= bundle.utility.weiToEth(Math.abs(order.amount), bundle.Main.getDivisor(selectedToken)) %></td>
+          <td><%= translation.sell %></td>
+          <td><% if (Number(order.order.expires) > blockNumber){ %><%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? translation.block : translation.blocks %><% } else { %><%= translation.expired %><% } %></td>
+          <td><button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrder('<%= encodeURIComponent(JSON.stringify(order.order)) %>');"><%= translation.cancel %></button></td>
+        </tr>
+        <% }); %>
+        <% buyOrders.forEach(function(order){ %>
+        <tr>
+          <td><%= order.price.toNumber().toFixed(5) %></td>
+          <td><%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %> / <%= bundle.utility.weiToEth(Math.abs(order.amount), bundle.Main.getDivisor(selectedToken)) %></td>
+          <td><%= translation.buy %></td>
+          <td><% if (Number(order.order.expires) > blockNumber){ %><%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? translation.block : translation.blocks %><% } else { %><%= translation.expired %><% } %></td>
+          <td><button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrder('<%= encodeURIComponent(JSON.stringify(order.order)) %>');"><%= translation.cancel %></button></td>
+        </tr>
+        <% }); %>
+        <% if (buyOrders.length==0 && sellOrders.length==0) { %>
           <tr>
-            <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
-            <td><span class="label <%= selectedAddr.toLowerCase()==trade.buyer.toLowerCase() ? 'label-success' : 'label-danger' %>"><%= selectedAddr.toLowerCase()==trade.buyer.toLowerCase() ? translation.buy : translation.sell %></span></td>
-            <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %> <%= selectedToken.name %> (<%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %> <%= selectedBase.name %>)</td>
-            <td><%= trade.price.toNumber().toFixed(5) %></td>
-          </tr>
-        <% } else if (event.deposit) { %>
-          <% deposit = event.deposit %>
-          <tr>
-            <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
-            <td><span class="label label-info"><%= translation.deposit %></span></td>
-            <td><%= bundle.utility.weiToEth(deposit.amount, bundle.Main.getDivisor(deposit.token)) %> <%= deposit.token.name %></td>
-            <td></td>
-          </tr>
-        <% } else if (event.withdraw) { %>
-          <% withdraw = event.withdraw %>
-          <tr>
-            <td><%= event.blockNumber %> <a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
-            <td><span class="label label-info"><%= translation.withdraw %></span></td>
-            <td><%= bundle.utility.weiToEth(withdraw.amount, bundle.Main.getDivisor(withdraw.token)) %> <%= withdraw.token.name %></td>
-            <td></td>
+            <td colspan="4"><%= translation.no_orders %> <a href="javascript:;" onclick="bundle.Main.resetCaches();"><%= translation.no_orders_reset %></a>.</td>
           </tr>
         <% } %>
-      <% }); %>
-    </tbody>
-  </table>
+      </table>
+    </div>
+  </div>
 </div>

@@ -211,55 +211,72 @@ Main.loadEvents = function(callback) {
     });
   });
 }
-Main.displayMyEvents = function(callback) {
-  var myEvents = [];
-  var events = Object.values(eventsCache);
-  events.forEach(function(event){
-    if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr && (event.args.get.toLowerCase()==addrs[selectedAccount].toLowerCase() || event.args.give.toLowerCase()==addrs[selectedAccount].toLowerCase())) {
-      var trade;
-      if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
-        if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
-          //sell
-          trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), buyer: event.args.get, seller: event.args.give};
-        } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
-          //buy
-          trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), buyer: event.args.give, seller: event.args.get};
+Main.displayMyTransactions = function(callback) {
+  //orders
+  Main.getOrders(function(orders, blockNumber) {
+    //only include orders by the selected user
+    orders = orders.filter(function(order){return addrs[selectedAccount].toLowerCase()==order.order.user.toLowerCase()});
+    //final order filtering and sorting
+    var buyOrders = orders.filter(function(x){return x.amount>0});
+    var sellOrders = orders.filter(function(x){return x.amount<0});
+    sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
+    buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
+    buyOrders = buyOrders.slice(0,25); //show 25 best orders
+    sellOrders = sellOrders.slice(0,25); //show 25 best orders
+    //events
+    var myEvents = [];
+    var events = Object.values(eventsCache);
+    events.forEach(function(event){
+      if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr && (event.args.get.toLowerCase()==addrs[selectedAccount].toLowerCase() || event.args.give.toLowerCase()==addrs[selectedAccount].toLowerCase())) {
+        var trade;
+        if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
+          if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
+            //sell
+            trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), buyer: event.args.get, seller: event.args.give};
+          } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
+            //buy
+            trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), buyer: event.args.give, seller: event.args.get};
+          }
         }
-      }
-      if (trade) {
+        if (trade) {
+          var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+          myEvents.push({trade: trade, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+        }
+      } else if (event.event=='Deposit' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
         var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-        myEvents.push({trade: trade, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+        var deposit = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
+        myEvents.push({deposit: deposit, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+      } else if (event.event=='Withdraw' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
+        var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+        var withdraw = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
+        myEvents.push({withdraw: withdraw, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
       }
-    } else if (event.event=='Deposit' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
-      var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-      var deposit = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
-      myEvents.push({deposit: deposit, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
-    } else if (event.event=='Withdraw' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
-      var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-      var withdraw = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
-      myEvents.push({withdraw: withdraw, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
-    }
-  });
-  myEvents.sort(function(a,b){ return b.id - a.id });
-  //pending transactions
-  async.map(pendingTransactions,
-    function(tx, callbackMap) {
-      utility.txReceipt(web3, tx.txHash, function(err, result){
-        if (result && !err) {
-          callbackMap(null, undefined);
-        } else {
-          callbackMap(null, tx);
+    });
+    myEvents.sort(function(a,b){ return b.id - a.id });
+    //pending transactions
+    async.map(pendingTransactions,
+      function(tx, callbackMap) {
+        utility.txReceipt(web3, tx.txHash, function(err, result){
+          if (result && !err) {
+            callbackMap(null, undefined);
+          } else {
+            callbackMap(null, tx);
+          }
+        });
+      },
+      function(err, results) {
+        pendingTransactions = results.filter(function(x){return x!=undefined});
+        //display the template
+        try {
+          new EJS({url: config.homeURL+'/templates/'+'my_events.ejs'}).update('my_events', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents, pendingTransactions: pendingTransactions, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
+          $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
+          callback();
+        } catch (err) {
+          console.log(err)
         }
-      });
-    },
-    function(err, results) {
-      pendingTransactions = results.filter(function(x){return x!=undefined});
-      //display the template
-      new EJS({url: config.homeURL+'/templates/'+'my_events.ejs'}).update('my_events', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents, pendingTransactions: pendingTransactions});
-      $('table').stickyTableHeaders({scrollableArea: $('.scroll-container')});
-      callback();
-    }
-  );
+      }
+    );
+  });
 }
 Main.displayVolume = function(callback) {
   var tokenVolumes = {};
@@ -267,11 +284,13 @@ Main.displayVolume = function(callback) {
   var timeFrame = 86400*1000*1;
   var now = new Date();
   //the default pairs
-  for (var i=1; i<config.tokens.length; i++) {
-    var token = config.tokens[i];
-    var base = config.tokens[0];
-    var pair = token.name+'/'+base.name;
-    if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volume: 0};
+  for (var i=1; i<config.pairs.length; i++) {
+    var token = Main.getToken(config.pairs[i].token);
+    var base = Main.getToken(config.pairs[i].base);
+    if (token && base) {
+      var pair = token.name+'/'+base.name;
+      if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volume: 0};
+    }
   }
   //get trading volume
   var events = Object.values(eventsCache);
@@ -410,9 +429,9 @@ Main.lineChart = function(elem, title, xtype, ytype, xtitle, ytitle, data) {
   var chart = new google.visualization.LineChart(document.getElementById(elem));
   chart.draw(dataTable, options);
 }
-Main.displayOrderbook = function(callback) {
+Main.getOrders = function(callback) {
   utility.blockNumber(web3, function(err, blockNumber) {
-    var orders = [];
+    var rawOrders = [];
     //get orders from gitter messages
     var expectedKeys = JSON.stringify(['amountGet','amountGive','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
     Object.keys(gitterMessagesCache).forEach(function(id) {
@@ -421,31 +440,32 @@ Main.displayOrderbook = function(callback) {
         if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
       }
       if (typeof(message)=='object' && JSON.stringify(Object.keys(message).sort())==expectedKeys) {
-        var order;
-        if (message.tokenGet==selectedToken.addr && message.tokenGive==selectedBase.addr) {
-          //buy
-          order = {amount: message.amountGet, price: message.amountGive.div(message.amountGet).mul(Main.getDivisor(message.tokenGet)).div(Main.getDivisor(message.tokenGive)), id: id, order: message};
-        } else if (message.tokenGet==selectedBase.addr && message.tokenGive==selectedToken.addr) {
-          //sell
-          order = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive).mul(Main.getDivisor(message.tokenGive)).div(Main.getDivisor(message.tokenGet)), id: id, order: message};
-        }
-        if (order && !deadOrders[order.id]) orders.push(order);
+        var rawOrder = message;
+        rawOrder.id = id;
+        rawOrders.push(rawOrder);
       }
     });
     //get orders from events
     var events = Object.values(eventsCache);
     events.forEach(function(event){
       if (event.event=='Order' && event.address==config.contractEtherDeltaAddr) {
-        var order;
-        if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
-          //buy
-          order = {amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
-        } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
-          //sell
-          order = {amount: -event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
-        }
-        if (order && !deadOrders[order.id]) orders.push(order);
+        var rawOrder = event.args;
+        rawOrder.id = event.blockNumber*1000+event.transactionIndex;
+        rawOrders.push(rawOrder);
       }
+    });
+    //filter orders
+    var orders = [];
+    rawOrders.forEach(function(rawOrder){
+      var order;
+      if (rawOrder.tokenGet==selectedToken.addr && rawOrder.tokenGive==selectedBase.addr) {
+        //buy
+        order = {amount: rawOrder.amountGet, price: rawOrder.amountGive.div(rawOrder.amountGet).mul(Main.getDivisor(rawOrder.tokenGet)).div(Main.getDivisor(rawOrder.tokenGive)), id: rawOrder.id, order: rawOrder};
+      } else if (rawOrder.tokenGet==selectedBase.addr && rawOrder.tokenGive==selectedToken.addr) {
+        //sell
+        order = {amount: -rawOrder.amountGive, price: rawOrder.amountGet.div(rawOrder.amountGive).mul(Main.getDivisor(rawOrder.tokenGive)).div(Main.getDivisor(rawOrder.tokenGet)), id: rawOrder.id, order: rawOrder};
+      }
+      if (order && !deadOrders[order.id]) orders.push(order);
     });
     //get available volumes
     async.reduce(orders, [],
@@ -453,20 +473,14 @@ Main.displayOrderbook = function(callback) {
         if (blockNumber<Number(order.order.expires)) {
           utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
             if (!err) {
-              var ethAvailableVolume = 0;
               if (order.amount>=0) {
                 order.availableVolume = result;
-                ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
+                order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
               } else {
                 order.availableVolume = result.div(order.price).mul(Main.getDivisor(order.order.tokenGive)).div(Main.getDivisor(order.order.tokenGet));
-                ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
+                order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
               }
-              if (Number(ethAvailableVolume).toFixed(3)>=minOrderSize) { //min order size
-                memo.push(order);
-              //an order isn't truly dead until it expires, because the volume might be unavailable due to funds needing to be deposited
-              // } else {
-              //   deadOrders[order.id] = true;
-              }
+              memo.push(order);
               callbackReduce(null, memo);
             } else {
               callbackReduce(null, memo);
@@ -477,33 +491,40 @@ Main.displayOrderbook = function(callback) {
           callbackReduce(null, memo);
         }
       },
-      function(err, ordersReduced){
+      function(err, orders){
         //save dead orders to storage
         Main.createCookie(config.deadOrdersCookie, JSON.stringify(deadOrders), 999);
-        //final order filtering and sorting
-        var buyOrders = ordersReduced.filter(function(x){return x.amount>0});
-        var sellOrders = ordersReduced.filter(function(x){return x.amount<0});
-        sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
-        buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
-        buyOrders = buyOrders.slice(0,25); //show 25 best orders
-        sellOrders = sellOrders.slice(0,25); //show 25 best orders
-        //display the template
-        new EJS({url: config.homeURL+'/templates/'+'order_book.ejs'}).update('order_book', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
-        $("[data-toggle=popover]").popover({
-          html : true,
-          content: function() {
-            var content = $(this).attr("data-popover-content");
-            return $(content).children(".popover-body").html();
-          },
-          title: function() {
-            var title = $(this).attr("data-popover-content");
-            return $(title).children(".popover-heading").html();
-          }
-        });
-        $('#order_book_scroll')[0].scrollTop = $('#order_book_mid').position().top-$('#order_book_scroll')[0].clientHeight/2-$('#order_book_mid')[0].clientHeight;
-        callback();
+        callback(orders, blockNumber);
       }
     );
+  });
+}
+Main.displayOrderbook = function(callback) {
+  Main.getOrders(function(orders, blockNumber) {
+    //remove orders below the min order limit
+    orders = orders.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=minOrderSize});
+    //final order filtering and sorting
+    var buyOrders = orders.filter(function(x){return x.amount>0});
+    var sellOrders = orders.filter(function(x){return x.amount<0});
+    sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
+    buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
+    buyOrders = buyOrders.slice(0,25); //show 25 best orders
+    sellOrders = sellOrders.slice(0,25); //show 25 best orders
+    //display the template
+    new EJS({url: config.homeURL+'/templates/'+'order_book.ejs'}).update('order_book', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
+    $("[data-toggle=popover]").popover({
+      html : true,
+      content: function() {
+        var content = $(this).attr("data-popover-content");
+        return $(content).children(".popover-body").html();
+      },
+      title: function() {
+        var title = $(this).attr("data-popover-content");
+        return $(title).children(".popover-heading").html();
+      }
+    });
+    $('#order_book_scroll')[0].scrollTop = $('#order_book_mid').position().top-$('#order_book_scroll')[0].clientHeight/2-$('#order_book_mid')[0].clientHeight;
+    callback();
   });
 }
 Main.displayTokensAndBases = function(callback) {
@@ -800,7 +821,7 @@ Main.addPending = function(err, tx) {
   if (!err) {
     tx.txLink = 'https://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash;
     pendingTransactions.push(tx);
-    Main.displayMyEvents(function(){});
+    Main.displayMyTransactions(function(){});
   }
 }
 Main.updateUrl = function() {
@@ -900,10 +921,9 @@ Main.refresh = function(callback, force) {
     Main.updateUrl();
     Main.loadEvents(function(newEvents){
       if (newEvents>0 || force) {
-        console.log('Loaded new events:', newEvents.length);
         Main.displayAccounts(function(){});
         Main.displayAllBalances(function(){});
-        Main.displayMyEvents(function(){});
+        Main.displayMyTransactions(function(){});
         Main.displayTradesAndCharts(function(){});
         Main.displayVolume(function(){});
       }
@@ -2204,24 +2224,29 @@ configs["1"] = {
   ethAddr: '0x0000000000000000000000000000000000000123',
   ethAddrPrivateKey: '',
   tokens: [
-    {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0xd8912c10681d8b21fd3742244f44658dba12264e', name: 'PLU', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0x4df812f6064def1e5e029f1ca858777cc98d2d81', name: 'XAUR', decimals: 8, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
-    {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', decimals: 9, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd', name: 'EPOSY', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0', name: 'EPOSN', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x0105d415be226a6edbdbfe5bc31e6f4b2b1d2698', name: 'ETCWY', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x1f0dc965d1dcdd8ad0559d170123a92dfc7e111f', name: 'ETCWN', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', decimals: 16, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
-    {addr: '0x55e7c4a77821d5c50b4570b08f9f92896a25e012', name: 'P+', decimals: 0, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
+    {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', decimals: 9, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd', name: 'EPOSY', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0', name: 'EPOSN', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0x0105d415be226a6edbdbfe5bc31e6f4b2b1d2698', name: 'ETCWY', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0x1f0dc965d1dcdd8ad0559d170123a92dfc7e111f', name: 'ETCWN', decimals: 18, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', decimals: 16, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0x55e7c4a77821d5c50b4570b08f9f92896a25e012', name: 'P+', decimals: 0, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0xfdc40df608b10d1ea9ca81a23ea4161c12893ec1', name: 'DUSD', decimals: 8, gasApprove: 150000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
   ],
   pairs: [
-    {token: 1, base: 0},
-    {token: 2, base: 0},
-    {token: 3, base: 0},
+    {token: 'PLU', base: 'ETH'},
+    {token: 'ETH', base: 'DUSD'},
+    {token: 'XAUR', base: 'ETH'},
+    {token: 'MKR', base: 'ETH'},
+    {token: 'DGD', base: 'ETH'},
+    {token: 'TRMPY', base: 'ETH'},
+    {token: 'TRMPN', base: 'ETH'},
   ],
   gitterHost: 'https://api.gitter.im',
   gitterStream: 'stream.gitter.im',
@@ -2262,8 +2287,8 @@ configs["2"] = {
     {addr: '0xaf7d1722464786c0311d20ab7d98bee6a4b0f38d', name: 'HFYES', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 1000000},
   ],
   pairs: [
-    {token: 0, base: 1},
-    {token: 2, base: 0},
+    {token: 'ETH', base: 'EUSD100'},
+    {token: 'BKR', base: 'ETH'},
   ],
   gitterHost: 'https://api.gitter.im',
   gitterStream: 'stream.gitter.im',
@@ -91836,6 +91861,7 @@ var translations = {
     'howto_videos': 'How-to videos',
     'announcements': 'Announcements',
     'order_book': 'Order book',
+    'orders': 'Orders',
     'follow_twitter': 'Follow us on Twitter',
     'chat': 'Chat',
     'send': 'Send',
@@ -91955,6 +91981,7 @@ var translations = {
     'howto_videos': '说明视频',
     'announcements': '公告',
     'order_book': '订单簿',
+    'orders': '订单簿',
     'follow_twitter': '跟Twitter',
     'chat': '聊',
     'send': '发送',

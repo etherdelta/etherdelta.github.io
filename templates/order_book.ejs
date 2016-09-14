@@ -12,11 +12,6 @@
           <div class="popover-body">
             <ul class="list-group">
               <li class="list-group-item"><% if (Number(order.order.expires) > blockNumber){ %><%= translation.expires_in %> <%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? translation.block : translation.blocks %><% } else { %><%= translation.expired %><% } %></li>
-              <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase() && order.workingOrder && order.workingOrder.refresh) { %>
-                <li class="list-group-item">
-                  <%= translation.order_will_refresh %> <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrderRefresh(<%= order.order.nonce %>);"><%= translation.stop %></button> <%= translation.or_refresh %>
-                </li>
-              <% } %>
               <% if (selectedAddr.toLowerCase()==order.order.user.toLowerCase()) { %>
                 <li class="list-group-item">
                   <%= translation.you_can %> <button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="bundle.Main.cancelOrder('<%= encodeURIComponent(JSON.stringify(order.order)) %>');"><%= translation.cancel %></button> <%= translation.cancel_blockchain %>
@@ -37,7 +32,7 @@
       <th><%= translation.price %></th>
       <th><%= selectedToken.name %></th>
       <th><%= selectedBase.name %></th>
-      <th><%= translation.buy %></th>
+      <th><%= translation.trade %></th>
     </tr>
     <% buyOrders.forEach(function(order){ %>
     <tr>
