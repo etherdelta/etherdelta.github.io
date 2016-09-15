@@ -45,28 +45,9 @@ var schema = {
         ]
       }
     },
-    "tokenPrices": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "name",
-          "price"
-        ]
-      }
-    }
   },
   "required": [
-    "pairs",
-    "tokenPrices"
+    "pairs"
   ]
 };
 

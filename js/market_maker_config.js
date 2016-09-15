@@ -8,17 +8,6 @@ var config = {
     // {pair: 'EPOSY/ETH', theo: 0.45, minPrice: 0, maxPrice: 1, minEdge: 0.1, edgeStep: 0.075, ordersPerSide: 5, expires: 15000},
     {pair: 'ETH/DUSD', theo: 12, minPrice: 0, minEdge: 0.02, edgeStep: 0.02, ordersPerSide: 5, expires: 15000},
   ],
-  tokenPrices: [
-    {name: 'ETH', price: 1.0},
-    {name: 'MKR', price: 3.0},
-    {name: 'DAO', price: 0.01},
-    {name: 'PLU', price: 0.3},
-    {name: 'DGD', price: 0},
-    {name: 'EPOSY', price: 0.45},
-    {name: 'ETCWY', price: 0.05},
-    {name: 'TRMPY', price: 0.30},
-    {name: 'DUSD', price: 1/12},
-  ],
 };
 
 module.exports = config;
