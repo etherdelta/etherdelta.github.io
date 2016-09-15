@@ -2219,8 +2219,8 @@ var configs = {};
 
 //mainnet
 configs["1"] = {
-  // homeURL: 'https://etherdelta.github.io',
-  homeURL: 'http://localhost:8080',
+  homeURL: 'https://etherdelta.github.io',
+  // homeURL: 'http://localhost:8080',
   contractEtherDelta: 'smart_contract/etherdelta.sol',
   contractToken: 'smart_contract/token.sol',
   contractReserveToken: 'smart_contract/reservetoken.sol',
