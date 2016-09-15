@@ -309,10 +309,6 @@ API.getToken = function(addrOrToken, name, decimals) {
   var expectedKeys = JSON.stringify(['addr','decimals','gasApprove','gasDeposit','gasTrade','gasWithdraw','name']);
   if (matchingTokens.length>0) {
     result = matchingTokens[0];
-  } else if (selectedToken.addr==addrOrToken) {
-    result = selectedToken;
-  } else if (selectedBase.addr==addrOrToken) {
-    result = selectedBase;
   } else if (addrOrToken.addr && JSON.stringify(Object.keys(addrOrToken).sort())==expectedKeys) {
     result = addrOrToken;
   } else if (addrOrToken.slice(0,2)=='0x' && name!='' && decimals>=0) {
@@ -474,16 +470,6 @@ API.getDepositsWithdrawals = function(callback) {
   });
   depositsWithdrawals.sort(function(a,b){ return b.id - a.id });
   callback(null, {depositsWithdrawals: depositsWithdrawals});
-}
-
-API.getToken = function(nameOrAddr) {
-  var self = this;
-  var matchingTokens = self.config.tokens.filter(function(x){return x.name==nameOrAddr || x.addr==nameOrAddr});
-  var token = undefined;
-  if (matchingTokens.length==1) {
-    token = matchingTokens[0];
-  }
-  return token;
 }
 
 API.publishOrder = function(addr, baseAddr, tokenAddr, direction, amount, price, expires, orderNonce, callback) {

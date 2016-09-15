@@ -118,6 +118,8 @@ var translations = {
     'type': 'Type',
     'question_mark': '???',
     'pending': 'Pending',
+    'daily': 'Daily',
+    'weekly': 'Weekly',
   },
   'Chinese (中文)': {
     'title': 'EtherDelta',
@@ -239,6 +241,8 @@ var translations = {
     'type': '类型',
     'question_mark': '???',
     'pending': '待定',
+    'daily': '经常',
+    'weekly': '每周的',
   },
 };
 

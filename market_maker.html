@@ -19,50 +19,11 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/tv4/1.2.7/tv4.min.js" type="text/javascript"></script>
     <script src="/js/treema.js" type="text/javascript"></script>
+    <script src="/js/market_maker_config.js" type="text/javascript"></script>
+    <script src="/js/market_maker_config_schema.js" type="text/javascript"></script>
     <script>
-    var schema = {
-      type: 'object',
-      "properties": {
-        "pairs": {
-          "title": "Pairs",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "pair": {
-                "type": "string"
-              },
-              "theo": {
-                "type": "number"
-              },
-              "minPrice": {
-                "type": "number"
-              },
-              "maxPrice": {
-                "type": "number"
-              },
-              "minEdge": {
-                "type": "number"
-              },
-              "edgeStep": {
-                "type": "number"
-              },
-              "ordersPerSide": {
-                "type": "number"
-              },
-              "expires": {
-                "type": "number"
-              },
-            }
-          }
-        },
-        "tokenPrices": {
-          "title": "Token prices",
-          "type": "object",
-        },
-      }
-    };
-          var data = {};
+      var schema = market_maker_config_schema;
+      var data = market_maker_config;
       var options = { schema:schema, data:data };
       var el = $('#config');
       var treema = el.treema(options);

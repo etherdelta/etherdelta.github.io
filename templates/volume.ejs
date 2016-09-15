@@ -1,15 +1,31 @@
 <h3><%= translation.volume %></h3>
 <div style="height: 300px; overflow-y: scroll">
   <table class="table">
-    <tr><th><%= translation.pair %></th><th><%= translation.volume %></th></tr>
+    <tr>
+      <th><%= translation.pair %></th>
+      <th><%= translation.daily %></th>
+      <th><%= translation.weekly %></th>
+    </tr>
     <% pairVolumes.forEach(function(pairVolume){ %>
-      <tr><td><a href="javascript:;" onclick="bundle.Main.selectTokenAndBase('<%= pairVolume.token.addr %>','<%= pairVolume.base.addr %>');"><%= pairVolume.token.name+'/'+pairVolume.base.name %></a></td><td><%= bundle.utility.weiToEth(pairVolume.volume, bundle.Main.getDivisor(pairVolume.token)) %></td></tr>
+      <tr>
+        <td><a href="javascript:;" onclick="bundle.Main.selectTokenAndBase('<%= pairVolume.token.addr %>','<%= pairVolume.base.addr %>');"><%= pairVolume.token.name+'/'+pairVolume.base.name %></a></td>
+        <td><%= bundle.utility.weiToEth(pairVolume.volumes[1], bundle.Main.getDivisor(pairVolume.token)) %></td>
+        <td><%= bundle.utility.weiToEth(pairVolume.volumes[0], bundle.Main.getDivisor(pairVolume.token)) %></td>
+      </tr>
     <% }) %>
   </table>
   <table class="table">
-    <tr><th><%= translation.token %></th><th><%= translation.volume %></th></tr>
+    <tr>
+      <th><%= translation.token %></th>
+      <th><%= translation.daily %></th>
+      <th><%= translation.weekly %></th>
+    </tr>
     <% tokenVolumes.forEach(function(tokenVolume){ %>
-      <tr><td><%= tokenVolume.token.name %></td><td><%= bundle.utility.weiToEth(tokenVolume.volume, bundle.Main.getDivisor(tokenVolume.token)) %></td></tr>
+      <tr>
+        <td><%= tokenVolume.token.name %></td>
+        <td><%= bundle.utility.weiToEth(tokenVolume.volumes[1], bundle.Main.getDivisor(tokenVolume.token)) %></td>
+        <td><%= bundle.utility.weiToEth(tokenVolume.volumes[0], bundle.Main.getDivisor(tokenVolume.token)) %></td>
+      </tr>
     <% }) %>
   </table>
 </div>

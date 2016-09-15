@@ -276,10 +276,10 @@ Main.displayMyTransactions = function(callback) {
     );
   });
 }
-Main.displayVolume = function(callback) {
+Main.displayVolumes = function(callback) {
   var tokenVolumes = {};
   var pairVolumes = {};
-  var timeFrame = 86400*1000*1;
+  var timeFrames = [86400*1000*7, 86400*1000*1];
   var now = new Date();
   //the default pairs
   for (var i=1; i<config.pairs.length; i++) {
@@ -287,7 +287,7 @@ Main.displayVolume = function(callback) {
     var base = Main.getToken(config.pairs[i].base);
     if (token && base) {
       var pair = token.name+'/'+base.name;
-      if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volume: 0};
+      if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0)};
     }
   }
   //get trading volume
@@ -299,11 +299,12 @@ Main.displayVolume = function(callback) {
       var amountGet = event.args.amountGet;
       var amountGive = event.args.amountGive;
       if (tokenGet && tokenGive) {
-        if (!tokenVolumes[tokenGet.name]) tokenVolumes[tokenGet.name] = {token: tokenGet, volume: 0};
-        if (!tokenVolumes[tokenGive.name]) tokenVolumes[tokenGive.name] = {token: tokenGive, volume: 0};
+        if (!tokenVolumes[tokenGet.name]) tokenVolumes[tokenGet.name] = {token: tokenGet, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0)};
+        if (!tokenVolumes[tokenGive.name]) tokenVolumes[tokenGive.name] = {token: tokenGive, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0)};
         var token;
         var base;
-        var volume;
+        var volume = 0;
+        var ethVolume;
         if (tokenGive.name=='ETH' || (tokenGive.name>tokenGet.name && tokenGet.name!='ETH')) {
           token = tokenGet;
           base = tokenGive;
@@ -313,20 +314,30 @@ Main.displayVolume = function(callback) {
           base = tokenGet;
           volume = amountGive;
         }
+        if (tokenGive.name=='ETH') ethVolume = amountGive;
+        if (tokenGet.name=='ETH') ethVolume = amountGet;
         var pair = token.name+'/'+base.name;
-        if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volume: 0};
-        if (now-Main.blockTime(event.blockNumber)<timeFrame) {
-          tokenVolumes[tokenGet.name].volume += amountGet.toNumber();
-          tokenVolumes[tokenGive.name].volume += amountGive.toNumber();
-          pairVolumes[pair].volume += volume.toNumber();
+        if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0)};
+        for (var i=0; i<timeFrames.length; i++) {
+          var timeFrame = timeFrames[i];
+          if (now-Main.blockTime(event.blockNumber)<timeFrame) {
+            tokenVolumes[tokenGet.name].volumes[i] += amountGet.toNumber();
+            tokenVolumes[tokenGive.name].volumes[i] += amountGive.toNumber();
+            pairVolumes[pair].volumes[i] += volume.toNumber();
+            if (ethVolume) {
+              tokenVolumes[tokenGet.name].ethVolumes[i] += ethVolume.toNumber();
+              tokenVolumes[tokenGive.name].ethVolumes[i] += ethVolume.toNumber();
+              pairVolumes[pair].ethVolumes[i] += ethVolume.toNumber();
+            }
+          }
         }
       }
     }
   });
   tokenVolumes = Object.values(tokenVolumes);
-  tokenVolumes.sort(function(a,b){return b.volume-a.volume});
+  tokenVolumes.sort(function(a,b){return b.ethVolumes[0]-a.ethVolumes[0]});
   pairVolumes = Object.values(pairVolumes);
-  pairVolumes.sort(function(a,b){return b.volume-a.volume});
+  pairVolumes.sort(function(a,b){return b.ethVolumes[0]-a.ethVolumes[0]});
   new EJS({url: config.homeURL+'/templates/'+'volume.ejs'}).update('volume', {translation: translation, tokenVolumes: tokenVolumes, pairVolumes: pairVolumes});
   callback();
 }
@@ -923,7 +934,7 @@ Main.refresh = function(callback, force) {
         Main.displayAllBalances(function(){});
         Main.displayMyTransactions(function(){});
         Main.displayTradesAndCharts(function(){});
-        Main.displayVolume(function(){});
+        Main.displayVolumes(function(){});
       }
     });
     Main.getGitterMessages(function(){
