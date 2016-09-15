@@ -4,6 +4,7 @@
 var schema = {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
+  "additionalProperties": false,
   "properties": {
     "pairs": {
       "type": "array",
@@ -35,6 +36,7 @@ var schema = {
             "type": "integer"
           }
         },
+        "additionalProperties": false,
         "required": [
           "pair",
           "theo",

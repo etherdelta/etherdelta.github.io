@@ -282,6 +282,7 @@ Main.displayVolumes = function(callback) {
   var tokenVolumes = {};
   var pairVolumes = {};
   var timeFrames = [86400*1000*7, 86400*1000*1];
+  var mainBases = ['DUSD','ETH']; //in order of priority
   var now = new Date();
   //the default pairs
   for (var i=1; i<config.pairs.length; i++) {
@@ -307,14 +308,27 @@ Main.displayVolumes = function(callback) {
         var base;
         var volume = 0;
         var ethVolume;
-        if (tokenGive.name=='ETH' || (tokenGive.name>tokenGet.name && tokenGet.name!='ETH')) {
-          token = tokenGet;
-          base = tokenGive;
-          volume = amountGet;
-        } else {
+        mainBases.some(function(mainBase){
+          if (tokenGive.name==mainBase) {
+            token = tokenGet;
+            base = tokenGive;
+            volume = amountGet;
+            return true;
+          } else if (tokenGet.name==mainBase) {
+            token = tokenGive;
+            base = tokenGet;
+            volume = amountGive;
+            return true;
+          }
+        });
+        if (!token && !base && tokenGive.name>=tokenGet.name) {
           token = tokenGive;
           base = tokenGet;
           volume = amountGive;
+        } else if (!token && !base && tokenGive.name<tokenGet.name) {
+          token = tokenGet;
+          base = tokenGive;
+          volume = amountGet;
         }
         if (tokenGive.name=='ETH') ethVolume = amountGive;
         if (tokenGet.name=='ETH') ethVolume = amountGet;
