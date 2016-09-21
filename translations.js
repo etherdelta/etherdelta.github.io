@@ -131,7 +131,7 @@ var translations = {
     'follow_twitter': '跟Twitter',
     'chat': '聊',
     'send': '发送',
-    'volume': '卷',
+    'volume': '量',
     'pair': '名称',
     'produced_etherboost': 'Etherboost制作',
     'etherdelta_desc': 'EtherDelta &#8212; 无中心交易',
