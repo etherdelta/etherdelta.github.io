@@ -531,8 +531,9 @@ Main.displayOrderbook = function(callback) {
     var sellOrders = orders.filter(function(x){return x.amount<0});
     sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
     buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
+    console.log(sellOrders.filter(function(x){return x.order.user.toLowerCase()==addrs[selectedAccount]}));
     buyOrders = buyOrders.slice(0,25); //show 25 best orders
-    sellOrders = sellOrders.slice(0,25); //show 25 best orders
+    sellOrders = sellOrders.slice(-25); //show 25 best orders
     //display the template
     new EJS({url: config.homeURL+'/templates/'+'order_book.ejs'}).update('order_book', {translation: translation, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
     $("[data-toggle=popover]").popover({
@@ -738,7 +739,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
     } else {
       var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
       var hash = sha256(new Buffer(condensed,'hex'));
-      utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
+      utility.sign(web3, addrs[selectedAccount], '0x'+hash, pks[selectedAccount], function(err, sig) {
         if (err) {
           Main.alertError('Could not sign order because of an error: '+err);
         } else {
@@ -946,13 +947,13 @@ Main.refresh = function(callback, force) {
       if (newEvents>0 || force) {
         Main.displayAccounts(function(){});
         Main.displayAllBalances(function(){});
-        Main.displayMyTransactions(function(){});
         Main.displayTradesAndCharts(function(){});
         Main.displayVolumes(function(){});
       }
     });
     Main.getGitterMessages(function(){
       Main.displayOrderbook(function(){});
+      Main.displayMyTransactions(function(){});
       $('#loading').hide();
     });
   }
@@ -972,6 +973,8 @@ Main.displayBuySell = function(callback) {
   callback();
 }
 Main.initMarket = function(callback) {
+  console.log('Initializing new market');
+  Main.displayOrderbook(function(){}); //to reset the order book
   Main.displayBuySell(function(){});
   Main.displayTokensAndBases(function(){});
   Main.refresh(function(){}, true);
