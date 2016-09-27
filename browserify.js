@@ -734,7 +734,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   }
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [tokenGive, addrs[selectedAccount]], function(err, result) {
     var balance = result;
-    if (balance.lt(new BigNumber(amountGive))) {
+    if (false && balance.lt(new BigNumber(amountGive))) {
       Main.alertError('You do not have enough funds to send this order.');
     } else {
       var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
