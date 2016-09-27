@@ -741,7 +741,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
     } else {
       var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
       var hash = sha256(new Buffer(condensed,'hex'));
-      utility.sign(web3, addrs[selectedAccount], '0x'+hash, pks[selectedAccount], function(err, sig) {
+      utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
         if (err) {
           Main.alertError('Could not sign order because of an error: '+err);
         } else {
@@ -1773,7 +1773,9 @@ function sign(web3, address, value, privateKey, callback) {
     }
   } else {
     web3.eth.sign(address, value, function(err, sig) {
-      if (!err) {
+      if (err && value.slice(0,2)!='0x') {
+        sign(web3, address, '0x'+value, privateKey, callback);
+      } else if (!err) {
         try {
           var r = sig.slice(0, 66);
           var s = '0x' + sig.slice(66, 130);

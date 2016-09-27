@@ -734,12 +734,12 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   }
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [tokenGive, addrs[selectedAccount]], function(err, result) {
     var balance = result;
-    if (false && balance.lt(new BigNumber(amountGive))) {
+    if (balance.lt(new BigNumber(amountGive))) {
       Main.alertError('You do not have enough funds to send this order.');
     } else {
       var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
       var hash = sha256(new Buffer(condensed,'hex'));
-      utility.sign(web3, addrs[selectedAccount], '0x'+hash, pks[selectedAccount], function(err, sig) {
+      utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
         if (err) {
           Main.alertError('Could not sign order because of an error: '+err);
         } else {
