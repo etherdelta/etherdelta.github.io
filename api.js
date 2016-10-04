@@ -132,7 +132,7 @@ API.logs = function(callback) {
     }
     async.map(self.contractEtherDeltaAddrs,
       function(contractEtherDeltaAddr, callbackMap) {
-        var blocks = Object.values(self.eventsCache).map(function(x){return x.blockNumber});
+        var blocks = Object.values(self.eventsCache).filter(function(x){return x.address==contractEtherDeltaAddr}).map(function(x){return x.blockNumber});
         var startBlock = 0;
         if (blocks.length) startBlock = blocks.max();
         utility.logsOnce(self.web3, self.contractEtherDelta, contractEtherDeltaAddr, startBlock, 'latest', function(err, events) {
