@@ -1,0 +1,57 @@
+<div class="row-box table-header">
+  <table class="table table-condensed table-borderless">
+    <tr>
+      <th class="trn">Block</th>
+      <th class="trn">type</th>
+      <th class="align-right"><%= selectedToken.name %></th>
+      <th class="align-right"><%= selectedBase.name %></th>
+      <th class="align-right padding-right"><%= selectedToken.name %>/<%= selectedBase.name %></th>
+    </tr>
+  </table>
+</div>
+<div class="row-box fifty scroll">
+  <table class="table table-condensed table-borderless">
+    <% pendingTransactions.forEach(function(pendingTransaction){ %>
+      <tr>
+        <td><span class="trn">question_mark</span><a href="<%= pendingTransaction.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+        <td><span class="trn">pending</span></td>
+        <td class="align-right"></td>
+        <td class="align-right"></td>
+        <td class="align-right padding-right"></td>
+      </tr>
+    <% }) %>
+    <% myEvents.forEach(function(event){ %>
+      <% if (event.trade) { %>
+        <% trade = event.trade %>
+        <tr>
+          <td><%= event.blockNumber %><a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+          <td><% if(selectedAddr.toLowerCase()==trade.buyer.toLowerCase()) { %><span class="trn">buy</span><% } else { %><span class="trn">sell</span><% } %></span></td>
+          <td class="align-right"><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %></td>
+          <td class="align-right"><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %></td>
+          <td class="align-right padding-right"><%= trade.price.toNumber().toFixed(5) %></td>
+        </tr>
+      <% } else if (event.deposit) { %>
+        <% deposit = event.deposit %>
+        <tr>
+          <td><%= event.blockNumber %><a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+          <td><span class="trn">deposit</span></td>
+          <td class="align-right"><% if (deposit.token.addr==selectedToken.addr) {%><%= bundle.utility.weiToEth(deposit.amount, bundle.Main.getDivisor(deposit.token)) %><% } %></td>
+          <td class="align-right"><% if (deposit.token.addr==selectedBase.addr) {%><%= bundle.utility.weiToEth(deposit.amount, bundle.Main.getDivisor(deposit.token)) %><% } %></td>
+          <td class="align-right padding-right"></td>
+        </tr>
+      <% } else if (event.withdraw) { %>
+        <% withdraw = event.withdraw %>
+        <tr>
+          <td><%= event.blockNumber %><a href="<%= event.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+          <td><span class="trn">withdraw</span></td>
+          <td class="align-right"><% if (withdraw.token.addr==selectedToken.addr) {%><%= bundle.utility.weiToEth(withdraw.amount, bundle.Main.getDivisor(withdraw.token)) %><% } %></td>
+          <td class="align-right"><% if (withdraw.token.addr==selectedBase.addr) {%><%= bundle.utility.weiToEth(withdraw.amount, bundle.Main.getDivisor(withdraw.token)) %><% } %></td>
+          <td class="align-right padding-right"></td>
+        </tr>
+      <% } %>
+    <% }); %>
+    <tr>
+      <td colspan="5" class="trn padding-right">only_7_days</td>
+    </tr>
+  </table>
+</div>

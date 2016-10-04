@@ -9,6 +9,7 @@ var async = require('async');
 var BigNumber = require('bignumber.js');
 var utils = require('web3/lib/utils/utils.js');
 var coder = require('web3/lib/solidity/coder.js');
+var solc = require('solc');
 
 var logger = {
   log: function(message) {
@@ -20,14 +21,14 @@ function deploy(web3, sourceFile, contractName, constructorParams, address, call
   utility.readFile(sourceFile+'.bytecode', function(err, bytecode){
     utility.readFile(sourceFile+'.interface', function(err, abi){
       utility.readFile(sourceFile, function(err, source){
-        if (abi && bytecode) {
-          abi = JSON.parse(abi);
-          bytecode = JSON.parse(bytecode);
-        } else if (typeof(solc)!='undefined') {
+        // if (abi && bytecode) {
+        //   abi = JSON.parse(abi);
+        //   bytecode = JSON.parse(bytecode);
+        // } else if (typeof(solc)!='undefined') {
           var compiled = solc.compile(source, 1).contracts[contractName];
           abi = JSON.parse(compiled.interface);
           bytecode = compiled.bytecode;
-        }
+        // }
         var contract = web3.eth.contract(abi);
         utility.testSend(web3, contract, undefined, 'constructor', constructorParams.concat([{from: address, data: bytecode}]), address, undefined, 0, function(err, result) {
           var initialTransaction = result;
@@ -90,21 +91,21 @@ describe("Test", function(done) {
 
   describe("Contract scenario", function() {
     it("Should add a token1 contract to the network", function(done) {
-      deploy(web3, config.contractReserveToken, 'ReserveToken', [], accounts[0], function(err, contract) {
+      deploy(web3, config.contractEtherDelta, 'ReserveToken', [], accounts[0], function(err, contract) {
         contractToken1 = contract.contract;
         contractToken1Addr = contract.addr;
         done();
       });
     });
     it("Should add a token2 contract to the network", function(done) {
-      deploy(web3, config.contractReserveToken, 'ReserveToken', [], accounts[0], function(err, contract) {
+      deploy(web3, config.contractEtherDelta, 'ReserveToken', [], accounts[0], function(err, contract) {
         contractToken2 = contract.contract;
         contractToken2Addr = contract.addr;
         done();
       });
     });
     it("Should add the etherdelta contract to the network", function(done) {
-      feeMake = new BigNumber(utility.ethToWei(0));
+      feeMake = new BigNumber(utility.ethToWei(0.005));
       feeTake = new BigNumber(utility.ethToWei(0.003));
       feeAccount = accounts[0];
       deploy(web3, config.contractEtherDelta, 'EtherDelta', [feeAccount, feeMake, feeTake], accounts[0], function(err, contract) {
@@ -196,7 +197,7 @@ describe("Test", function(done) {
         var expires = blockNumber+2;
         var orderNonce = 1;
         var user = accounts[1];
-        var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
+        var condensed = utility.pack([contractEtherDeltaAddr, tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 160, 256, 160, 256, 256, 256]);
         var hash = sha256(new Buffer(condensed,'hex'));
         var amount = amountGet.div(new BigNumber(2));
         utility.sign(web3, user, hash, undefined, function(err, sig) {
@@ -232,7 +233,7 @@ describe("Test", function(done) {
         var expires = blockNumber+1000;
         var orderNonce = 2;
         var user = accounts[1];
-        var condensed = utility.pack([tokenGet, amountGet.toNumber(), tokenGive, amountGive.toNumber(), expires, orderNonce], [160, 256, 160, 256, 256, 256]);
+        var condensed = utility.pack([contractEtherDeltaAddr, tokenGet, amountGet.toNumber(), tokenGive, amountGive.toNumber(), expires, orderNonce], [160, 160, 256, 160, 256, 256, 256]);
         var hash = sha256(new Buffer(condensed,'hex'));
         var amount = amountGet.div(new BigNumber(2));
         utility.sign(web3, user, hash, undefined, function(err, sig) {

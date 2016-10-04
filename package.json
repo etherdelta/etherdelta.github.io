@@ -2,6 +2,8 @@
   "dependencies": {
     "assert": "^1.4.1",
     "async": "^2.0.0-rc.5",
+    "command-line-args": "^3.0.1",
+    "ethereumjs-abi": "^0.6.4",
     "ethereumjs-testrpc": "^1.2.1",
     "ethereumjs-tx": "^1.1.1",
     "ethereumjs-util": "^4.4.1",
@@ -10,7 +12,7 @@
     "js-sha256": "^0.3.0",
     "keythereum": "^0.2.6",
     "request": "^2.72.0",
-    "solc": "^0.3.5",
+    "solc": "^0.4.2",
     "web3": "^0.17.0-alpha"
   }
 }

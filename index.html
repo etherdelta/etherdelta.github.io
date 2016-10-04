@@ -4,126 +4,148 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/images/favicon.ico" />
-    <link href="//getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="//getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
-    <link href="//cdn.jsdelivr.net/alertifyjs/1.7.1/css/alertify.min.css" rel="stylesheet" />
-    <link href="//cdn.jsdelivr.net/alertifyjs/1.7.1/css/themes/bootstrap.min.css" rel="stylesheet" />
-    <link href="/stylesheets/base.css" rel="stylesheet" />
+    <link href="/images/favicon.ico" rel="icon" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
+    <link href="/css/alertify.min.css" rel="stylesheet" />
+    <link href="/css/alertify-bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/base.css" rel="stylesheet" />
     <title>EtherDelta</title>
   </head>
 
   <body>
 
-    <div id="family">
-    </div>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only" id="toggle_navigation" class="trn">toggle_navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img src="/images/title.png" />
+          </a>
+        </div>
 
-    <div id="title">
-      <img src="/images/title.png" />
-    </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="dropdown" id="tokens"></li>
+            <li class="dropdown" id="bases"></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/tokens.html" target="_blank"><i class="fa fa-info-circle" aria-hidden="true"></i> <span class="trn">tokens</span></a></li>
+            <li><a href="/guides.html" target="_blank"><i class="fa fa-book" aria-hidden="true"></i> <span class="trn">guides</span></a></li>
+            <li><a href="https://www.youtube.com/channel/UCkUTWdqHjFUfC98gFUsNuzg" target="_blank"><i class="fa fa-video-camera" aria-hidden="true"></i> <span class="trn">videos</span></a></li>
+            <li class="dropdown" id="connection"></li>
+            <li class="dropdown" id="languages"></li>
+            <li class="dropdown" id="addresses"></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
 
-    <div id="description" class="description_label"></div>
-
-    <div id="page">
-      <div id="content">
-        <nav class="navbar navbar-default">
-          <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only" id="toggle_navigation" class="toggle_navigation_label">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="#">
-                <img src="/images/logo.png" style="height: 100%;" />
-              </a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav">
-                <li class="dropdown" id="tokens">
-                </li>
-                <li class="dropdown" id="bases">
-                </li>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 no-float">
+          <div class="row-container">
+            <div class="row-header trn">balance</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs two" role="tablist">
+                <li role="presentation" class="active"><a href="#deposit" aria-controls="deposit" role="tab" data-toggle="tab" class="trn">deposit</a></li>
+                <li role="presentation"><a href="#withdraw" aria-controls="withdraw" role="tab" data-toggle="tab" class="trn">withdraw</a></li>
               </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown" id="languages">
-                </li>
-                <li class="dropdown" id="addresses">
-                </li>
+            </div>
+            <div class="row-box table-header">
+              <table class="table table-condensed table-borderless">
+                <tr>
+                  <th class="trn">token</th><th class="trn">balance_in_your_wallet</th><th class="trn">balance_etherdelta</th>
+                </tr>
+              </table>
+            </div>
+            <div class="row-box forty">
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="deposit"></div>
+                <div role="tabpanel" class="tab-pane" id="withdraw"></div>
+              </div>
+            </div>
+            <div class="row-header trn">new_order</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs two" role="tablist">
+                <li role="presentation" class="active"><a href="#buy" aria-controls="buy" role="tab" data-toggle="tab" class="trn">buy</a></li>
+                <li role="presentation"><a href="#sell" aria-controls="sell" role="tab" data-toggle="tab" class="trn">sell</a></li>
               </ul>
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
-        </nav>
+            </div>
+            <div class="row-box sixty padding">
+              <input type="hidden" id="token_addr" value="<%= selectedToken.addr %>" />
+              <input type="hidden" id="base_addr" value="<%= selectedBase.addr %>" />
 
-        <div class="box-container">
-          <div class="row">
-            <div class="col-xs-3">
-              <div id="volume"></div>
-              <hr />
-              <div id="announcements"></div>
-            </div>
-            <div class="col-xs-3">
-              <div id="order_book"></div>
-            </div>
-            <div class="col-xs-3">
-              <div id="sell"></div>
-              <hr />
-              <div id="buy"></div>
-            </div>
-            <div class="col-xs-3">
-              <!-- <div id="chat"></div> -->
-              <div id="videos"></div>
-              <hr />
-              <div id="trades"></div>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="buy"></div>
+                <div role="tabpanel" class="tab-pane" id="sell"></div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="box-container">
-          <div class="row">
-            <div class="col-xs-12">
-              <div id="chart_price"></div>
+        <div class="col-md-3 no-float">
+          <div class="row-container">
+            <div class="row-header trn">order_book</div>
+            <div id="order_book"></div>
+          </div>
+        </div>
+        <div class="col-md-5 no-float">
+          <div class="row-container">
+            <div class="row-header trn">price_chart</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs two" role="tablist">
+                <li role="presentation" class="active"><a href="#chart_price" aria-controls="chart_price" role="tab" data-toggle="tab" class="trn">price</a></li>
+                <li role="presentation"><a href="#chart_depth" aria-controls="chart_depth" role="tab" data-toggle="tab" class="trn">depth</a></li>
+              </ul>
+            </div>
+            <div class="row-box fifty">
+              <div class="tab-content" style="height: 100%;">
+                <div role="tabpanel" class="tab-pane active" id="chart_price" style="height: 100%; width: 100%;"></div>
+                <div role="tabpanel" class="tab-pane" id="chart_depth" style="height: 100%; width: 100%;"></div>
+              </div>
+            </div>
+            <div class="row-header trn">my_transactions</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs two" role="tablist">
+                <li role="presentation" class="active"><a href="#my_trades" aria-controls="my_trades" role="tab" data-toggle="tab" class="trn">trades</a></li>
+                <li role="presentation"><a href="#my_orders" aria-controls="my_orders" role="tab" data-toggle="tab" class="trn">orders</a></li>
+              </ul>
+            </div>
+            <div class="row-box">
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="my_trades"></div>
+                <div role="tabpanel" class="tab-pane" id="my_orders"></div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="box-container">
-          <div class="row">
-            <div class="col-xs-6">
-              <div id="balances"></div>
+        <div class="col-md-2 no-float">
+          <div class="row-container">
+            <div class="row-header trn">volume</div>
+            <div class="row-box table-header">
+              <table class="table table-condensed table-borderless">
+                <tr>
+                  <th class="trn">pair</th>
+                  <th class="trn align-right">daily</th>
+                  <th class="trn align-right padding-right">weekly</th>
+                </tr>
+              </table>
             </div>
-            <div class="col-xs-6">
-              <div id="my_events"></div>
+            <div id="volume"></div>
+            <div class="row-header">
+              <span class="trn">trades</span>
             </div>
-          </div>
+            <div id="trades"></div>
         </div>
-
-        <div class="box-container">
-          <div class="row">
-            <div class="col-xs-6">
-              <div id="guides"></div>
-            </div>
-            <div class="col-xs-6">
-              <div id="twitter"></div>
-            </div>
-          </div>
-        </div>
-
       </div>
-
-    </div>
-
-    <div id="footer">
-      <div id="connection"></div>
-    </div>
-
-    <div id="loading">
-      <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
     </div>
 
     <!-- Address -->
@@ -132,25 +154,25 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title add_account_label">Add account</h4>
+            <h4 class="modal-title trn">add_account</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="address_addr address_label">Address</label>
+                <label for="address_addr" class="trn">address</label>
                 <input type="text" class="form-control" id="address_addr" placeholder="0x..." />
               </div>
               <div id="pk_div">
                 <div class="form-group">
-                  <label for="address_addr private_key_label">Private key</label>
+                  <label for="address_addr" class="trn">private_key</label>
                   <input type="text" class="form-control" id="address_pk" placeholder="0x..." />
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary add_account_label" id="address_submit">Add account</button>
+            <button type="button" class="btn btn-default trn" data-dismiss="modal">cancel</button>
+            <button type="button" class="btn btn-primary trn" id="address_submit">add_account</button>
           </div>
         </div>
       </div>
@@ -162,24 +184,24 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title buy_label" id="myModalLabel">Buy</h4>
+            <h4 class="modal-title trn" id="myModalLabel">buy</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="buy_cross_desc" class="order_label">Order</label>
+                <label for="buy_cross_desc" class="trn">order</label>
                 <div id="buy_cross_desc"></div>
               </div>
               <div class="form-group">
-                <label for="buy_cross_amount" class="amount_label">Amount</label>
-                <input type="text" class="form-control" id="buy_cross_amount" placeholder="0.00" />
+                <label for="buy_cross_amount"><span class="trn">amount_to_buy</span> (<span id="buy_cross_token"></span>)</label>
+                <input type="text" class="form-control trn" id="buy_cross_amount" placeholder="amount" />
               </div>
             </form>
           </div>
           <input type="hidden" id="buy_cross_order" />
           <div class="modal-footer">
-            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary buy_label" id="buy_cross_submit">Buy</button>
+            <button type="button" class="btn btn-default trn" data-dismiss="modal">cancel</button>
+            <button type="button" class="btn btn-primary trn" id="buy_cross_submit">buy</button>
           </div>
         </div>
       </div>
@@ -191,24 +213,24 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title sell_label" id="myModalLabel">Sell</h4>
+            <h4 class="modal-title trn" id="myModalLabel">sell</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="sell_cross_desc" class="order_label">Order</label>
+                <label for="sell_cross_desc" class="trn">order</label>
                 <div id="sell_cross_desc"></div>
               </div>
               <div class="form-group">
-                <label for="sell_cross_amount" class="amount_label">Amount</label>
-                <input type="text" class="form-control" id="sell_cross_amount" placeholder="0.00" />
+                <label for="sell_cross_amount"><span class="trn">amount_to_sell</span> (<span id="sell_cross_token"></span>)</label>
+                <input type="text" class="form-control trn" id="sell_cross_amount" placeholder="amount" />
               </div>
             </form>
           </div>
           <input type="hidden" id="sell_cross_order" />
           <div class="modal-footer">
-            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary sell_label" id="sell_cross_submit">Sell</button>
+            <button type="button" class="btn btn-default trn" data-dismiss="modal">cancel</button>
+            <button type="button" class="btn btn-primary trn" id="sell_cross_submit">sell</button>
           </div>
         </div>
       </div>
@@ -220,27 +242,27 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title other_token_label" id="myModalLabel">Other token</h4>
+            <h4 class="modal-title trn" id="myModalLabel">other_token</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="other_token_addr" class="address_label">Address</label>
+                <label for="other_token_addr" class="trn">address</label>
                 <input type="text" class="form-control" id="other_token_addr" placeholder="0x..." />
               </div>
               <div class="form-group">
-                <label for="other_token_name" class="name_label">Name</label>
+                <label for="other_token_name" class="trn">name</label>
                 <input type="text" class="form-control" id="other_token_name" placeholder="XYZ" />
               </div>
               <div class="form-group">
-                <label for="other_token_decimals" class="decimals_label">Decimals</label>
+                <label for="other_token_decimals" class="trn">decimals</label>
                 <input type="text" class="form-control" id="other_token_decimals" value="18" />
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary go_label" id="other_token_submit">Go</button>
+            <button type="button" class="btn btn-default trn" data-dismiss="modal">cancel</button>
+            <button type="button" class="btn btn-primary trn" id="other_token_submit">go</button>
           </div>
         </div>
       </div>
@@ -252,27 +274,43 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title other_base_label" id="myModalLabel">Other base</h4>
+            <h4 class="modal-title trn" id="myModalLabel">other_base</h4>
           </div>
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="other_base_addr" class="address_label">Address</label>
+                <label for="other_base_addr" class="trn">address</label>
                 <input type="text" class="form-control" id="other_base_addr" placeholder="0x..." />
               </div>
               <div class="form-group">
-                <label for="other_base_name" class="name_label">Name</label>
+                <label for="other_base_name" class="trn">name</label>
                 <input type="text" class="form-control" id="other_base_name" placeholder="XYZ" />
               </div>
               <div class="form-group">
-                <label for="other_base_decimals" class="decimals_label">Decimals</label>
+                <label for="other_base_decimals" class="trn">decimals</label>
                 <input type="text" class="form-control" id="other_base_decimals" value="18" />
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default cancel_label" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary go_label" id="other_base_submit">Go</button>
+            <button type="button" class="btn btn-default trn" data-dismiss="modal">cancel</button>
+            <button type="button" class="btn btn-primary trn" id="other_base_submit">go</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Token -->
+    <div class="modal fade" id="tokenModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel"><div id="token_guide_title"></div></h4>
+          </div>
+          <div class="modal-body">
+            <div id="token_guide_details"></div>
+            <div id="token_guide_body"></div>
           </div>
         </div>
       </div>
@@ -280,16 +318,16 @@
 
     <script src="//www.gstatic.com/charts/loader.js" type="text/javascript"></script>
     <script>google.charts.load('current', {packages: ['corechart', 'line']});</script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/hellojs/1.13.4/hello.all.min.js" type="text/javascript"></script>
-    <script src="//cdn.socket.io/socket.io-1.2.0.js" type="text/javascript"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous" type="text/javascript"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/sticky-table-headers/0.1.19/js/jquery.stickytableheaders.min.js" type="text/javascript"></script>
-    <script src="//cdn.jsdelivr.net/alertifyjs/1.7.1/alertify.min.js" type="text/javascript"></script>
+    <script src="/js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="/js/jquery.translate.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/alertify.min.js" type="text/javascript"></script>
     <script src="/js/ejs_production.js" type="text/javascript"></script>
-    <script src="config.js" type="text/javascript"></script>
-    <script src="js/bundle.js" type="text/javascript"></script>
+    <script src="/js/config.js" type="text/javascript"></script>
+    <script src="/js/translations.js" type="text/javascript"></script>
+    <script src="/js/bundle.js" type="text/javascript"></script>
     <script src="script.js" type="text/javascript"></script>
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -303,6 +341,6 @@
         room: 'etherdelta/etherdelta.github.io'
       };
     </script>
-    <script src="//sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+    <script src="/js/sidecar.v1.js" async defer></script>
   </body>
 </html>

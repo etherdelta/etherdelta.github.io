@@ -1,4 +1,4 @@
-//last compiled with soljson-v0.3.6-2016-08-29-b8060c5.js
+pragma solidity ^0.4.2;
 
 contract SafeMath {
   //internals
@@ -134,9 +134,9 @@ contract ReserveToken is StandardToken, SafeMath {
 
 contract EtherDelta is SafeMath {
 
-  mapping (address => mapping (address => uint)) tokens; //mapping of token addresses to mapping of account balances
+  mapping (address => mapping (address => uint)) public tokens; //mapping of token addresses to mapping of account balances
   //ether balances are held in the token=0 account
-  mapping (bytes32 => uint) orderFills;
+  mapping (bytes32 => uint) public orderFills;
   address public feeAccount;
   uint public feeMake; //percentage times (1 ether)
   uint public feeTake; //percentage times (1 ether)
@@ -157,7 +157,7 @@ contract EtherDelta is SafeMath {
     throw;
   }
 
-  function deposit() {
+  function deposit() payable {
     tokens[0][msg.sender] = safeAdd(tokens[0][msg.sender], msg.value);
     Deposit(0, msg.sender, msg.value, tokens[0][msg.sender]);
   }
@@ -198,7 +198,7 @@ contract EtherDelta is SafeMath {
   function trade(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, address user, uint8 v, bytes32 r, bytes32 s, uint amount) {
     //amount is in amountGet terms
     if (msg.value>0) throw;
-    bytes32 hash = sha256(tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
+    bytes32 hash = sha256(this, tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
     if (!(
       ecrecover(hash,v,r,s) == user &&
       block.number <= expires &&
@@ -206,14 +206,20 @@ contract EtherDelta is SafeMath {
       tokens[tokenGet][msg.sender] >= amount &&
       tokens[tokenGive][user] >= safeMul(amountGive, amount) / amountGet
     )) throw;
-    tokens[tokenGet][msg.sender] = safeSub(tokens[tokenGet][msg.sender], amount);
-    tokens[tokenGet][user] = safeAdd(tokens[tokenGet][user], safeMul(amount, ((1 ether) - feeMake)) / (1 ether));
-    tokens[tokenGet][feeAccount] = safeAdd(tokens[tokenGet][feeAccount], safeMul(amount, feeMake) / (1 ether));
-    tokens[tokenGive][user] = safeSub(tokens[tokenGive][user], safeMul(amountGive, amount) / amountGet);
-    tokens[tokenGive][msg.sender] = safeAdd(tokens[tokenGive][msg.sender], safeMul(safeMul(((1 ether) - feeTake), amountGive), amount) / amountGet / (1 ether));
-    tokens[tokenGive][feeAccount] = safeAdd(tokens[tokenGive][feeAccount], safeMul(safeMul(feeTake, amountGive), amount) / amountGet / (1 ether));
+    tradeBalances(tokenGet, amountGet, tokenGive, amountGive, user, amount);
     orderFills[hash] = safeAdd(orderFills[hash], amount);
     Trade(tokenGet, amount, tokenGive, amountGive * amount / amountGet, user, msg.sender);
+  }
+
+  function tradeBalances(address tokenGet, uint amountGet, address tokenGive, uint amountGive, address user, uint amount) private {
+    uint feeMakeXfer = safeMul(amount, feeMake) / (1 ether);
+    tokens[tokenGet][msg.sender] = safeSub(tokens[tokenGet][msg.sender], amount);
+    tokens[tokenGet][user] = safeAdd(tokens[tokenGet][user], safeSub(amount, feeMakeXfer));
+    tokens[tokenGet][feeAccount] = safeAdd(tokens[tokenGet][feeAccount], feeMakeXfer);
+    uint feeTakeXfer = safeMul(safeMul(feeTake, amountGive), amount) / amountGet / (1 ether);
+    tokens[tokenGive][user] = safeSub(tokens[tokenGive][user], safeMul(amountGive, amount) / amountGet);
+    tokens[tokenGive][msg.sender] = safeAdd(tokens[tokenGive][msg.sender], safeSub(safeMul(amountGive, amount) / amountGet, feeTakeXfer));
+    tokens[tokenGive][feeAccount] = safeAdd(tokens[tokenGive][feeAccount], feeTakeXfer);
   }
 
   function testTrade(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, address user, uint8 v, bytes32 r, bytes32 s, uint amount, address sender) constant returns(bool) {
@@ -225,7 +231,7 @@ contract EtherDelta is SafeMath {
   }
 
   function availableVolume(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, address user, uint8 v, bytes32 r, bytes32 s) constant returns(uint) {
-    bytes32 hash = sha256(tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
+    bytes32 hash = sha256(this, tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
     if (!(
       ecrecover(hash,v,r,s) == user &&
       block.number <= expires
@@ -238,7 +244,7 @@ contract EtherDelta is SafeMath {
 
   function cancelOrder(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, uint8 v, bytes32 r, bytes32 s) {
     if (msg.value>0) throw;
-    bytes32 hash = sha256(tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
+    bytes32 hash = sha256(this, tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
     if (ecrecover(hash,v,r,s) != msg.sender) throw;
     orderFills[hash] = amountGet;
     Cancel(tokenGet, amountGet, tokenGive, amountGive, expires, nonce, msg.sender, v, r, s);

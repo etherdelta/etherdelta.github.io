@@ -3,13 +3,13 @@ var async = require('async');
 var API = require('./api.js');
 var marketMakerConfig = require('./market_maker_config.js');
 
-var cli = commandLineArgs([
+var cli = [
 	{ name: 'help', alias: 'h', type: Boolean },
 	{ name: 'address', type: String },
 	{ name: 'implied', type: Boolean, defaultValue: false},
 	{ name: 'armed', type: Boolean, defaultValue: false},
-]);
-var cliOptions = cli.parse()
+];
+var cliOptions = commandLineArgs(cli);
 
 if (cliOptions.help) {
 	console.log(cli.getUsage());

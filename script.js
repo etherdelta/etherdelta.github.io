@@ -25,32 +25,34 @@ function sell_change() {
 $(function () {
   $('body').on('click', '#buy_submit', function (e) {
     e.preventDefault();
-    // bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'buy', $('#buy_amount').val(), $('#buy_price').val(), $('#buy_expires').val(), $('#buy_refresh').is(':checked'));
-    bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'buy', $('#buy_amount').val(), $('#buy_price').val(), $('#buy_expires').val(), false);
+    bundle.Main.order('buy', $('#buy_amount').val(), $('#buy_price').val(), $('#buy_expires').val(), false);
   });
 });
 $(function () {
   $('body').on('click', '#sell_submit', function (e) {
     e.preventDefault();
-    // bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'sell', $('#sell_amount').val(), $('#sell_price').val(), $('#sell_expires').val(), $('#sell_refresh').is(':checked'));
-    bundle.Main.order($('#base_addr').val(), $('#token_addr').val(), 'sell', $('#sell_amount').val(), $('#sell_price').val(), $('#sell_expires').val(), false);
+    bundle.Main.order('sell', $('#sell_amount').val(), $('#sell_price').val(), $('#sell_expires').val(), false);
   });
 });
 $('#buy_cross_modal').on('show.bs.modal', function(e) {
   var order = $(e.relatedTarget).data('order');
   var amount = $(e.relatedTarget).data('amount');
   var desc = $(e.relatedTarget).data('desc');
+  var token = $(e.relatedTarget).data('token');
   $('#buy_cross_order').val(JSON.stringify(order.order));
   $('#buy_cross_amount').val(amount);
   $('#buy_cross_desc').html(desc);
+  $('#buy_cross_token').html(token);
 });
 $('#sell_cross_modal').on('show.bs.modal', function(e) {
   var order = $(e.relatedTarget).data('order');
   var amount = $(e.relatedTarget).data('amount');
   var desc = $(e.relatedTarget).data('desc');
+  var token = $(e.relatedTarget).data('token');
   $('#sell_cross_order').val(JSON.stringify(order.order));
   $('#sell_cross_amount').val(amount);
   $('#sell_cross_desc').html(desc);
+  $('#sell_cross_token').html(token);
 });
 $(function () {
   $('body').on('click', '#buy_cross_submit', function (e) {

@@ -296,7 +296,7 @@ API.getDivisor = function(tokenOrAddress) {
   var self = this;
   var result = 1000000000000000000;
   var token = API.getToken(tokenOrAddress);
-  if (token && token.decimals) {
+  if (token && token.decimals!=undefined) {
     result = Math.pow(10,token.decimals);
   }
   return new BigNumber(result);
@@ -433,6 +433,26 @@ API.getTrades = function(callback) {
   });
   trades.sort(function(a,b){ return b.id - a.id });
   callback(null, {trades: trades});
+}
+
+API.getFees = function(callback) {
+  var self = this;
+  var fees = [];
+  var feeTake = new BigNumber(0.003);
+  var feeMake = new BigNumber(0.000);
+  var events = Object.values(self.eventsCache);
+  events.forEach(function(event){
+    if (event.event=='Trade' && self.contractEtherDeltaAddrs.indexOf(event.address)>=0) {
+      if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
+        //take fee
+        fees.push({token: API.getToken(event.args.tokenGive), amount: event.args.amountGive.times(feeTake), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber});
+        //make fee
+        fees.push({token: API.getToken(event.args.tokenGet), amount: event.args.amountGet.times(feeMake), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber});
+      }
+    }
+  });
+  fees.sort(function(a,b){ return b.id - a.id });
+  callback(null, {fees: fees});
 }
 
 API.getVolumes = function(callback) {

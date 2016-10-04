@@ -19,7 +19,9 @@ configs["1"] = {
   ethAddrPrivateKey: '',
   tokens: [
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0x48c80f1f4d53d5951e5d5438b54cba84f29f32a5', name: 'REP', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0xd8912c10681d8b21fd3742244f44658dba12264e', name: 'PLU', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
+    {addr: '0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009', name: 'SNGLS', decimals: 0, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0x4df812f6064def1e5e029f1ca858777cc98d2d81', name: 'XAUR', decimals: 8, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
     {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', decimals: 9, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
@@ -35,7 +37,9 @@ configs["1"] = {
     {addr: '0x01a7018e6d1fde8a68d12f59b6532fb523b6259d', name: 'DUSD', decimals: 8, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 1000000},
   ],
   pairs: [
+    {token: 'REP', base: 'ETH'},
     {token: 'PLU', base: 'ETH'},
+    {token: 'SNGLS', base: 'ETH'},
     {token: 'ETH', base: 'DUSD'},
     {token: 'XAUR', base: 'ETH'},
     {token: 'MKR', base: 'ETH'},
