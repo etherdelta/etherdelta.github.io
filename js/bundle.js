@@ -1946,6 +1946,7 @@ Main.displayAllBalances = function(callback) {
     function(err, balances){
       Main.ejs(config.homeURL+'/templates/'+'deposit.ejs', 'deposit', {balances: balances, addr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase});
       Main.ejs(config.homeURL+'/templates/'+'withdraw.ejs', 'withdraw', {balances: balances, addr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase});
+      Main.ejs(config.homeURL+'/templates/'+'transfer.ejs', 'transfer', {balances: balances, addr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase});
       callback();
     }
   );

@@ -148,10 +148,13 @@ tr.clickable-row:hover {
 .nav-tabs.two > li {
   width: 50%;
 }
-.nav-tabs.two {
+.nav-tabs.three > li {
+  width: calc(100%/3);
+}
+.nav-tabs.columns {
   border-bottom: 0;
 }
-.nav-tabs.two > li > a {
+.nav-tabs.columns > li > a {
   border-radius: 0;
   height: 35px;
   line-height: 17px;
@@ -161,12 +164,12 @@ tr.clickable-row:hover {
   color: #fff;
   border: 0;
 }
-.nav-tabs.two > li.active > a {
+.nav-tabs.columns > li.active > a {
   color: #fff;
   background: #666;
   border: 0;
 }
-.nav-tabs.two > li > a:hover {
+.nav-tabs.columns > li > a:hover {
   color: #000;
   background: #fff;
   border: 0;
