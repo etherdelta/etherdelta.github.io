@@ -122,12 +122,8 @@ API.init = function(callback, allContracts, path) {
 API.logs = function(callback) {
   var self = this;
   utility.blockNumber(self.web3, function(err, blockNumber) {
-    var startBlock = 0;
     for (id in self.eventsCache) {
       var event = self.eventsCache[id];
-      if (event.blockNumber>startBlock && self.contractEtherDeltaAddrs.indexOf(event.address)>=0) {
-        startBlock = event.blockNumber;
-      }
       for (arg in event.args) {
         if (typeof(event.args[arg])=='string' && event.args[arg].slice(0,2)!='0x') {
           event.args[arg] = new BigNumber(event.args[arg]);
@@ -136,6 +132,9 @@ API.logs = function(callback) {
     }
     async.map(self.contractEtherDeltaAddrs,
       function(contractEtherDeltaAddr, callbackMap) {
+        var blocks = Object.values(self.eventsCache).map(function(x){return x.blockNumber});
+        var startBlock = 0;
+        if (blocks.length) startBlock = blocks.max();
         utility.logsOnce(self.web3, self.contractEtherDelta, contractEtherDeltaAddr, startBlock, 'latest', function(err, events) {
           var newEvents = 0;
           events.forEach(function(event){
