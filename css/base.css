@@ -5,7 +5,7 @@ html,body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
   font-family: 'Open Sans', sans-serif;
   background: #202c34;
@@ -133,7 +133,7 @@ tr.clickable-row:hover {
 }
 
 .scroll {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .row-box.nav-header {
@@ -247,5 +247,5 @@ a:hover {
   padding: 20px;
   border: 10px solid #ccc;
   height: calc(100vh - 50px);
-  overflow-y: scroll;
+  overflow-y: auto;
 }

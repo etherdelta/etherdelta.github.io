@@ -21,14 +21,9 @@ function deploy(web3, sourceFile, contractName, constructorParams, address, call
   utility.readFile(sourceFile+'.bytecode', function(err, bytecode){
     utility.readFile(sourceFile+'.interface', function(err, abi){
       utility.readFile(sourceFile, function(err, source){
-        // if (abi && bytecode) {
-        //   abi = JSON.parse(abi);
-        //   bytecode = JSON.parse(bytecode);
-        // } else if (typeof(solc)!='undefined') {
-          var compiled = solc.compile(source, 1).contracts[contractName];
-          abi = JSON.parse(compiled.interface);
-          bytecode = compiled.bytecode;
-        // }
+        var compiled = solc.compile(source, 1).contracts[contractName];
+        abi = JSON.parse(compiled.interface);
+        bytecode = compiled.bytecode;
         var contract = web3.eth.contract(abi);
         utility.testSend(web3, contract, undefined, 'constructor', constructorParams.concat([{from: address, data: bytecode}]), address, undefined, 0, function(err, result) {
           var initialTransaction = result;
