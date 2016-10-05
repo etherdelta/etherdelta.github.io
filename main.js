@@ -1166,7 +1166,7 @@ var secondsPerBlock = 14;
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') { //metamask situation
   web3 = new Web3(web3.currentProvider);
-} else if (typeof Web3 !== 'undefined' && window.location.protocol != "https:") { //mist/geth/parity situation
+} else if (typeof Web3 !== 'undefined'){ // && window.location.protocol != "https:") { //mist/geth/parity situation
   web3 = new Web3(new Web3.providers.HttpProvider(config.ethProvider));
 } else if(typeof web3 == 'undefined' && typeof Web3 == 'undefined') { //etherscan proxy
   web3 = new Web3();
