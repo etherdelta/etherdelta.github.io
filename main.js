@@ -716,9 +716,17 @@ Main.transfer = function(addr, amount, toAddr) {
   }
   if (!web3.isAddress(toAddr) || toAddr=='0x0000000000000000000000000000000000000000') {
     Main.alertError('Please specify a valid address.');
-  } else if (addr=='0x0000000000000000000000000000000000000000') {
-    Main.alertError('Please use your wallet software to transfer plain Ether.');
-  } else {
+  } else if (addr=='0x0000000000000000000000000000000000000000') { //plain Ether transfer
+    utility.getBalance(web3, addrs[selectedAccount], function(err, balance) {
+      if (amount>balance) amount = balance;
+      utility.send(web3, undefined, toAddr, undefined, [{gas: token.gasDeposit, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+        txHash = result.txHash;
+        nonce = result.nonce;
+        Main.addPending(err, {txHash: result.txHash});
+        Main.alertTxResult(err, result);
+      });
+    });
+  } else { //token transfer
     utility.call(web3, contractToken, token.addr, 'balanceOf', [addrs[selectedAccount]], function(err, result) {
       if (amount>result) amount = result;
       utility.send(web3, contractToken, token.addr, 'transfer', [toAddr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {

@@ -25,7 +25,7 @@ balanceBase = balances.filter(function(x){return x.token.addr==selectedBase.addr
       <input type="text" class="form-control input-xs trn" id="transfer_amount_<%= selectedBase.addr %>" placeholder="amount" />
     </td>
     <td>
-      <input type="text" class="form-control input-xs trn" id="transfer_to_<%= selectedToken.addr %>" placeholder="address" value="<%= addr %>" />
+      <input type="text" class="form-control input-xs trn" id="transfer_to_<%= selectedBase.addr %>" placeholder="address" value="<%= addr %>" />
     </td>
     <td>
       <button type="button" class="btn btn-primary btn-xs trn" style="width: 100%;" id="transfer_submit_<%= selectedBase.addr %>" onclick="transfer_click('<%= selectedBase.addr %>')">transfer</button>
