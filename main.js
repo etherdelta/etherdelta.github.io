@@ -227,8 +227,6 @@ Main.displayMyTransactions = function(callback) {
     var sellOrders = orders.filter(function(x){return x.amount<0});
     sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
     buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
-    buyOrders = buyOrders.slice(0,25); //show 25 best orders
-    sellOrders = sellOrders.slice(0,25); //show 25 best orders
     //events
     var myEvents = [];
     var events = Object.values(eventsCache);
