@@ -589,8 +589,8 @@ Main.getOrders = function(callback) {
       if (order && !deadOrders[order.id]) orders.push(order);
     });
     //get available volumes
-    async.reduce(orders, [],
-      function(memo, order, callbackReduce) {
+    async.map(orders,
+      function(order, callbackMap) {
         if (blockNumber<Number(order.order.expires)) {
           utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
             if (!err) {
@@ -601,18 +601,18 @@ Main.getOrders = function(callback) {
                 order.availableVolume = result.div(order.price).mul(Main.getDivisor(order.order.tokenGive)).div(Main.getDivisor(order.order.tokenGet));
                 order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
               }
-              memo.push(order);
-              callbackReduce(null, memo);
+              callbackMap(null, order);
             } else {
-              callbackReduce(null, memo);
+              callbackMap(null, undefined);
             }
           });
         } else {
           deadOrders[order.id] = true;
-          callbackReduce(null, memo);
+          callbackMap(null, undefined);
         }
       },
       function(err, orders){
+        orders = orders.filter(function(x){return x!=undefined});
         //save dead orders to storage
         Main.createCookie(config.deadOrdersCookie, JSON.stringify(deadOrders), 999);
         callback(orders, blockNumber);
@@ -652,9 +652,9 @@ Main.displayOrderbook = function(callback) {
       if (i==0) depthData.push([price*1.1, 0, cumul]);
     }
     depthData.unshift([{label: "Price", type: 'number'}, {label: "Cumulative bid size", type: 'number'}, {label: "Cumulative offer size", type: 'number'}]);
-    //top 25 bids and offers:
-    buyOrders = buyOrders.slice(0,25);
-    sellOrders = sellOrders.slice(-25);
+    // // top 25 bids and offers:
+    // buyOrders = buyOrders.slice(0,25);
+    // sellOrders = sellOrders.slice(-25);
     Main.ejs(config.homeURL+'/templates/'+'order_book.ejs', 'order_book', {translator: translator, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
     $('#order_book_scroll')[0].scrollTop = $('#order_book_mid').position().top-$('#order_book_scroll')[0].clientHeight/2-$('#order_book_mid')[0].clientHeight;
     Main.depthChart('chart_depth', '', '', '', depthData, median*0.25, median*1.75);
@@ -978,18 +978,22 @@ Main.loadToken = function(addr, callback) {
     callback(null, token);
   } else {
     token = JSON.parse(JSON.stringify(config.tokens[0]));
-    token.addr = addr;
-    utility.call(web3, contractToken, token.addr, 'decimals', [], function(err, result) {
-      if (!err && result>=0) token.decimals = result.toNumber();
-      utility.call(web3, contractToken, token.addr, 'name', [], function(err, result) {
-        if (!err && result && result!='') {
-          token.name = result;
-        } else {
-          token.name = token.addr.slice(2,6);
-        }
-        callback(null, token);
+    if (addr.slice(0,2)=='0x') {
+      token.addr = addr;
+      utility.call(web3, contractToken, token.addr, 'decimals', [], function(err, result) {
+        if (!err && result>=0) token.decimals = result.toNumber();
+        utility.call(web3, contractToken, token.addr, 'name', [], function(err, result) {
+          if (!err && result && result!='') {
+            token.name = result;
+          } else {
+            token.name = token.addr.slice(2,6);
+          }
+          callback(null, token);
+        });
       });
-    });
+    } else {
+      callback(null, token);
+    }
   }
 }
 Main.selectToken = function(addrOrToken, name, decimals) {

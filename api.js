@@ -16,12 +16,6 @@ API.init = function(callback, allContracts, path) {
   self.config = config;
   self.utility = utility;
 
-  //path
-  if (path) {
-    self.config.contractEtherDelta = path + self.config.contractEtherDelta;
-    self.config.contractToken= path + self.config.contractToken;
-  }
-
   //web3
   self.web3 = new Web3();
   self.web3.eth.defaultAccount = self.config.ethAddr;
@@ -30,6 +24,13 @@ API.init = function(callback, allContracts, path) {
   //check mainnet vs testnet
   self.web3.version.getNetwork(function(error, version){
     if (version in configs) self.config = configs[version];
+
+    //path
+    if (path) {
+      self.config.contractEtherDelta = path + self.config.contractEtherDelta;
+      self.config.contractToken= path + self.config.contractToken;
+    }
+
     try {
       if (self.web3.currentProvider) {
         self.web3.eth.coinbase;
