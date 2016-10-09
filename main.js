@@ -1122,15 +1122,29 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
               function(callback) {
                 Main.getGitterMessages(function(){
                   callback(null, undefined);
-                  Main.displayOrderbook(function(){
-                  });
                 });
               }
             ],
             function(err, results) {
-              Main.displayMyTransactions(function(){
-                callback(null, undefined);
-              });
+              async.parallel(
+                [
+                  function(callback) {
+                    Main.displayMyTransactions(function(){
+                      callback(null, undefined);
+                    });
+                  },
+                  function(callback) {
+                    Main.displayOrderbook(function(){
+                      callback(null, undefined);
+                    });
+                  }
+                ],
+                function(err, results) {
+                  console.log('Ending refresh')
+                  done();
+                  callback();
+                }
+              );
             }
           );
         }

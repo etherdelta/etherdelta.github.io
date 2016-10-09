@@ -358,19 +358,22 @@ API.getOrders = function(callback) {
       //get orders from gitter messages
       var expectedKeys = JSON.stringify(['amountGet','amountGive','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
       Object.keys(self.gitterMessagesCache).forEach(function(id) {
-        var message = JSON.parse(JSON.stringify(self.gitterMessagesCache[id]));
-        for (key in message) {
-          if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
-        }
-        if (typeof(message)=='object' && JSON.stringify(Object.keys(message).sort())==expectedKeys) {
-          var order = undefined;
-          //buy
-          order = {amount: message.amountGet, price: message.amountGive.div(message.amountGet).mul(API.getDivisor(message.tokenGet)).div(API.getDivisor(message.tokenGive)), id: id, order: message};
-          if (order && !self.deadOrdersCache[order.id]) orders.push(order);
-          order = undefined;
-          //sell
-          order = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive).mul(API.getDivisor(message.tokenGive)).div(API.getDivisor(message.tokenGet)), id: id, order: message};
-          if (order && !self.deadOrdersCache[order.id]) orders.push(order);
+        try {
+          var message = JSON.parse(JSON.stringify(self.gitterMessagesCache[id]));
+          for (key in message) {
+            if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
+          }
+          if (typeof(message)=='object' && JSON.stringify(Object.keys(message).sort())==expectedKeys) {
+            var order = undefined;
+            //buy
+            order = {amount: message.amountGet, price: message.amountGive.div(message.amountGet).mul(API.getDivisor(message.tokenGet)).div(API.getDivisor(message.tokenGive)), id: id, order: message};
+            if (order && !self.deadOrdersCache[order.id]) orders.push(order);
+            order = undefined;
+            //sell
+            order = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive).mul(API.getDivisor(message.tokenGive)).div(API.getDivisor(message.tokenGet)), id: id, order: message};
+            if (order && !self.deadOrdersCache[order.id]) orders.push(order);
+          }
+        } catch (err) {
         }
       });
       //get orders from events
