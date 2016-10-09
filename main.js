@@ -1140,9 +1140,7 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
                   }
                 ],
                 function(err, results) {
-                  console.log('Ending refresh')
-                  done();
-                  callback();
+                  callback(null, undefined);
                 }
               );
             }
