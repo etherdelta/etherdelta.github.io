@@ -1809,14 +1809,17 @@ Main.getOrders = function(callback) {
     //get orders from gitter messages
     var expectedKeys = JSON.stringify(['amountGet','amountGive','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
     Object.keys(gitterMessagesCache).forEach(function(id) {
-      var message = JSON.parse(JSON.stringify(gitterMessagesCache[id]));
-      for (key in message) {
-        if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
-      }
-      if (typeof(message)=='object' && JSON.stringify(Object.keys(message).sort())==expectedKeys) {
-        var rawOrder = message;
-        rawOrder.id = id;
-        rawOrders.push(rawOrder);
+      try {
+        var message = JSON.parse(JSON.stringify(gitterMessagesCache[id]));
+        for (key in message) {
+          if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
+        }
+        if (typeof(message)=='object' && JSON.stringify(Object.keys(message).sort())==expectedKeys) {
+          var rawOrder = message;
+          rawOrder.id = id;
+          rawOrders.push(rawOrder);
+        }
+      } catch (err) {
       }
     });
     //get orders from events
