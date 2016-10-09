@@ -16,6 +16,12 @@ API.init = function(callback, allContracts, path) {
   self.config = config;
   self.utility = utility;
 
+  //path
+  if (path) {
+    self.config.contractEtherDelta = path + self.config.contractEtherDelta;
+    self.config.contractToken= path + self.config.contractToken;
+  }
+
   //web3
   self.web3 = new Web3();
   self.web3.eth.defaultAccount = self.config.ethAddr;
@@ -24,13 +30,6 @@ API.init = function(callback, allContracts, path) {
   //check mainnet vs testnet
   self.web3.version.getNetwork(function(error, version){
     if (version in configs) self.config = configs[version];
-
-    //path
-    if (path) {
-      self.config.contractEtherDelta = path + self.config.contractEtherDelta;
-      self.config.contractToken= path + self.config.contractToken;
-    }
-
     try {
       if (self.web3.currentProvider) {
         self.web3.eth.coinbase;
@@ -48,7 +47,9 @@ API.init = function(callback, allContracts, path) {
     //other variables
     self.gitterMessagesCache = {};
     self.eventsCache = {};
-    self.deadOrders = {};
+    self.deadOrdersCache = {};
+    self.ordersCache = {};
+    self.usersWithOrdersToUpdate = {};
     self.blockTimeSnapshot = undefined;
 
     async.series(
@@ -90,12 +91,24 @@ API.init = function(callback, allContracts, path) {
           });
         },
         function(callback){
-          utility.readFile('storage_deadOrders', function(err, result){
+          utility.readFile('storage_deadOrdersCache', function(err, result){
             if (!err) {
               try {
-                self.deadOrders = JSON.parse(result);
+                self.deadOrdersCache = JSON.parse(result);
               } catch(err) {
-                self.deadOrders = {};
+                self.deadOrdersCache = {};
+              }
+            }
+            callback(null, true);
+          });
+        },
+        function(callback){
+          utility.readFile('storage_ordersCache', function(err, result){
+            if (!err) {
+              try {
+                self.ordersCache = JSON.parse(result);
+              } catch(err) {
+                self.ordersCache = {};
               }
             }
             callback(null, true);
@@ -143,6 +156,13 @@ API.logs = function(callback) {
               newEvents++;
               event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
               self.eventsCache[event.transactionHash+event.logIndex] = event;
+              //users with orders to update
+              if (event.event=='Trade') {
+                self.usersWithOrdersToUpdate[event.args.give] = true;
+                self.usersWithOrdersToUpdate[event.args.get] = true;
+              } else if (event.event=='Deposit' || event.event=='Withdraw' || event.event=='Cancel') {
+                self.usersWithOrdersToUpdate[event.args.user] = true;
+              }
             }
           })
           callbackMap(null, newEvents);
@@ -330,7 +350,7 @@ API.getGitterMessages = function(callback) {
   });
 }
 
-API.getOrderBook = function(callback) {
+API.getOrders = function(callback) {
   var self = this;
   API.getGitterMessages(function(err, newMessagesFound){
     utility.blockNumber(self.web3, function(err, blockNumber) {
@@ -346,11 +366,11 @@ API.getOrderBook = function(callback) {
           var order = undefined;
           //buy
           order = {amount: message.amountGet, price: message.amountGive.div(message.amountGet).mul(API.getDivisor(message.tokenGet)).div(API.getDivisor(message.tokenGive)), id: id, order: message};
-          if (order && !self.deadOrders[order.id]) orders.push(order);
+          if (order && !self.deadOrdersCache[order.id]) orders.push(order);
           order = undefined;
           //sell
           order = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive).mul(API.getDivisor(message.tokenGive)).div(API.getDivisor(message.tokenGet)), id: id, order: message};
-          if (order && !self.deadOrders[order.id]) orders.push(order);
+          if (order && !self.deadOrdersCache[order.id]) orders.push(order);
         }
       });
       //get orders from events
@@ -360,55 +380,66 @@ API.getOrderBook = function(callback) {
           var order = undefined;
           //buy
           order = {amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(API.getDivisor(event.args.tokenGet)).div(API.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
-          if (order && !self.deadOrders[order.id]) orders.push(order);
+          if (order && !self.deadOrdersCache[order.id]) orders.push(order);
           order = undefined;
           //sell
           order = {amount: -event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(API.getDivisor(event.args.tokenGive)).div(API.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, order: event.args};
-          if (order && !self.deadOrders[order.id]) orders.push(order);
+          if (order && !self.deadOrdersCache[order.id]) orders.push(order);
         }
       });
       //get available volumes
-      async.reduce(orders, [],
-        function(memo, order, callbackReduce) {
+      async.map(orders,
+        function(order, callbackMap) {
           if (blockNumber<Number(order.order.expires)) {
-            utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-              if (!err) {
-                var ethAvailableVolume = 0;
-                if (order.amount>=0) {
-                  order.availableVolume = result;
-                  ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGet));
+            if (!self.ordersCache[order.id] || self.usersWithOrdersToUpdate[order.order.user]) {
+              utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
+                if (!err) {
+                  var ethAvailableVolume = 0;
+                  if (order.amount>=0) {
+                    order.availableVolume = result;
+                    ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGet));
+                  } else {
+                    order.availableVolume = result.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
+                    ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGive));
+                  }
+                  self.ordersCache[order.id] = {availableVolume: order.availableVolume.toNumber(), ethAvailableVolume: order.ethAvailableVolume};
+                  callbackMap(null, order);
                 } else {
-                  order.availableVolume = result.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
-                  ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGive));
+                  callbackMap(null, undefined);
                 }
-                if (Number(ethAvailableVolume).toFixed(3)>=0.001) { //min order size is 0.001
-                  memo.push(order);
-                //an order isn't truly dead until it expires, because the volume might be unavailable due to funds needing to be deposited
-                // } else {
-                //   self.deadOrders[order.id] = true;
-                }
-                callbackReduce(null, memo);
-              } else {
-                callbackReduce(null, memo);
-              }
-            });
+              });
+            } else {
+              order.availableVolume = self.ordersCache[order.id].availableVolume;
+              order.ethAvailableVolume = self.ordersCache[order.id].ethAvailableVolume;
+              callbackMap(null, order);
+            }
           } else {
-            self.deadOrders[order.id] = true;
-            callbackReduce(null, memo);
+            self.deadOrdersCache[order.id] = true;
+            callbackMap(null, undefined);
           }
         },
-        function(err, ordersReduced){
-          //store dead orders
-          utility.writeFile('storage_deadOrders', JSON.stringify(self.deadOrders), function(err, result){});
-          //final order filtering and sorting
-          var buyOrders = ordersReduced.filter(function(x){return x.amount>0});
-          var sellOrders = ordersReduced.filter(function(x){return x.amount<0});
-          buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
-          sellOrders.sort(function(a,b){ return a.price - b.price || a.id - b.id });
-          callback(null, {buyOrders: buyOrders, sellOrders: sellOrders});
+        function(err, ordersMapped){
+          ordersMapped = ordersMapped.filter(function(x){return x!=undefined});
+          //save orders and dead orders to storage
+          utility.writeFile('storage_ordersCache', JSON.stringify(self.ordersCache), function(err, result){});
+          utility.writeFile('storage_deadOrdersCache', JSON.stringify(self.deadOrdersCache), function(err, result){});
+          self.usersWithOrdersToUpdate = {};
+          callback(null, {orders: ordersMapped, blockNumber: blockNumber});
         }
       );
     });
+  });
+}
+
+API.getOrderBook = function(callback) {
+  API.getOrders(function(err, result){
+    var orders = result.orders;
+    //final order filtering and sorting
+    var buyOrders = orders.filter(function(x){return x.amount>0});
+    var sellOrders = orders.filter(function(x){return x.amount<0});
+    buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
+    sellOrders.sort(function(a,b){ return a.price - b.price || a.id - b.id });
+    callback(null, {buyOrders: buyOrders, sellOrders: sellOrders});
   });
 }
 

@@ -1166,7 +1166,8 @@ configs["1"] = {
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   gitterCacheCookie: 'EtherDelta_gitterCache',
-  deadOrdersCookie: 'EtherDelta_deadOrders',
+  deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
+  ordersCacheCookie: 'EtherDelta_ordersCache',
   defaultToken: 1,
   defaultBase: 0,
   etherscanAPIKey: '44JPUFZGPI8GUIG8XR5ZRRF7WSE2XJVS1T',
@@ -1208,7 +1209,8 @@ configs["2"] = {
   userCookie: 'EtherDelta_testnet',
   eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
   gitterCacheCookie: 'EtherDelta_gitterCache_testnet',
-  deadOrdersCookie: 'EtherDelta_deadOrders_testnet',
+  deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache_testnet',
+  ordersCacheCookie: 'EtherDelta_ordersCache_testnet',
   defaultToken: 0,
   defaultBase: 1,
   etherscanAPIKey: '44JPUFZGPI8GUIG8XR5ZRRF7WSE2XJVS1T',
@@ -1454,6 +1456,13 @@ Main.loadEvents = function(callback) {
           newEvents++;
           event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
           eventsCache[event.transactionHash+event.logIndex] = event;
+          //users with orders to update
+          if (event.event=='Trade') {
+            usersWithOrdersToUpdate[event.args.give] = true;
+            usersWithOrdersToUpdate[event.args.get] = true;
+          } else if (event.event=='Deposit' || event.event=='Withdraw' || event.event=='Cancel') {
+            usersWithOrdersToUpdate[event.args.user] = true;
+          }
         }
       })
       Main.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
@@ -1830,35 +1839,44 @@ Main.getOrders = function(callback) {
         //sell
         order = {amount: -rawOrder.amountGive, price: rawOrder.amountGet.div(rawOrder.amountGive).mul(Main.getDivisor(rawOrder.tokenGive)).div(Main.getDivisor(rawOrder.tokenGet)), id: rawOrder.id, order: rawOrder};
       }
-      if (order && !deadOrders[order.id]) orders.push(order);
+      if (order && !deadOrdersCache[order.id]) orders.push(order);
     });
     //get available volumes
     async.map(orders,
       function(order, callbackMap) {
         if (blockNumber<Number(order.order.expires)) {
-          utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-            if (!err) {
-              if (order.amount>=0) {
-                order.availableVolume = result;
-                order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
+          if (!ordersCache[order.id] || usersWithOrdersToUpdate[order.order.user]) {
+            utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
+              if (!err) {
+                if (order.amount>=0) {
+                  order.availableVolume = result;
+                  order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
+                } else {
+                  order.availableVolume = result.div(order.price).mul(Main.getDivisor(order.order.tokenGive)).div(Main.getDivisor(order.order.tokenGet));
+                  order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
+                }
+                ordersCache[order.id] = {availableVolume: order.availableVolume.toNumber(), ethAvailableVolume: order.ethAvailableVolume};
+                callbackMap(null, order);
               } else {
-                order.availableVolume = result.div(order.price).mul(Main.getDivisor(order.order.tokenGive)).div(Main.getDivisor(order.order.tokenGet));
-                order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
+                callbackMap(null, undefined);
               }
-              callbackMap(null, order);
-            } else {
-              callbackMap(null, undefined);
-            }
-          });
+            });
+          } else {
+            order.availableVolume = ordersCache[order.id].availableVolume;
+            order.ethAvailableVolume = ordersCache[order.id].ethAvailableVolume;
+            callbackMap(null, order);
+          }
         } else {
-          deadOrders[order.id] = true;
+          deadOrdersCache[order.id] = true;
           callbackMap(null, undefined);
         }
       },
       function(err, orders){
         orders = orders.filter(function(x){return x!=undefined});
-        //save dead orders to storage
-        Main.createCookie(config.deadOrdersCookie, JSON.stringify(deadOrders), 999);
+        //save orders and dead orders to storage
+        Main.createCookie(config.ordersCacheCookie, JSON.stringify(ordersCache), 999);
+        Main.createCookie(config.deadOrdersCacheCookie, JSON.stringify(deadOrdersCache), 999);
+        usersWithOrdersToUpdate = {};
         callback(orders, blockNumber);
       }
     );
@@ -2286,7 +2304,8 @@ Main.displayTokenGuide = function(name) {
 Main.resetCaches = function() {
   Main.eraseCookie(config.eventsCacheCookie);
   Main.eraseCookie(config.gitterCacheCookie);
-  Main.eraseCookie(config.deadOrdersCookie);
+  Main.eraseCookie(config.deadOrdersCacheCookie);
+  Main.eraseCookie(config.ordersCacheCookie);
   location.reload();
 }
 Main.loading = function(callback) {
@@ -2397,26 +2416,24 @@ var selectedBase;
 var cookie;
 var connection = undefined;
 var nonce = undefined;
-var eventsCache = {};
-var lastRefresh = undefined;
 var price = undefined;
 var priceUpdated = Date.now();
 var contractEtherDelta = undefined;
 var contractToken = undefined;
+var eventsCache = {};
 var gitterMessagesCache = {};
-var deadOrders = {};
+var deadOrdersCache = {};
+var ordersCache = {};
 var publishingOrders = false;
 var pendingTransactions = [];
 var defaultdecimals = new BigNumber(1000000000000000000);
-var loadedEvents = false;
-var loadedBalances = false;
 var language = 'en';
 var minOrderSize = 0.1;
-var oauth = undefined;
 var messageToSend = undefined;
 var blockTimeSnapshot = undefined;
 var translator = undefined;
 var secondsPerBlock = 14;
+var usersWithOrdersToUpdate = {};
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') { //metamask situation
   web3 = new Web3(web3.currentProvider);
@@ -2457,9 +2474,14 @@ web3.version.getNetwork(function(error, version){
   var eventsCacheCookie = Main.readCookie(config.eventsCacheCookie);
   if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
   //dead orders cookie
-  var deadOrdersCookie = Main.readCookie(config.deadOrdersCookie);
-  if (deadOrdersCookie) {
-    deadOrders = JSON.parse(deadOrdersCookie);
+  var deadOrdersCacheCookie = Main.readCookie(config.deadOrdersCacheCookie);
+  if (deadOrdersCacheCookie) {
+    deadOrdersCache = JSON.parse(deadOrdersCacheCookie);
+  }
+  //orders cookie
+  var ordersCacheCookie = Main.readCookie(config.ordersCacheCookie);
+  if (ordersCacheCookie) {
+    ordersCache = JSON.parse(ordersCacheCookie);
   }
   //get accounts
   web3.eth.defaultAccount = config.ethAddr;
