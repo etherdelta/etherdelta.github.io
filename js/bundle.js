@@ -2325,6 +2325,7 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
       [
         function(callback) {
           if (initMarket) {
+            ordersCache = {};
             if (token) selectedToken = token;
             if (base) selectedBase = base;
             connection = undefined;
