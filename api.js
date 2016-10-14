@@ -16,12 +16,6 @@ API.init = function(callback, allContracts, path) {
   self.config = config;
   self.utility = utility;
 
-  //path
-  if (path) {
-    self.config.contractEtherDelta = path + self.config.contractEtherDelta;
-    self.config.contractToken= path + self.config.contractToken;
-  }
-
   //web3
   self.web3 = new Web3();
   self.web3.eth.defaultAccount = self.config.ethAddr;
@@ -36,6 +30,12 @@ API.init = function(callback, allContracts, path) {
       }
     } catch(err) {
       self.web3.setProvider(undefined);
+    }
+
+    //path
+    if (path) {
+      self.config.contractEtherDelta = path + self.config.contractEtherDelta;
+      self.config.contractToken= path + self.config.contractToken;
     }
 
     //contracts

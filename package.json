@@ -6,7 +6,7 @@
     "ethereumjs-abi": "^0.6.4",
     "ethereumjs-testrpc": "^1.2.1",
     "ethereumjs-tx": "^1.1.1",
-    "ethereumjs-util": "^4.4.1",
+    "ethereumjs-util": "^4.5.0",
     "fs": "^0.0.2",
     "gaussian": "^1.1.0",
     "js-sha256": "^0.3.0",
