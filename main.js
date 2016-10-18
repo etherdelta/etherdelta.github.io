@@ -135,7 +135,6 @@ Main.addressLink = function(address) {
   return 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+address;
 }
 Main.contractAddr = function(addr) {
-  gitterMessagesCache = {}; //clear gitter message cache
   config.contractEtherDeltaAddr = addr;
   Main.refresh(function(){}, true, true);
 }
@@ -224,66 +223,63 @@ Main.loadEvents = function(callback) {
     });
   });
 }
-Main.displayMyTransactions = function(callback) {
-  //orders
-  Main.getOrders(function(orders, blockNumber) {
-    //only include orders by the selected user
-    orders = orders.filter(function(order){return addrs[selectedAccount].toLowerCase()==order.order.user.toLowerCase()});
-    //final order filtering and sorting
-    var buyOrders = orders.filter(function(x){return x.amount>0});
-    var sellOrders = orders.filter(function(x){return x.amount<0});
-    sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
-    buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
-    //events
-    var myEvents = [];
-    var events = Object.values(eventsCache);
-    events.forEach(function(event){
-      if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr && (event.args.get.toLowerCase()==addrs[selectedAccount].toLowerCase() || event.args.give.toLowerCase()==addrs[selectedAccount].toLowerCase())) {
-        var trade;
-        if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
-          if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
-            //sell
-            trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), buyer: event.args.get, seller: event.args.give};
-          } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
-            //buy
-            trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), buyer: event.args.give, seller: event.args.get};
-          }
+Main.displayMyTransactions = function(orders, blockNumber, callback) {
+  //only include orders by the selected user
+  orders = orders.filter(function(order){return addrs[selectedAccount].toLowerCase()==order.order.user.toLowerCase()});
+  //final order filtering and sorting
+  var buyOrders = orders.filter(function(x){return x.amount>0});
+  var sellOrders = orders.filter(function(x){return x.amount<0});
+  sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
+  buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
+  //events
+  var myEvents = [];
+  var events = Object.values(eventsCache);
+  events.forEach(function(event){
+    if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr && (event.args.get.toLowerCase()==addrs[selectedAccount].toLowerCase() || event.args.give.toLowerCase()==addrs[selectedAccount].toLowerCase())) {
+      var trade;
+      if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
+        if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
+          //sell
+          trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), buyer: event.args.get, seller: event.args.give};
+        } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
+          //buy
+          trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), buyer: event.args.give, seller: event.args.get};
         }
-        if (trade) {
-          var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-          myEvents.push({trade: trade, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
-        }
-      } else if (event.event=='Deposit' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
-        var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-        var deposit = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
-        myEvents.push({deposit: deposit, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
-      } else if (event.event=='Withdraw' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
-        var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-        var withdraw = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
-        myEvents.push({withdraw: withdraw, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
       }
-    });
-    myEvents.sort(function(a,b){ return b.id - a.id });
-    //pending transactions
-    async.map(pendingTransactions,
-      function(tx, callbackMap) {
-        utility.txReceipt(web3, tx.txHash, function(err, result){
-          if (!err && result && result.blockNumber) {
-            callbackMap(null, undefined);
-          } else {
-            callbackMap(null, tx);
-          }
-        });
-      },
-      function(err, results) {
-        pendingTransactions = results.filter(function(x){return x!=undefined});
-        //display the template
-        Main.ejs(config.homeURL+'/templates/'+'my_trades.ejs', 'my_trades', {translator: translator, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents, pendingTransactions: pendingTransactions, blockNumber: blockNumber});
-        Main.ejs(config.homeURL+'/templates/'+'my_orders.ejs', 'my_orders', {translator: translator, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
-        callback();
+      if (trade) {
+        var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+        myEvents.push({trade: trade, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
       }
-    );
+    } else if (event.event=='Deposit' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
+      var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+      var deposit = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
+      myEvents.push({deposit: deposit, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+    } else if (event.event=='Withdraw' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
+      var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+      var withdraw = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
+      myEvents.push({withdraw: withdraw, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+    }
   });
+  myEvents.sort(function(a,b){ return b.id - a.id });
+  //pending transactions
+  async.map(pendingTransactions,
+    function(tx, callbackMap) {
+      utility.txReceipt(web3, tx.txHash, function(err, result){
+        if (!err && result && result.blockNumber) {
+          callbackMap(null, undefined);
+        } else {
+          callbackMap(null, tx);
+        }
+      });
+    },
+    function(err, results) {
+      pendingTransactions = results.filter(function(x){return x!=undefined});
+      //display the template
+      Main.ejs(config.homeURL+'/templates/'+'my_trades.ejs', 'my_trades', {translator: translator, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, myEvents: myEvents, pendingTransactions: pendingTransactions, blockNumber: blockNumber});
+      Main.ejs(config.homeURL+'/templates/'+'my_orders.ejs', 'my_orders', {translator: translator, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
+      callback();
+    }
+  );
 }
 Main.displayVolumes = function(callback) {
   var tokenVolumes = {};
@@ -558,127 +554,80 @@ Main.lineChart = function(elem, title, xtype, ytype, xtitle, ytitle, data) {
   });
 }
 Main.getOrders = function(callback) {
-  utility.blockNumber(web3, function(err, blockNumber) {
-    var rawOrders = [];
-    //get orders from gitter messages
-    var expectedKeys = JSON.stringify(['amountGet','amountGive','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
-    Object.keys(gitterMessagesCache).forEach(function(id) {
+  utility.getURL(config.apiServer+'/orders', function(err, result){
+    if (!err) {
       try {
-        var message = JSON.parse(JSON.stringify(gitterMessagesCache[id]));
-        for (key in message) {
-          if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
-        }
-        if (typeof(message)=='object' && JSON.stringify(Object.keys(message).sort())==expectedKeys) {
-          var rawOrder = message;
-          rawOrder.id = id;
-          rawOrders.push(rawOrder);
-        }
+        result = JSON.parse(result);
+        var blockNumber = result.blockNumber;
+        var orders = result.orders;
+        orders.forEach(function(x){
+          Object.assign(x, {
+            price: new BigNumber(x.price),
+            // amount: new BigNumber(x.amount),
+            // availableVolume: new BigNumber(x.availableVolume),
+            // ethAvailableVolume: x.ethAvailableVolume,
+            order: Object.assign(x.order, {
+              amountGet: new BigNumber(x.order.amountGet),
+              amountGive: new BigNumber(x.order.amountGive),
+              expires: Number(x.order.expires),
+              nonce: Number(x.order.nonce),
+              tokenGet: x.order.tokenGet,
+              tokenGive: x.order.tokenGive,
+              user: x.order.user,
+              r: x.order.r,
+              s: x.order.s,
+              v: Number(x.order.v),
+            })
+          });
+        });
+        orders = orders.filter(function(x){return (x.order.tokenGet==selectedToken.addr && x.order.tokenGive==selectedBase.addr && x.amount>0) || (x.order.tokenGive==selectedToken.addr && x.order.tokenGet==selectedBase.addr && x.amount<0)})
+        callback(null, {orders: orders, blockNumber: blockNumber});
       } catch (err) {
+        callback(err, undefined);
       }
-    });
-    //get orders from events
-    var events = Object.values(eventsCache);
-    events.forEach(function(event){
-      if (event.event=='Order' && event.address==config.contractEtherDeltaAddr) {
-        var rawOrder = event.args;
-        rawOrder.id = event.blockNumber*1000+event.transactionIndex;
-        rawOrders.push(rawOrder);
-      }
-    });
-    //filter orders
-    var orders = [];
-    rawOrders.forEach(function(rawOrder){
-      var order;
-      if (rawOrder.tokenGet==selectedToken.addr && rawOrder.tokenGive==selectedBase.addr) {
-        //buy
-        order = {amount: rawOrder.amountGet, price: rawOrder.amountGive.div(rawOrder.amountGet).mul(Main.getDivisor(rawOrder.tokenGet)).div(Main.getDivisor(rawOrder.tokenGive)), id: rawOrder.id, order: rawOrder};
-      } else if (rawOrder.tokenGet==selectedBase.addr && rawOrder.tokenGive==selectedToken.addr) {
-        //sell
-        order = {amount: -rawOrder.amountGive, price: rawOrder.amountGet.div(rawOrder.amountGive).mul(Main.getDivisor(rawOrder.tokenGive)).div(Main.getDivisor(rawOrder.tokenGet)), id: rawOrder.id, order: rawOrder};
-      }
-      if (order && !deadOrdersCache[order.id]) orders.push(order);
-    });
-    //get available volumes
-    async.map(orders,
-      function(order, callbackMap) {
-        if (blockNumber<Number(order.order.expires)) {
-          if (!ordersCache[order.id] || usersWithOrdersToUpdate[order.order.user]) {
-            utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-              if (!err) {
-                if (order.amount>=0) {
-                  order.availableVolume = result;
-                  order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
-                } else {
-                  order.availableVolume = result.div(order.price).mul(Main.getDivisor(order.order.tokenGive)).div(Main.getDivisor(order.order.tokenGet));
-                  order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), Main.getDivisor(selectedToken));
-                }
-                ordersCache[order.id] = {availableVolume: order.availableVolume.toNumber(), ethAvailableVolume: order.ethAvailableVolume};
-                callbackMap(null, order);
-              } else {
-                callbackMap(null, undefined);
-              }
-            });
-          } else {
-            order.availableVolume = ordersCache[order.id].availableVolume;
-            order.ethAvailableVolume = ordersCache[order.id].ethAvailableVolume;
-            callbackMap(null, order);
-          }
-        } else {
-          deadOrdersCache[order.id] = true;
-          callbackMap(null, undefined);
-        }
-      },
-      function(err, orders){
-        orders = orders.filter(function(x){return x!=undefined});
-        //save orders and dead orders to storage
-        Main.createCookie(config.ordersCacheCookie, JSON.stringify(ordersCache), 999);
-        Main.createCookie(config.deadOrdersCacheCookie, JSON.stringify(deadOrdersCache), 999);
-        usersWithOrdersToUpdate = {};
-        callback(orders, blockNumber);
-      }
-    );
+    } else {
+      callback(err, undefined);
+    }
   });
 }
-Main.displayOrderbook = function(callback) {
-  Main.getOrders(function(orders, blockNumber) {
-    //remove orders below the min order limit
-    orders = orders.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=minOrderSize});
-    //final order filtering and sorting
-    var buyOrders = orders.filter(function(x){return x.amount>0});
-    var sellOrders = orders.filter(function(x){return x.amount<0});
-    sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
-    buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
-    //get depth data
-    var depthData = [];
-    var median = 0;
-    if (buyOrders.length>0) median += buyOrders[0].price.toNumber();
-    if (sellOrders.length>0) median += sellOrders[sellOrders.length-1].price.toNumber();
-    if (buyOrders.length>0 && sellOrders.length>0) median /= 2;
-    var cumul = 0;
-    for (var i=0; i<buyOrders.length; i++){
-      var price = buyOrders[i].price.toNumber();
-      var volume = Number(utility.weiToEth(Math.abs(buyOrders[i].availableVolume), Main.getDivisor(selectedToken)));
-      cumul += volume;
-      depthData.unshift([price, cumul, 0]);
-      if (i==buyOrders.length-1) depthData.unshift([price*0.9, cumul, 0]);
-    }
-    cumul = 0;
-    for (var i=sellOrders.length-1; i>=0; i--) {
-      var price = sellOrders[i].price.toNumber();
-      var volume = Number(utility.weiToEth(Math.abs(sellOrders[i].availableVolume), Main.getDivisor(selectedToken)));
-      depthData.push([price, 0, cumul]);
-      cumul += volume;
-      if (i==0) depthData.push([price*1.1, 0, cumul]);
-    }
-    depthData.unshift([{label: "Price", type: 'number'}, {label: "Cumulative bid size", type: 'number'}, {label: "Cumulative offer size", type: 'number'}]);
-    // // top 25 bids and offers:
-    // buyOrders = buyOrders.slice(0,25);
-    // sellOrders = sellOrders.slice(-25);
-    Main.ejs(config.homeURL+'/templates/'+'order_book.ejs', 'order_book', {translator: translator, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
-    $('#order_book_scroll')[0].scrollTop = $('#order_book_mid').position().top-$('#order_book_scroll')[0].clientHeight/2-$('#order_book_mid')[0].clientHeight;
-    Main.depthChart('chart_depth', '', '', '', depthData, median*0.25, median*1.75);
-    callback();
-  });
+Main.displayOrderbook = function(orders, blockNumber, callback) {
+  //remove orders below the min order limit
+  orders = orders.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=minOrderSize});
+  //final order filtering and sorting
+  var buyOrders = orders.filter(function(x){return x.amount>0});
+  var sellOrders = orders.filter(function(x){return x.amount<0});
+  sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
+  buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
+  //get depth data
+  var depthData = [];
+  var median = 0;
+  if (buyOrders.length>0) median += buyOrders[0].price.toNumber();
+  if (sellOrders.length>0) median += sellOrders[sellOrders.length-1].price.toNumber();
+  if (buyOrders.length>0 && sellOrders.length>0) median /= 2;
+  var cumul = 0;
+  for (var i=0; i<buyOrders.length; i++){
+    var price = buyOrders[i].price.toNumber();
+    var volume = Number(utility.weiToEth(Math.abs(buyOrders[i].availableVolume), Main.getDivisor(selectedToken)));
+    cumul += volume;
+    depthData.unshift([price, cumul, 0]);
+    if (i==buyOrders.length-1) depthData.unshift([price*0.9, cumul, 0]);
+  }
+  cumul = 0;
+  for (var i=sellOrders.length-1; i>=0; i--) {
+    var price = sellOrders[i].price.toNumber();
+    var volume = Number(utility.weiToEth(Math.abs(sellOrders[i].availableVolume), Main.getDivisor(selectedToken)));
+    depthData.push([price, 0, cumul]);
+    cumul += volume;
+    if (i==0) depthData.push([price*1.1, 0, cumul]);
+  }
+  depthData.unshift([{label: "Price", type: 'number'}, {label: "Cumulative bid size", type: 'number'}, {label: "Cumulative offer size", type: 'number'}]);
+  // // top 25 bids and offers:
+  // buyOrders = buyOrders.slice(0,25);
+  // sellOrders = sellOrders.slice(-25);
+  Main.ejs(config.homeURL+'/templates/'+'order_book.ejs', 'order_book', {translator: translator, selectedAddr: addrs[selectedAccount], selectedToken: selectedToken, selectedBase: selectedBase, buyOrders: buyOrders, sellOrders: sellOrders, blockNumber: blockNumber});
+  $('#order_book_scroll')[0].scrollTop = $('#order_book_mid').position().top-$('#order_book_scroll')[0].clientHeight/2-$('#order_book_mid')[0].clientHeight;
+  Main.depthChart('chart_depth', '', '', '', depthData, median*0.25, median*1.75);
+  callback();
 }
 Main.displayTokensAndBases = function(callback) {
   Main.ejs(config.homeURL+'/templates/'+'tokens_dropdown.ejs', 'tokens', {tokens: config.tokens, selectedToken: selectedToken});
@@ -877,9 +826,9 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
         if (err) {
           Main.alertError('Could not sign order because of an error: '+err);
         } else {
-          // Send order to Gitter channel:
+          // Send order to offchain book:
           var order = {tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
-          utility.postGitterMessage(JSON.stringify(order), function(err, result){
+          utility.postURL(config.apiServer+'/message', {message: JSON.stringify(order)}, function(err, result){
             if (!err) {
               Main.alertSuccess('You sent an order to the order book!');
               Main.refresh(function(){});
@@ -936,15 +885,6 @@ Main.trade = function(kind, order, amount) {
     });
   });
 }
-Main.getGitterMessages = function(callback) {
-  utility.getGitterMessages(gitterMessagesCache, function(err, result){
-    if (!err) {
-      gitterMessagesCache = result.gitterMessages;
-      Main.createCookie(config.gitterCacheCookie, JSON.stringify(gitterMessagesCache), 999);
-    }
-    callback();
-  });
-}
 Main.blockTime = function(block) {
   return new Date(blockTimeSnapshot.date.getTime()+((block - blockTimeSnapshot.blockNumber)*1000*secondsPerBlock));
 }
@@ -952,8 +892,7 @@ Main.addPending = function(err, tx) {
   if (!err) {
     tx.txLink = 'https://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash;
     pendingTransactions.push(tx);
-    Main.displayMyTransactions(function(){});
-    // Main.refresh(function(){}, true, true);
+    Main.refresh(function(){}, true, true);
   }
 }
 Main.updateUrl = function() {
@@ -1045,22 +984,21 @@ Main.displayBuySell = function(callback) {
 Main.displayTokenGuide = function(name) {
   var matchingTokens = config.tokens.filter(function(x){return name==x.name});
   if (matchingTokens.length==1) {
-      var token = matchingTokens[0];
-      $('#token_guide_title').html(name);
-      $('#token_guide_body').html('');
-      var tokenLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/token/'+token.addr;
-      Main.ejs(config.homeURL+'/token_guides/details.ejs', 'token_guide_details', {token: token, tokenLink: tokenLink});
-      try {
-        Main.ejs(config.homeURL+'/token_guides/'+name+'.ejs', 'token_guide_body', {token: token, tokenLink: tokenLink});
-      } catch (err) {
-        console.log(err);
-      }
-      $('#tokenModal').modal('show');
+    var token = matchingTokens[0];
+    $('#token_guide_title').html(name);
+    $('#token_guide_body').html('');
+    var tokenLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/token/'+token.addr;
+    Main.ejs(config.homeURL+'/token_guides/details.ejs', 'token_guide_details', {token: token, tokenLink: tokenLink});
+    try {
+      Main.ejs(config.homeURL+'/token_guides/'+name+'.ejs', 'token_guide_body', {token: token, tokenLink: tokenLink});
+    } catch (err) {
+      console.log(err);
+    }
+    $('#tokenModal').modal('show');
   }
 }
 Main.resetCaches = function() {
   Main.eraseCookie(config.eventsCacheCookie);
-  Main.eraseCookie(config.gitterCacheCookie);
   Main.eraseCookie(config.deadOrdersCacheCookie);
   Main.eraseCookie(config.ordersCacheCookie);
   location.reload();
@@ -1121,29 +1059,34 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
                 });
               },
               function(callback) {
-                Main.getGitterMessages(function(){
-                  callback(null, undefined);
+                Main.getOrders(function(err, result) {
+                  if (!err) {
+                    async.parallel(
+                      [
+                        function(callback) {
+                          Main.displayMyTransactions(result.orders, result.blockNumber, function(){
+                            callback(null, undefined);
+                          });
+                        },
+                        function(callback) {
+                          Main.displayOrderbook(result.orders, result.blockNumber, function(){
+                            callback(null, undefined);
+                          });
+                        }
+                      ],
+                      function(err, results) {
+                        callback(null, undefined);
+                      }
+                    );
+                  } else {
+                    console.log('Error getting order book');
+                    callback(null, undefined);
+                  }
                 });
               }
             ],
             function(err, results) {
-              async.parallel(
-                [
-                  function(callback) {
-                    Main.displayMyTransactions(function(){
-                      callback(null, undefined);
-                    });
-                  },
-                  function(callback) {
-                    Main.displayOrderbook(function(){
-                      callback(null, undefined);
-                    });
-                  }
-                ],
-                function(err, results) {
-                  callback(null, undefined);
-                }
-              );
+              callback(null, undefined);
             }
           );
         }
@@ -1191,7 +1134,6 @@ var priceUpdated = Date.now();
 var contractEtherDelta = undefined;
 var contractToken = undefined;
 var eventsCache = {};
-var gitterMessagesCache = {};
 var deadOrdersCache = {};
 var ordersCache = {};
 var publishingOrders = false;
@@ -1235,11 +1177,6 @@ web3.version.getNetwork(function(error, version){
   }
   //translation
   translator = $('body').translate({lang: language, t: translations});
-  //gitter messages cache cookie
-  var gitterCookie = Main.readCookie(config.gitterCacheCookie);
-  if (gitterCookie) {
-    gitterMessagesCache = JSON.parse(gitterCookie);
-  }
   //events cache cookie
   var eventsCacheCookie = Main.readCookie(config.eventsCacheCookie);
   if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);

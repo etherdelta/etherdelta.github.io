@@ -47,14 +47,11 @@ configs["1"] = {
     {token: 'TRMPY', base: 'ETH'},
     {token: 'TRMPN', base: 'ETH'},
   ],
-  gitterHost: 'https://api.gitter.im',
-  gitterStream: 'stream.gitter.im',
-  gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
-  gitterRoomID: '57756375c2f0db084a20cf77',
   chatServer: 'https://etherdeltachat.herokuapp.com:443',
+  apiServer: 'https://api.etherdelta.com',
+  // apiServer: 'http://localhost:3000',
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
-  gitterCacheCookie: 'EtherDelta_gitterCache',
   deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
   ordersCacheCookie: 'EtherDelta_ordersCache',
   defaultToken: 1,
@@ -90,14 +87,11 @@ configs["2"] = {
     {token: 'ETH', base: 'EUSD100'},
     {token: 'BKR', base: 'ETH'},
   ],
-  gitterHost: 'https://api.gitter.im',
-  gitterStream: 'stream.gitter.im',
-  gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
-  gitterRoomID: '57756375c2f0db084a20cf77',
   chatServer: 'https://etherdeltachat.herokuapp.com:443',
+  apiServer: 'https://api.etherdelta.com',
+  // apiServer: 'http://localhost:3000',
   userCookie: 'EtherDelta_testnet',
   eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
-  gitterCacheCookie: 'EtherDelta_gitterCache_testnet',
   deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache_testnet',
   ordersCacheCookie: 'EtherDelta_ordersCache_testnet',
   defaultToken: 0,
@@ -121,6 +115,8 @@ if (typeof(window)!='undefined') {
   if (network) {
     index = network;
   }
+} else if (global.network) {
+  index = global.network;
 }
 var config = configs[index];
 

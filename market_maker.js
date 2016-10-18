@@ -12,7 +12,7 @@ var cli = [
 var cliOptions = commandLineArgs(cli);
 
 if (cliOptions.help) {
-	console.log(cli.getUsage());
+	console.log(cli);
 } else if (cliOptions.address) {
 
 	API.init(function(err,result){
@@ -26,7 +26,9 @@ if (cliOptions.help) {
 				API.getEtherDeltaTokenBalances(cliOptions.address, function(err, result){
 					var balances = result;
 					API.getOrderBook(function(err, result){
+						console.log(err)
 						if (!err) {
+							console.log(result)
 							async.eachSeries(pairs,
 								function(pair, callbackEach) {
 									var selectedToken = undefined;
