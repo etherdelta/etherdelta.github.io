@@ -1182,6 +1182,7 @@ configs["1"] = {
   ],
   chatServer: 'https://etherdeltachat.herokuapp.com:443',
   apiServer: 'https://api.etherdelta.com',
+  // apiServer: 'http://localhost:3000',
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
@@ -1220,8 +1221,8 @@ configs["2"] = {
     {token: 'BKR', base: 'ETH'},
   ],
   chatServer: 'https://etherdeltachat.herokuapp.com:443',
-  // apiServer: 'https://api.etherdelta.com',
-  apiServer: 'http://localhost:3000',
+  apiServer: 'https://api.etherdelta.com',
+  // apiServer: 'http://localhost:3000',
   userCookie: 'EtherDelta_testnet',
   eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
   deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache_testnet',
@@ -2086,6 +2087,9 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
       var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
       var hash = sha256(new Buffer(condensed,'hex'));
       utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
+        console.log(hash)
+        console.log(sig)
+        // err = 'TEMP'
         if (err) {
           Main.alertError('Could not sign order because of an error: '+err);
         } else {

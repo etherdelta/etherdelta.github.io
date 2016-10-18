@@ -422,7 +422,7 @@ API.getOrders = function(callback) {
       async.map(orders,
         function(order, callbackMap) {
           if (blockNumber<Number(order.order.expires)) {
-            if (!self.ordersCache[order.id+(order.amount>=0 ? "buy" : "sell")] || self.usersWithOrdersToUpdate[order.order.user]) {
+            if (!self.ordersCache[order.id+(order.amount>=0 ? "buy" : "sell")] || self.usersWithOrdersToUpdate[order.order.user] || true) {
               utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
                 if (!err) {
                   if (order.amount>=0) {
