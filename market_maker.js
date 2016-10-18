@@ -24,6 +24,7 @@ if (cliOptions.help) {
 		async.forever(
 	    function(nextForever) {
 				API.getEtherDeltaTokenBalances(cliOptions.address, function(err, result){
+					console.log(result)
 					var balances = result;
 					API.getOrderBook(function(err, result){
 						console.log(err)

@@ -37,9 +37,9 @@ Main.alertSuccess = function(message) {
   alertify.success(message);
 }
 Main.alertTxResult = function(err, result) {
-  if (result.txHash) {
+  if (!err && result.txHash!='0x0000000000000000000000000000000000000000000000000000000000000000') {
     Main.alertDialog('You just created an Ethereum transaction. Track its progress here: <a href="http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+result.txHash+'" target="_blank">'+result.txHash+'</a>.');
-  } else {
+  } else if (err) {
     Main.alertError('You tried to send an Ethereum transaction but there was an error: '+err);
   }
 }
@@ -714,7 +714,7 @@ Main.deposit = function(addr, amount) {
     return;
   }
   if (addr=='0x0000000000000000000000000000000000000000') {
-    utility.getBalance(web3, addr, function(err, result) {
+    utility.getBalance(web3, addrs[selectedAccount], function(err, result) {
       if (amount > result && amount < result * 1.1) amount = result;
       if (amount <= result) {
         utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'deposit', [{gas: token.gasDeposit, value: amount}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
@@ -889,7 +889,7 @@ Main.blockTime = function(block) {
   return new Date(blockTimeSnapshot.date.getTime()+((block - blockTimeSnapshot.blockNumber)*1000*secondsPerBlock));
 }
 Main.addPending = function(err, tx) {
-  if (!err) {
+  if (!err && tx.txHash!='0x0000000000000000000000000000000000000000000000000000000000000000') {
     tx.txLink = 'https://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash;
     pendingTransactions.push(tx);
     Main.refresh(function(){}, true, true);
