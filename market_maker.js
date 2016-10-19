@@ -24,12 +24,9 @@ if (cliOptions.help) {
 		async.forever(
 	    function(nextForever) {
 				API.getEtherDeltaTokenBalances(cliOptions.address, function(err, result){
-					console.log(result)
 					var balances = result;
-					API.getOrderBook(function(err, result){
-						console.log(err)
+					API.getOrders(function(err, result){
 						if (!err) {
-							console.log(result)
 							async.eachSeries(pairs,
 								function(pair, callbackEach) {
 									var selectedToken = undefined;
@@ -39,10 +36,13 @@ if (cliOptions.help) {
 										selectedToken = API.getToken(pairSplit[0]);
 										selectedBase = API.getToken(pairSplit[1]);
 									}
-									if (selectedToken && selectedBase) {
-									}
-									var buyOrders = result.buyOrders.filter(function(x){return x.order.tokenGet==selectedToken.addr && x.order.tokenGive==selectedBase.addr});
-				          var sellOrders = result.sellOrders.filter(function(x){return x.order.tokenGive==selectedToken.addr && x.order.tokenGet==selectedBase.addr});
+									//final order filtering and sorting
+								  var buyOrders = result.orders.filter(function(x){return x.amount>0});
+								  var sellOrders = result.orders.filter(function(x){return x.amount<0});
+								  sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
+								  buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
+									buyOrders = buyOrders.filter(function(x){return x.order.tokenGet==selectedToken.addr && x.order.tokenGive==selectedBase.addr});
+				          sellOrders = sellOrders.filter(function(x){return x.order.tokenGive==selectedToken.addr && x.order.tokenGet==selectedBase.addr});
 				          var myBuyOrders = buyOrders.filter(function(x){return x.order.user.toLowerCase()==cliOptions.address.toLowerCase()});
 				          var mySellOrders = sellOrders.filter(function(x){return x.order.user.toLowerCase()==cliOptions.address.toLowerCase()});
 				          var myBuySize = myBuyOrders.map(function(x){return x.availableVolume * x.price.toNumber() * API.getDivisor(selectedBase)/API.getDivisor(selectedToken)}).reduce(function(a,b){return a+b},0);
