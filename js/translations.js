@@ -14,7 +14,8 @@ var translations = {
   },
   description:{
     en:'EtherDelta is a decentralized exchange for Ethereum tokens.',
-    cn:'EtherDelta是无中心的以太坊交易平台。'
+    cn:'EtherDelta是去中心化的以太坊交易平台。'
+    // cn:'EtherDelta是无中心的以太坊交易平台。'
   },
   howto_videos:{
     en:'How-to videos',
@@ -26,8 +27,10 @@ var translations = {
   },
   only_7_days:{
     en:'Note: EtherDelta will only show transactions from the last 7 days.',
-    cn:'Note: EtherDelta will only show transactions from the last 7 days.'
+    cn:'Note: EtherDelta 只会显示近7天的交易记录'
+    // cn:'Note: EtherDelta will only show transactions from the last 7 days.'
   },
+
   announcements:{
     en:'Announcements',
     cn:'公告'
@@ -38,15 +41,18 @@ var translations = {
   },
   orders:{
     en:'Orders',
-    cn:'订单簿'
+    cn:'订单'
+    // cn:'订单簿'
   },
   follow_twitter:{
     en:'Follow us on Twitter',
-    cn:'跟Twitter'
+    cn:'订阅我们的Twitter'
+    // cn:'跟Twitter'
   },
   chat:{
     en:'Chat',
-    cn:'聊'
+    cn:'聊天'
+    // cn:'聊'
   },
   send:{
     en:'Send',
@@ -54,11 +60,13 @@ var translations = {
   },
   volume:{
     en:'Volume',
-    cn:'量'
+    cn:'交易量'
+    // cn:'量'
   },
   pair:{
     en:'Pair',
-    cn:'名称'
+    cn:'交易币种'
+    // cn:'名称'
   },
   produced_etherboost:{
     en:'Produced by Etherboost',
@@ -66,15 +74,18 @@ var translations = {
   },
   etherdelta_desc:{
     en:'EtherDelta &#8212; decentralized token exchange',
-    cn:'EtherDelta &#8212; 无中心交易'
+    cn:'EtherDelta &#8212; 去中心化交易'
+    // cn:'EtherDelta &#8212; 无中心交易'
   },
   etheropt_desc:{
     en:'EtherOpt &#8212; decentralized options exchange',
-    cn:'EtherOpt &#8212; 无中心期权交易'
+    cn:'EtherOpt &#8212; 去中心化期权交易'
+    // cn:'EtherOpt &#8212; 无中心期权交易'
   },
   predictiontoken_desc:{
     en:'PredictionToken &#8212; prediction market tokens',
-    cn:'PredictionToken &#8212; 预测市场币'
+    cn:'PredictionToken &#8212; 虚拟货币市场预测'
+    // cn:'PredictionToken &#8212; 预测市场币'
   },
   ethereumdollar_desc:{
     en:'EthereumDollar &#8212; stable dollar token',
@@ -86,11 +97,12 @@ var translations = {
   },
   name:{
     en:'Name',
-    cn:'币名称'
+    cn:'币种'
+    // cn:'币名称'
   },
-  divisor:{
-    en:'Divisor',
-    cn:'除数'
+  decimals:{
+    en:'Decimals',
+    cn:'小数位数'
   },
   go:{
     en:'Go',
@@ -118,11 +130,13 @@ var translations = {
   },
   amount_to_buy:{
     en:'Amount to buy',
-    cn:'买的量'
+    cn:'买入量'
+    // cn:'买的量'
   },
   amount_to_sell:{
     en:'Amount to sell',
-    cn:'卖的量'
+    cn:'卖出量'
+    // cn:'卖的量'
   },
   price:{
     en:'Price',
@@ -138,11 +152,13 @@ var translations = {
   },
   etherscan_contract:{
     en:'Etherscan contract',
-    cn:'Etherscan contract'
+    cn:'Etherscan 合约'
+    // cn:'Etherscan contract'
   },
   etherscan_address:{
     en:'Etherscan address',
-    cn:'Etherscan address'
+    cn:'Etherscan 地址'
+    // cn:'Etherscan address'
   },
   guides:{
     en:'Guides',
@@ -154,11 +170,13 @@ var translations = {
   },
   number_of_blocks:{
     en:'Number of blocks',
-    cn:'到期块数量'
+    cn:'过期区块数量'
+    // cn:'到期块数量'
   },
   expires:{
     en:'Expires',
-    cn:'到期块数量'
+    cn:'到期区块数量'
+    // cn:'到期块数量'
   },
   balances:{
     en:'Balances',
@@ -170,11 +188,13 @@ var translations = {
   },
   token:{
     en:'Token',
-    cn:'币'
+    cn:'币种'
+    // cn:'币'
   },
   tokens:{
     en:'Tokens',
-    cn:'币'
+    cn:'币种'
+    // cn:'币'
   },
   aug032016:{
     en:'August 3, 2016',
@@ -182,7 +202,8 @@ var translations = {
   },
   aug032016_announcement:{
     en:'EtherDelta has moved to a new smart contract. Go to the bottom of the page and switch to the old one if you have a balance there you need to withdraw.',
-    cn:'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。'
+    cn:'EtherDelta更新了智能合约。如果你要提取余额，请到本页底部转成旧的合约并进行提取。'
+    // cn:'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。'
   },
   aug302016:{
     en:'August 30, 2016',
@@ -190,7 +211,9 @@ var translations = {
   },
   aug302016_announcement:{
     en:'EtherDelta has moved to a new smart contract. Go to the bottom of the page and switch to the old one if you have a balance there you need to withdraw.',
-    cn:'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。'
+    cn:'EtherDelta更新了智能合约。如果你要提取余额，请到本页底部转成旧的合约并进行提取。'
+    // cn:'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。'
+
   },
   new_account:{
     en:'New account',
@@ -250,7 +273,8 @@ var translations = {
   },
   other_base:{
     en:'Other base',
-    cn:'其它币基'
+    cn:'其它支付币种'
+    // cn:'其它币基'
   },
   connection:{
     en:'Connection',
@@ -262,7 +286,8 @@ var translations = {
   },
   testnet:{
     en:'TESTNET',
-    cn:'TESTNET'
+    cn:'测试链'
+    // cn:'TESTNET'
   },
   metamask:{
     en:'MetaMask',
@@ -278,7 +303,8 @@ var translations = {
   },
   fees:{
     en:'Fees',
-    cn:'收费'
+    cn:'费用'
+    // cn:'收费'
   },
   connect_ethereum:{
     en:'Connect to Ethereum',
@@ -298,7 +324,8 @@ var translations = {
   },
   fee:{
     en:'Fee',
-    cn:'收费'
+    cn:'费用'
+    // cn:'收费'
   },
   maker:{
     en:'Maker',
@@ -322,7 +349,8 @@ var translations = {
   },
   only_fee_taker:{
     en:'The only fee is a Taker fee. Deposit, withdraw, and maker transactions are all free.',
-    cn:'只有Taker收费. 充值，提取，和Maker交易免费。'
+    cn:'收费仅对Taker. 充值，提现对Maker免费。'
+    // cn:'只有Taker收费. 充值，提取，和Maker交易免费。'
   },
   maker_fee_desc:{
     en:'A maker order is one that rests in the order book ("resting order"). To create a maker order, fill out the "Buy" or "Sell" form. Once you click "Buy" or "Sell," you will see your order appear in the order book. These orders are always free. This is to encourage market makers to add liquidity to the order book.',

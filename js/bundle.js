@@ -1451,6 +1451,7 @@ Main.selectLanguage = function(newLanguage) {
   language = newLanguage;
   window.title = translations.title[language];
   translator.lang(language);
+  Main.displayLanguages(function(){});
   Main.refresh(function(){}, true, true);
 }
 Main.loadEvents = function(callback) {
