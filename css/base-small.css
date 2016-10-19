@@ -1,0 +1,49 @@
+html, body {
+  height: auto;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+.row .no-float {
+  display: block;
+}
+.row .no-float:not(:last-child) {
+  border: 0;
+}
+.row {
+  height: auto;
+  display: block;
+}
+.row-container {
+  height: auto;
+}
+.row-box.fifty {
+  height: auto;
+}
+.row-box.thirty {
+  height: auto;
+}
+.row-box.seventy {
+  height: auto;
+}
+.row-box.forty {
+  height: auto;
+}
+.row-box.sixty {
+  height: auto;
+}
+.row-box.hundred {
+  height: auto;
+}
+
+.token-container {
+  width: 100%;
+  margin: 0 auto;
+}
+.token {
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+  font-size: 16px;
+  line-height: 100px;
+  border-radius: 100px;
+}
