@@ -963,7 +963,7 @@ Main.selectToken = function(addrOrToken, name, decimals) {
 }
 Main.selectBase = function(addrOrToken, name, decimals) {
   var base = Main.getToken(addrOrToken, name, decimals);
-  if (token) {
+  if (base) {
     Main.loading(function(){});
     Main.refresh(function(){}, true, true, selectedToken, base);
   }

@@ -88,6 +88,8 @@ configs["2"] = {
     {addr: '0xaf7d1722464786c0311d20ab7d98bee6a4b0f38d', name: 'HFYES', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000},
   ],
   pairs: [
+    {token: 'TESTTRMPY', base: 'ETH'},
+    {token: 'TESTTRMPN', base: 'ETH'},
     {token: 'ETH', base: 'EUSD100'},
     {token: 'BKR', base: 'ETH'},
   ],
