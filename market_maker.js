@@ -56,18 +56,19 @@ if (cliOptions.help) {
 									console.log('On buy orders', API.utility.weiToEth(myBuySize, API.getDivisor(selectedBase)), selectedBase.name);
 									console.log('On sell orders', API.utility.weiToEth(mySellSize, API.getDivisor(selectedToken)), selectedToken.name);
 									var orders = [];
+									//bids
 									if (myBuySize<balances[selectedBase.name]*0.75) {
 										var placedOrders = myBuyOrders.length;
 										var volumeToPlace = balances[selectedBase.name] - myBuySize;
 										var ordersToPlace = pair.ordersPerSide - placedOrders;
 										var bestPrice = pair.theo*(1-pair.minEdge);
 										if (sellOrders.length>0 && bestPrice>sellOrders[0].price) bestPrice = sellOrders[0].price*(1-pair.minEdge);
-										var worstPrice = bestPrice * Math.pow(1-pair.edgeStep,pair.ordersPerSide);
+										var worstPrice = bestPrice - pair.edgeStep*pair.ordersPerSide*pair.theo;
 										bestPrice = API.clip(bestPrice, pair.minPrice, pair.maxPrice);
 										worstPrice = API.clip(worstPrice, pair.minPrice, pair.maxPrice);
 										var myExistingPrices = myBuyOrders.map(function(x){return Number(x.price)});
 										var pricePoints = [];
-										for (var i=0; i<pair.ordersPerSide; i++) pricePoints.push(worstPrice + (bestPrice-worstPrice)*i/(pair.ordersPerSide-1));
+										for (var i=0; i<pair.ordersPerSide; i++) pricePoints.push(bestPrice - (bestPrice-worstPrice)*i/(pair.ordersPerSide));
 										while (placedOrders < pair.ordersPerSide) {
 											var price = pricePoints.reduce(function(a,b){
 												return myExistingPrices.map(function(x){return Math.abs(x-b)}).min()>myExistingPrices.map(function(x){return Math.abs(x-a)}).min() ? b : a
@@ -78,6 +79,7 @@ if (cliOptions.help) {
 											placedOrders += 1;
 										}
 									}
+									//offers
 									if (mySellSize<balances[selectedToken.name]*0.75) {
 										var placedOrders = mySellOrders.length;
 										var volumeToPlace = balances[selectedToken.name] - mySellSize;
@@ -86,10 +88,10 @@ if (cliOptions.help) {
 										if (buyOrders.length>0 && bestPrice<buyOrders[0].price) bestPrice = buyOrders[0].price*(1+pair.minEdge);
 										var worstPrice = bestPrice * Math.pow(1+pair.edgeStep,pair.ordersPerSide);
 										bestPrice = API.clip(bestPrice, pair.minPrice, pair.maxPrice);
-										worstPrice = API.clip(worstPrice, pair.minPrice, pair.maxPrice);
+										var worstPrice = bestPrice + pair.edgeStep*pair.ordersPerSide*pair.theo;
 										var myExistingPrices = mySellOrders.map(function(x){return Number(x.price)});
 										var pricePoints = [];
-										for (var i=0; i<pair.ordersPerSide; i++) pricePoints.push(worstPrice + (bestPrice-worstPrice)*i/(pair.ordersPerSide-1));
+										for (var i=0; i<pair.ordersPerSide; i++) pricePoints.push(bestPrice - (bestPrice-worstPrice)*i/(pair.ordersPerSide));
 										while (placedOrders < pair.ordersPerSide) {
 											var price = pricePoints.reduce(function(a,b){
 												return myExistingPrices.map(function(x){return Math.abs(x-b)}).min()>myExistingPrices.map(function(x){return Math.abs(x-a)}).min() ? b : a

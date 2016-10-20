@@ -36,11 +36,23 @@ Main.alertSuccess = function(message) {
   console.log(message);
   alertify.success(message);
 }
-Main.alertTxResult = function(err, result) {
-  if (!err && result.txHash!='0x0000000000000000000000000000000000000000000000000000000000000000') {
-    Main.alertDialog('You just created an Ethereum transaction. Track its progress here: <a href="http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+result.txHash+'" target="_blank">'+result.txHash+'</a>.');
-  } else if (err) {
+Main.alertTxResult = function(err, txs) {
+  if (!Array.isArray(txs)) txs = [txs];
+  if (err) {
     Main.alertError('You tried to send an Ethereum transaction but there was an error: '+err);
+  } else {
+    if (txs.length==1) {
+      var tx = txs[0];
+      if (tx.txHash && tx.txHash!='0x0000000000000000000000000000000000000000000000000000000000000000') {
+        Main.alertDialog('You just created an Ethereum transaction. Track its progress: <a href="http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash+'" target="_blank">'+tx.txHash+'</a>.');
+      }
+    } else if (txs.length>1){
+      var message = 'You just created Ethereum transactions. Track their progress: <br />';
+      txs.forEach(function(tx){
+        message += '<a href="http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash+'" target="_blank">'+tx.txHash+'</a><br />';
+      });
+      Main.alertDialog(message);
+    }
   }
 }
 Main.enableTooltips = function() {
@@ -735,13 +747,14 @@ Main.deposit = function(addr, amount) {
         utility.send(web3, contractToken, addr, 'approve', [config.contractEtherDeltaAddr, amount, {gas: token.gasApprove, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
           txHash = result.txHash;
           nonce = result.nonce;
-          Main.addPending(err, {txHash: result.txHash});
-          Main.alertTxResult(err, result);
+          var txs = [];
+          txs.push(result);
           utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'depositToken', [addr, amount, {gas: token.gasDeposit, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
             txHash = result.txHash;
             nonce = result.nonce;
-            Main.addPending(err, {txHash: result.txHash});
-            Main.alertTxResult(err, result);
+            txs.push(result);
+            Main.addPending(err, txs);
+            Main.alertTxResult(err, txs);
           });
         });
       } else {
@@ -889,12 +902,15 @@ Main.trade = function(kind, order, amount) {
 Main.blockTime = function(block) {
   return new Date(blockTimeSnapshot.date.getTime()+((block - blockTimeSnapshot.blockNumber)*1000*secondsPerBlock));
 }
-Main.addPending = function(err, tx) {
-  if (!err && tx.txHash!='0x0000000000000000000000000000000000000000000000000000000000000000') {
-    tx.txLink = 'https://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash;
-    pendingTransactions.push(tx);
-    Main.refresh(function(){}, true, true);
-  }
+Main.addPending = function(err, txs) {
+  if (!Array.isArray(txs)) txs = [txs];
+  txs.forEach(function(tx){
+    if (!err && tx.txHash!='0x0000000000000000000000000000000000000000000000000000000000000000') {
+      tx.txLink = 'https://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+tx.txHash;
+      pendingTransactions.push(tx);
+    }
+  });
+  Main.refresh(function(){});
 }
 Main.updateUrl = function() {
   var tokenName = selectedToken.name;
