@@ -910,7 +910,7 @@ Main.addPending = function(err, txs) {
       pendingTransactions.push(tx);
     }
   });
-  Main.refresh(function(){});
+  Main.refresh(function(){}, true, true);
 }
 Main.updateUrl = function() {
   var tokenName = selectedToken.name;
