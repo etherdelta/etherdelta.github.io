@@ -19,11 +19,13 @@ API.init = function(callback, allContracts, path, ethProvider) {
   //web3
   self.web3 = new Web3();
   self.web3.eth.defaultAccount = self.config.ethAddr;
-  self.web3.setProvider(new self.web3.providers.HttpProvider(ethProvider ? ethProvider : self.config.ethProvider));
+  self.config.ethProvider = ethProvider ? ethProvider : self.config.ethProvider;
+  self.web3.setProvider(new self.web3.providers.HttpProvider(self.config.ethProvider));
 
   //check mainnet vs testnet
   self.web3.version.getNetwork(function(error, version){
     if (version in configs) self.config = configs[version];
+    self.config.ethProvider = ethProvider ? ethProvider : self.config.ethProvider;
     try {
       if (self.web3.currentProvider) {
         self.web3.eth.coinbase;
