@@ -1835,7 +1835,7 @@ Main.lineChart = function(elem, title, xtype, ytype, xtitle, ytitle, data) {
   });
 }
 Main.getOrders = function(callback) {
-  utility.getURL(config.apiServer+'/orders', function(err, result){
+  utility.getURL(config.apiServer+'/orders/'+apiServerNonce, function(err, result){
     if (!err) {
       try {
         result = JSON.parse(result);
@@ -2302,6 +2302,7 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
       [
         function(callback) {
           if (initMarket) {
+            apiServerNonce = Math.random().toString().slice(2)+Math.random().toString().slice(2);
             ordersCache = {};
             if (token) selectedToken = token;
             if (base) selectedBase = base;
@@ -2364,7 +2365,7 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
                       }
                     );
                   } else {
-                    console.log('Error getting order book');
+                    console.log('Failed to get order book, or order book has not changed.');
                     callback(null, undefined);
                   }
                 });
@@ -2431,6 +2432,7 @@ var blockTimeSnapshot = undefined;
 var translator = undefined;
 var secondsPerBlock = 14;
 var usersWithOrdersToUpdate = {};
+var apiServerNonce = undefined;
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') { //metamask situation
   web3 = new Web3(web3.currentProvider);
