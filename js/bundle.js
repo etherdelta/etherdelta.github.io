@@ -31,8 +31,8 @@ function roundToNearest(numToRound, numToRoundTo) {
     return Math.round(numToRound * numToRoundTo) / numToRoundTo;
 }
 
-function getURL(url, callback) {
-  request.get(url, function(err, httpResponse, body){
+function getURL(url, callback, options) {
+  request.get(url, options, function(err, httpResponse, body){
     if (err) {
       callback(err, undefined);
     } else {
@@ -63,7 +63,7 @@ function readFile(filename, callback) {
           }
         });
       } else {
-        request.get(config.homeURL+"/"+filename, function(err, httpResponse, body){
+        getURL(config.homeURL+"/"+filename, function(err, body){
           if (err) {
             callback(err, undefined);
           } else {
@@ -115,7 +115,7 @@ function call(web3, contract, address, functionName, args, callback) {
     var result = undefined;
     var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api?module=proxy&action=eth_Call&to='+address+'&data='+data;
     if (config.etherscanAPIKey) url += '&apikey='+config.etherscanAPIKey;
-    request.get(url, function(err, httpResponse, body){
+    getURL(url, function(err, body){
       if (!err) {
         try {
           result = JSON.parse(body);
@@ -257,7 +257,7 @@ function send(web3, contract, address, functionName, args, fromAddress, privateK
           var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api';
           var formData = {module: 'proxy', action: 'eth_sendRawTransaction', hex: serializedTx};
           if (config.etherscanAPIKey) formData.apikey = config.etherscanAPIKey;
-          request.post({url: url, form: formData}, function(err, httpResponse, body){
+          postURL({url: url, form: formData}, function(err, body){
             if (!err) {
               try {
                 var result = JSON.parse(body);
@@ -355,7 +355,7 @@ function txReceipt(web3, txHash, callback) {
   function proxy(){
     var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api?module=proxy&action=eth_GetTransactionReceipt&txhash='+txHash;
     if (config.etherscanAPIKey) url += '&apikey='+config.etherscanAPIKey;
-    request.get(url, function(err, httpResponse, body){
+    getURL(url, function(err, body){
       if (!err) {
         result = JSON.parse(body);
         callback(undefined, result['result']);
@@ -399,7 +399,7 @@ function logs(web3, contract, address, fromBlock, toBlock, callback) {
   function proxy(retries) {
     var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api?module=logs&action=getLogs&address='+address+'&fromBlock='+fromBlock+'&toBlock='+toBlock;
     if (config.etherscanAPIKey) url += '&apikey='+config.etherscanAPIKey;
-    request.get(url, function(err, httpResponse, body){
+    getURL(url, function(err, body){
       if (!err) {
         try {
           var result = JSON.parse(body);
@@ -463,7 +463,7 @@ function logsOnce(web3, contract, address, fromBlock, toBlock, callback) {
   function proxy(retries) {
     var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api?module=logs&action=getLogs&address='+address+'&fromBlock='+fromBlock+'&toBlock='+toBlock;
     if (config.etherscanAPIKey) url += '&apikey='+config.etherscanAPIKey;
-    request.get(url, {timeout: 1500}, function(err, httpResponse, body){
+    getURL(url, function(err, body){
       if (!err) {
         try {
           var result = JSON.parse(body);
@@ -490,7 +490,7 @@ function logsOnce(web3, contract, address, fromBlock, toBlock, callback) {
       } else {
         callback(null, []);
       }
-    });
+    }, {timeout: 1500});
   }
   proxy(1);
 }
@@ -499,7 +499,7 @@ function getBalance(web3, address, callback) {
   function proxy(){
     var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api?module=account&action=balance&address='+address+'&tag=latest';
     if (config.etherscanAPIKey) url += '&apikey='+config.etherscanAPIKey;
-    request.get(url, function(err, httpResponse, body){
+    getURL(url, function(err, body){
       if (!err) {
         result = JSON.parse(body);
         callback(undefined, result['result']);
@@ -529,7 +529,7 @@ function getCode(web3, address, callback) {
   function proxy(){
     var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api?module=proxy&action=eth_getCode&address='+address+'&tag=latest';
     if (config.etherscanAPIKey) url += '&apikey='+config.etherscanAPIKey;
-    request.get(url, function(err, httpResponse, body){
+    getURL(url, function(err, body){
       if (!err) {
         result = JSON.parse(body);
         callback(undefined, result['result']);
@@ -559,7 +559,7 @@ function getNextNonce(web3, address, callback) {
   function proxy(){
     var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api?module=proxy&action=eth_GetTransactionCount&address='+address+'&tag=latest';
     if (config.etherscanAPIKey) url += '&apikey='+config.etherscanAPIKey;
-    request.get(url, function(err, httpResponse, body){
+    getURL(url, function(err, body){
       if (!err) {
         result = JSON.parse(body);
         var nextNonce = Number(result['result']);
@@ -592,7 +592,7 @@ function blockNumber(web3, callback) {
   function proxy() {
     var url = 'https://'+(config.ethTestnet ? 'testnet' : 'api')+'.etherscan.io/api?module=proxy&action=eth_BlockNumber';
     if (config.etherscanAPIKey) url += '&apikey='+config.etherscanAPIKey;
-    request.get(url, function(err, httpResponse, body){
+    getURL(url, function(err, body){
       if (!err) {
         var result = JSON.parse(body);
         callback(undefined, Number(hexToDec(result['result'])));
@@ -950,7 +950,7 @@ function getGitterMessages(gitterMessages, callback) {
     function (callbackUntil) {
       pages -= 1;
       var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken+'&limit='+perPage+'&skip='+skip;
-      request.get(url, function(err, httpResponse, body){
+      getURL(url, function(err, body){
         if (!err) {
           var data = JSON.parse(body);
           if (data && data.length>0) {
@@ -987,7 +987,7 @@ function getGitterMessages(gitterMessages, callback) {
 
 function postGitterMessage(message, callback) {
   var url = config.gitterHost + '/v1/rooms/'+config.gitterRoomID+'/chatMessages?access_token='+config.gitterToken;
-  request.post({url: url, form: {text: message}}, function(err, httpResponse, body){
+  postURL({url: url, form: {text: message}}, function(err, body){
     if (err) {
       if (callback) callback('Failure', false);
     } else if (httpResponse.statusCode==429) {
