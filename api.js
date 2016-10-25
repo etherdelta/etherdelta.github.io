@@ -710,9 +710,9 @@ API.publishOrders = function(orders, addr, expires, token, base, armed, callback
 
 API.formatOrder = function(order, token, base) {
   if (order.amount>=0) {
-    return utility.weiToEth(order.availableVolume.toNumber(), API.getDivisor(token.addr))+' '+token.name+' @ '+order.price.toNumber().toFixed(5)+' '+token.name+'/'+base.name;
+    return utility.weiToEth(order.availableVolume, API.getDivisor(token.addr))+' '+token.name+' @ '+order.price.toNumber().toFixed(5)+' '+token.name+'/'+base.name;
   } else {
-    return utility.weiToEth(order.availableVolume.toNumber(), API.getDivisor(token.addr))+' '+token.name+' @ '+order.price.toNumber().toFixed(5)+' '+token.name+'/'+base.name;
+    return utility.weiToEth(order.availableVolume, API.getDivisor(token.addr))+' '+token.name+' @ '+order.price.toNumber().toFixed(5)+' '+token.name+'/'+base.name;
   }
 }
 
