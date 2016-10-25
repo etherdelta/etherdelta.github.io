@@ -105,7 +105,7 @@ configs["2"] = {
   gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
   gitterRoomID: '57756375c2f0db084a20cf77',
   chatServer: 'https://etherdeltachat.herokuapp.com:443',
-  apiServer: 'https://api.etherdelta.com',
+  apiServer: 'https://etherdeltapublicapi.herokuapp.com',
   // apiServer: 'http://localhost:3000',
   userCookie: 'EtherDelta_testnet',
   eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
