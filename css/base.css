@@ -249,3 +249,24 @@ a:hover {
   height: calc(100vh - 50px);
   overflow-y: auto;
 }
+
+.modal-dialog.large {
+  width: 90%; /* respsonsive width */
+  text-align: center;
+}
+
+.modal-dialog a {
+  color: #33f;
+}
+
+.modal-dialog a:hover {
+  color: #333;
+}
+
+pre {
+    overflow-x: auto;
+}
+pre code {
+    overflow-wrap: normal;
+    white-space: pre;
+}

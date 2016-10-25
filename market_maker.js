@@ -25,7 +25,7 @@ if (cliOptions.help) {
 	    function(nextForever) {
 				API.getEtherDeltaTokenBalances(cliOptions.address, function(err, result){
 					var balances = result;
-					API.getOrders(function(err, result){
+					API.getOrdersRemote(function(err, result){
 						if (!err) {
 							async.eachSeries(pairs,
 								function(pair, callbackEach) {
@@ -86,9 +86,9 @@ if (cliOptions.help) {
 										var ordersToPlace = pair.ordersPerSide - placedOrders;
 										var bestPrice = pair.theo*(1+pair.minEdge);
 										if (buyOrders.length>0 && bestPrice<buyOrders[0].price) bestPrice = buyOrders[0].price*(1+pair.minEdge);
-										var worstPrice = bestPrice * Math.pow(1+pair.edgeStep,pair.ordersPerSide);
-										bestPrice = API.clip(bestPrice, pair.minPrice, pair.maxPrice);
 										var worstPrice = bestPrice + pair.edgeStep*pair.ordersPerSide*pair.theo;
+										bestPrice = API.clip(bestPrice, pair.minPrice, pair.maxPrice);
+										worstPrice = API.clip(worstPrice, pair.minPrice, pair.maxPrice);
 										var myExistingPrices = mySellOrders.map(function(x){return Number(x.price)});
 										var pricePoints = [];
 										for (var i=0; i<pair.ordersPerSide; i++) pricePoints.push(bestPrice - (bestPrice-worstPrice)*i/(pair.ordersPerSide));
@@ -111,7 +111,7 @@ if (cliOptions.help) {
 								}
 							);
 						}
-			    });
+					});
 				});
 	    },
 	    function(err) {

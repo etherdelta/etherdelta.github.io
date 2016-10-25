@@ -17,9 +17,33 @@ var translations = {
     cn:'EtherDelta是去中心化的以太坊交易平台。'
     // cn:'EtherDelta是无中心的以太坊交易平台。'
   },
+  Smart_Contract:{
+    en:'Smart Contract',
+    cn:'智能合约'
+  },
+  smart_contract_overview:{
+    en:'Smart contract overview',
+    cn:'智能合约概貌'
+  },
   howto_videos:{
     en:'How-to videos',
     cn:'说明视频'
+  },
+  FAQ:{
+    en:'FAQ',
+    cn:'FAQ'
+  },
+  Screencast:{
+    en:'Screencast',
+    cn:'截屏'
+  },
+  cost:{
+    en:'Cost',
+    cn:'成本'
+  },
+  Notes:{
+    en:'Notes',
+    cn:'笔记'
   },
   depth:{
     en:'Depth',
@@ -160,9 +184,13 @@ var translations = {
     cn:'Etherscan 地址'
     // cn:'Etherscan address'
   },
-  guides:{
+  Guides:{
     en:'Guides',
     cn:'指南'
+  },
+  help:{
+    en:'Help',
+    cn:'援助'
   },
   videos:{
     en:'Videos',
@@ -311,7 +339,7 @@ var translations = {
     cn:'连接以太坊'
   },
   deposit_withdraw:{
-    en:'Deposit and withdraw',
+    en:'Deposit and Withdraw',
     cn:'充值和提取'
   },
   trade:{
@@ -449,8 +477,8 @@ var translations = {
     cn:'竞价'
   },
   no_orders:{
-    en:'There are no orders here. You might need to',
-    cn:'这里没有显示订单。你可以试下'
+    en:'There are no orders here.',
+    cn:'这里没有显示订单。'
   },
   no_orders_reset:{
     en:'reset the cache',

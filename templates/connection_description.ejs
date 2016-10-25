@@ -1,9 +1,10 @@
-<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-file-text"></i> <%= contractAddr.substring(0,12) %>... <span class="caret"></span></a>
+<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-file-text"></i> <span class="trn">Smart_Contract</span> <span class="caret"></span></a>
 <ul class="dropdown-menu">
   <li><a href="javascript:;"><span class="trn">connection</span>: <%= connection.connection %> (<%= connection.provider %>) <%= connection.testnet ? 'TESTNET' : ''%></a></li>
-  <li><a href="<%= contractLink%>" target="_blank" class="trn">etherscan_contract</a></li>
+  <li><a href="<%= contractLink%>" target="_blank"><span class="trn">etherscan_contract</span></a></li>
+  <li><a href="javascript:;" onclick="bundle.Main.displayHelp('smart_contract')"><span class="trn">smart_contract_overview</span></a></li>
   <li role="separator" class="divider"></li>
   <% contracts.forEach(function(contract){ %>
-    <li><a href="javascript:;" onclick="bundle.Main.contractAddr('<%= contract.addr %>');"><%= contract.addr.substring(0,12) %>... (<%= contract.info %>)</a></li>
+    <li style="<%= contractAddr==contract.addr ? 'background: #999;' : ''%>"><a href="javascript:;" onclick="bundle.Main.contractAddr('<%= contract.addr %>');"><%= contract.addr.substring(0,12) %>... (<%= contract.info %>)</a></li>
   <%}) %>
 </ul>

@@ -35,13 +35,12 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="dropdown" id="tokens"></li>
-            <li class="dropdown" id="bases"></li>
+            <li class="dropdown" id="tokens_dropdown"></li>
+            <li class="dropdown" id="bases_dropdown"></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/tokens.html" target="_blank"><i class="fa fa-info-circle" aria-hidden="true"></i> <span class="trn">tokens</span></a></li>
-            <li><a href="/guides.html" target="_blank"><i class="fa fa-book" aria-hidden="true"></i> <span class="trn">guides</span></a></li>
-            <li><a href="https://www.youtube.com/channel/UCkUTWdqHjFUfC98gFUsNuzg" target="_blank"><i class="fa fa-video-camera" aria-hidden="true"></i> <span class="trn">videos</span></a></li>
+            <li class="dropdown" id="token_guides_dropdown"></li>
+            <li class="dropdown" id="help_dropdown"></li>
             <li class="dropdown" id="connection"></li>
             <li class="dropdown" id="languages"></li>
             <li class="dropdown" id="addresses"></li>
@@ -196,8 +195,16 @@
                 <div id="buy_cross_desc"></div>
               </div>
               <div class="form-group">
-                <label for="buy_cross_amount"><span class="trn">amount_to_buy</span> (<span id="buy_cross_token"></span>)</label>
+                <label for="buy_cross_amount"><span class="trn">amount_to_buy</span> (<span class="buy_cross_token"></span>)</label>
                 <input type="text" class="form-control trn" id="buy_cross_amount" placeholder="amount" />
+              </div>
+              <div class="form-group">
+                <label for="buy_cross_base_amount"><span class="buy_cross_base"></span></label>
+                <input type="text" class="form-control trn" id="buy_cross_base_amount" placeholder="amount" />
+              </div>
+              <div class="form-group">
+                <label for="buy_cross_fee"><span class="trn">fee</span> (<span class="buy_cross_base"></span>)</label>
+                <input type="text" class="form-control trn" id="buy_cross_fee" disabled="disabled" />
               </div>
             </form>
           </div>
@@ -225,8 +232,16 @@
                 <div id="sell_cross_desc"></div>
               </div>
               <div class="form-group">
-                <label for="sell_cross_amount"><span class="trn">amount_to_sell</span> (<span id="sell_cross_token"></span>)</label>
+                <label for="sell_cross_amount"><span class="trn">amount_to_sell</span> (<span class="sell_cross_token"></span>)</label>
                 <input type="text" class="form-control trn" id="sell_cross_amount" placeholder="amount" />
+              </div>
+              <div class="form-group">
+                <label for="sell_cross_base_amount"><span class="sell_cross_base"></span></label>
+                <input type="text" class="form-control trn" id="sell_cross_base_amount" placeholder="amount" />
+              </div>
+              <div class="form-group">
+                <label for="sell_cross_fee"><span class="trn">fee</span> (<span class="sell_cross_token"></span>)</label>
+                <input type="text" class="form-control trn" id="sell_cross_fee" disabled="disabled" />
               </div>
             </form>
           </div>
@@ -314,6 +329,28 @@
           <div class="modal-body">
             <div id="token_guide_details"></div>
             <div id="token_guide_body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div id="help_body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screencast -->
+    <div class="modal fade" id="screencastModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog large" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div id="screencast_body"></div>
           </div>
         </div>
       </div>

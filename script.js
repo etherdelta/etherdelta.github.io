@@ -39,20 +39,46 @@ $('#buy_cross_modal').on('show.bs.modal', function(e) {
   var amount = $(e.relatedTarget).data('amount');
   var desc = $(e.relatedTarget).data('desc');
   var token = $(e.relatedTarget).data('token');
+  var base = $(e.relatedTarget).data('base');
+  var price = $(e.relatedTarget).data('price');
   $('#buy_cross_order').val(JSON.stringify(order.order));
   $('#buy_cross_amount').val(amount);
   $('#buy_cross_desc').html(desc);
-  $('#buy_cross_token').html(token);
+  $('.buy_cross_token').html(token);
+  $('.buy_cross_base').html(base);
+  $('#buy_cross_base_amount').val((amount*price).toFixed(3));
+  $('#buy_cross_fee').val((amount*price*0.003).toFixed(3));
+  $('#buy_cross_base_amount').change(function(){
+    $('#buy_cross_amount').val((Number($('#buy_cross_base_amount').val()) / price).toFixed(3));
+    $('#buy_cross_fee').val(($('#buy_cross_base_amount').val()*0.003).toFixed(3));
+  });
+  $('#buy_cross_amount').change(function(){
+    $('#buy_cross_base_amount').val((Number($('#buy_cross_amount').val()) * price).toFixed(3));
+    $('#buy_cross_fee').val(($('#buy_cross_base_amount').val()*0.003).toFixed(3));
+  });
 });
 $('#sell_cross_modal').on('show.bs.modal', function(e) {
   var order = $(e.relatedTarget).data('order');
   var amount = $(e.relatedTarget).data('amount');
   var desc = $(e.relatedTarget).data('desc');
   var token = $(e.relatedTarget).data('token');
+  var base = $(e.relatedTarget).data('base');
+  var price = $(e.relatedTarget).data('price');
   $('#sell_cross_order').val(JSON.stringify(order.order));
   $('#sell_cross_amount').val(amount);
   $('#sell_cross_desc').html(desc);
-  $('#sell_cross_token').html(token);
+  $('.sell_cross_token').html(token);
+  $('.sell_cross_base').html(base);
+  $('#sell_cross_base_amount').val((amount*price).toFixed(3));
+  $('#sell_cross_fee').val((amount*0.003).toFixed(3));
+  $('#sell_cross_base_amount').change(function(){
+    $('#sell_cross_amount').val((Number($('#sell_cross_base_amount').val()) / price).toFixed(3));
+    $('#sell_cross_fee').val(($('#sell_cross_amount').val()*0.003).toFixed(3));
+  });
+  $('#sell_cross_amount').change(function(){
+    $('#sell_cross_base_amount').val((Number($('#sell_cross_amount').val()) * price).toFixed(3));
+    $('#sell_cross_fee').val(($('#sell_cross_amount').val()*0.003).toFixed(3));
+  });
 });
 $(function () {
   $('body').on('click', '#buy_cross_submit', function (e) {

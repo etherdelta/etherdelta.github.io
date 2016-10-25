@@ -9,7 +9,7 @@ var sha256 = require('js-sha256').sha256;
 function API(){
 }
 
-API.init = function(callback, allContracts, path, ethProvider) {
+API.init = function(callback, allContracts, path) {
   var self = this;
 
   //self.config, utility
@@ -19,13 +19,11 @@ API.init = function(callback, allContracts, path, ethProvider) {
   //web3
   self.web3 = new Web3();
   self.web3.eth.defaultAccount = self.config.ethAddr;
-  self.config.ethProvider = ethProvider ? ethProvider : self.config.ethProvider;
   self.web3.setProvider(new self.web3.providers.HttpProvider(self.config.ethProvider));
 
   //check mainnet vs testnet
   self.web3.version.getNetwork(function(error, version){
     if (version in configs) self.config = configs[version];
-    self.config.ethProvider = ethProvider ? ethProvider : self.config.ethProvider;
     try {
       if (self.web3.currentProvider) {
         self.web3.eth.coinbase;
@@ -164,7 +162,7 @@ API.logs = function(callback) {
           events.forEach(function(event){
             if (!self.eventsCache[event.transactionHash+event.logIndex]) {
               newEvents++;
-              event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+              event.txLink = 'http://'+(self.config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
               self.eventsCache[event.transactionHash+event.logIndex] = event;
               //users with orders to update
               if (event.event=='Trade') {
@@ -336,7 +334,7 @@ API.getToken = function(addrOrToken, name, decimals) {
   var self = this;
   var result = undefined;
   var matchingTokens = self.config.tokens.filter(function(x){return x.addr==addrOrToken || x.name==addrOrToken});
-  var expectedKeys = JSON.stringify(['addr','decimals','gasApprove','gasDeposit','gasTrade','gasWithdraw','name']);
+  var expectedKeys = JSON.stringify(['addr','decimals','gasApprove','gasDeposit','gasOrder','gasTrade','gasWithdraw','name']);
   if (matchingTokens.length>0) {
     result = matchingTokens[0];
   } else if (addrOrToken.addr && JSON.stringify(Object.keys(addrOrToken).sort())==expectedKeys) {
@@ -383,7 +381,7 @@ API.getOrders = function(callback) {
     utility.blockNumber(self.web3, function(err, blockNumber) {
       var orders = [];
       //get orders from messages
-      var expectedKeys = JSON.stringify(['amountGet','amountGive','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
+      var expectedKeys = JSON.stringify(['amountGet','amountGive','contractAddr','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
       Object.keys(self.messagesCache).forEach(function(id) {
         try {
           var message = JSON.parse(JSON.stringify(self.messagesCache[id]));
@@ -427,15 +425,31 @@ API.getOrders = function(callback) {
             if (!self.ordersCache[order.id+(order.amount>=0 ? "buy" : "sell")] || self.usersWithOrdersToUpdate[order.order.user] || true) {
               utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
                 if (!err) {
-                  if (order.amount>=0) {
-                    order.availableVolume = result;
-                    order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGet));
-                  } else {
-                    order.availableVolume = result.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
-                    order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGive));
-                  }
-                  self.ordersCache[order.id+(order.amount>=0 ? "buy" : "sell")] = {availableVolume: order.availableVolume.toNumber(), ethAvailableVolume: order.ethAvailableVolume};
-                  callbackMap(null, order);
+                  var availableVolume = result;
+                  utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'amountFilled', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
+                    if (!err) {
+                      var amountFilled = result;
+                      if (amountFilled.lessThan(order.order.amountGet)) {
+                        if (order.amount>=0) {
+                          order.availableVolume = availableVolume;
+                          order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGet));
+                          order.amountFilled = amountFilled;
+                        } else {
+                          order.availableVolume = availableVolume.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
+                          order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGive));
+                          order.amountFilled = amountFilled.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
+                        }
+                        self.ordersCache[order.id+(order.amount>=0 ? "buy" : "sell")] = {availableVolume: order.availableVolume.toNumber(), ethAvailableVolume: order.ethAvailableVolume, amountFilled: order.amountFilled.toNumber()};
+                        callbackMap(null, order);
+                      } else {
+                        // console.log(amountFilled.toNumber()/1000000000000000000, availableVolume.toNumber()/1000000000000000000, order.order.amountGet.toNumber()/1000000000000000000)
+                        deadOrdersCache[order.id+(order.amount>=0 ? "buy" : "sell")] = true;
+                        callbackMap(null, undefined);
+                      }
+                    } else {
+                      callbackMap(null, undefined);
+                    }
+                  });
                 } else {
                   callbackMap(null, undefined);
                 }
@@ -443,11 +457,12 @@ API.getOrders = function(callback) {
             } else {
               order.availableVolume = self.ordersCache[order.id+(order.amount>=0 ? "buy" : "sell")].availableVolume;
               order.ethAvailableVolume = self.ordersCache[order.id+(order.amount>=0 ? "buy" : "sell")].ethAvailableVolume;
+              order.amountFilled = self.ordersCache[order.id+(order.amount>=0 ? "buy" : "sell")].amountFilled;
               callbackMap(null, order);
             }
           } else {
-            self.deadOrdersCache[order.id] = true;
-            delete self.messagesCache[order.id];
+            self.deadOrdersCache[order.id+(order.amount>=0 ? "buy" : "sell")] = true;
+            delete self.messagesCache[order.id+(order.amount>=0 ? "buy" : "sell")];
             callbackMap(null, undefined);
           }
         },
@@ -465,6 +480,39 @@ API.getOrders = function(callback) {
       );
     });
   });
+}
+
+API.getOrdersRemote = function(callback) {
+  var self = this;
+  utility.getURL(self.config.apiServer+'/orders', function(err, data){
+    if (!err) {
+      data = JSON.parse(data);
+      var orders = data.orders;
+      orders.forEach(function(x){
+        Object.assign(x, {
+          price: new BigNumber(x.price),
+          // amount: new BigNumber(x.amount),
+          // availableVolume: new BigNumber(x.availableVolume),
+          // ethAvailableVolume: x.ethAvailableVolume,
+          order: Object.assign(x.order, {
+            amountGet: new BigNumber(x.order.amountGet),
+            amountGive: new BigNumber(x.order.amountGive),
+            expires: Number(x.order.expires),
+            nonce: Number(x.order.nonce),
+            tokenGet: x.order.tokenGet,
+            tokenGive: x.order.tokenGive,
+            user: x.order.user,
+            r: x.order.r,
+            s: x.order.s,
+            v: Number(x.order.v),
+          })
+        });
+      });
+      callback(null, {orders: orders, blockNumber: data.blockNumber});
+    } else {
+      callback(err, []);
+    }
+  })
 }
 
 API.blockTime = function(block) {
@@ -602,23 +650,32 @@ API.publishOrder = function(addr, baseAddr, tokenAddr, direction, amount, price,
     if (balance.lt(new BigNumber(amountGive))) {
       callback('You do not have enough funds to send this order.', false);
     } else {
-      var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
-      var hash = sha256(new Buffer(condensed,'hex'));
-      utility.sign(self.web3, addr, hash, undefined, function(err, sig) {
-        if (err) {
-          callback('Could not sign order because of an error: '+err, false);
-        } else {
-          // Send order to Gitter channel:
-          var order = {tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addr};
-          utility.postURL(config.apiServer+'/message', {message: JSON.stringify(order)}, function(err, result){
-            if (!err) {
-              callback(null, true);
-            } else {
-              callback('You tried sending an order to the order book but there was an error.', false);
-            }
-          });
-        }
-      });
+      if (!self.config.ordersOnchain) { //offchain order
+        var condensed = utility.pack([self.contractEtherDeltaAddrs[0], tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 160, 256, 160, 256, 256, 256]);
+        var hash = sha256(new Buffer(condensed,'hex'));
+        utility.sign(self.web3, addr, hash, undefined, function(err, sig) {
+          if (err) {
+            callback('Could not sign order because of an error: '+err, false);
+          } else {
+            // Send order to Gitter channel:
+            var order = {contractAddr: self.contractEtherDeltaAddrs[0], tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addr};
+            utility.postURL(self.config.apiServer+'/message', {message: JSON.stringify(order)}, function(err, result){
+              if (!err) {
+                callback(null, true);
+              } else {
+                callback('You tried sending an order to the order book but there was an error.', false);
+              }
+            });
+          }
+        });
+      } else { //onchain order
+        var token = API.getToken(tokenGet);
+        API.utility.send(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'order', [tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce, {gas: token.gasOrder, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+          txHash = result.txHash;
+          nonce = result.nonce;
+          callback(null, true);
+        });
+      }
     }
   });
 }

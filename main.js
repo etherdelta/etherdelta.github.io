@@ -239,6 +239,8 @@ Main.loadEvents = function(callback) {
 Main.displayMyTransactions = function(orders, blockNumber, callback) {
   //only include orders by the selected user
   orders = orders.filter(function(order){return addrs[selectedAccount].toLowerCase()==order.order.user.toLowerCase()});
+  //filter only orders that match the smart contract address
+  orders = orders.filter(function(order){return order.order.contractAddr==config.contractEtherDeltaAddr});
   //final order filtering and sorting
   var buyOrders = orders.filter(function(x){return x.amount>0});
   var sellOrders = orders.filter(function(x){return x.amount<0});
@@ -248,29 +250,32 @@ Main.displayMyTransactions = function(orders, blockNumber, callback) {
   var myEvents = [];
   var events = Object.values(eventsCache);
   events.forEach(function(event){
-    if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr && (event.args.get.toLowerCase()==addrs[selectedAccount].toLowerCase() || event.args.give.toLowerCase()==addrs[selectedAccount].toLowerCase())) {
-      var trade;
-      if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
-        if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
-          //sell
-          trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), buyer: event.args.get, seller: event.args.give};
-        } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
-          //buy
-          trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), buyer: event.args.give, seller: event.args.get};
+    try {
+      if (event.event=='Trade' && event.address==config.contractEtherDeltaAddr && (event.args.get.toLowerCase()==addrs[selectedAccount].toLowerCase() || event.args.give.toLowerCase()==addrs[selectedAccount].toLowerCase())) {
+        var trade;
+        if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
+          if (event.args.tokenGet==selectedToken.addr && event.args.tokenGive==selectedBase.addr) {
+            //sell
+            trade = {amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(Main.getDivisor(event.args.tokenGet)).div(Main.getDivisor(event.args.tokenGive)), buyer: event.args.get, seller: event.args.give};
+          } else if (event.args.tokenGet==selectedBase.addr && event.args.tokenGive==selectedToken.addr) {
+            //buy
+            trade = {amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(Main.getDivisor(event.args.tokenGive)).div(Main.getDivisor(event.args.tokenGet)), buyer: event.args.give, seller: event.args.get};
+          }
         }
-      }
-      if (trade) {
+        if (trade) {
+          var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+          myEvents.push({trade: trade, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+        }
+      } else if (event.event=='Deposit' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
         var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-        myEvents.push({trade: trade, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+        var deposit = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
+        myEvents.push({deposit: deposit, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+      } else if (event.event=='Withdraw' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
+        var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+        var withdraw = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
+        myEvents.push({withdraw: withdraw, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
       }
-    } else if (event.event=='Deposit' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
-      var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-      var deposit = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
-      myEvents.push({deposit: deposit, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
-    } else if (event.event=='Withdraw' && event.address==config.contractEtherDeltaAddr && (event.args.token==selectedBase.addr || event.args.token==selectedToken.addr) && event.args.user.toLowerCase()==addrs[selectedAccount].toLowerCase()) {
-      var txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-      var withdraw = {token: event.args.token==selectedToken.addr ? selectedToken : selectedBase, amount: event.args.amount, balance: event.args.balance};
-      myEvents.push({withdraw: withdraw, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, txLink: txLink});
+    } catch (err) {
     }
   });
   myEvents.sort(function(a,b){ return b.id - a.id });
@@ -606,6 +611,8 @@ Main.getOrders = function(callback) {
 Main.displayOrderbook = function(orders, blockNumber, callback) {
   //remove orders below the min order limit
   orders = orders.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=minOrderSize});
+  //filter only orders that match the smart contract address
+  orders = orders.filter(function(order){return order.order.contractAddr==config.contractEtherDeltaAddr});
   //final order filtering and sorting
   var buyOrders = orders.filter(function(x){return x.amount>0});
   var sellOrders = orders.filter(function(x){return x.amount<0});
@@ -643,8 +650,8 @@ Main.displayOrderbook = function(orders, blockNumber, callback) {
   callback();
 }
 Main.displayTokensAndBases = function(callback) {
-  Main.ejs(config.homeURL+'/templates/'+'tokens_dropdown.ejs', 'tokens', {tokens: config.tokens, selectedToken: selectedToken});
-  Main.ejs(config.homeURL+'/templates/'+'bases_dropdown.ejs', 'bases', {tokens: config.tokens, selectedBase: selectedBase});
+  Main.ejs(config.homeURL+'/templates/'+'tokens_dropdown.ejs', 'tokens_dropdown', {tokens: config.tokens, selectedToken: selectedToken});
+  Main.ejs(config.homeURL+'/templates/'+'bases_dropdown.ejs', 'bases_dropdown', {tokens: config.tokens, selectedBase: selectedBase});
   callback();
 }
 Main.displayAllBalances = function(callback) {
@@ -834,24 +841,34 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
     if (balance.lt(new BigNumber(amountGive))) {
       Main.alertError('You do not have enough funds to send this order.');
     } else {
-      var condensed = utility.pack([tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 256, 160, 256, 256, 256]);
-      var hash = sha256(new Buffer(condensed,'hex'));
-      utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
-        if (err) {
-          Main.alertError('Could not sign order because of an error: '+err);
-        } else {
-          // Send order to offchain book:
-          var order = {tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
-          utility.postURL(config.apiServer+'/message', {message: JSON.stringify(order)}, function(err, result){
-            if (!err) {
-              Main.alertSuccess('You sent an order to the order book!');
-              Main.refresh(function(){});
-            } else {
-              Main.alertError('You tried sending an order to the order book but there was an error: '+err);
-            }
-          });
-        }
-      });
+      if (!config.ordersOnchain) { //offchain order
+        var condensed = utility.pack([config.contractEtherDeltaAddr, tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 160, 256, 160, 256, 256, 256]);
+        var hash = sha256(new Buffer(condensed,'hex'));
+        utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
+          if (err) {
+            Main.alertError('Could not sign order because of an error: '+err);
+          } else {
+            // Send order to offchain book:
+            var order = {contractAddr: config.contractEtherDeltaAddr, tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
+            utility.postURL(config.apiServer+'/message', {message: JSON.stringify(order)}, function(err, result){
+              if (!err) {
+                Main.alertSuccess('You sent an order to the order book!');
+                Main.refresh(function(){});
+              } else {
+                Main.alertError('You tried sending an order to the order book but there was an error: '+err);
+              }
+            });
+          }
+        });
+      } else { //onchain order
+        var token = Main.getToken(tokenGet);
+        utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'order', [tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce, {gas: token.gasOrder, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+          txHash = result.txHash;
+          nonce = result.nonce;
+          Main.addPending(err, {txHash: result.txHash});
+          Main.alertTxResult(err, result);
+        });
+      }
     }
   });
 }
@@ -879,21 +896,29 @@ Main.trade = function(kind, order, amount) {
   }
   var token = Main.getToken(order.tokenGet);
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [order.tokenGet, addrs[selectedAccount]], function(err, result) {
-    var availableBalance = result;
+    var availableBalance = result.toNumber();
     utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s], function(err, result) {
-      var availableVolume = result;
+      var availableVolume = result.toNumber();
       if (amount>availableBalance) amount = availableBalance;
       if (amount>availableVolume) amount = availableVolume;
-      utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, addrs[selectedAccount]], function(err, result) {
+      var v = Number(order.v);
+      var r = order.r;
+      var s = order.s;
+      if (!(v && r && s)) {
+        v = 0;
+        r = '0x0';
+        s = '0x0';
+      }
+      utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, v, r, s, amount, addrs[selectedAccount]], function(err, result) {
         if (result && amount>0) {
-          utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s, amount, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+          utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, v, r, s, amount, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
             txHash = result.txHash;
             nonce = result.nonce;
             Main.addPending(err, {txHash: result.txHash});
             Main.alertTxResult(err, result);
           });
         } else {
-          Main.alertError("You tried placing an order, but the order failed. Either the order already traded or you or the counterparty do not have enough funds.");
+          Main.alertError("This order already traded.");
         }
       });
     });
@@ -930,7 +955,7 @@ Main.getDivisor = function(tokenOrAddress) {
 Main.getToken = function(addrOrToken, name, decimals) {
   var result = undefined;
   var matchingTokens = config.tokens.filter(function(x){return x.addr==addrOrToken || x.name==addrOrToken});
-  var expectedKeys = JSON.stringify(['addr','decimals','gasApprove','gasDeposit','gasTrade','gasWithdraw','name']);
+  var expectedKeys = JSON.stringify(['addr','decimals','gasApprove','gasDeposit','gasOrder','gasTrade','gasWithdraw','name']);
   if (matchingTokens.length>0) {
     result = matchingTokens[0];
   } else if (selectedToken.addr==addrOrToken) {
@@ -998,6 +1023,24 @@ Main.displayBuySell = function(callback) {
   Main.ejs(config.homeURL+'/templates/'+'sell.ejs', 'sell', {selectedToken: selectedToken, selectedBase: selectedBase});
   callback();
 }
+Main.displayTokenGuidesDropdown = function() {
+  var tokens = config.tokens.map(function(x){return x});
+  tokens.sort(function(a,b){return a.name>b.name ? 1 : -1});
+  Main.ejs(config.homeURL+'/templates/'+'token_guides_dropdown.ejs', 'token_guides_dropdown', {tokens: tokens});
+}
+Main.displayHelpDropdown = function() {
+  Main.ejs(config.homeURL+'/templates/'+'help_dropdown.ejs', 'help_dropdown', {});
+}
+Main.displayHelp = function(name) {
+  $('#help_body').html('');
+  Main.ejs(config.homeURL+'/help/'+name+'.ejs', 'help_body', {});
+  $('#helpModal').modal('show');
+}
+Main.displayScreencast = function(name) {
+  $('#screencast_body').html('');
+  Main.ejs(config.homeURL+'/help/'+name+'.ejs', 'screencast_body', {});
+  $('#screencastModal').modal('show');
+}
 Main.displayTokenGuide = function(name) {
   var matchingTokens = config.tokens.filter(function(x){return name==x.name});
   if (matchingTokens.length==1) {
@@ -1014,10 +1057,13 @@ Main.displayTokenGuide = function(name) {
     $('#tokenModal').modal('show');
   }
 }
+Main.checkContractUpgrade = function() {
+  if ((!selectedContract || selectedContract!=config.contractEtherDeltaAddr) && (addrs.length>1 || (addrs.length==1 && addrs[0]!='0x0000000000000000000000000000000000000123'))) {
+    Main.alertDialog('<p>EtherDelta has a new smart contract. It is now selected.</p><p>Please use the "Smart Contract" menu to select the old one and withdraw from it.</p><p><a href="javascript:;" class="btn btn-default" onclick="alertify.closeAll(); bundle.Main.displayHelp(\'smart_contract\')">Smart contract changelog</a></p>');
+  }
+}
 Main.resetCaches = function() {
   Main.eraseCookie(config.eventsCacheCookie);
-  Main.eraseCookie(config.deadOrdersCacheCookie);
-  Main.eraseCookie(config.ordersCacheCookie);
   location.reload();
 }
 Main.loading = function(callback) {
@@ -1029,13 +1075,13 @@ Main.loading = function(callback) {
 Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
   q.push(function(done) {
     console.log('Beginning refresh', new Date());
-    Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken" : selectedToken, "selectedBase" : selectedBase}), 999);
+    selectedContract = config.contractEtherDeltaAddr;
+    Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken": selectedToken, "selectedBase": selectedBase, "selectedContract": selectedContract}), 999);
     async.series(
       [
         function(callback) {
           if (initMarket) {
             apiServerNonce = Math.random().toString().slice(2)+Math.random().toString().slice(2);
-            ordersCache = {};
             if (token) selectedToken = token;
             if (base) selectedBase = base;
             connection = undefined;
@@ -1079,27 +1125,27 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
               function(callback) {
                 Main.getOrders(function(err, result) {
                   if (!err) {
-                    async.parallel(
-                      [
-                        function(callback) {
-                          Main.displayMyTransactions(result.orders, result.blockNumber, function(){
-                            callback(null, undefined);
-                          });
-                        },
-                        function(callback) {
-                          Main.displayOrderbook(result.orders, result.blockNumber, function(){
-                            callback(null, undefined);
-                          });
-                        }
-                      ],
-                      function(err, results) {
-                        callback(null, undefined);
-                      }
-                    );
+                    ordersResult = result;
                   } else {
-                    console.log('Failed to get order book, or order book has not changed.');
-                    callback(null, undefined);
+                    console.log('Order book has not changed since last refresh.');
                   }
+                  async.parallel(
+                    [
+                      function(callback) {
+                        Main.displayMyTransactions(ordersResult.orders, ordersResult.blockNumber, function(){
+                          callback(null, undefined);
+                        });
+                      },
+                      function(callback) {
+                        Main.displayOrderbook(ordersResult.orders, ordersResult.blockNumber, function(){
+                          callback(null, undefined);
+                        });
+                      }
+                    ],
+                    function(err, results) {
+                      callback(null, undefined);
+                    }
+                  );
                 });
               }
             ],
@@ -1129,7 +1175,10 @@ Main.init = function(callback) {
   console.log('Beginning init');
   connection = undefined;
   Main.loading(function(){});
+  Main.displayTokenGuidesDropdown(function(){});
+  Main.displayHelpDropdown(function(){});
   Main.displayLanguages(function(){});
+  Main.checkContractUpgrade(function(){});
   Main.refresh(function(){
     callback();
   }, true, true);
@@ -1152,8 +1201,6 @@ var priceUpdated = Date.now();
 var contractEtherDelta = undefined;
 var contractToken = undefined;
 var eventsCache = {};
-var deadOrdersCache = {};
-var ordersCache = {};
 var publishingOrders = false;
 var pendingTransactions = [];
 var defaultdecimals = new BigNumber(1000000000000000000);
@@ -1165,6 +1212,8 @@ var translator = undefined;
 var secondsPerBlock = 14;
 var usersWithOrdersToUpdate = {};
 var apiServerNonce = undefined;
+var ordersResult = {orders: [], blockNumber: 0};
+var selectedContract = undefined;
 //web3
 if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') { //metamask situation
   web3 = new Web3(web3.currentProvider);
@@ -1191,24 +1240,13 @@ web3.version.getNetwork(function(error, version){
     pks = userCookie["pks"];
     selectedAccount = userCookie["selectedAccount"];
     if (userCookie["language"]) language = userCookie["language"];
-    // selectedToken = userCookie["selectedToken"];
-    // selectedBase = userCookie["selectedBase"];
+    selectedContract = userCookie["selectedContract"];
   }
   //translation
   translator = $('body').translate({lang: language, t: translations});
   //events cache cookie
   var eventsCacheCookie = Main.readCookie(config.eventsCacheCookie);
   if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
-  //dead orders cookie
-  var deadOrdersCacheCookie = Main.readCookie(config.deadOrdersCacheCookie);
-  if (deadOrdersCacheCookie) {
-    deadOrdersCache = JSON.parse(deadOrdersCacheCookie);
-  }
-  //orders cookie
-  var ordersCacheCookie = Main.readCookie(config.ordersCacheCookie);
-  if (ordersCacheCookie) {
-    ordersCache = JSON.parse(ordersCacheCookie);
-  }
   //get accounts
   web3.eth.defaultAccount = config.ethAddr;
   web3.eth.getAccounts(function(e,accounts){
