@@ -999,6 +999,7 @@ Main.loadToken = function(addr, callback) {
 Main.selectToken = function(addrOrToken, name, decimals) {
   var token = Main.getToken(addrOrToken, name, decimals);
   if (token) {
+    ordersResult = {orders: [], blockNumber: 0};
     Main.loading(function(){});
     Main.refresh(function(){}, true, true, token, selectedBase);
   }
@@ -1006,6 +1007,7 @@ Main.selectToken = function(addrOrToken, name, decimals) {
 Main.selectBase = function(addrOrToken, name, decimals) {
   var base = Main.getToken(addrOrToken, name, decimals);
   if (base) {
+    ordersResult = {orders: [], blockNumber: 0};
     Main.loading(function(){});
     Main.refresh(function(){}, true, true, selectedToken, base);
   }
@@ -1014,6 +1016,7 @@ Main.selectTokenAndBase = function(tokenAddr, baseAddr) {
   token = Main.getToken(tokenAddr);
   base = Main.getToken(baseAddr);
   if (token && base) {
+    ordersResult = {orders: [], blockNumber: 0};
     Main.loading(function(){});
     Main.refresh(function(){}, true, true, token, base);
   }
