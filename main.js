@@ -58,40 +58,6 @@ Main.alertTxResult = function(err, txs) {
 Main.enableTooltips = function() {
   $('[data-toggle="tooltip"]').tooltip();
 }
-Main.createCookie = function(name,value,days) {
-  if (localStorage) {
-    localStorage.setItem(name, value);
-  } else {
-    if (days) {
-      var date = new Date();
-      date.setTime(date.getTime()+(days*24*60*60*1000));
-      var expires = "; expires="+date.toGMTString();
-    }
-    else var expires = "";
-    document.cookie = name+"="+value+expires+"; path=/";
-  }
-}
-Main.readCookie = function(name) {
-  if (localStorage) {
-    return localStorage.getItem(name);
-  } else {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-      var c = ca[i];
-      while (c.charAt(0)==' ') c = c.substring(1,c.length);
-      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-  }
-}
-Main.eraseCookie = function(name) {
-  if (localStorage) {
-    localStorage.removeItem(name);
-  } else {
-    createCookie(name,"",-1);
-  }
-}
 Main.logout = function() {
   addrs = [config.ethAddr];
   pks = [config.ethAddrPrivateKey];
@@ -231,7 +197,7 @@ Main.loadEvents = function(callback) {
           }
         }
       })
-      Main.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
+      utility.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
       callback(newEvents);
     });
   });
@@ -1066,7 +1032,7 @@ Main.checkContractUpgrade = function() {
   }
 }
 Main.resetCaches = function() {
-  Main.eraseCookie(config.eventsCacheCookie);
+  utility.eraseCookie(config.eventsCacheCookie);
   location.reload();
 }
 Main.loading = function(callback) {
@@ -1079,7 +1045,7 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
   q.push(function(done) {
     console.log('Beginning refresh', new Date());
     selectedContract = config.contractEtherDeltaAddr;
-    Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken": selectedToken, "selectedBase": selectedBase, "selectedContract": selectedContract}), 999);
+    utility.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken": selectedToken, "selectedBase": selectedBase, "selectedContract": selectedContract}), 999);
     async.series(
       [
         function(callback) {
@@ -1236,7 +1202,7 @@ web3.version.getNetwork(function(error, version){
   addrs = [config.ethAddr];
   pks = [config.ethAddrPrivateKey];
   //get cookie
-  var userCookie = Main.readCookie(config.userCookie);
+  var userCookie = utility.readCookie(config.userCookie);
   if (userCookie) {
     userCookie = JSON.parse(userCookie);
     addrs = userCookie["addrs"];
@@ -1248,7 +1214,7 @@ web3.version.getNetwork(function(error, version){
   //translation
   translator = $('body').translate({lang: language, t: translations});
   //events cache cookie
-  var eventsCacheCookie = Main.readCookie(config.eventsCacheCookie);
+  var eventsCacheCookie = utility.readCookie(config.eventsCacheCookie);
   if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
   //get accounts
   web3.eth.defaultAccount = config.ethAddr;

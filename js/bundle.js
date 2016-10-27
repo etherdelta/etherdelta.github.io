@@ -93,6 +93,43 @@ function writeFile(filename, data, callback) {
 	});
 }
 
+function createCookie(name,value,days) {
+  if (localStorage) {
+    localStorage.setItem(name, value);
+  } else {
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime()+(days*24*60*60*1000));
+      var expires = "; expires="+date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name+"="+value+expires+"; path=/";
+  }
+}
+
+function readCookie(name) {
+  if (localStorage) {
+    return localStorage.getItem(name);
+  } else {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+}
+
+function eraseCookie(name) {
+  if (localStorage) {
+    localStorage.removeItem(name);
+  } else {
+    createCookie(name,"",-1);
+  }
+}
+
 function testCall(web3, contract, address, functionName, args, callback) {
   var options = {};
   options.data = contract[functionName].getData.apply(null, args);
@@ -1115,6 +1152,9 @@ exports.verify = verify;
 exports.createAccount = createAccount;
 exports.verifyPrivateKey = verifyPrivateKey;
 exports.toChecksumAddress = toChecksumAddress;
+exports.readCookie = readCookie;
+exports.createCookie = createCookie;
+exports.eraseCookie = eraseCookie;
 exports.getURL = getURL;
 exports.postURL = postURL;
 exports.readFile = readFile;
@@ -1221,8 +1261,8 @@ configs["2"] = {
   ethAddrPrivateKey: '',
   tokens: [
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
-    {addr: '0x9a210726fb7fdcb2b701b75e43c94c532eba0de4', name: 'TESTTRMPY', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000},
-    {addr: '0x77cafe1d95fd9d03143df9e1dffb401580aabaa5', name: 'TESTTRMPN', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000},
+    {addr: '0x9a210726fb7fdcb2b701b75e43c94c532eba0de4', name: 'TESTTRMPY', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
+    {addr: '0x77cafe1d95fd9d03143df9e1dffb401580aabaa5', name: 'TESTTRMPN', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD100', decimals: 16, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
     // {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
@@ -1338,40 +1378,6 @@ Main.alertTxResult = function(err, txs) {
 }
 Main.enableTooltips = function() {
   $('[data-toggle="tooltip"]').tooltip();
-}
-Main.createCookie = function(name,value,days) {
-  if (localStorage) {
-    localStorage.setItem(name, value);
-  } else {
-    if (days) {
-      var date = new Date();
-      date.setTime(date.getTime()+(days*24*60*60*1000));
-      var expires = "; expires="+date.toGMTString();
-    }
-    else var expires = "";
-    document.cookie = name+"="+value+expires+"; path=/";
-  }
-}
-Main.readCookie = function(name) {
-  if (localStorage) {
-    return localStorage.getItem(name);
-  } else {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-      var c = ca[i];
-      while (c.charAt(0)==' ') c = c.substring(1,c.length);
-      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-  }
-}
-Main.eraseCookie = function(name) {
-  if (localStorage) {
-    localStorage.removeItem(name);
-  } else {
-    createCookie(name,"",-1);
-  }
 }
 Main.logout = function() {
   addrs = [config.ethAddr];
@@ -1512,7 +1518,7 @@ Main.loadEvents = function(callback) {
           }
         }
       })
-      Main.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
+      utility.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
       callback(newEvents);
     });
   });
@@ -2347,7 +2353,7 @@ Main.checkContractUpgrade = function() {
   }
 }
 Main.resetCaches = function() {
-  Main.eraseCookie(config.eventsCacheCookie);
+  utility.eraseCookie(config.eventsCacheCookie);
   location.reload();
 }
 Main.loading = function(callback) {
@@ -2360,7 +2366,7 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
   q.push(function(done) {
     console.log('Beginning refresh', new Date());
     selectedContract = config.contractEtherDeltaAddr;
-    Main.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken": selectedToken, "selectedBase": selectedBase, "selectedContract": selectedContract}), 999);
+    utility.createCookie(config.userCookie, JSON.stringify({"addrs": addrs, "pks": pks, "selectedAccount": selectedAccount, "selectedToken": selectedToken, "selectedBase": selectedBase, "selectedContract": selectedContract}), 999);
     async.series(
       [
         function(callback) {
@@ -2517,7 +2523,7 @@ web3.version.getNetwork(function(error, version){
   addrs = [config.ethAddr];
   pks = [config.ethAddrPrivateKey];
   //get cookie
-  var userCookie = Main.readCookie(config.userCookie);
+  var userCookie = utility.readCookie(config.userCookie);
   if (userCookie) {
     userCookie = JSON.parse(userCookie);
     addrs = userCookie["addrs"];
@@ -2529,7 +2535,7 @@ web3.version.getNetwork(function(error, version){
   //translation
   translator = $('body').translate({lang: language, t: translations});
   //events cache cookie
-  var eventsCacheCookie = Main.readCookie(config.eventsCacheCookie);
+  var eventsCacheCookie = utility.readCookie(config.eventsCacheCookie);
   if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
   //get accounts
   web3.eth.defaultAccount = config.ethAddr;

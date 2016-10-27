@@ -55,59 +55,36 @@ if (cliOptions.help) {
 									console.log('Balance', API.utility.weiToEth(balances[selectedBase.name], API.getDivisor(selectedBase)), selectedBase.name);
 									console.log('On buy orders', API.utility.weiToEth(myBuySize, API.getDivisor(selectedBase)), selectedBase.name);
 									console.log('On sell orders', API.utility.weiToEth(mySellSize, API.getDivisor(selectedToken)), selectedToken.name);
+
 									var orders = [];
-									//bids
-									if (myBuySize<balances[selectedBase.name]*0.75) {
-										var placedOrders = myBuyOrders.length;
-										var volumeToPlace = balances[selectedBase.name] - myBuySize;
-										var ordersToPlace = pair.ordersPerSide - placedOrders;
-										var bestPrice = pair.theo*(1-pair.minEdge);
-										if (sellOrders.length>0 && bestPrice>sellOrders[0].price) bestPrice = sellOrders[0].price*(1-pair.minEdge);
-										var worstPrice = bestPrice - pair.edgeStep*pair.ordersPerSide*pair.theo;
-										bestPrice = API.clip(bestPrice, pair.minPrice, pair.maxPrice);
-										worstPrice = API.clip(worstPrice, pair.minPrice, pair.maxPrice);
-										var myExistingPrices = myBuyOrders.map(function(x){return Number(x.price)});
-										var pricePoints = [];
-										for (var i=0; i<pair.ordersPerSide; i++) pricePoints.push(bestPrice - (bestPrice-worstPrice)*i/(pair.ordersPerSide));
-										while (placedOrders < pair.ordersPerSide) {
-											var price = pricePoints.reduce(function(a,b){
-												return myExistingPrices.map(function(x){return Math.abs(x-b)}).min()>myExistingPrices.map(function(x){return Math.abs(x-a)}).min() ? b : a
-											}, pricePoints.min());
-											var volume = (volumeToPlace/price*API.getDivisor(selectedToken)/API.getDivisor(selectedBase)/pair.ordersPerSide).toFixed(2);
-											myExistingPrices.push(price);
-											orders.push({volume: volume, price: price});
-											placedOrders += 1;
+
+									var n = pair.buyNum;
+						      var balance = balances[selectedBase.name];
+									var onOrders = myBuySize;
+						      for (var i=0; i<n; i++) {
+						        var price = eval(pair.buyPrice);
+						        var volume = eval(pair.buyVolume);
+										if (Math.abs(volume)>0) {
+											orders.push({price: price, volume: volume});
 										}
-									}
-									//offers
-									if (mySellSize<balances[selectedToken.name]*0.75) {
-										var placedOrders = mySellOrders.length;
-										var volumeToPlace = balances[selectedToken.name] - mySellSize;
-										var ordersToPlace = pair.ordersPerSide - placedOrders;
-										var bestPrice = pair.theo*(1+pair.minEdge);
-										if (buyOrders.length>0 && bestPrice<buyOrders[0].price) bestPrice = buyOrders[0].price*(1+pair.minEdge);
-										var worstPrice = bestPrice + pair.edgeStep*pair.ordersPerSide*pair.theo;
-										bestPrice = API.clip(bestPrice, pair.minPrice, pair.maxPrice);
-										worstPrice = API.clip(worstPrice, pair.minPrice, pair.maxPrice);
-										var myExistingPrices = mySellOrders.map(function(x){return Number(x.price)});
-										var pricePoints = [];
-										for (var i=0; i<pair.ordersPerSide; i++) pricePoints.push(bestPrice - (bestPrice-worstPrice)*i/(pair.ordersPerSide));
-										while (placedOrders < pair.ordersPerSide) {
-											var price = pricePoints.reduce(function(a,b){
-												return myExistingPrices.map(function(x){return Math.abs(x-b)}).min()>myExistingPrices.map(function(x){return Math.abs(x-a)}).min() ? b : a
-											}, pricePoints.max());
-											var volume = (volumeToPlace/pair.ordersPerSide).toFixed(2);
-											myExistingPrices.push(price);
-											orders.push({volume: -volume, price: price});
-											placedOrders += 1;
+						      }
+									n = pair.sellNum;
+						      balance = balances[selectedToken.name];
+									onOrders = mySellSize;
+						      for (var i=0; i<n; i++) {
+						        var price = eval(pair.sellPrice);
+						        var volume = eval(pair.sellVolume);
+										if (Math.abs(volume)>0) {
+											orders.push({price: price, volume: -volume});
 										}
-									}
+						      }
+
 									API.publishOrders(orders, cliOptions.address, pair.expires, selectedToken, selectedBase, cliOptions.armed, function(err, result){
 										callbackEach(null);
 									});
 								},
 								function(err) {
-									setTimeout(function(){nextForever(null)}, 10*1000);
+									setTimeout(function(){nextForever(null)}, 60*1000);
 								}
 							);
 						}

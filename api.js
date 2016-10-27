@@ -75,50 +75,26 @@ API.init = function(callback, allContracts, path) {
           });
         },
         function(callback){
-          utility.readFile(self.storageMessagesCache, function(err, result){
-            if (!err) {
-              try {
-                self.messagesCache = JSON.parse(result);
-              } catch (err) {
-                self.messagesCache = {};
-              }
-            }
+          API.readStorage(self.storageMessagesCache, function(err, result){
+            self.messagesCache = !err ? result : {};
             callback(null, true);
           });
         },
         function(callback){
-          utility.readFile(self.storageEventsCache, function(err, result){
-            if (!err) {
-              try {
-                self.eventsCache = JSON.parse(result);
-              } catch (err) {
-                self.eventsCache = {};
-              }
-            }
+          API.readStorage(self.storageEventsCache, function(err, result){
+            self.eventsCache = !err ? result : {};
             callback(null, true);
           });
         },
         function(callback){
-          utility.readFile(self.storageDeadOrdersCache, function(err, result){
-            if (!err) {
-              try {
-                self.deadOrdersCache = JSON.parse(result);
-              } catch(err) {
-                self.deadOrdersCache = {};
-              }
-            }
+          API.readStorage(self.storageDeadOrdersCache, function(err, result){
+            self.deadOrdersCache = !err ? result : {};
             callback(null, true);
           });
         },
         function(callback){
-          utility.readFile(self.storageOrdersCache, function(err, result){
-            if (!err) {
-              try {
-                self.ordersCache = JSON.parse(result);
-              } catch(err) {
-                self.ordersCache = {};
-              }
-            }
+          API.readStorage(self.storageOrdersCache, function(err, result){
+            self.ordersCache = !err ? result : {};
             callback(null, true);
           });
         },
@@ -139,6 +115,51 @@ API.init = function(callback, allContracts, path) {
       }
     );
   });
+}
+
+API.readStorage = function(name, callback) {
+  if (typeof(window)!='undefined') {
+    var result = utility.readCookie(name);
+    if (result) {
+      try {
+        result = JSON.parse(result);
+        callback(null, result);
+      } catch (err) {
+        callback('fail', undefined);
+      }
+    } else {
+      callback('fail', undefined);
+    }
+  } else {
+    utility.readFile(name, function(err, result){
+      if (!err) {
+        try {
+          var result = JSON.parse(result);
+          callback(null, result);
+        } catch (err) {
+          callback(err, undefined);
+        }
+      } else {
+        callback(err, undefined);
+      }
+    });
+  }
+}
+
+API.writeStorage = function(name, obj, callback) {
+  obj = JSON.stringify(obj);
+  if (typeof(window)!='undefined') {
+    utility.createCookie(name, obj);
+    callback(null, true);
+  } else {
+    utility.writeFile(name, obj, function(err, result){
+      if (!err) {
+        callback(null, true);
+      } else {
+        callback(err, false);
+      }
+    });
+  }
 }
 
 API.logs = function(callback) {
@@ -178,7 +199,7 @@ API.logs = function(callback) {
       },
       function(err, result) {
         var newEvents = result.reduce(function(a,b){return a+b},0);
-        utility.writeFile(self.storageEventsCache, JSON.stringify(self.eventsCache), function(err, result){});
+        API.writeStorage(self.storageEventsCache, self.eventsCache, function(err, result){});
         callback(null, newEvents);
       }
     );
@@ -353,8 +374,8 @@ API.getMessages = function(callback) {
   if (self.messagesCache) {
     callback(null, self.messagesCache)
   } else {
-    utility.readFile(self.storageMessagesCache, function(err, result){
-      var messagesResult = !err ? JSON.parse(result) : {};
+    API.readStorage(self.storageMessagesCache, function(err, result){
+      var messagesResult = !err ? result : {};
       var keys = Object.keys(messagesResult);
       keys.sort();
       self.messagesCache = {};
@@ -370,7 +391,7 @@ API.getMessages = function(callback) {
 API.saveMessage = function(message, callback) {
   var self = this;
   self.messagesCache[self.lastMessagesId++] = message;
-  API.utility.writeFile(self.storageMessagesCache, JSON.stringify(self.messagesCache), function(err, result){
+  API.writeStorage(self.storageMessagesCache, self.messagesCache, function(err, result){
     callback(null, true);
   })
 }
@@ -472,9 +493,9 @@ API.getOrders = function(callback) {
             //remove orders below the min order limit
             orders = orders.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=self.minOrderSize});
             //save to storage
-            utility.writeFile(self.storageMessagesCache, JSON.stringify(self.messagesCache), function(err, result){});
-            utility.writeFile(self.storageOrdersCache, JSON.stringify(self.ordersCache), function(err, result){});
-            utility.writeFile(self.storageDeadOrdersCache, JSON.stringify(self.deadOrdersCache), function(err, result){});
+            API.writeStorage(self.storageMessagesCache, self.messagesCache, function(err, result){});
+            API.writeStorage(self.storageOrdersCache, self.ordersCache, function(err, result){});
+            API.writeStorage(self.storageDeadOrdersCache, self.deadOrdersCache, function(err, result){});
             self.usersWithOrdersToUpdate = {};
             callback(null, {orders: ordersMapped, blockNumber: blockNumber});
           }
