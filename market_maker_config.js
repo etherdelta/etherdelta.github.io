@@ -2,8 +2,8 @@ var config = {
   pairs: [
     {
       pair: 'TRMPN/ETH', expires: 25,
-      sellNum: 5, sellVolume: '(balance - onOrders) / n', sellPrice: '0.9 + 0.025 * i',
-      buyNum: 5, buyVolume: '(balance - onOrders) / n / price', buyPrice: '0.8 - 0.05 * i'
+      sellNum: 15, sellVolume: '(balance - onOrders) / n * (0.9 + Math.random()*0.1)', sellPrice: '0.9 + 0.099 * i / n',
+      buyNum: 15, buyVolume: '(balance - onOrders) / n / price * (0.9 + Math.random()*0.1)', buyPrice: '0.75 - 0.35 * i / n'
     },
   ],
 };

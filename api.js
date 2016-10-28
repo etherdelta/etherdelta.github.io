@@ -708,7 +708,7 @@ API.publishOrder = function(addr, baseAddr, tokenAddr, direction, amount, price,
 API.publishOrders = function(orders, addr, expires, token, base, armed, callback) {
   API.utility.blockNumber(API.web3, function(err, blockNumber) {
     orders.sort(function(a,b){return b.price-a.price});
-    async.each(orders,
+    async.eachSeries(orders,
       function(order, callbackEach) {
         var amount = utility.weiToEth(Math.abs(order.volume), API.getDivisor(token.addr));
         var orderNonce = utility.getRandomInt(0,Math.pow(2,32));
