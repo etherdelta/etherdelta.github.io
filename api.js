@@ -9,7 +9,7 @@ var sha256 = require('js-sha256').sha256;
 function API(){
 }
 
-API.init = function(callback, allContracts, path) {
+API.init = function(callback, allContracts, path, provider) {
   var self = this;
 
   //self.config, utility
@@ -19,6 +19,9 @@ API.init = function(callback, allContracts, path) {
   //web3
   self.web3 = new Web3();
   self.web3.eth.defaultAccount = self.config.ethAddr;
+  if (provider) {
+    self.config.ethProvider = provider;
+  }
   self.web3.setProvider(new self.web3.providers.HttpProvider(self.config.ethProvider));
 
   //check mainnet vs testnet
