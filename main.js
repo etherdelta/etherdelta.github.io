@@ -203,6 +203,8 @@ Main.loadEvents = function(callback) {
   });
 }
 Main.displayMyTransactions = function(orders, blockNumber, callback) {
+  //only look at orders for the selected token and base
+  orders = orders.filter(function(x){return (x.order.tokenGet==selectedToken.addr && x.order.tokenGive==selectedBase.addr && x.amount>0) || (x.order.tokenGive==selectedToken.addr && x.order.tokenGet==selectedBase.addr && x.amount<0)});
   //only include orders by the selected user
   orders = orders.filter(function(order){return addrs[selectedAccount].toLowerCase()==order.order.user.toLowerCase()});
   //filter only orders that match the smart contract address
@@ -265,7 +267,7 @@ Main.displayMyTransactions = function(orders, blockNumber, callback) {
     }
   );
 }
-Main.displayVolumes = function(callback) {
+Main.displayVolumes = function(orders, blockNumber, callback) {
   var tokenVolumes = {};
   var pairVolumes = {};
   var timeFrames = [86400*1000*7, 86400*1000*1];
@@ -277,7 +279,20 @@ Main.displayVolumes = function(callback) {
     var base = Main.getToken(config.pairs[i].base);
     if (token && base) {
       var pair = token.name+'/'+base.name;
-      if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0)};
+      //only look at orders for the selected token and base
+      var ordersFiltered = orders.filter(function(x){return (x.order.tokenGet==token.addr && x.order.tokenGive==base.addr && x.amount>0) || (x.order.tokenGive==token.addr && x.order.tokenGet==base.addr && x.amount<0)});
+      //remove orders below the min order limit
+      ordersFiltered = ordersFiltered.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=minOrderSize});
+      //filter only orders that match the smart contract address
+      ordersFiltered = ordersFiltered.filter(function(order){return order.order.contractAddr==config.contractEtherDeltaAddr});
+      //final order filtering and sorting
+      var buyOrders = ordersFiltered.filter(function(x){return x.amount>0});
+      var sellOrders = ordersFiltered.filter(function(x){return x.amount<0});
+      sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
+      buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
+      var bid = buyOrders.length>0 ? buyOrders[0].price : undefined;
+      var ask = sellOrders.length>0 ? sellOrders[sellOrders.length-1].price : undefined;
+      if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0), bid: bid, ask: ask};
     }
   }
   //get trading volume
@@ -564,7 +579,6 @@ Main.getOrders = function(callback) {
             })
           });
         });
-        orders = orders.filter(function(x){return (x.order.tokenGet==selectedToken.addr && x.order.tokenGive==selectedBase.addr && x.amount>0) || (x.order.tokenGive==selectedToken.addr && x.order.tokenGet==selectedBase.addr && x.amount<0)})
         callback(null, {orders: orders, blockNumber: blockNumber});
       } catch (err) {
         callback(err, undefined);
@@ -575,6 +589,8 @@ Main.getOrders = function(callback) {
   });
 }
 Main.displayOrderbook = function(orders, blockNumber, callback) {
+  //only look at orders for the selected token and base
+  orders = orders.filter(function(x){return (x.order.tokenGet==selectedToken.addr && x.order.tokenGive==selectedBase.addr && x.amount>0) || (x.order.tokenGive==selectedToken.addr && x.order.tokenGet==selectedBase.addr && x.amount<0)});
   //remove orders below the min order limit
   orders = orders.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=minOrderSize});
   //filter only orders that match the smart contract address
@@ -865,7 +881,7 @@ Main.trade = function(kind, order, amount) {
     var availableBalance = result.toNumber();
     utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s], function(err, result) {
       var availableVolume = result.toNumber();
-      if (amount>availableBalance) amount = availableBalance;
+      if (amount>availableBalance/1.003) amount = availableBalance/1.003; //balance adjusted for fees
       if (amount>availableVolume) amount = availableVolume;
       var v = Number(order.v);
       var r = order.r;
@@ -1087,7 +1103,6 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
                     Main.displayAccounts(function(){});
                     Main.displayAllBalances(function(){});
                     Main.displayTradesAndChart(function(){});
-                    Main.displayVolumes(function(){});
                   }
                 });
               },
@@ -1107,6 +1122,11 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
                       },
                       function(callback) {
                         Main.displayOrderbook(ordersResult.orders, ordersResult.blockNumber, function(){
+                          callback(null, undefined);
+                        });
+                      },
+                      function(callback) {
+                        Main.displayVolumes(ordersResult.orders, ordersResult.blockNumber, function(){
                           callback(null, undefined);
                         });
                       }

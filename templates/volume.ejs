@@ -1,22 +1,28 @@
-<div class="row-box thirty scroll">
+<div class="row-box height5 scroll">
   <table class="table table-condensed table-borderless">
     <% pairVolumes.forEach(function(pairVolume){ %>
       <tr>
         <td><a href="javascript:;" onclick="bundle.Main.selectTokenAndBase('<%= pairVolume.token.addr %>','<%= pairVolume.base.addr %>');"><%= pairVolume.token.name+'/'+pairVolume.base.name %></a></td>
         <td class="align-right"><%= bundle.utility.weiToEth(pairVolume.volumes[1], bundle.Main.getDivisor(pairVolume.token)) %></td>
-        <td class="align-right padding-right"><%= bundle.utility.weiToEth(pairVolume.volumes[0], bundle.Main.getDivisor(pairVolume.token)) %></td>
+        <td class="align-right"><%= bundle.utility.weiToEth(pairVolume.volumes[0], bundle.Main.getDivisor(pairVolume.token)) %></td>
+        <td class="align-right"><%= pairVolume.bid ? pairVolume.bid.toNumber().toFixed(5) : '' %></td>
+        <td class="align-right padding-right"><%= pairVolume.ask ? pairVolume.ask.toNumber().toFixed(5) : '' %></td>
       </tr>
     <% }) %>
     <tr class="mid-header">
       <th class="trn">token</th>
       <th class="trn align-right">daily</th>
-      <th class="trn align-right padding-right">weekly</th>
+      <th class="trn align-right">weekly</th>
+      <th class="align-right"></th>
+      <th class="align-right padding-right"></th>
     </tr>
     <% tokenVolumes.forEach(function(tokenVolume){ %>
       <tr>
         <td><a href="javascript:;" onclick="bundle.Main.displayTokenGuide('<%= tokenVolume.token.name %>')"><%= tokenVolume.token.name %></a></td>
         <td class="align-right"><%= bundle.utility.weiToEth(tokenVolume.volumes[1], bundle.Main.getDivisor(tokenVolume.token)) %></td>
-        <td class="align-right padding-right"><%= bundle.utility.weiToEth(tokenVolume.volumes[0], bundle.Main.getDivisor(tokenVolume.token)) %></td>
+        <td class="align-right"><%= bundle.utility.weiToEth(tokenVolume.volumes[0], bundle.Main.getDivisor(tokenVolume.token)) %></td>
+        <td class="align-right"></td>
+        <td class="align-right padding-right"></td>
       </tr>
     <% }) %>
   </table>

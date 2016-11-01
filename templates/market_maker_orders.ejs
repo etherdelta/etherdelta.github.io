@@ -1,0 +1,13 @@
+<% pairOrders.forEach(function(pairOrder){ %>
+  <div style="width: 200px; float: left; margin-right: 12px;">
+    <h4><%= pairOrder.pair.pair %></h4>
+    <table class="table table-condensed table-borderless">
+    <% pairOrder.orders.forEach(function(order){ %>
+      <tr>
+        <td><span class="<%= order.volume>0 ? 'buy' : 'sell' %>"><%= order.price.toFixed(5) %></span></td>
+        <td><%= bundle.API.utility.weiToEth(Math.abs(order.volume, bundle.API.getDivisor(pairOrder.token.addr))) %></td>
+      </tr>
+    <% }) %>
+    </table>
+  </div>
+<% }) %>

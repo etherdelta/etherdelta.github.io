@@ -651,7 +651,7 @@ API.returnTicker = function(callback) {
   });
 }
 
-API.publishOrder = function(addr, baseAddr, tokenAddr, direction, amount, price, expires, orderNonce, callback) {
+API.publishOrder = function(addr, pk, baseAddr, tokenAddr, direction, amount, price, expires, orderNonce, callback) {
   var self = this;
   var tokenGet = undefined;
   var tokenGive = undefined;
@@ -678,7 +678,7 @@ API.publishOrder = function(addr, baseAddr, tokenAddr, direction, amount, price,
       if (!self.config.ordersOnchain) { //offchain order
         var condensed = utility.pack([self.contractEtherDeltaAddrs[0], tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 160, 256, 160, 256, 256, 256]);
         var hash = sha256(new Buffer(condensed,'hex'));
-        utility.sign(self.web3, addr, hash, undefined, function(err, sig) {
+        utility.sign(self.web3, addr, hash, pk, function(err, sig) {
           if (err) {
             callback('Could not sign order because of an error: '+err, false);
           } else {
@@ -695,7 +695,7 @@ API.publishOrder = function(addr, baseAddr, tokenAddr, direction, amount, price,
         });
       } else { //onchain order
         var token = API.getToken(tokenGet);
-        API.utility.send(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'order', [tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce, {gas: token.gasOrder, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+        API.utility.send(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'order', [tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce, {gas: token.gasOrder, value: 0}], addr, pk, nonce, function(err, result) {
           txHash = result.txHash;
           nonce = result.nonce;
           callback(null, true);
@@ -705,7 +705,7 @@ API.publishOrder = function(addr, baseAddr, tokenAddr, direction, amount, price,
   });
 }
 
-API.publishOrders = function(orders, addr, expires, token, base, armed, callback) {
+API.publishOrders = function(orders, addr, pk, expires, token, base, armed, callback, callbackSentOne) {
   API.utility.blockNumber(API.web3, function(err, blockNumber) {
     orders.sort(function(a,b){return b.price-a.price});
     async.eachSeries(orders,
@@ -713,8 +713,12 @@ API.publishOrders = function(orders, addr, expires, token, base, armed, callback
         var amount = utility.weiToEth(Math.abs(order.volume), API.getDivisor(token.addr));
         var orderNonce = utility.getRandomInt(0,Math.pow(2,32));
         if (armed) {
-          API.publishOrder(addr, base.addr, token.addr, order.volume>0 ? 'buy' : 'sell', amount, order.price, blockNumber + expires, orderNonce, function(err, result){
+          API.publishOrder(addr, pk, base.addr, token.addr, order.volume>0 ? 'buy' : 'sell', amount, order.price, blockNumber + expires, orderNonce, function(err, result){
             if (!err && result) {
+              if (callbackSentOneOrder) {
+                var message = 'Sent order: ' + (order.volume>0 ? 'buy' : 'sell') + ' ' + amount + ' ' + (token.name+'/'+base.name) + ' ' +  '@' + ' ' + order.price;
+                callbackSentOne(null, message);
+              }
               console.log('Sent order:', order.volume>0 ? 'buy' : 'sell', amount, token.name+'/'+base.name, '@', order.price);
             } else {
               console.log('Error sending order:', err);

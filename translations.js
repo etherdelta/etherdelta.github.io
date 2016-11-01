@@ -475,6 +475,14 @@ var translations = {
     en:'Bids',
     cn:'竞价'
   },
+  bid:{
+    en:'Bid',
+    cn:'竞价'
+  },
+  offer:{
+    en:'Offer',
+    cn:'要价'
+  },
   no_orders:{
     en:'There are no orders here.',
     cn:'这里没有显示订单。'

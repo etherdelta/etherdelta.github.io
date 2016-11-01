@@ -77,7 +77,7 @@ if (cliOptions.help) {
 										}
 						      }
 
-									API.publishOrders(orders, cliOptions.address, pair.expires, selectedToken, selectedBase, cliOptions.armed, function(err, result){
+									API.publishOrders(orders, cliOptions.address, undefined, pair.expires, selectedToken, selectedBase, cliOptions.armed, function(err, result){
 										callbackEach(null);
 									});
 								},

@@ -1,6 +1,28 @@
 //http://jsonschema.net/#/
 
-var schema = {
+var account = {
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "displayProperty": "account",
+  "properties": {
+    "address": {
+      "title": "Address",
+      "description": "The Ethereum address",
+      "type": "string"
+    },
+    "privateKey": {
+      "title": "Private key",
+      "description": "The Ethereum private key)",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "address"
+  ]
+};
+
+var pairs = {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "array",
   "items": {
@@ -16,6 +38,11 @@ var schema = {
         "title": "Expires",
         "description": "Number of blocks until your orders expire",
         "type": "integer"
+      },
+      "sellEnabled": {
+        "title": "Sell enabled",
+        "description": "Whether to enable sell orders",
+        "type": "string"
       },
       "sellNum": {
         "title": "Sell number",
@@ -46,20 +73,27 @@ var schema = {
         "title": "Buy number",
         "description": "Number of buy orders",
         "type": "number"
-      }
+      },
+      "buyEnabled": {
+        "title": "Buy enabled",
+        "description": "Whether to enable buy orders",
+        "type": "string"
+      },
     },
     "additionalProperties": false,
     "required": [
       "pair",
       "expires",
+      "sellEnabled",
       "sellNum",
       "sellVolume",
       "sellPrice",
       "buyPrice",
       "buyVolume",
-      "buyNum"
+      "buyNum",
+      "buyEnabled"
     ]
   }
 };
 
-module.exports = schema;
+module.exports = {account: account, pairs: pairs};

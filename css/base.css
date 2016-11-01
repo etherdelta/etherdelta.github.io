@@ -83,23 +83,20 @@ a.navbar-brand {
   overflow-y: none;
 }
 
-.row-box.fifty {
+.row-box.height1 {
+  height: calc(100vh - 123px);
+}
+.row-box.height2 {
   height: calc(50vh - 116px);
 }
-.row-box.thirty {
-  height: calc(30vh - 99px);
+.row-box.height3 {
+  height: calc(50vh - 81px);
 }
-.row-box.seventy {
-  height: calc(70vh - 99px);
+.row-box.height4 {
+  height: calc(40vh - 116px);
 }
-.row-box.forty {
-  height: calc(40vh - 117px);
-}
-.row-box.sixty {
-  height: calc(60vh - 117px);
-}
-.row-box.hundred {
-  height: calc(100vh - 89px);
+.row-box.height5 {
+  height: calc(60vh - 116px);
 }
 .row-box.table-header {
   height: 35px;

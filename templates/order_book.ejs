@@ -1,4 +1,4 @@
-<div class="row-box hundred scroll" id="order_book_scroll">
+<div class="row-box height3 scroll" id="order_book_scroll">
   <table class="table table-condensed table-borderless">
     <% sellOrders.forEach(function(order){ %>
     <tr class="clickable-row" data-toggle="modal" data-target="#buy_cross_modal" data-order='<%= JSON.stringify(order) %>' data-desc='<% if (Number(order.order.expires) > blockNumber){ %><%= translator.get("expires_in")%> <%= (Number(order.order.expires) - blockNumber) %> <%= Number(order.order.expires) - blockNumber==1 ? translator.get("block") : translator.get("blocks") %><% } else { %><%= translator.get("expired") %><% } %><br /><%= translator.get("sell_order")%>: <%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %> <%= selectedToken.name %> @ <%= order.price.toNumber().toFixed(5) %> <%= selectedToken.name+'/'+selectedBase.name %>' data-token='<%= selectedToken.name %>' data-price='<%= order.price.toNumber().toFixed(5) %>' data-base='<%= selectedBase.name %>' data-amount='<%= bundle.utility.weiToEth(Math.abs(order.availableVolume), bundle.Main.getDivisor(selectedToken)) %>'>
@@ -24,6 +24,5 @@
         <td colspan="3" style="padding-right: 12px;"><span class="trn">no_orders</span></td>
       </tr>
     <% } %>
-
   </table>
 </div>

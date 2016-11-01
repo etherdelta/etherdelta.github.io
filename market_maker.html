@@ -5,30 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/images/favicon.ico" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/css/jquery-ui.css" rel="stylesheet" />
     <link href="/css/treema.css" rel="stylesheet" />
+    <link href="/css/alertify.min.css" rel="stylesheet" />
+    <link href="/css/alertify-bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/base_market_maker.css" rel="stylesheet" />
     <title>EtherDelta Market Maker</title>
   </head>
 
   <body>
-    <h1>Market maker</h1>
 
-    <div id="config"></div>
+    <div class="header">
+      <img src="/images/title.png" />
+      <span class="title">Market Maker</span>
+    </div>
+
+    <div class="content">
+
+      <div class="row">
+
+        <div class="col-md-4">
+          <h3>Account</h3>
+          <div id="config_account" class="padding-margin-bottom"></div>
+
+          <h3>Pairs</h3>
+          <div id="config_pairs" class="padding-margin-bottom"></div>
+          <p>
+            <button class="btn btn-default" onclick="bundle.Main.saveConfig(function(){});">Save config</button>
+            <button class="btn btn-default" onclick="bundle.Main.forgetConfig(function(){});">Forget config</button>
+          </p>
+          <p>
+            <button class="btn btn-default" onclick="bundle.Main.generateOrders(function(){});">Preview orders</button>
+            <button class="btn btn-default" onclick="bundle.Main.sendOrders(function(){});">Send orders</button>
+          </p>
+        </div>
+
+        <div class="col-md-8">
+          <h3>Orders</h3>
+          <div id="orders" class="padding-margin-bottom"></div>
+        </div>
+
+      </div>
+
+    </div>
 
     <script src="/js/jquery-1.11.1.min.js" type="text/javascript"></script>
     <script src="/js/jquery-ui.js" type="text/javascript"></script>
+    <script src="/js/alertify.min.js" type="text/javascript"></script>
+    <script src="/js/ejs_production.js" type="text/javascript"></script>
     <script src="/js/tv4.min.js" type="text/javascript"></script>
     <script src="/js/treema.js" type="text/javascript"></script>
-    <script src="/js/market_maker_config.js" type="text/javascript"></script>
-    <script src="/js/market_maker_config_schema.js" type="text/javascript"></script>
-    <script>
-      var schema = market_maker_config_schema;
-      var data = market_maker_config.pairs;
-      var options = { schema:schema, data:data };
-      var el = $('#config');
-      var treema = el.treema(options);
-      treema.build();
-    </script>
+    <script src="/js/market_maker_gui.js" type="text/javascript"></script>
   </body>
 
 </html>

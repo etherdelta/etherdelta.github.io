@@ -51,7 +51,7 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-md-2 no-float">
+        <div class="col-md-3 no-float">
           <div class="row-container">
             <div class="row-header trn">balance</div>
             <div class="row-box nav-header">
@@ -68,13 +68,32 @@
                 </tr>
               </table>
             </div>
-            <div class="row-box forty">
+            <div class="row-box height4">
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="deposit"></div>
                 <div role="tabpanel" class="tab-pane" id="withdraw"></div>
                 <div role="tabpanel" class="tab-pane" id="transfer"></div>
               </div>
             </div>
+            <div class="row-header trn">volume</div>
+            <div class="row-box table-header">
+              <table class="table table-condensed table-borderless">
+                <tr>
+                  <th class="trn">pair</th>
+                  <th class="trn align-right">daily</th>
+                  <th class="trn align-right">weekly</th>
+                  <th class="align-right"><span class="trn">bid</span></th>
+                  <th class="align-right padding-right"><span class="trn">offer</span></th>
+                </tr>
+              </table>
+            </div>
+            <div id="volume"></div>
+          </div>
+        </div>
+        <div class="col-md-2 no-float">
+          <div class="row-container">
+            <div class="row-header trn">order_book</div>
+            <div id="order_book"></div>
             <div class="row-header trn">new_order</div>
             <div class="row-box nav-header">
               <ul class="nav nav-tabs two columns" role="tablist">
@@ -82,7 +101,7 @@
                 <li role="presentation"><a href="#sell" aria-controls="sell" role="tab" data-toggle="tab" class="trn">sell</a></li>
               </ul>
             </div>
-            <div class="row-box sixty padding">
+            <div class="row-box height3 padding">
               <input type="hidden" id="token_addr" value="<%= selectedToken.addr %>" />
               <input type="hidden" id="base_addr" value="<%= selectedBase.addr %>" />
 
@@ -91,12 +110,6 @@
                 <div role="tabpanel" class="tab-pane" id="sell"></div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-3 no-float">
-          <div class="row-container">
-            <div class="row-header trn">order_book</div>
-            <div id="order_book"></div>
           </div>
         </div>
         <div class="col-md-5 no-float">
@@ -108,7 +121,7 @@
                 <li role="presentation"><a href="#chart_depth" aria-controls="chart_depth" role="tab" data-toggle="tab" class="trn">depth</a></li>
               </ul>
             </div>
-            <div class="row-box fifty">
+            <div class="row-box height2">
               <div class="tab-content" style="height: 100%;">
                 <div role="tabpanel" class="tab-pane active" id="chart_price" style="height: 100%; width: 100%;"></div>
                 <div role="tabpanel" class="tab-pane" id="chart_depth" style="height: 100%; width: 100%;"></div>
@@ -131,17 +144,6 @@
         </div>
         <div class="col-md-2 no-float">
           <div class="row-container">
-            <div class="row-header trn">volume</div>
-            <div class="row-box table-header">
-              <table class="table table-condensed table-borderless">
-                <tr>
-                  <th class="trn">pair</th>
-                  <th class="trn align-right">daily</th>
-                  <th class="trn align-right padding-right">weekly</th>
-                </tr>
-              </table>
-            </div>
-            <div id="volume"></div>
             <div class="row-header">
               <span class="trn">trades</span>
             </div>
@@ -210,7 +212,7 @@
           </div>
           <input type="hidden" id="buy_cross_order" />
           <div class="modal-footer">
-            <button type="button" class="btn btn-default trn" data-dismiss="modal">cancel</button>
+            <!-- <button type="button" class="btn btn-default trn" data-dismiss="modal">cancel</button> -->
             <button type="button" class="btn btn-primary trn" id="buy_cross_submit">buy</button>
           </div>
         </div>
@@ -247,7 +249,7 @@
           </div>
           <input type="hidden" id="sell_cross_order" />
           <div class="modal-footer">
-            <button type="button" class="btn btn-default trn" data-dismiss="modal">cancel</button>
+            <!-- <button type="button" class="btn btn-default trn" data-dismiss="modal">cancel</button> -->
             <button type="button" class="btn btn-primary trn" id="sell_cross_submit">sell</button>
           </div>
         </div>
