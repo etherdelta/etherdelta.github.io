@@ -881,7 +881,7 @@ Main.trade = function(kind, order, amount) {
     var availableBalance = result.toNumber();
     utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s], function(err, result) {
       var availableVolume = result.toNumber();
-      if (amount>availableBalance/1.003) amount = availableBalance/1.003; //balance adjusted for fees
+      if (amount>availableBalance/1.0031) amount = availableBalance/1.0031; //balance adjusted for fees (0.0001 to avoid rounding error)
       if (amount>availableVolume) amount = availableVolume;
       var v = Number(order.v);
       var r = order.r;

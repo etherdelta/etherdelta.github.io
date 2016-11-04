@@ -708,7 +708,7 @@ API.publishOrder = function(addr, pk, baseAddr, tokenAddr, direction, amount, pr
   });
 }
 
-API.publishOrders = function(orders, addr, pk, expires, token, base, armed, callback, callbackSentOne) {
+API.publishOrders = function(orders, addr, pk, expires, token, base, armed, callback, callbackSentOneOrder) {
   API.utility.blockNumber(API.web3, function(err, blockNumber) {
     orders.sort(function(a,b){return b.price-a.price});
     async.eachSeries(orders,
@@ -720,7 +720,7 @@ API.publishOrders = function(orders, addr, pk, expires, token, base, armed, call
             if (!err && result) {
               if (callbackSentOneOrder) {
                 var message = 'Sent order: ' + (order.volume>0 ? 'buy' : 'sell') + ' ' + amount + ' ' + (token.name+'/'+base.name) + ' ' +  '@' + ' ' + order.price;
-                callbackSentOne(null, message);
+                callbackSentOneOrder(null, message);
               }
               console.log('Sent order:', order.volume>0 ? 'buy' : 'sell', amount, token.name+'/'+base.name, '@', order.price);
             } else {
