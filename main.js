@@ -765,20 +765,24 @@ Main.withdraw = function(addr, amount) {
     if (amount>balance) {
       amount = balance;
     }
-    if (addr=='0x0000000000000000000000000000000000000000') {
-      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-        txHash = result.txHash;
-        nonce = result.nonce;
-        Main.addPending(err, {txHash: result.txHash});
-        Main.alertTxResult(err, result);
-      });
+    if (amount<=0) {
+      Main.alertError('You don\'t have anything to withdraw.');
     } else {
-      utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdrawToken', [addr, amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-        txHash = result.txHash;
-        nonce = result.nonce;
-        Main.addPending(err, {txHash: result.txHash});
-        Main.alertTxResult(err, result);
-      });
+      if (addr=='0x0000000000000000000000000000000000000000') {
+        utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+          txHash = result.txHash;
+          nonce = result.nonce;
+          Main.addPending(err, {txHash: result.txHash});
+          Main.alertTxResult(err, result);
+        });
+      } else {
+        utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdrawToken', [addr, amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+          txHash = result.txHash;
+          nonce = result.nonce;
+          Main.addPending(err, {txHash: result.txHash});
+          Main.alertTxResult(err, result);
+        });
+      }
     }
   });
 }
