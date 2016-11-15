@@ -1,34 +1,40 @@
-<%
-balanceToken = balances.filter(function(x){return x.token.addr==selectedToken.addr})[0]
-balanceBase = balances.filter(function(x){return x.token.addr==selectedBase.addr})[0]
-%>
-<table class="table table-borderless">
-  <tr>
-    <td><a href="javascript:;" onclick="bundle.Main.displayTokenGuide('<%= selectedToken.name %>')"><%= selectedToken.name %></a></td><td><%= bundle.utility.weiToEth(balanceToken.balanceOutside, bundle.Main.getDivisor(balanceToken.token)) %></td><td><%= bundle.utility.weiToEth(balanceToken.balance, bundle.Main.getDivisor(balanceToken.token)) %></td>
-  </tr>
-  <tr>
-    <td>
-      <input type="text" class="form-control input-xs trn" id="transfer_amount_<%= selectedToken.addr %>" placeholder="amount" />
-    </td>
-    <td>
-      <input type="text" class="form-control input-xs trn" id="transfer_to_<%= selectedToken.addr %>" placeholder="address" value="<%= addr %>" />
-    </td>
-    <td>
-      <button type="button" class="btn btn-primary btn-xs trn" style="width: 100%;" id="transfer_submit_<%= selectedToken.addr %>" onclick="transfer_click('<%= selectedToken.addr %>')">transfer</button>
-    </td>
-  </tr>
-  <tr>
-    <td><a href="javascript:;" onclick="bundle.Main.displayTokenGuide('<%= selectedBase.name %>')"><%= selectedBase.name %></a></td><td><%= bundle.utility.weiToEth(balanceBase.balanceOutside, bundle.Main.getDivisor(balanceBase.token)) %></td><td><%= bundle.utility.weiToEth(balanceBase.balance, bundle.Main.getDivisor(balanceBase.token)) %></td>
-  </tr>
-  <tr>
-    <td>
-      <input type="text" class="form-control input-xs trn" id="transfer_amount_<%= selectedBase.addr %>" placeholder="amount" />
-    </td>
-    <td>
-      <input type="text" class="form-control input-xs trn" id="transfer_to_<%= selectedBase.addr %>" placeholder="address" value="<%= addr %>" />
-    </td>
-    <td>
-      <button type="button" class="btn btn-primary btn-xs trn" style="width: 100%;" id="transfer_submit_<%= selectedBase.addr %>" onclick="transfer_click('<%= selectedBase.addr %>')">transfer</button>
-    </td>
-  </tr>
-</table>
+<% if (addr!='0x0000000000000000000000000000000000000123') { %>
+  <%
+  balanceToken = balances.filter(function(x){return x.token.addr==selectedToken.addr})[0]
+  balanceBase = balances.filter(function(x){return x.token.addr==selectedBase.addr})[0]
+  %>
+  <table class="table table-borderless">
+    <tr>
+      <td><a href="javascript:;" onclick="bundle.Main.displayTokenGuide('<%= selectedToken.name %>')"><%= selectedToken.name %></a></td><td><%= bundle.utility.weiToEth(balanceToken.balanceOutside, bundle.Main.getDivisor(balanceToken.token)) %></td><td><%= bundle.utility.weiToEth(balanceToken.balance, bundle.Main.getDivisor(balanceToken.token)) %></td>
+    </tr>
+    <tr>
+      <td>
+        <input type="text" class="form-control input-xs trn" id="transfer_amount_<%= selectedToken.addr %>" placeholder="amount" />
+      </td>
+      <td>
+        <input type="text" class="form-control input-xs trn" id="transfer_to_<%= selectedToken.addr %>" placeholder="address" value="<%= addr %>" />
+      </td>
+      <td>
+        <button type="button" class="btn btn-primary btn-xs trn" style="width: 100%;" id="transfer_submit_<%= selectedToken.addr %>" onclick="transfer_click('<%= selectedToken.addr %>')">transfer</button>
+      </td>
+    </tr>
+    <tr>
+      <td><a href="javascript:;" onclick="bundle.Main.displayTokenGuide('<%= selectedBase.name %>')"><%= selectedBase.name %></a></td><td><%= bundle.utility.weiToEth(balanceBase.balanceOutside, bundle.Main.getDivisor(balanceBase.token)) %></td><td><%= bundle.utility.weiToEth(balanceBase.balance, bundle.Main.getDivisor(balanceBase.token)) %></td>
+    </tr>
+    <tr>
+      <td>
+        <input type="text" class="form-control input-xs trn" id="transfer_amount_<%= selectedBase.addr %>" placeholder="amount" />
+      </td>
+      <td>
+        <input type="text" class="form-control input-xs trn" id="transfer_to_<%= selectedBase.addr %>" placeholder="address" value="<%= addr %>" />
+      </td>
+      <td>
+        <button type="button" class="btn btn-primary btn-xs trn" style="width: 100%;" id="transfer_submit_<%= selectedBase.addr %>" onclick="transfer_click('<%= selectedBase.addr %>')">transfer</button>
+      </td>
+    </tr>
+  </table>
+<% } else { %>
+  <table class="table table-borderless">
+    <tr><td>Please select an account using the account dropdown in the upper right.</td></tr>
+  </table>
+<% } %>

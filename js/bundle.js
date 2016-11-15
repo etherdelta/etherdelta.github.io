@@ -1267,7 +1267,7 @@ configs["2"] = {
   ethTestnet: true,
   ethProvider: 'http://localhost:8545',
   ethGasPrice: 20000000000,
-  ethAddr: '0x0000000000000000000000000000000000000123',
+  ethAddr: '0x0000000000000000000000000000000000000000',
   ethAddrPrivateKey: '',
   tokens: [
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
@@ -2235,7 +2235,7 @@ Main.trade = function(kind, order, amount) {
             Main.alertTxResult(err, result);
           });
         } else {
-          Main.alertError("This order already traded.");
+          Main.alertError("You cannot trade this order. Either you don't have enough funds, or this order already traded.");
         }
       });
     });

@@ -904,7 +904,7 @@ Main.trade = function(kind, order, amount) {
             Main.alertTxResult(err, result);
           });
         } else {
-          Main.alertError("This order already traded.");
+          Main.alertError("You cannot trade this order. Either you don't have enough funds, or this order already traded.");
         }
       });
     });

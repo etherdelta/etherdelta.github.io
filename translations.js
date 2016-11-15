@@ -24,6 +24,10 @@ var translations = {
     en:'Smart contract overview',
     cn:'智能合约概貌'
   },
+  select_account:{
+    en:'Select an account',
+    cn:'选择账号'
+  },
   howto_videos:{
     en:'How-to videos',
     cn:'说明视频'
