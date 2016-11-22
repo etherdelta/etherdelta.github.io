@@ -1401,7 +1401,7 @@ Main.createAccount = function() {
   var addr = newAccount.address;
   var pk = newAccount.privateKey;
   Main.addAccount(addr, pk);
-  Main.alertDialog('You just created an Ethereum account: '+addr+'.');
+  Main.alertDialog('You just created an Ethereum account: '+addr+'<br /><br />Please BACKUP the private key for this account: '+pk);
 }
 Main.deleteAccount = function() {
   addrs.splice(selectedAccount, 1);
