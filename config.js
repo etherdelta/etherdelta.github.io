@@ -56,6 +56,8 @@ configs["1"] = {
     {token: 'REP', base: 'ETH'},
     {token: 'SNGLS', base: 'ETH'},
     {token: 'ARC', base: 'ETH'},
+    {token: 'VSL', base: 'ETH'},
+    // {token: '1ST', base: 'ETH'},
     {token: 'HKG', base: 'ETH'},
     {token: 'ETH', base: 'USD.DC'},
     {token: 'ETH', base: 'BTC.DC'},
