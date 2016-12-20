@@ -52,6 +52,7 @@ configs["1"] = {
   ],
   pairs: [
     {token: 'PLU', base: 'ETH'},
+    {token: 'Nexium', base: 'ETH'},
     {token: 'GNTW', base: 'ETH'},
     {token: 'GNTM', base: 'ETH'},
     {token: 'ICN', base: 'ETH'},
