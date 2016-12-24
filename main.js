@@ -828,6 +828,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
       Main.alertError('You do not have enough funds to send this order.');
     } else {
       if (!config.ordersOnchain) { //offchain order
+        // console.log([config.contractEtherDeltaAddr, tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce]);
         var condensed = utility.pack([config.contractEtherDeltaAddr, tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 160, 256, 160, 256, 256, 256]);
         var hash = sha256(new Buffer(condensed,'hex'));
         utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
@@ -837,6 +838,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
             // Send order to offchain book:
             var order = {contractAddr: config.contractEtherDeltaAddr, tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
             utility.postURL(config.apiServer+'/message', {message: JSON.stringify(order)}, function(err, result){
+              // console.log(result)
               if (!err) {
                 Main.alertSuccess('You sent an order to the order book!');
                 Main.refresh(function(){});
