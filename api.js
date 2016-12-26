@@ -223,6 +223,14 @@ API.getPrices = function(callback) {
   });
 }
 
+API.getCoinMarketCapTicker = function(callback) {
+  var self = this;
+  request.get('https://api.coinmarketcap.com/v1/ticker/', function(err, httpResponse, body) {
+    ticker = JSON.parse(body);
+    callback(null, ticker);
+  });
+}
+
 API.getBalance = function(addr, callback) {
   var self = this;
   utility.getBalance(this.web3, addr, function(err, balance){
@@ -293,55 +301,74 @@ API.getTokenBalances = function(addr, callback){
 
 API.getUSDBalance = function(addr, tokenPrices, callback) {
   var self = this;
-  API.getPrices(function(err, prices){
-    async.parallel(
-      [
-        function(callback){
-          API.getTokenBalances(addr, callback);
-        },
-        function(callback){
-          API.getEtherDeltaTokenBalances(addr, callback);
-        }
-      ],
-      function(err, results){
-        var balances = {'Tokens': results[0], 'EtherDelta Tokens': results[1]};
-        var total = 0;
-        for (var dapp in balances) {
-          var balance = balances[dapp];
-          if (typeof(balance)=='object' && typeof(balance['ETH'])!=undefined) {
-            var totalBalance = 0;
-            var ethToken = self.config.tokens[0];
-            Object.keys(balance).forEach(function(name) {
-              var tokenBalance = balance[name];
-              var token = API.getToken(name);
-              var price = 0;
-              var tokenMatches = tokenPrices.filter(function(x){return x.name==token.name});
-              if (tokenMatches.length==1) {
-                price = tokenMatches[0].price;
-              } else {
-                if (token.name.slice(-1)=='N') {
-                  var yesVersion = token.name.replace(/N$/, 'Y');
-                  var tokenYesMatches = tokenPrices.filter(function(x){return x.name==yesVersion});
-                  if (tokenYesMatches.length==1) {
-                    price = 1.0 - tokenYesMatches[0].price;
-                  }
+  async.parallel(
+    [
+      function(callback){
+        API.getTokenBalances(addr, callback);
+      },
+      function(callback){
+        API.getEtherDeltaTokenBalances(addr, callback);
+      },
+      function(callback){
+        API.getPrices(callback);
+      },
+      function(callback){
+        API.getCoinMarketCapTicker(callback);
+      }
+    ],
+    function(err, results){
+      var balances = {'Tokens': results[0], 'EtherDelta Tokens': results[1]};
+      var prices = results[2];
+      var tickers = results[3];
+      var total = 0;
+      for (var dapp in balances) {
+        var balance = balances[dapp];
+        if (typeof(balance)=='object' && typeof(balance['ETH'])!=undefined) {
+          var totalBalance = 0;
+          var ethToken = self.config.tokens[0];
+          Object.keys(balance).forEach(function(name) {
+            var token = API.getToken(name);
+            var tokenBalance = balance[name] / Math.pow(10,token.decimals);
+            var price = 0;
+            var tokenMatch = tokenPrices.filter(function(x){return x.name==token.name})[0];
+            if (tokenMatch) {
+              if (tokenMatch.price) {
+                if (tokenMatch.unit=='ETH') {
+                  price = tokenMatch.price;
+                } else if (tokenMatch.unit=='USD') {
+                  price = tokenMatch.price / prices.ETHUSD;
+                }
+              } else if (tokenMatch.api_symbol) {
+                var tickerMatch = tickers.filter(function(x){return x.symbol==tokenMatch.api_symbol})[0];
+                if (tickerMatch) {
+                  price = tickerMatch.price_usd / prices.ETHUSD;
                 }
               }
-              totalBalance += tokenBalance * price * Math.pow(10,ethToken.decimals) / Math.pow(10,token.decimals);
-            });
-            balances[dapp] = Number(utility.weiToEth(totalBalance));
-          } else {
-            balances[dapp] = Number(utility.weiToEth(balance));
-          }
-          total += balances[dapp];
+            } else {
+              if (token.name.slice(-1)=='N') {
+                var yesVersion = token.name.replace(/N$/, 'Y');
+                var tokenYesMatches = tokenPrices.filter(function(x){return x.name==yesVersion});
+                if (tokenYesMatches.length==1) {
+                  price = 1.0 - tokenYesMatches[0].price;
+                }
+              }
+            }
+            totalBalance += tokenBalance * price;
+            if (!balances[name]) balances[name] = 0;
+            balances[name] += tokenBalance * price * prices.ETHUSD;
+          });
+          balances[dapp] = totalBalance;
+        } else {
+          balances[dapp] = balance;
         }
-        var ethValue = total;
-        var usdValue = total*prices.ETHUSD;
-        var result = {ethValue: ethValue, usdValue: usdValue, balances: balances, prices: prices};
-        callback(null, result);
+        total += balances[dapp];
       }
-    );
-  });
+      var ethValue = total;
+      var usdValue = total * prices.ETHUSD;
+      var result = {ethValue: ethValue, usdValue: usdValue, balances: balances, prices: prices};
+      callback(null, result);
+    }
+  );
 }
 
 API.getDivisor = function(tokenOrAddress) {

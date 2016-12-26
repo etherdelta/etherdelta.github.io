@@ -2221,11 +2221,11 @@ var config = {
     privateKey: ''
   },
   pairs: [
-    // {
-    //   pair: 'TRMPN/ETH', expires: 15000,
-    //   sellEnabled: 'onOrders/balance<0.25', sellNum: 5, sellVolume: '(balance - onOrders) / n * (0.9 + Math.random()*0.1)', sellPrice: '0.9 + 0.099 * i / n',
-    //   buyEnabled: 'onOrders/balance<0.25', buyNum: 5, buyVolume: '(balance - onOrders) / n / price * (0.9 + Math.random()*0.1)', buyPrice: '0.7 - 0.21 * i / n'
-    // },
+    {
+      pair: '1ST/ETH', expires: 15000,
+      sellEnabled: 'onOrders/balance<0.25', sellNum: 5, sellVolume: '(balance - onOrders) / n * (0.9 + Math.random()*0.1)', sellPrice: '0.955 + 1.245 * i / n',
+      buyEnabled: 'onOrders/balance<0.25', buyNum: 0, buyVolume: '(balance - onOrders) / n / price * (0.9 + Math.random()*0.1)', buyPrice: '0.008 - 0.004 * i / n'
+    },
   ],
 };
 
@@ -2395,6 +2395,14 @@ Main.generateOrders = function(callback) {
             var mySellOrders = sellOrders.filter(function(x){return x.order.user.toLowerCase()==marketMakerConfig.account.address.toLowerCase()});
             var myBuySize = myBuyOrders.map(function(x){return x.availableVolume * x.price.toNumber() * API.getDivisor(selectedBase)/API.getDivisor(selectedToken)}).reduce(function(a,b){return a+b},0);
             var mySellSize = mySellOrders.map(function(x){return Number(x.availableVolume)}).reduce(function(a,b){return a+b},0);
+            console.log(selectedToken.name+'/'+selectedBase.name);
+            console.log('----------------------');
+            console.log('Lowest offer', sellOrders.length>0 ? API.formatOrder(sellOrders[0], selectedToken, selectedBase) : 'None');
+            console.log('Highest bid', buyOrders.length>0 ? API.formatOrder(buyOrders[0], selectedToken, selectedBase) : 'None');
+            console.log('Balance', API.utility.weiToEth(balances[selectedToken.name], API.getDivisor(selectedToken)), selectedToken.name);
+            console.log('Balance', API.utility.weiToEth(balances[selectedBase.name], API.getDivisor(selectedBase)), selectedBase.name);
+            console.log('On buy orders', API.utility.weiToEth(myBuySize, API.getDivisor(selectedBase)), selectedBase.name);
+            console.log('On sell orders', API.utility.weiToEth(mySellSize, API.getDivisor(selectedToken)), selectedToken.name);
 
             var orders = [];
 
