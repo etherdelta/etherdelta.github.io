@@ -214,9 +214,9 @@ API.getPrices = function(callback) {
   var ethBTC = undefined;
   var btcUSD = undefined;
   request.get('https://poloniex.com/public?command=returnTicker', function(err, httpResponse, body) {
-    ethBTC = JSON.parse(body).BTC_ETH.last;
+    ethBTC = Number(JSON.parse(body).BTC_ETH.last.replace(',',''));
     request.get('http://api.coindesk.com/v1/bpi/currentprice/USD.json', function(err, httpResponse, body) {
-      btcUSD = JSON.parse(body).bpi.USD.rate;
+      btcUSD = Number(JSON.parse(body).bpi.USD.rate.replace(',',''));
       var price = ethBTC * btcUSD;
       callback(null, {"ETHBTC": ethBTC, "BTCUSD": btcUSD, "ETHUSD": price});
     });
@@ -339,7 +339,7 @@ API.getUSDBalance = function(addr, tokenPrices, callback) {
                   price = tokenMatch.price / prices.ETHUSD;
                 }
               } else if (tokenMatch.api_symbol) {
-                var tickerMatch = tickers.filter(function(x){return x.symbol==tokenMatch.api_symbol})[0];
+                var tickerMatch = tickers.filter(function(x){return x.symbol==tokenMatch.api_symbol || x.id==tokenMatch.api_symbol})[0];
                 if (tickerMatch) {
                   price = tickerMatch.price_usd / prices.ETHUSD;
                 }
