@@ -216,12 +216,20 @@ API.getPrices = function(callback) {
   var ethBTC = undefined;
   var btcUSD = undefined;
   request.get('https://poloniex.com/public?command=returnTicker', function(err, httpResponse, body) {
-    ethBTC = JSON.parse(body).BTC_ETH.last;
+    ethBTC = Number(JSON.parse(body).BTC_ETH.last.replace(',',''));
     request.get('http://api.coindesk.com/v1/bpi/currentprice/USD.json', function(err, httpResponse, body) {
-      btcUSD = JSON.parse(body).bpi.USD.rate;
+      btcUSD = Number(JSON.parse(body).bpi.USD.rate.replace(',',''));
       var price = ethBTC * btcUSD;
       callback(null, {"ETHBTC": ethBTC, "BTCUSD": btcUSD, "ETHUSD": price});
     });
+  });
+}
+
+API.getCoinMarketCapTicker = function(callback) {
+  var self = this;
+  request.get('https://api.coinmarketcap.com/v1/ticker/', function(err, httpResponse, body) {
+    ticker = JSON.parse(body);
+    callback(null, ticker);
   });
 }
 
@@ -295,55 +303,74 @@ API.getTokenBalances = function(addr, callback){
 
 API.getUSDBalance = function(addr, tokenPrices, callback) {
   var self = this;
-  API.getPrices(function(err, prices){
-    async.parallel(
-      [
-        function(callback){
-          API.getTokenBalances(addr, callback);
-        },
-        function(callback){
-          API.getEtherDeltaTokenBalances(addr, callback);
-        }
-      ],
-      function(err, results){
-        var balances = {'Tokens': results[0], 'EtherDelta Tokens': results[1]};
-        var total = 0;
-        for (var dapp in balances) {
-          var balance = balances[dapp];
-          if (typeof(balance)=='object' && typeof(balance['ETH'])!=undefined) {
-            var totalBalance = 0;
-            var ethToken = self.config.tokens[0];
-            Object.keys(balance).forEach(function(name) {
-              var tokenBalance = balance[name];
-              var token = API.getToken(name);
-              var price = 0;
-              var tokenMatches = tokenPrices.filter(function(x){return x.name==token.name});
-              if (tokenMatches.length==1) {
-                price = tokenMatches[0].price;
-              } else {
-                if (token.name.slice(-1)=='N') {
-                  var yesVersion = token.name.replace(/N$/, 'Y');
-                  var tokenYesMatches = tokenPrices.filter(function(x){return x.name==yesVersion});
-                  if (tokenYesMatches.length==1) {
-                    price = 1.0 - tokenYesMatches[0].price;
-                  }
+  async.parallel(
+    [
+      function(callback){
+        API.getTokenBalances(addr, callback);
+      },
+      function(callback){
+        API.getEtherDeltaTokenBalances(addr, callback);
+      },
+      function(callback){
+        API.getPrices(callback);
+      },
+      function(callback){
+        API.getCoinMarketCapTicker(callback);
+      }
+    ],
+    function(err, results){
+      var balances = {'Tokens': results[0], 'EtherDelta Tokens': results[1]};
+      var prices = results[2];
+      var tickers = results[3];
+      var total = 0;
+      for (var dapp in balances) {
+        var balance = balances[dapp];
+        if (typeof(balance)=='object' && typeof(balance['ETH'])!=undefined) {
+          var totalBalance = 0;
+          var ethToken = self.config.tokens[0];
+          Object.keys(balance).forEach(function(name) {
+            var token = API.getToken(name);
+            var tokenBalance = balance[name] / Math.pow(10,token.decimals);
+            var price = 0;
+            var tokenMatch = tokenPrices.filter(function(x){return x.name==token.name})[0];
+            if (tokenMatch) {
+              if (tokenMatch.price) {
+                if (tokenMatch.unit=='ETH') {
+                  price = tokenMatch.price;
+                } else if (tokenMatch.unit=='USD') {
+                  price = tokenMatch.price / prices.ETHUSD;
+                }
+              } else if (tokenMatch.api_symbol) {
+                var tickerMatch = tickers.filter(function(x){return x.symbol==tokenMatch.api_symbol || x.id==tokenMatch.api_symbol})[0];
+                if (tickerMatch) {
+                  price = tickerMatch.price_usd / prices.ETHUSD;
                 }
               }
-              totalBalance += tokenBalance * price * Math.pow(10,ethToken.decimals) / Math.pow(10,token.decimals);
-            });
-            balances[dapp] = Number(utility.weiToEth(totalBalance));
-          } else {
-            balances[dapp] = Number(utility.weiToEth(balance));
-          }
-          total += balances[dapp];
+            } else {
+              if (token.name.slice(-1)=='N') {
+                var yesVersion = token.name.replace(/N$/, 'Y');
+                var tokenYesMatches = tokenPrices.filter(function(x){return x.name==yesVersion});
+                if (tokenYesMatches.length==1) {
+                  price = 1.0 - tokenYesMatches[0].price;
+                }
+              }
+            }
+            totalBalance += tokenBalance * price;
+            if (!balances[name]) balances[name] = 0;
+            balances[name] += tokenBalance * price * prices.ETHUSD;
+          });
+          balances[dapp] = totalBalance;
+        } else {
+          balances[dapp] = balance;
         }
-        var ethValue = total;
-        var usdValue = total*prices.ETHUSD;
-        var result = {ethValue: ethValue, usdValue: usdValue, balances: balances, prices: prices};
-        callback(null, result);
+        total += balances[dapp];
       }
-    );
-  });
+      var ethValue = total;
+      var usdValue = total * prices.ETHUSD;
+      var result = {ethValue: ethValue, usdValue: usdValue, balances: balances, prices: prices};
+      callback(null, result);
+    }
+  );
 }
 
 API.getDivisor = function(tokenOrAddress) {
@@ -2079,7 +2106,7 @@ configs["1"] = {
     // {addr: '0xa74476443119a942de498590fe1f2454d7d4ac0d', name: 'GNT', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x5c543e7ae0a1104f78406c340e9c64fd9fce5170', name: 'VSL', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xac709fcb44a43c35f0da4e3163b117a17f3770f5', name: 'ARC', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
-    {addr: '0xb582baaf5e749d6aa98a22355a9d08b4c4d013c8', name: 'HKG', decimals: 3, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
+    // {addr: '0xb582baaf5e749d6aa98a22355a9d08b4c4d013c8', name: 'HKG', decimals: 3, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x888666ca69e0f178ded6d75b5726cee99a87d698', name: 'ICN', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x48c80f1f4d53d5951e5d5438b54cba84f29f32a5', name: 'REP', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009', name: 'SNGLS', decimals: 0, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
@@ -2111,7 +2138,7 @@ configs["1"] = {
     {token: 'ARC', base: 'ETH'},
     {token: 'VSL', base: 'ETH'},
     {token: '1ST', base: 'ETH'},
-    {token: 'HKG', base: 'ETH'},
+    // {token: 'HKG', base: 'ETH'},
     {token: 'ETH', base: 'USD.DC'},
     {token: 'ETH', base: 'BTC.DC'},
     {token: 'XAUR', base: 'ETH'},
@@ -2223,8 +2250,8 @@ var config = {
   pairs: [
     {
       pair: '1ST/ETH', expires: 15000,
-      sellEnabled: 'onOrders/balance<0.25', sellNum: 5, sellVolume: '(balance - onOrders) / n * (0.9 + Math.random()*0.1)', sellPrice: '0.955 + 1.245 * i / n',
-      buyEnabled: 'onOrders/balance<0.25', buyNum: 0, buyVolume: '(balance - onOrders) / n / price * (0.9 + Math.random()*0.1)', buyPrice: '0.008 - 0.004 * i / n'
+      sellEnabled: 'onOrders/balance<0.25', sellNum: 5, sellVolume: '(balance - onOrders) / n * (0.9 + Math.random()*0.1)', sellPrice: '0.0125 + 0.0125 * i / n',
+      buyEnabled: 'onOrders/balance<0.25', buyNum: 5, buyVolume: '(balance - onOrders) / n / price * (0.9 + Math.random()*0.1)', buyPrice: '0.008 - 0.004 * i / n'
     },
   ],
 };
