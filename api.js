@@ -62,6 +62,7 @@ API.init = function(callback, allContracts, path, provider) {
     self.usersWithOrdersToUpdate = {};
     self.blockTimeSnapshot = undefined;
     self.minOrderSize = 0.1;
+    self.pricesCache = undefined;
 
     async.series(
       [
@@ -213,8 +214,10 @@ API.getPrices = function(callback) {
   var self = this;
   var ethBTC = undefined;
   var btcUSD = undefined;
-  request.get('https://poloniex.com/public?command=returnTicker', function(err, httpResponse, body) {
-    ethBTC = Number(JSON.parse(body).BTC_ETH.last.replace(',',''));
+  // request.get('https://poloniex.com/public?command=returnTicker', function(err, httpResponse, body) {
+  //   ethBTC = Number(JSON.parse(body).BTC_ETH.last.replace(',',''));
+  request.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC', function(err, httpResponse, body) {
+    ethBTC = Number(JSON.parse(body).ETH.BTC);
     request.get('http://api.coindesk.com/v1/bpi/currentprice/USD.json', function(err, httpResponse, body) {
       btcUSD = Number(JSON.parse(body).bpi.USD.rate.replace(',',''));
       var price = ethBTC * btcUSD;
@@ -244,46 +247,26 @@ API.getBalance = function(addr, callback) {
 
 API.getEtherDeltaBalance = function(addr, callback) {
   var self = this;
-  var token = '0x0000000000000000000000000000000000000000'; //ether token
-  utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'balanceOf', [token, addr], function(err, result) {
-    if (!err) {
-      callback(null, result.toNumber());
-    } else {
-      callback(null, 0);
-    }
-  });
+  if (addr.length==42) {
+    var token = '0x0000000000000000000000000000000000000000'; //ether token
+    utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'balanceOf', [token, addr], function(err, result) {
+      if (!err) {
+        callback(null, result.toNumber());
+      } else {
+        callback(null, 0);
+      }
+    });
+  } else {
+    callback(null, 0);
+  }
 }
 
 API.getEtherDeltaTokenBalances = function(addr, callback){
   var self = this;
-  async.reduce(self.config.tokens, {},
-    function(memo, token, callbackReduce){
-      utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'balanceOf', [token.addr, addr], function(err, result) {
-        if (!err) {
-          memo[token.name] = result.toNumber();
-          callbackReduce(null, memo);
-        } else {
-          callbackReduce(null, memo);
-        }
-      });
-    },
-    function(err, tokenBalances) {
-      callback(null, tokenBalances);
-    }
-  );
-}
-
-API.getTokenBalances = function(addr, callback){
-  var self = this;
-  async.reduce(self.config.tokens, {},
-    function(memo, token, callbackReduce){
-      if (token.addr=='0x0000000000000000000000000000000000000000') {
-        API.getBalance(addr, function(err, result){
-          memo[token.name] = result;
-          callbackReduce(null, memo);
-        });
-      } else {
-        utility.call(self.web3, self.contractToken, token.addr, 'balanceOf', [addr], function(err, result) {
+  if (addr.length==42) {
+    async.reduce(self.config.tokens, {},
+      function(memo, token, callbackReduce){
+        utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'balanceOf', [token.addr, addr], function(err, result) {
           if (!err) {
             memo[token.name] = result.toNumber();
             callbackReduce(null, memo);
@@ -291,12 +274,51 @@ API.getTokenBalances = function(addr, callback){
             callbackReduce(null, memo);
           }
         });
+      },
+      function(err, tokenBalances) {
+        callback(null, tokenBalances);
       }
-    },
-    function(err, tokenBalances) {
-      callback(null, tokenBalances);
-    }
-  );
+    );
+  } else {
+    callback(null, {});
+  }
+}
+
+API.getTokenBalances = function(addr, callback){
+  var self = this;
+  if (addr.length==42) {
+    //Ethereum address
+    async.reduce(self.config.tokens, {},
+      function(memo, token, callbackReduce){
+        if (token.addr=='0x0000000000000000000000000000000000000000') {
+          API.getBalance(addr, function(err, result){
+            memo[token.name] = result;
+            callbackReduce(null, memo);
+          });
+        } else {
+          utility.call(self.web3, self.contractToken, token.addr, 'balanceOf', [addr], function(err, result) {
+            if (!err) {
+              memo[token.name] = result.toNumber();
+              callbackReduce(null, memo);
+            } else {
+              callbackReduce(null, memo);
+            }
+          });
+        }
+      },
+      function(err, tokenBalances) {
+        callback(null, tokenBalances);
+      }
+    );
+  } else if (addr.length==34) {
+    //Bitcoin address
+    request.get('https://blockchain.info/q/addressbalance/'+addr, function(err, httpResponse, body) {
+      balance = Number(body) / Math.pow(10,8);
+      callback(null, {
+        'BTC': balance
+      })
+    });
+  }
 }
 
 API.getUSDBalance = function(addr, tokenPrices, callback) {
@@ -328,6 +350,7 @@ API.getUSDBalance = function(addr, tokenPrices, callback) {
           var ethToken = self.config.tokens[0];
           Object.keys(balance).forEach(function(name) {
             var token = API.getToken(name);
+            if (!token) token = {name: name, decimals: 0};
             var tokenBalance = balance[name] / Math.pow(10,token.decimals);
             var price = 0;
             var tokenMatch = tokenPrices.filter(function(x){return x.name==token.name})[0];
