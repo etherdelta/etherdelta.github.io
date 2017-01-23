@@ -351,7 +351,7 @@ API.getUSDValue = function(tokenName, balance, tokenPrices, tickers) {
       }
     }
   }
-  return {price: price, usd: tokenBalance * price, eth: tokenBalance * price * ETHUSD, balance: tokenBalance};
+  return {price: price, eth: tokenBalance * price, usd: tokenBalance * price * ETHUSD, balance: tokenBalance};
 }
 
 API.getUSDBalance = function(addr, tokenPrices, callback) {
@@ -383,7 +383,7 @@ API.getUSDBalance = function(addr, tokenPrices, callback) {
             var value = API.getUSDValue(name, balance[name], tokenPrices, tickers);
             totalBalance += value.balance * value.price;
             if (!balances[name]) balances[name] = 0;
-            balances[name] += value.eth;
+            balances[name] += value.usd;
           });
           balances[dapp] = totalBalance;
         } else {
