@@ -369,7 +369,7 @@ API.getUSDBalance = function(addr, tokenPrices, callback) {
       }
     ],
     function(err, results){
-      var balances = {'Tokens': results[0], 'EtherDelta Tokens': results[1]};
+      var balances = {'Wallet': results[0], 'EtherDelta': results[1]};
       var tickers = results[2];
       var total = 0;
       var ETHUSD = Number(tickers.filter(x => x.symbol=='ETH')[0].price_usd);

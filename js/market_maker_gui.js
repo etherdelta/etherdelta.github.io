@@ -323,6 +323,39 @@ API.getTokenBalances = function(addr, callback){
   }
 }
 
+API.getUSDValue = function(tokenName, balance, tokenPrices, tickers) {
+  var token = API.getToken(tokenName);
+  if (!token) token = {name: tokenName, decimals: 0};
+  var tokenBalance = balance / Math.pow(10,token.decimals);
+  var price = 0;
+  var tokenMatch = tokenPrices.filter(function(x){return x.name==token.name})[0];
+  var ETHUSD = Number(tickers.filter(x => x.symbol=='ETH')[0].price_usd);
+  var BTCUSD = Number(tickers.filter(x => x.symbol=='BTC')[0].price_usd);
+  if (tokenMatch) {
+    if (tokenMatch.price) {
+      if (tokenMatch.unit=='ETH') {
+        price = tokenMatch.price;
+      } else if (tokenMatch.unit=='USD') {
+        price = tokenMatch.price / ETHUSD;
+      }
+    } else if (tokenMatch.api_symbol) {
+      var tickerMatch = tickers.filter(function(x){return x.symbol==tokenMatch.api_symbol || x.id==tokenMatch.api_symbol})[0];
+      if (tickerMatch) {
+        price = tickerMatch.price_usd / ETHUSD;
+      }
+    }
+  } else {
+    if (token.name.slice(-1)=='N') {
+      var yesVersion = token.name.replace(/N$/, 'Y');
+      var tokenYesMatches = tokenPrices.filter(function(x){return x.name==yesVersion});
+      if (tokenYesMatches.length==1) {
+        price = 1.0 - tokenYesMatches[0].price;
+      }
+    }
+  }
+  return {price: price, eth: tokenBalance * price, usd: tokenBalance * price * ETHUSD, balance: tokenBalance};
+}
+
 API.getUSDBalance = function(addr, tokenPrices, callback) {
   var self = this;
   async.parallel(
@@ -334,53 +367,25 @@ API.getUSDBalance = function(addr, tokenPrices, callback) {
         API.getEtherDeltaTokenBalances(addr, callback);
       },
       function(callback){
-        API.getPrices(callback);
-      },
-      function(callback){
         API.getCoinMarketCapTicker(callback);
       }
     ],
     function(err, results){
-      var balances = {'Tokens': results[0], 'EtherDelta Tokens': results[1]};
-      var prices = results[2];
-      var tickers = results[3];
+      var balances = {'Wallet': results[0], 'EtherDelta': results[1]};
+      var tickers = results[2];
       var total = 0;
+      var ETHUSD = Number(tickers.filter(x => x.symbol=='ETH')[0].price_usd);
+      var BTCUSD = Number(tickers.filter(x => x.symbol=='BTC')[0].price_usd);
       for (var dapp in balances) {
         var balance = balances[dapp];
         if (typeof(balance)=='object' && typeof(balance['ETH'])!=undefined) {
           var totalBalance = 0;
           var ethToken = self.config.tokens[0];
           Object.keys(balance).forEach(function(name) {
-            var token = API.getToken(name);
-            if (!token) token = {name: name, decimals: 0};
-            var tokenBalance = balance[name] / Math.pow(10,token.decimals);
-            var price = 0;
-            var tokenMatch = tokenPrices.filter(function(x){return x.name==token.name})[0];
-            if (tokenMatch) {
-              if (tokenMatch.price) {
-                if (tokenMatch.unit=='ETH') {
-                  price = tokenMatch.price;
-                } else if (tokenMatch.unit=='USD') {
-                  price = tokenMatch.price / prices.ETHUSD;
-                }
-              } else if (tokenMatch.api_symbol) {
-                var tickerMatch = tickers.filter(function(x){return x.symbol==tokenMatch.api_symbol || x.id==tokenMatch.api_symbol})[0];
-                if (tickerMatch) {
-                  price = tickerMatch.price_usd / prices.ETHUSD;
-                }
-              }
-            } else {
-              if (token.name.slice(-1)=='N') {
-                var yesVersion = token.name.replace(/N$/, 'Y');
-                var tokenYesMatches = tokenPrices.filter(function(x){return x.name==yesVersion});
-                if (tokenYesMatches.length==1) {
-                  price = 1.0 - tokenYesMatches[0].price;
-                }
-              }
-            }
-            totalBalance += tokenBalance * price;
+            var value = API.getUSDValue(name, balance[name], tokenPrices, tickers);
+            totalBalance += value.balance * value.price;
             if (!balances[name]) balances[name] = 0;
-            balances[name] += tokenBalance * price * prices.ETHUSD;
+            balances[name] += value.usd;
           });
           balances[dapp] = totalBalance;
         } else {
@@ -389,8 +394,8 @@ API.getUSDBalance = function(addr, tokenPrices, callback) {
         total += balances[dapp];
       }
       var ethValue = total;
-      var usdValue = total * prices.ETHUSD;
-      var result = {ethValue: ethValue, usdValue: usdValue, balances: balances, prices: prices};
+      var usdValue = total * ETHUSD;
+      var result = {ethValue: ethValue, usdValue: usdValue, balances: balances, prices: {ETHUSD: ETHUSD, BTCUSD: BTCUSD}};
       callback(null, result);
     }
   );
@@ -2149,6 +2154,7 @@ configs["1"] = {
     {addr: '0x6f47980674550d8c8240e6eaf3b594f562adc7a9', name: 'DCN', decimals: 0, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x01a7018e6d1fde8a68d12f59b6532fb523b6259d', name: 'USD.DC', decimals: 8, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xffad42d96e43df36652c8eaf61a7e6dba2ad0e41', name: 'BTC.DC', decimals: 8, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
+    {addr: '0xdF36EBfFa7AB074a13e665daBC34ef4b42e59D75', name: 'AMIS', decimals: 3, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
   ],
   pairs: [
     {token: 'PLU', base: 'ETH'},
