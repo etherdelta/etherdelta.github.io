@@ -18,26 +18,29 @@ var logger = {
 var compiledSources = {};
 function deploy(web3, sourceFile, contractName, constructorParams, address, callback) {
   utility.readFile(sourceFile, function(err, source){
-    if (!compiledSources[sourceFile]) compiledSources[sourceFile] = solc.compile(source, 1);
-    var compiled = compiledSources[sourceFile];
-    var compiledContract = compiled.contracts[contractName];
-    var abi = JSON.parse(compiledContract.interface);
-    var bytecode = compiledContract.bytecode;
-    var contract = web3.eth.contract(abi);
-    utility.testSend(web3, contract, undefined, 'constructor', constructorParams.concat([{from: address, data: bytecode}]), address, undefined, 0, function(err, result) {
-      var initialTransaction = result;
-      assert.deepEqual(initialTransaction.length, 66);
-      web3.eth.getTransactionReceipt(initialTransaction, function(err, receipt) {
-        assert.equal(err, undefined);
-        var addr = receipt.contractAddress;
-        contract = contract.at(addr);
-        assert.notEqual(receipt, null, "Transaction receipt shouldn't be null");
-        assert.notEqual(addr, null, "Transaction did not create a contract");
-        web3.eth.getCode(addr, function(err, result) {
+    var solcVersion = 'v0.4.9+commit.364da425';
+    solc.loadRemoteVersion(solcVersion, function(err, solcV) {
+      if (!compiledSources[sourceFile]) compiledSources[sourceFile] = solcV.compile(source, 1);
+      var compiled = compiledSources[sourceFile];
+      var compiledContract = compiled.contracts[':'+contractName];
+      var abi = JSON.parse(compiledContract.interface);
+      var bytecode = compiledContract.bytecode;
+      var contract = web3.eth.contract(abi);
+      utility.testSend(web3, contract, undefined, 'constructor', constructorParams.concat([{from: address, data: bytecode}]), address, undefined, 0, function(err, result) {
+        var initialTransaction = result;
+        assert.deepEqual(initialTransaction.length, 66);
+        web3.eth.getTransactionReceipt(initialTransaction, function(err, receipt) {
           assert.equal(err, undefined);
-          assert.notEqual(result, null);
-          assert.notEqual(result, "0x0");
-          callback(undefined, {contract: contract, addr: addr});
+          var addr = receipt.contractAddress;
+          contract = contract.at(addr);
+          assert.notEqual(receipt, null, "Transaction receipt shouldn't be null");
+          assert.notEqual(addr, null, "Transaction did not create a contract");
+          web3.eth.getCode(addr, function(err, result) {
+            assert.equal(err, undefined);
+            assert.notEqual(result, null);
+            assert.notEqual(result, "0x0");
+            callback(undefined, {contract: contract, addr: addr});
+          });
         });
       });
     });

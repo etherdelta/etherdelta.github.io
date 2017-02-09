@@ -3,14 +3,15 @@
 var configs = {};
 
 //mainnet
-configs["1"] = {
+configs["mainnet"] = {
   homeURL: 'https://etherdelta.github.io',
   // homeURL: 'http://localhost:8080',
   contractEtherDelta: 'smart_contract/etherdelta.sol',
   contractToken: 'smart_contract/token.sol',
   contractReserveToken: 'smart_contract/reservetoken.sol',
   contractEtherDeltaAddrs: [
-    {addr: '0x373c55c277b866a69dc047cad488154ab9759466', info: 'Deployed 10/24/2016'},
+    {addr: '0x8d12a197cb00d4747a1fe03395095ce2a5cc6819', info: 'Deployed 02/09/2017'},
+    {addr: '0x373c55c277b866a69dc047cad488154ab9759466', info: 'Deployed 10/24/2016 -- please withdraw'},
     {addr: '0x4aea7cf559f67cedcad07e12ae6bc00f07e8cf65', info: 'Deployed 08/30/2016 -- please withdraw'},
     {addr: '0x2136bbba2edca21afdddee838fff19ea70d10f03', info: 'Deployed 08/03/2016 -- please withdraw'},
     {addr: '0xc6b330df38d6ef288c953f1f2835723531073ce2', info: 'Deployed 07/08/2016 -- please withdraw'}
@@ -37,12 +38,8 @@ configs["1"] = {
     {addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     // {addr: '0x569348f5204f0491a137c0b8bd5b0ab72c5a659c', name: 'NEWB', decimals: 0, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', decimals: 9, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
-    // {addr: '0x9a526b18eeb7195b7324f7271fc02c6b5e11ff5e', name: 'TRMPY', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
-    // {addr: '0x4a41659df69d663d000764d3b235908e5937c6b2', name: 'TRMPN', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd', name: 'EPOSY', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0', name: 'EPOSN', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
-    // {addr: '0x0105d415be226a6edbdbfe5bc31e6f4b2b1d2698', name: 'ETCWY', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
-    // {addr: '0x1f0dc965d1dcdd8ad0559d170123a92dfc7e111f', name: 'ETCWN', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', decimals: 16, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x55e7c4a77821d5c50b4570b08f9f92896a25e012', name: 'P+', decimals: 0, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x45e42d659d9f9466cd5df622506033145a9b89bc', name: 'NXC', decimals: 3, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
@@ -54,24 +51,22 @@ configs["1"] = {
   ],
   pairs: [
     {token: 'PLU', base: 'ETH'},
-    {token: 'NXC', base: 'ETH'},
+    {token: '1ST', base: 'ETH'},
+    {token: 'ARC', base: 'ETH'},
     {token: 'GNTW', base: 'ETH'},
     {token: 'GNTM', base: 'ETH'},
+    {token: 'NXC', base: 'ETH'},
     {token: 'ICN', base: 'ETH'},
     {token: 'REP', base: 'ETH'},
     {token: 'SNGLS', base: 'ETH'},
-    {token: 'ARC', base: 'ETH'},
-    {token: 'SWT', base: 'ETH'},
-    {token: 'VSL', base: 'ETH'},
-    {token: '1ST', base: 'ETH'},
-    {token: 'HKG', base: 'ETH'},
-    {token: 'ETH', base: 'USD.DC'},
-    {token: 'ETH', base: 'BTC.DC'},
-    {token: 'XAUR', base: 'ETH'},
     {token: 'MKR', base: 'ETH'},
     {token: 'DGD', base: 'ETH'},
-    {token: 'TRMPY', base: 'ETH'},
-    {token: 'TRMPN', base: 'ETH'},
+    {token: 'SWT', base: 'ETH'},
+    {token: 'VSL', base: 'ETH'},
+    {token: 'HKG', base: 'ETH'},
+    {token: 'XAUR', base: 'ETH'},
+    {token: 'ETH', base: 'USD.DC'},
+    {token: 'ETH', base: 'BTC.DC'},
   ],
   ordersOnchain: false,
   gitterHost: 'https://api.gitter.im',
@@ -91,13 +86,14 @@ configs["1"] = {
 };
 
 //testnet
-configs["2"] = {
+configs["testnet"] = {
   homeURL: 'https://etherdelta.github.io',
   // homeURL: 'http://localhost:8080',
   contractEtherDelta: 'smart_contract/etherdelta.sol',
   contractToken: 'smart_contract/token.sol',
   contractReserveToken: 'smart_contract/reservetoken.sol',
   contractEtherDeltaAddrs: [
+    {addr: '0x228344536a03c0910fb8be9c2755c1a0ba6f89e1', info: 'Deployed 02/09/2017'},
     {addr: '0xf80cd360e96fa96b8b7d9e95d5a7911ac5f09ec2', info: 'Deployed 10/24/2016'},
     {addr: '0xcdd152384c55dd4e5b5a3128cc90e0d9311570de', info: 'Deployed 10/06/2016'},
     {addr: '0x24b0ed7ba8d6d969bfe8409b4e6aeee3a40f8855', info: 'Deployed 08/03/2016'},
@@ -111,16 +107,10 @@ configs["2"] = {
   ethAddrPrivateKey: '',
   tokens: [
     {addr: '0x0000000000000000000000000000000000000000', name: 'ETH', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
-    {addr: '0x9a210726fb7fdcb2b701b75e43c94c532eba0de4', name: 'TESTTRMPY', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
-    {addr: '0x77cafe1d95fd9d03143df9e1dffb401580aabaa5', name: 'TESTTRMPN', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
-    {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD100', decimals: 16, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
-    // {addr: '0xedbaad5f8053f17a4a2ad829fd12c5d1332c9f1a', name: 'EUSD', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
-    {addr: '0xf0c3d5c1a8f181f365d906447b67ea6510a8ac93', name: 'BKR', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
-    {addr: '0xaf7d1722464786c0311d20ab7d98bee6a4b0f38d', name: 'HFYES', decimals: 18, gasApprove: 150000, gasDeposit: 150000, gasWithdraw: 150000, gasTrade: 250000, gasOrder: 250000},
+    {addr: '0x40aade55175aaeed9c88612c3ed2ff91d8943964', name: '1ST', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
   ],
   pairs: [
-    {token: 'ETH', base: 'EUSD100'},
-    {token: 'BKR', base: 'ETH'},
+    {token: '1ST', base: 'ETH'},
   ],
   ordersOnchain: false,
   gitterHost: 'https://api.gitter.im',
@@ -149,7 +139,7 @@ function getParameterByName(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 //default config
-var index = "1"; //mainnet
+var index = "mainnet"; //mainnet
 if (typeof(window)!='undefined') {
   var network = getParameterByName("network");
   if (network) {

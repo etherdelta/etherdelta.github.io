@@ -4,6 +4,7 @@ var fs = require('fs');
 var ethabi = require('ethereumjs-abi');
 var BigNumber = require('bignumber.js');
 var commandLineArgs = require('command-line-args');
+var async = require('async');
 
 var cli = [
 	{ name: 'help', alias: 'h', type: Boolean },
@@ -25,7 +26,7 @@ if (cliOptions.help) {
   //Config
   var solidityFile = './smart_contract/etherdelta.sol';
   var contractName = 'EtherDelta';
-	var solcVersion = 'v0.4.2+commit.af6afb04';
+	var solcVersion = 'v0.4.9+commit.364da425';
   var address = cliOptions.address;
 	var admin = cliOptions.admin;
   var feeAccount = cliOptions.feeAccount;
@@ -33,37 +34,61 @@ if (cliOptions.help) {
 	var feeMake = 0;
   var feeTake = 3000000000000000;
 	var feeRebate = 0;
-  var constructTypes = ['address', 'address', 'address', 'uint256', 'uint256', 'uint256'];
-  var constructArguments = [ admin, feeAccount, accountLevelsAddr, feeMake, feeTake, feeRebate ];
-	var abiEncoded = ethabi.rawEncode(constructTypes, constructArguments);
+	var gas = 2000000;
+  var args = [ admin, feeAccount, accountLevelsAddr, feeMake, feeTake, feeRebate ];
+
+	function deploy(compiledContract, args, gas, address, sendImmediately) {
+    var abi = JSON.parse(compiledContract.interface);
+    var bytecode = compiledContract.bytecode;
+
+		if (args.length>0) {
+			var constructTypes = abi.filter(function(x){return x.type=='constructor'})[0].inputs.map(function(x){return x.type});
+	    var abiEncoded = ethabi.rawEncode(constructTypes, args);
+	    console.log('ABI encoded constructor arguments: '+abiEncoded.toString('hex'));
+		}
+
+    var contract = web3.eth.contract(abi);
+    if (gas && address && sendImmediately) {
+			var data = '0x'+contract.new.getData.apply(null, args.concat({data: bytecode}));
+      web3.eth.sendTransaction({from: address, gas: gas, data: data}, function(err, txHash){
+        if(err) {
+          console.log(err);
+        } else {
+					var contractAddress = undefined;
+					async.whilst(
+						function() {return !contractAddress},
+						function(callback) {
+							web3.eth.getTransactionReceipt(txHash, function(err, result) {
+								if (result && result.contractAddress) contractAddress = result.contractAddress;
+								setTimeout(function(){
+									callback(null);
+								}, 10*1000);
+							});
+						},
+						function(err) {
+							if (!err){
+								console.log(contractAddress);
+							} else {
+								console.log(err);
+							}
+						}
+					)
+        }
+      });
+    } else {
+      console.log('Contract data:', data);
+    }
+  }
 
 	solc.loadRemoteVersion(solcVersion, function(err, solcV) {
 		console.log("Solc version:",solcV.version());
-
-	  console.log('ABI encoded constructor arguments: '+abiEncoded.toString('hex'));
-
 	  fs.readFile(solidityFile, function(err, result){
 	    var source = result.toString();
 	    var output = solcV.compile(source, 1); // 1 activates the optimiser
 			if (output.errors) console.log(output.errors);
-	    var abi = JSON.parse(output.contracts[contractName].interface);
-	    var bytecode = output.contracts[contractName].bytecode;
-
-	    var contract = web3.eth.contract(abi);
-			if (cliOptions.sendImmediately) {
-				var contractInstance = contract.new(admin, feeAccount, accountLevelsAddr, feeMake, feeTake, feeRebate, {from: address, gas: 1500000, data: bytecode}, function(err, myContract){
-		      if(!err) {
-						if (myContract.address) {
-							console.log(myContract.address);
-						}
-		      } else {
-						console.log(err);
-					}
-		    });
-			} else {
-				var data = contract.new.getData(admin, feeAccount, accountLevelsAddr, feeMake, feeTake, feeRebate, {data: bytecode});
-				console.log('Contract data:', '0x'+data);
-			}
+			var args = [admin, feeAccount, accountLevelsAddr, feeMake, feeTake, feeRebate];
+			var sendImmediately = cliOptions.sendImmediately;
+			deploy(output.contracts[':'+contractName], args, gas, address, sendImmediately)
 	  });
 	});
 }
