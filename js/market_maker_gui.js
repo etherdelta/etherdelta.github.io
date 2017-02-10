@@ -1649,7 +1649,8 @@ function sign(web3, address, msgToSign, privateKey, callback) {
     }
   } else {
     web3.version.getNode(function(error, node){
-      if (node != undefined && (node.match('Parity') != null || node.match('TestRPC') != null)) {
+      //these nodes still use old-style eth_sign
+      if (node != undefined && (node.match('Parity') != null || node.match('TestRPC') != null || node.match('MetaMask') != null)) {
         msgToSign = prefixMessage(msgToSign);
       }
       web3.eth.sign(address, msgToSign, function(err, sig) {
@@ -1658,7 +1659,7 @@ function sign(web3, address, msgToSign, privateKey, callback) {
         } else {
           sig = ethUtil.fromRpcSig(sig);
           var msg;
-          if (node != undefined && (node.match('Parity') != null || node.match('TestRPC') != null)) {
+          if (node != undefined && (node.match('Parity') != null || node.match('TestRPC') != null || node.match('MetaMask') != null)) {
             msg = msgToSign;
           } else {
             msg = prefixMessage(msgToSign);

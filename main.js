@@ -339,13 +339,13 @@ Main.displayVolumes = function(orders, blockNumber, callback) {
         for (var i=0; i<timeFrames.length; i++) {
           var timeFrame = timeFrames[i];
           if (now-Main.blockTime(event.blockNumber)<timeFrame) {
-            tokenVolumes[tokenGet.name].volumes[i] += amountGet.toNumber();
-            tokenVolumes[tokenGive.name].volumes[i] += amountGive.toNumber();
-            pairVolumes[pair].volumes[i] += volume.toNumber();
+            tokenVolumes[tokenGet.name].volumes[i] += Number(amountGet);
+            tokenVolumes[tokenGive.name].volumes[i] += Number(amountGive);
+            pairVolumes[pair].volumes[i] += Number(volume);
             if (ethVolume) {
-              tokenVolumes[tokenGet.name].ethVolumes[i] += ethVolume.toNumber();
-              tokenVolumes[tokenGive.name].ethVolumes[i] += ethVolume.toNumber();
-              pairVolumes[pair].ethVolumes[i] += ethVolume.toNumber();
+              tokenVolumes[tokenGet.name].ethVolumes[i] += Number(ethVolume);
+              tokenVolumes[tokenGive.name].ethVolumes[i] += Number(ethVolume);
+              pairVolumes[pair].ethVolumes[i] += Number(ethVolume);
             }
           }
         }
@@ -1202,7 +1202,7 @@ var defaultdecimals = new BigNumber(1000000000000000000);
 var language = 'en';
 var minOrderSize = 0.1;
 var messageToSend = undefined;
-var blockTimeSnapshot = undefined;
+var blockTimeSnapshot = {blockNumber: 3154928, date: new Date('Feb-10-2017 01:40:47')}; //default snapshot
 var translator = undefined;
 var secondsPerBlock = 14;
 var usersWithOrdersToUpdate = {};
