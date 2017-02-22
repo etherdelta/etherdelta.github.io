@@ -632,8 +632,8 @@ Main.displayOrderbook = function(orders, blockNumber, callback) {
   callback();
 }
 Main.displayTokensAndBases = function(callback) {
-  Main.ejs(config.homeURL+'/templates/'+'tokens_dropdown.ejs', 'tokens_dropdown', {tokens: config.tokens, selectedToken: selectedToken});
-  Main.ejs(config.homeURL+'/templates/'+'bases_dropdown.ejs', 'bases_dropdown', {tokens: config.tokens, selectedBase: selectedBase});
+  Main.ejs(config.homeURL+'/templates/'+'tokens_dropdown.ejs', 'tokens_dropdown', {tokens: config.tokens.sort((a,b) => a.name>b.name), selectedToken: selectedToken});
+  Main.ejs(config.homeURL+'/templates/'+'bases_dropdown.ejs', 'bases_dropdown', {tokens: config.tokens.sort((a,b) => a.name>b.name), selectedBase: selectedBase});
   callback();
 }
 Main.displayAllBalances = function(callback) {
