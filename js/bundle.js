@@ -1989,8 +1989,10 @@ Main.displayOrderbook = function(orders, blockNumber, callback) {
   callback();
 }
 Main.displayTokensAndBases = function(callback) {
-  Main.ejs(config.homeURL+'/templates/'+'tokens_dropdown.ejs', 'tokens_dropdown', {tokens: config.tokens.sort((a,b) => a.name>b.name), selectedToken: selectedToken});
-  Main.ejs(config.homeURL+'/templates/'+'bases_dropdown.ejs', 'bases_dropdown', {tokens: config.tokens.sort((a,b) => a.name>b.name), selectedBase: selectedBase});
+  var tokens = config.tokens.map(function(x){return x});
+  tokens.sort(function(a,b){return a.name>b.name ? 1 : -1});
+  Main.ejs(config.homeURL+'/templates/'+'tokens_dropdown.ejs', 'tokens_dropdown', {tokens: tokens, selectedToken: selectedToken});
+  Main.ejs(config.homeURL+'/templates/'+'bases_dropdown.ejs', 'bases_dropdown', {tokens: tokens, selectedBase: selectedBase});
   callback();
 }
 Main.displayAllBalances = function(callback) {
