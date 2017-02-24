@@ -1241,7 +1241,7 @@ configs["mainnet"] = {
     {addr: '0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6', name: 'DCN', decimals: 0, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x01a7018e6d1fde8a68d12f59b6532fb523b6259d', name: 'USD.DC', decimals: 8, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xffad42d96e43df36652c8eaf61a7e6dba2ad0e41', name: 'BTC.DC', decimals: 8, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
-    {addr: '0xdF36EBfFa7AB074a13e665daBC34ef4b42e59D75', name: 'AMIS', decimals: 3, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
+    {addr: '0x949bed886c739f1a3273629b3320db0c5024c719', name: 'AMIS', decimals: 9, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xb9e7f8568e08d5659f5d29c4997173d84cdf2607', name: 'SWT', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xf77089f2f00fca83501705b711cbb10a0de77628', name: 'BME', decimals: 0, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0xb802b24e0637c2b87d2e8b7784c055bbe921011a', name: 'EMV', decimals: 2, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
