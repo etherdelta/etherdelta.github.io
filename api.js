@@ -611,7 +611,7 @@ API.getTrades = function(callback) {
     if (event.event=='Trade' && self.contractEtherDeltaAddrs.indexOf(event.address)>=0) {
       if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
         //sell
-        trades.push({token: API.getToken(event.args.tokenGet), base: API.getToken(event.args.tokenGive), amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(API.getDivisor(event.args.tokenGet)).div(API.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give});
+        trades.push({token: API.getToken(event.args.tokenGet), base: API.getToken(event.args.tokenGive), amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(API.getDivisor(event.args.tokenGet)).div(API.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give});
         //buy
         trades.push({token: API.getToken(event.args.tokenGive), base: API.getToken(event.args.tokenGet), amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(API.getDivisor(event.args.tokenGive)).div(API.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.give, seller: event.args.get});
       }
