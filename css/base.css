@@ -267,3 +267,8 @@ pre code {
     overflow-wrap: normal;
     white-space: pre;
 }
+
+.dropdown-menu {
+    max-height: 500px;
+    overflow-y: auto;
+}
