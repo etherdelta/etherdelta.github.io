@@ -230,7 +230,7 @@ API.getPrices = function(callback) {
 
 API.getCoinMarketCapTicker = function(callback) {
   var self = this;
-  request.get('https://api.coinmarketcap.com/v1/ticker/', function(err, httpResponse, body) {
+  request.get('https://api.coinmarketcap.com/v1/ticker/?limit=200', function(err, httpResponse, body) {
     ticker = JSON.parse(body);
     callback(null, ticker);
   });
@@ -613,7 +613,7 @@ API.getTrades = function(callback) {
     if (event.event=='Trade' && self.contractEtherDeltaAddrs.indexOf(event.address)>=0) {
       if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
         //sell
-        trades.push({token: API.getToken(event.args.tokenGet), base: API.getToken(event.args.tokenGive), amount: -event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(API.getDivisor(event.args.tokenGet)).div(API.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give});
+        trades.push({token: API.getToken(event.args.tokenGet), base: API.getToken(event.args.tokenGive), amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(API.getDivisor(event.args.tokenGet)).div(API.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give});
         //buy
         trades.push({token: API.getToken(event.args.tokenGive), base: API.getToken(event.args.tokenGet), amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(API.getDivisor(event.args.tokenGive)).div(API.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.give, seller: event.args.get});
       }
@@ -2181,6 +2181,7 @@ configs["mainnet"] = {
     {addr: '0xb802b24e0637c2b87d2e8b7784c055bbe921011a', name: 'EMV', decimals: 2, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x6531f133e6deebe7f2dce5a0441aa7ef330b4e53', name: 'TIME', decimals: 8, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
     {addr: '0x059d4329078dcA62c521779c0Ce98EB9329349e6', name: 'TIG', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
+    {addr: '0x5005149adcc611c47676dafdbd7d62756b4432e0', name: 'PWR4', decimals: 18, gasApprove: 250000, gasDeposit: 250000, gasWithdraw: 250000, gasTrade: 250000, gasOrder: 250000},
   ],
   pairs: [
     {token: 'PLU', base: 'ETH'},
