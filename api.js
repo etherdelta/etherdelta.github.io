@@ -29,7 +29,7 @@ API.init = function(callback, allContracts, path, provider) {
     if (version in configs) self.config = configs[version];
     try {
       if (self.web3.currentProvider) {
-        self.web3.eth.coinbase;
+        self.web3.eth.accounts;
       }
     } catch(err) {
       self.web3.setProvider(undefined);
