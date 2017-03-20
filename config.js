@@ -80,15 +80,15 @@ configs["mainnet"] = {
   gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
   gitterRoomID: '57756375c2f0db084a20cf77',
   chatServer: 'https://etherdeltachat.herokuapp.com:443',
-  apiServer: 'https://api.etherdelta.com',
-  // apiServer: 'http://localhost:3000',
+  // apiServer: 'https://api.etherdelta.com',
+  apiServer: 'http://localhost:3000',
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
   ordersCacheCookie: 'EtherDelta_ordersCache',
   defaultToken: 1,
   defaultBase: 0,
-  etherscanAPIKey: '44JPUFZGPI8GUIG8XR5ZRRF7WSE2XJVS1T',
+  etherscanAPIKey: 'GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE',
 };
 
 //testnet
@@ -132,7 +132,7 @@ configs["testnet"] = {
   ordersCacheCookie: 'EtherDelta_ordersCache_testnet',
   defaultToken: 0,
   defaultBase: 1,
-  etherscanAPIKey: '44JPUFZGPI8GUIG8XR5ZRRF7WSE2XJVS1T',
+  etherscanAPIKey: 'GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE',
 };
 
 function getParameterByName(name, url) {

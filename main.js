@@ -558,7 +558,12 @@ Main.getOrders = function(callback) {
       try {
         result = JSON.parse(result);
         var blockNumber = result.blockNumber;
-        var orders = result.orders;
+        var orders = undefined;
+        if (Array.isArray(result.orders)) {
+          orders = result.orders;
+        } else {
+          orders = Object.values(result.orders);
+        }
         orders.forEach(function(x){
           Object.assign(x, {
             price: new BigNumber(x.price),
