@@ -544,7 +544,12 @@ API.getOrdersRemote = function(callback) {
   utility.getURL(self.config.apiServer+'/orders', function(err, data){
     if (!err) {
       data = JSON.parse(data);
-      var orders = data.orders;
+      var orders = undefined;
+      if (Array.isArray(data.orders)) {
+        orders = data.orders;
+      } else {
+        orders = Object.values(data.orders);
+      }
       orders.forEach(function(x){
         Object.assign(x, {
           price: new BigNumber(x.price),
