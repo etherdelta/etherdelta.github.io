@@ -279,20 +279,7 @@ Main.displayVolumes = function(orders, blockNumber, callback) {
     var base = Main.getToken(config.pairs[i].base);
     if (token && base) {
       var pair = token.name+'/'+base.name;
-      //only look at orders for the selected token and base
-      var ordersFiltered = orders.filter(function(x){return (x.order.tokenGet==token.addr && x.order.tokenGive==base.addr && x.amount>0) || (x.order.tokenGive==token.addr && x.order.tokenGet==base.addr && x.amount<0)});
-      //remove orders below the min order limit
-      ordersFiltered = ordersFiltered.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=minOrderSize});
-      //filter only orders that match the smart contract address
-      ordersFiltered = ordersFiltered.filter(function(order){return order.order.contractAddr==config.contractEtherDeltaAddr});
-      //final order filtering and sorting
-      var buyOrders = ordersFiltered.filter(function(x){return x.amount>0});
-      var sellOrders = ordersFiltered.filter(function(x){return x.amount<0});
-      sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
-      buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
-      var bid = buyOrders.length>0 ? buyOrders[0].price : undefined;
-      var ask = sellOrders.length>0 ? sellOrders[sellOrders.length-1].price : undefined;
-      if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0), bid: bid, ask: ask};
+      if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0)};
     }
   }
   //get trading volume
@@ -335,20 +322,7 @@ Main.displayVolumes = function(orders, blockNumber, callback) {
         if (tokenGive.name=='ETH') ethVolume = amountGive;
         if (tokenGet.name=='ETH') ethVolume = amountGet;
         var pair = token.name+'/'+base.name;
-        //only look at orders for the selected token and base
-        var ordersFiltered = orders.filter(function(x){return (x.order.tokenGet==token.addr && x.order.tokenGive==base.addr && x.amount>0) || (x.order.tokenGive==token.addr && x.order.tokenGet==base.addr && x.amount<0)});
-        //remove orders below the min order limit
-        ordersFiltered = ordersFiltered.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=minOrderSize});
-        //filter only orders that match the smart contract address
-        ordersFiltered = ordersFiltered.filter(function(order){return order.order.contractAddr==config.contractEtherDeltaAddr});
-        //final order filtering and sorting
-        var buyOrders = ordersFiltered.filter(function(x){return x.amount>0});
-        var sellOrders = ordersFiltered.filter(function(x){return x.amount<0});
-        sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
-        buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
-        var bid = buyOrders.length>0 ? buyOrders[0].price : undefined;
-        var ask = sellOrders.length>0 ? sellOrders[sellOrders.length-1].price : undefined;
-        if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0), bid: bid, ask: ask};
+        if (!pairVolumes[pair]) pairVolumes[pair] = {token: token, base: base, volumes: Array(timeFrames.length).fill(0), ethVolumes: Array(timeFrames.length).fill(0)};
         for (var i=0; i<timeFrames.length; i++) {
           var timeFrame = timeFrames[i];
           if (now-Main.blockTime(event.blockNumber)<timeFrame) {
@@ -364,6 +338,26 @@ Main.displayVolumes = function(orders, blockNumber, callback) {
         }
       }
     }
+  });
+  //get bid and ask
+  pairVolumes.forEach(pairVolume => {
+    var token = pairVolume.token;
+    var base = pairVolume.base;
+    //only look at orders for the selected token and base
+    var ordersFiltered = orders.filter(function(x){return (x.order.tokenGet==token.addr && x.order.tokenGive==base.addr && x.amount>0) || (x.order.tokenGive==token.addr && x.order.tokenGet==base.addr && x.amount<0)});
+    //remove orders below the min order limit
+    ordersFiltered = ordersFiltered.filter(function(order){return Number(order.ethAvailableVolume).toFixed(3)>=minOrderSize});
+    //filter only orders that match the smart contract address
+    ordersFiltered = ordersFiltered.filter(function(order){return order.order.contractAddr==config.contractEtherDeltaAddr});
+    //final order filtering and sorting
+    var buyOrders = ordersFiltered.filter(function(x){return x.amount>0});
+    var sellOrders = ordersFiltered.filter(function(x){return x.amount<0});
+    sellOrders.sort(function(a,b){ return b.price - a.price || b.id - a.id });
+    buyOrders.sort(function(a,b){ return b.price - a.price || a.id - b.id });
+    var bid = buyOrders.length>0 ? buyOrders[0].price : undefined;
+    var ask = sellOrders.length>0 ? sellOrders[sellOrders.length-1].price : undefined;
+    pairVolume.bid = bid;
+    pairVolume.ask = ask;
   });
   tokenVolumes = Object.values(tokenVolumes);
   tokenVolumes.sort(function(a,b){return b.ethVolumes[0]-a.ethVolumes[0]});
