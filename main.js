@@ -340,7 +340,8 @@ Main.displayVolumes = function(orders, blockNumber, callback) {
     }
   });
   //get bid and ask
-  pairVolumes.forEach(pairVolume => {
+  Object.keys(pairVolumes).forEach(pair => {
+    var pairVolume = pairVolumes[pair];
     var token = pairVolume.token;
     var base = pairVolume.base;
     //only look at orders for the selected token and base
