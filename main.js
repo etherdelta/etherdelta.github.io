@@ -116,24 +116,7 @@ Main.contractAddr = function(addr) {
   config.contractEtherDeltaAddr = addr;
   Main.refresh(function(){}, true, true);
 }
-Main.connectionTest = function() {
-  if (connection) return connection;
-  connection = {connection: 'Proxy', provider: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io', testnet: config.ethTestnet};
-  try {
-    if (web3.currentProvider) {
-      web3.eth.coinbase;
-      connection = {connection: 'RPC', provider: config.ethProvider, testnet: config.ethTestnet};
-    }
-  } catch(err) {
-    web3.setProvider(undefined);
-  }
-  Main.ejs(config.homeURL+'/templates/'+'connection_description.ejs', 'connection', {connection: connection, contracts: config.contractEtherDeltaAddrs, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
-  return connection;
-}
 Main.displayAccounts = function(callback) {
-  if (Main.connectionTest().connection=='RPC') {
-    $('#pk_div').hide();
-  }
   if (addrs.length<=0 || addrs.length!=pks.length) {
     addrs = [config.ethAddr];
     pks = [config.ethAddrPrivateKey];
@@ -1091,7 +1074,6 @@ Main.refresh = function(callback, forceEventRead, initMarket, token, base) {
             if (token) selectedToken = token;
             if (base) selectedBase = base;
             connection = undefined;
-            Main.connectionTest();
             Main.updateUrl();
             async.parallel(
               [
@@ -1224,94 +1206,125 @@ var usersWithOrdersToUpdate = {};
 var apiServerNonce = undefined;
 var ordersResult = {orders: [], blockNumber: 0};
 var selectedContract = undefined;
-//web3
-if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') { //metamask situation
-  web3 = new Web3(web3.currentProvider);
-} else if (typeof Web3 !== 'undefined' && window.location.protocol != "https:") { //mist/geth/parity situation
-  web3 = new Web3(new Web3.providers.HttpProvider(config.ethProvider));
-} else { //etherscan proxy
-  web3 = new Web3();
+
+function loadWeb3(callback) {
+  //web3
+  if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') { //metamask situation
+    web3 = new Web3(web3.currentProvider);
+    async.until(
+      function() { return connection; },
+      function(callback) {
+        connection = {connection: 'RPC', provider: config.ethProvider, testnet: config.ethTestnet};
+        $('#pk_div').hide();
+        setTimeout(function() {
+          callback(null);
+        }, 500);
+      },
+      function (err) {
+        callback();
+      }
+    );
+  } else if (typeof Web3 !== 'undefined' && window.location.protocol != "https:") { //mist/geth/parity situation
+    web3 = new Web3(new Web3.providers.HttpProvider(config.ethProvider));
+    try {
+      connection = {connection: 'RPC', provider: config.ethProvider, testnet: config.ethTestnet};
+      web3.eth.coinbase;
+      $('#pk_div').hide();
+    } catch(err) {
+      connection = {connection: 'Proxy', provider: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io', testnet: config.ethTestnet};
+      web3.setProvider(undefined);
+    }
+    callback();
+  } else { //etherscan proxy
+    web3 = new Web3();
+    connection = {connection: 'Proxy', provider: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io', testnet: config.ethTestnet};
+    callback();
+  }
 }
 
-web3.version.getNetwork(function(error, version){
-  //check mainnet vs testnet
-  if (version in configs) config = configs[version];
-  //default selected token and base
-  selectedToken = config.tokens[config.defaultToken];
-  selectedBase = config.tokens[config.defaultBase];
-  //default addr, pk
-  addrs = [config.ethAddr];
-  pks = [config.ethAddrPrivateKey];
-  //get cookie
-  var userCookie = utility.readCookie(config.userCookie);
-  if (userCookie) {
-    userCookie = JSON.parse(userCookie);
-    addrs = userCookie["addrs"];
-    pks = userCookie["pks"];
-    selectedAccount = userCookie["selectedAccount"];
-    if (userCookie["language"]) language = userCookie["language"];
-    selectedContract = userCookie["selectedContract"];
-  }
-  //translation
-  translator = $('body').translate({lang: language, t: translations});
-  //events cache cookie
-  var eventsCacheCookie = utility.readCookie(config.eventsCacheCookie);
-  if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
-  //get accounts
-  web3.eth.defaultAccount = config.ethAddr;
-  web3.eth.getAccounts(function(e,accounts){
-    if (!e) {
-      accounts.forEach(function(addr){
-        if(addrs.indexOf(addr)<0) {
-          addrs.push(addr);
-          pks.push(undefined);
-        }
-      });
+loadWeb3(function() {
+  web3.version.getNetwork(function(error, version){
+    //check mainnet vs testnet
+    if (version in configs) config = configs[version];
+    //default selected token and base
+    selectedToken = config.tokens[config.defaultToken];
+    selectedBase = config.tokens[config.defaultBase];
+    //default addr, pk
+    addrs = [config.ethAddr];
+    pks = [config.ethAddrPrivateKey];
+    //get cookie
+    var userCookie = utility.readCookie(config.userCookie);
+    if (userCookie) {
+      userCookie = JSON.parse(userCookie);
+      addrs = userCookie["addrs"];
+      pks = userCookie["pks"];
+      selectedAccount = userCookie["selectedAccount"];
+      if (userCookie["language"]) language = userCookie["language"];
+      selectedContract = userCookie["selectedContract"];
     }
-  });
-  //load Twitter and chat (not in init because we only want to load these scripts once)
-  // Main.ejs(config.homeURL+'/templates/'+'twitter.ejs', 'twitter', {});
-  // Main.ejs(config.homeURL+'/templates/'+'chat.ejs', 'chat', {chatServer: config.chatServer});
-  //load contract
-  config.contractEtherDeltaAddr = config.contractEtherDeltaAddrs[0].addr;
-  utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
-    contractEtherDelta = contract;
-    utility.loadContract(web3, config.contractToken, '0x0000000000000000000000000000000000000000', function(err, contract){
-      contractToken = contract;
-      //select token and base
-      var hash = window.location.hash.substr(1);
-      var hashSplit = hash.split('-');
-      //get token and base from hash
-      async.parallel(
-        [
-          function(callback) {
-            if (hashSplit.length==2) {
-              Main.loadToken(hashSplit[0], function(err, result){
-                if (!err && result) selectedToken = result;
-                callback(null, true);
-              });
-            } else {
-              callback(null, true);
-            }
-          },
-          function(callback) {
-            if (hashSplit.length==2) {
-              Main.loadToken(hashSplit[1], function(err, result){
-                if (!err && result) selectedBase = result;
-                callback(null, true);
-              });
-            } else {
-              callback(null, true);
-            }
+    //translation
+    translator = $('body').translate({lang: language, t: translations});
+    //events cache cookie
+    var eventsCacheCookie = utility.readCookie(config.eventsCacheCookie);
+    if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
+    //connection
+    Main.ejs(config.homeURL+'/templates/'+'connection_description.ejs', 'connection', {connection: connection, contracts: config.contractEtherDeltaAddrs, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
+    //get accounts
+    web3.eth.defaultAccount = config.ethAddr;
+    web3.eth.getAccounts(function(e,accounts){
+      if (!e) {
+        accounts.forEach(function(addr){
+          if(addrs.indexOf(addr)<0) {
+            addrs.push(addr);
+            pks.push(undefined);
           }
-        ],
-        function(err, results) {
-          //init
-          Main.init(function(){
-            Main.refreshLoop();
-          });
-        }
-      );
+        });
+      }
+    });
+    //load Twitter and chat (not in init because we only want to load these scripts once)
+    // Main.ejs(config.homeURL+'/templates/'+'twitter.ejs', 'twitter', {});
+    // Main.ejs(config.homeURL+'/templates/'+'chat.ejs', 'chat', {chatServer: config.chatServer});
+    //load contract
+    config.contractEtherDeltaAddr = config.contractEtherDeltaAddrs[0].addr;
+    utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
+      contractEtherDelta = contract;
+      utility.loadContract(web3, config.contractToken, '0x0000000000000000000000000000000000000000', function(err, contract){
+        contractToken = contract;
+        //select token and base
+        var hash = window.location.hash.substr(1);
+        var hashSplit = hash.split('-');
+        //get token and base from hash
+        async.parallel(
+          [
+            function(callback) {
+              if (hashSplit.length==2) {
+                Main.loadToken(hashSplit[0], function(err, result){
+                  if (!err && result) selectedToken = result;
+                  callback(null, true);
+                });
+              } else {
+                callback(null, true);
+              }
+            },
+            function(callback) {
+              if (hashSplit.length==2) {
+                Main.loadToken(hashSplit[1], function(err, result){
+                  if (!err && result) selectedBase = result;
+                  callback(null, true);
+                });
+              } else {
+                callback(null, true);
+              }
+            }
+          ],
+          function(err, results) {
+            //init
+            Main.init(function(){
+              Main.refreshLoop();
+            });
+          }
+        );
+      });
     });
   });
 });
