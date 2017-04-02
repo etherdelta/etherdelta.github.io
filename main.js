@@ -19,27 +19,57 @@ Main.ejs = function(url, element, data) {
 Main.alertInfo = function(message) {
   console.log(message);
   alertify.message(message);
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Alert',
+    eventAction: 'Info'
+  });
 }
 Main.alertDialog = function(message) {
   console.log(message);
   alertify.alert('Alert', message, function(){});
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Alert',
+    eventAction: 'Dialog'
+  });
 }
 Main.alertWarning = function(message) {
   console.log(message);
   alertify.warning(message);
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Alert',
+    eventAction: 'Warning'
+  });
 }
 Main.alertError = function(message) {
   console.log(message);
   alertify.error(message);
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Alert',
+    eventAction: 'Error'
+  });
 }
 Main.alertSuccess = function(message) {
   console.log(message);
   alertify.success(message);
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Alert',
+    eventAction: 'Success'
+  });
 }
 Main.alertTxResult = function(err, txs) {
   if (!Array.isArray(txs)) txs = [txs];
   if (err) {
     Main.alertError('You tried to send an Ethereum transaction but there was an error: '+err);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Ethereum',
+      eventAction: 'Ethereum transaction error'
+    });
   } else {
     if (txs.length==1) {
       var tx = txs[0];
@@ -53,6 +83,11 @@ Main.alertTxResult = function(err, txs) {
       });
       Main.alertDialog(message);
     }
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Ethereum',
+      eventAction: ('Ethereum transactions ('+txs.length+')')
+    });
   }
 }
 Main.enableTooltips = function() {
@@ -64,6 +99,11 @@ Main.logout = function() {
   selectedAccount = 0;
   nonce = undefined;
   Main.refresh(function(){}, true, true);
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Action',
+    eventAction: 'Logout'
+  });
 }
 Main.createAccount = function() {
   var newAccount = utility.createAccount();
@@ -71,6 +111,11 @@ Main.createAccount = function() {
   var pk = newAccount.privateKey;
   Main.addAccount(addr, pk);
   Main.alertDialog('You just created an Ethereum account: '+addr+'<br /><br />Please BACKUP the private key for this account: '+pk);
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Action',
+    eventAction: 'Create Account'
+  });
 }
 Main.deleteAccount = function() {
   addrs.splice(selectedAccount, 1);
@@ -78,11 +123,21 @@ Main.deleteAccount = function() {
   selectedAccount = 0;
   nonce = undefined;
   Main.refresh(function(){}, true, true);
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Action',
+    eventAction: 'Delete Account'
+  });
 }
 Main.selectAccount = function(i) {
   selectedAccount = i;
   nonce = undefined;
   Main.refresh(function(){}, true, true);
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Action',
+    eventAction: 'Select Account'
+  });
 }
 Main.addAccount = function(addr, pk) {
   if (addr.slice(0,2)!='0x') addr = '0x'+addr;
@@ -90,14 +145,29 @@ Main.addAccount = function(addr, pk) {
   addr = utility.toChecksumAddress(addr);
   if (pk!=undefined && pk!='' && !utility.verifyPrivateKey(addr, pk)) {
     Main.alertDialog('For account '+addr+', the private key is invalid.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Add Account - invalid private key'
+    });
   } else if (!web3.isAddress(addr)) {
     Main.alertDialog('The specified address, '+addr+', is invalid.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Add Account - invalid address'
+    });
   } else {
     addrs.push(addr);
     pks.push(pk);
     selectedAccount = addrs.length-1;
     nonce = undefined;
     Main.refresh(function(){}, true, true);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Add Account'
+    });
   }
 }
 Main.showPrivateKey = function() {
@@ -105,8 +175,18 @@ Main.showPrivateKey = function() {
   var pk = pks[selectedAccount];
   if (pk==undefined || pk=='') {
     Main.alertDialog('For account '+addr+', there is no private key available. You can still transact if you are connected to Ethereum and the account is unlocked.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Show private key - unavailable'
+    });
   } else {
     Main.alertDialog('For account '+addr+', the private key is '+pk+'.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Show private key'
+    });
   }
 }
 Main.addressLink = function(address) {
@@ -146,6 +226,12 @@ Main.selectLanguage = function(newLanguage) {
   translator.lang(language);
   Main.displayLanguages(function(){});
   Main.refresh(function(){}, true, true);
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Action',
+    eventAction: 'Select language',
+    eventLabel: newLanguage
+  });
 }
 Main.loadEvents = function(callback) {
   utility.blockNumber(web3, function(err, blockNumber) {
@@ -675,15 +761,29 @@ Main.displayAllBalances = function(callback) {
     }
   );
 }
-Main.transfer = function(addr, amount, toAddr) {
-  amount = utility.ethToWei(amount, Main.getDivisor(addr));
+Main.transfer = function(addr, inputAmount, toAddr) {
+  var amount = utility.ethToWei(inputAmount, Main.getDivisor(addr));
   var token = Main.getToken(addr);
   if (amount<=0) {
     Main.alertError('You must specify a valid amount to transfer.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Transfer - invalid amount',
+      eventLabel: token.name,
+      eventValue: inputAmount
+    });
     return;
   }
   if (!web3.isAddress(toAddr) || toAddr=='0x0000000000000000000000000000000000000000') {
     Main.alertError('Please specify a valid address.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Transfer - invalid address',
+      eventLabel: token.name,
+      eventValue: inputAmount
+    });
   } else if (addr=='0x0000000000000000000000000000000000000000') { //plain Ether transfer
     utility.getBalance(web3, addrs[selectedAccount], function(err, balance) {
       if (amount>balance) amount = balance;
@@ -692,6 +792,13 @@ Main.transfer = function(addr, amount, toAddr) {
         nonce = result.nonce;
         Main.addPending(err, {txHash: result.txHash});
         Main.alertTxResult(err, result);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Action',
+          eventAction: 'Transfer',
+          eventLabel: token.name,
+          eventValue: inputAmount
+        });
       });
     });
   } else { //token transfer
@@ -702,15 +809,29 @@ Main.transfer = function(addr, amount, toAddr) {
         nonce = result.nonce;
         Main.addPending(err, {txHash: result.txHash});
         Main.alertTxResult(err, result);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Action',
+          eventAction: 'Transfer',
+          eventLabel: token.name,
+          eventValue: inputAmount
+        });
       });
     });
   }
 }
-Main.deposit = function(addr, amount) {
-  amount = utility.ethToWei(amount, Main.getDivisor(addr));
+Main.deposit = function(addr, inputAmount) {
+  var amount = utility.ethToWei(inputAmount, Main.getDivisor(addr));
   var token = Main.getToken(addr);
   if (amount<=0) {
     Main.alertError('You must specify a valid amount to deposit.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Deposit - invalid amount',
+      eventLabel: token.name,
+      eventValue: inputAmount
+    });
     return;
   }
   if (addr=='0x0000000000000000000000000000000000000000') {
@@ -722,9 +843,23 @@ Main.deposit = function(addr, amount) {
           nonce = result.nonce;
           Main.addPending(err, {txHash: result.txHash});
           Main.alertTxResult(err, result);
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'Action',
+            eventAction: 'Deposit',
+            eventLabel: token.name,
+            eventValue: inputAmount
+          });
         });
       } else {
         Main.alertError("You don't have enough balance.")
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Action',
+          eventAction: 'Deposit - not enough balance',
+          eventLabel: token.name,
+          eventValue: inputAmount
+        });
       }
     });
   } else {
@@ -742,19 +877,40 @@ Main.deposit = function(addr, amount) {
             txs.push(result);
             Main.addPending(err, txs);
             Main.alertTxResult(err, txs);
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Action',
+              eventAction: 'Deposit',
+              eventLabel: token.name,
+              eventValue: inputAmount
+            });
           });
         });
       } else {
         Main.alertError("You don't have enough balance.")
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Action',
+          eventAction: 'Deposit - not enough balance',
+          eventLabel: token.name,
+          eventValue: inputAmount
+        });
       }
     });
   }
 }
-Main.withdraw = function(addr, amount) {
-  amount = utility.ethToWei(amount, Main.getDivisor(addr));
+Main.withdraw = function(addr, inputAmount) {
+  var amount = utility.ethToWei(inputAmount, Main.getDivisor(addr));
   var token = Main.getToken(addr);
   if (amount<=0) {
     Main.alertError('You must specify a valid amount to withdraw.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Withdraw - invalid amount',
+      eventLabel: token.name,
+      eventValue: inputAmount
+    });
     return;
   }
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [addr, addrs[selectedAccount]], function(err, result) {
@@ -765,6 +921,13 @@ Main.withdraw = function(addr, amount) {
     }
     if (amount<=0) {
       Main.alertError('You don\'t have anything to withdraw.');
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Action',
+        eventAction: 'Withdraw - nothing to withdraw',
+        eventLabel: token.name,
+        eventValue: inputAmount
+      });
     } else {
       if (addr=='0x0000000000000000000000000000000000000000') {
         utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdraw', [amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
@@ -772,6 +935,13 @@ Main.withdraw = function(addr, amount) {
           nonce = result.nonce;
           Main.addPending(err, {txHash: result.txHash});
           Main.alertTxResult(err, result);
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'Action',
+            eventAction: 'Withdraw',
+            eventLabel: token.name,
+            eventValue: inputAmount
+          });
         });
       } else {
         utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'withdrawToken', [addr, amount, {gas: token.gasWithdraw, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
@@ -779,6 +949,13 @@ Main.withdraw = function(addr, amount) {
           nonce = result.nonce;
           Main.addPending(err, {txHash: result.txHash});
           Main.alertTxResult(err, result);
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'Action',
+            eventAction: 'Withdraw',
+            eventLabel: token.name,
+            eventValue: inputAmount
+          });
         });
       }
     }
@@ -805,6 +982,12 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   var amountGive = undefined;
   if (amount<minOrderSize) {
     Main.alertError('The minimum order size is '+minOrderSize+'.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Order - below minimum size',
+      eventLabel: selectedToken.name+'/'+selectedBase.name
+    });
     return;
   }
   if (direction=='buy') {
@@ -824,6 +1007,12 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
     var balance = result;
     if (balance.lt(new BigNumber(amountGive))) {
       Main.alertError('You do not have enough funds to send this order.');
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Action',
+        eventAction: 'Order - not enough funds',
+        eventLabel: selectedToken.name+'/'+selectedBase.name
+      });
     } else {
       if (!config.ordersOnchain) { //offchain order
         // console.log([config.contractEtherDeltaAddr, tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce]);
@@ -832,6 +1021,12 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
         utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
           if (err) {
             Main.alertError('Could not sign order because of an error: '+err);
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Action',
+              eventAction: 'Order - could not sign',
+              eventLabel: selectedToken.name+'/'+selectedBase.name
+            });
           } else {
             // Send order to offchain book:
             var order = {contractAddr: config.contractEtherDeltaAddr, tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addrs[selectedAccount]};
@@ -840,8 +1035,20 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
               if (!err) {
                 Main.alertSuccess('You sent an order to the order book!');
                 Main.refresh(function(){});
+                ga('send', {
+                  hitType: 'event',
+                  eventCategory: 'Action',
+                  eventAction: 'Order',
+                  eventLabel: selectedToken.name+'/'+selectedBase.name
+                });
               } else {
                 Main.alertError('You tried sending an order to the order book but there was an error: '+err);
+                ga('send', {
+                  hitType: 'event',
+                  eventCategory: 'Action',
+                  eventAction: 'Order - error',
+                  eventLabel: selectedToken.name+'/'+selectedBase.name
+                });
               }
             });
           }
@@ -853,6 +1060,12 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
           nonce = result.nonce;
           Main.addPending(err, {txHash: result.txHash});
           Main.alertTxResult(err, result);
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'Action',
+            eventAction: 'Order - onchain',
+            eventLabel: selectedToken.name+'/'+selectedBase.name
+          });
         });
       }
     }
@@ -867,16 +1080,23 @@ Main.cancelOrder = function(order) {
       nonce = result.nonce;
       Main.addPending(err, {txHash: result.txHash});
       Main.alertTxResult(err, result);
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Action',
+        eventAction: 'Cancel order',
+        eventLabel: selectedToken.name+'/'+selectedBase.name
+      });
     });
   }
 }
-Main.trade = function(kind, order, amount) {
+Main.trade = function(kind, order, inputAmount) {
+  var amount;
   if (kind=='sell') {
     //if I'm selling a bid, the buyer is getting the token
-    amount = utility.ethToWei(amount, Main.getDivisor(order.tokenGet));
+    amount = utility.ethToWei(inputAmount, Main.getDivisor(order.tokenGet));
   } else if (kind=='buy') {
     //if I'm buying an offer, the seller is getting the base and giving the token, so must convert to get terms
-    amount = utility.ethToWei(amount * Number(order.amountGet) / Number(order.amountGive), Main.getDivisor(order.tokenGive));
+    amount = utility.ethToWei(inputAmount * Number(order.amountGet) / Number(order.amountGive), Main.getDivisor(order.tokenGive));
   } else {
     return;
   }
@@ -902,9 +1122,23 @@ Main.trade = function(kind, order, amount) {
             nonce = result.nonce;
             Main.addPending(err, {txHash: result.txHash});
             Main.alertTxResult(err, result);
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Action',
+              eventAction: 'Trade',
+              eventLabel: selectedToken.name+'/'+selectedBase.name,
+              eventValue: inputAmount
+            });
           });
         } else {
           Main.alertError("You cannot trade this order. Either you don't have enough funds, or this order already traded.");
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'Action',
+            eventAction: 'Trade - failed',
+            eventLabel: selectedToken.name+'/'+selectedBase.name,
+            eventValue: inputAmount
+          });
         }
       });
     });
@@ -988,6 +1222,12 @@ Main.selectToken = function(addrOrToken, name, decimals) {
     ordersResult = {orders: [], blockNumber: 0};
     Main.loading(function(){});
     Main.refresh(function(){}, true, true, token, selectedBase);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Token',
+      eventAction: 'Select Token',
+      eventLabel: token.name
+    });
   }
 }
 Main.selectBase = function(addrOrToken, name, decimals) {
@@ -996,6 +1236,12 @@ Main.selectBase = function(addrOrToken, name, decimals) {
     ordersResult = {orders: [], blockNumber: 0};
     Main.loading(function(){});
     Main.refresh(function(){}, true, true, selectedToken, base);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Token',
+      eventAction: 'Select Base',
+      eventLabel: base.name
+    });
   }
 }
 Main.selectTokenAndBase = function(tokenAddr, baseAddr) {
@@ -1005,6 +1251,12 @@ Main.selectTokenAndBase = function(tokenAddr, baseAddr) {
     ordersResult = {orders: [], blockNumber: 0};
     Main.loading(function(){});
     Main.refresh(function(){}, true, true, token, base);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Token',
+      eventAction: 'Select Pair',
+      eventLabel: token.name+'/'+base.name
+    });
   }
 }
 Main.displayBuySell = function(callback) {
@@ -1024,11 +1276,23 @@ Main.displayHelp = function(name) {
   $('#help_body').html('');
   Main.ejs(config.homeURL+'/help/'+name+'.ejs', 'help_body', {});
   $('#helpModal').modal('show');
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Display',
+    eventAction: 'Help',
+    eventLabel: name
+  });
 }
 Main.displayScreencast = function(name) {
   $('#screencast_body').html('');
   Main.ejs(config.homeURL+'/help/'+name+'.ejs', 'screencast_body', {});
   $('#screencastModal').modal('show');
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Display',
+    eventAction: 'Screencast',
+    eventLabel: name
+  });
 }
 Main.displayTokenGuide = function(name) {
   var matchingTokens = config.tokens.filter(function(x){return name==x.name});
@@ -1043,6 +1307,12 @@ Main.displayTokenGuide = function(name) {
     } catch (err) {
       console.log(err);
     }
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Display',
+      eventAction: 'Token Guide',
+      eventLabel: name
+    });
     $('#tokenModal').modal('show');
   }
 }
@@ -1054,6 +1324,11 @@ Main.checkContractUpgrade = function() {
 Main.resetCaches = function() {
   utility.eraseCookie(config.eventsCacheCookie);
   location.reload();
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Other',
+    eventAction: 'Reset caches'
+  });
 }
 Main.loading = function(callback) {
   ['deposit','withdraw','buy','sell','order_book','chart_price','chart_depth','my_trades','my_orders','trades','volume'].forEach(function(div){

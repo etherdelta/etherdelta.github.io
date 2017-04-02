@@ -10,8 +10,8 @@
     <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
     <link href="/css/alertify.min.css" rel="stylesheet" />
     <link href="/css/alertify-bootstrap.min.css" rel="stylesheet" />
-    <link href="/css/base.css" rel="stylesheet" />
-    <link href="/css/base-small.css" rel="stylesheet" media="only screen and (max-device-width: 480px)" />
+    <link href="/css/black.css" rel="stylesheet" id="stylesheet" />
+    <link href="/css/small.css" rel="stylesheet" media="only screen and (max-device-width: 480px)" />
     <title>EtherDelta</title>
   </head>
 
@@ -35,6 +35,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
+            <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/black.css')"><i class="fa fa-square" aria-hidden="true"></i></a></li>
+            <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/white.css')"><i class="fa fa-square-o" aria-hidden="true"></i></a></li>
             <li class="dropdown" id="tokens_dropdown"></li>
             <li class="dropdown" id="bases_dropdown"></li>
           </ul>
@@ -123,8 +125,8 @@
             </div>
             <div class="row-box height2">
               <div class="tab-content" style="height: 100%;">
-                <div role="tabpanel" class="tab-pane active" id="chart_price" style="height: 100%; width: 100%;"></div>
-                <div role="tabpanel" class="tab-pane" id="chart_depth" style="height: 100%; width: 100%;"></div>
+                <div role="tabpanel" class="tab-pane active" id="chart_price" style="height: 100%; width: 100%; background: #000;"></div>
+                <div role="tabpanel" class="tab-pane" id="chart_depth" style="height: 100%; width: 100%; background: #000;"></div>
               </div>
             </div>
             <div class="row-header trn">my_transactions</div>
