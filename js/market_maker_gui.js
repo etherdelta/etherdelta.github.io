@@ -2194,6 +2194,7 @@ configs["mainnet"] = {
     {token: 'HKG', base: 'ETH'},
     {token: 'XAUR', base: 'ETH'},
     {token: 'TIME', base: 'ETH'},
+    {token: 'GUP', base: 'ETH'},
     {token: 'ETH', base: 'USD.DC'},
     {token: 'ETH', base: 'BTC.DC'},
   ],
