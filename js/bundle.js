@@ -2909,6 +2909,7 @@ loadWeb3(function() {
     var eventsCacheCookie = utility.readCookie(config.eventsCacheCookie);
     if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
     //connection
+    config.contractEtherDeltaAddr = config.contractEtherDeltaAddrs[0].addr;
     Main.ejs(config.homeURL+'/templates/'+'connection_description.ejs', 'connection', {connection: connection, contracts: config.contractEtherDeltaAddrs, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
     //get accounts
     web3.eth.defaultAccount = config.ethAddr;
@@ -2926,7 +2927,6 @@ loadWeb3(function() {
     // Main.ejs(config.homeURL+'/templates/'+'twitter.ejs', 'twitter', {});
     // Main.ejs(config.homeURL+'/templates/'+'chat.ejs', 'chat', {chatServer: config.chatServer});
     //load contract
-    config.contractEtherDeltaAddr = config.contractEtherDeltaAddrs[0].addr;
     utility.loadContract(web3, config.contractEtherDelta, config.contractEtherDeltaAddr, function(err, contract){
       contractEtherDelta = contract;
       utility.loadContract(web3, config.contractToken, '0x0000000000000000000000000000000000000000', function(err, contract){
