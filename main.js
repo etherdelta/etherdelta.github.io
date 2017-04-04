@@ -45,7 +45,7 @@ Main.alertWarning = function(message) {
 }
 Main.alertError = function(message) {
   console.log(message);
-  alertify.error(message);
+  alertify.alert('Error', message, function(){});
   ga('send', {
     hitType: 'event',
     eventCategory: 'Alert',
@@ -144,14 +144,14 @@ Main.addAccount = function(addr, pk) {
   if (pk.slice(0,2)=='0x') pk = pk.slice(2);
   addr = utility.toChecksumAddress(addr);
   if (pk!=undefined && pk!='' && !utility.verifyPrivateKey(addr, pk)) {
-    Main.alertDialog('For account '+addr+', the private key is invalid.');
+    Main.alertError('For account '+addr+', the private key is invalid.');
     ga('send', {
       hitType: 'event',
       eventCategory: 'Action',
       eventAction: 'Add Account - invalid private key'
     });
   } else if (!web3.isAddress(addr)) {
-    Main.alertDialog('The specified address, '+addr+', is invalid.');
+    Main.alertError('The specified address, '+addr+', is invalid.');
     ga('send', {
       hitType: 'event',
       eventCategory: 'Action',
@@ -174,7 +174,7 @@ Main.showPrivateKey = function() {
   var addr = addrs[selectedAccount];
   var pk = pks[selectedAccount];
   if (pk==undefined || pk=='') {
-    Main.alertDialog('For account '+addr+', there is no private key available. You can still transact if you are connected to Ethereum and the account is unlocked.');
+    Main.alertError('For account '+addr+', there is no private key available. You can still transact if you are connected to Ethereum and the account is unlocked.');
     ga('send', {
       hitType: 'event',
       eventCategory: 'Action',
@@ -853,7 +853,7 @@ Main.deposit = function(addr, inputAmount) {
           });
         });
       } else {
-        Main.alertError("You don't have enough balance.")
+        Main.alertError("You can't deposit more Ether than you have.")
         ga('send', {
           hitType: 'event',
           eventCategory: 'Action',
@@ -888,7 +888,7 @@ Main.deposit = function(addr, inputAmount) {
           });
         });
       } else {
-        Main.alertError("You don't have enough balance.")
+        Main.alertError("You can't deposit more tokens than you have.")
         ga('send', {
           hitType: 'event',
           eventCategory: 'Action',
@@ -981,7 +981,16 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   var tokenGive = undefined;
   var amountGet = undefined;
   var amountGive = undefined;
-  if (amount<minOrderSize) {
+  if (addrs[selectedAccount]=='0x0000000000000000000000000000000000000123') {
+    Main.alertError("You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Order - no account selected',
+      eventLabel: selectedToken.name+'/'+selectedBase.name
+    });
+    return;
+  } else if (amount<minOrderSize) {
     Main.alertError('The minimum order size is '+minOrderSize+'.');
     ga('send', {
       hitType: 'event',
@@ -1007,7 +1016,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [tokenGive, addrs[selectedAccount]], function(err, result) {
     var balance = result;
     if (balance.lt(new BigNumber(amountGive))) {
-      Main.alertError('You do not have enough funds to send this order.');
+      Main.alertError("You do not have enough funds to send this order. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
       ga('send', {
         hitType: 'event',
         eventCategory: 'Action',
@@ -1021,7 +1030,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
         var hash = sha256(new Buffer(condensed,'hex'));
         utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
           if (err) {
-            Main.alertError('Could not sign order because of an error: '+err);
+            Main.alertError('Order signing failed. Make sure you have an account selected from the Accounts dropdown in the upper right.');
             ga('send', {
               hitType: 'event',
               eventCategory: 'Action',
@@ -1132,7 +1141,7 @@ Main.trade = function(kind, order, inputAmount) {
             });
           });
         } else {
-          Main.alertError("You cannot trade this order. Either you don't have enough funds, or this order already traded.");
+          Main.alertError("You cannot trade this order. Either this order already traded, or you don't have enough funds. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
           ga('send', {
             hitType: 'event',
             eventCategory: 'Action',
