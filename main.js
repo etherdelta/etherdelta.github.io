@@ -985,7 +985,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
     Main.alertError("You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Order - no account selected',
       eventLabel: selectedToken.name+'/'+selectedBase.name
     });
@@ -1100,59 +1100,70 @@ Main.cancelOrder = function(order) {
   }
 }
 Main.trade = function(kind, order, inputAmount) {
-  var amount;
-  if (kind=='sell') {
-    //if I'm selling a bid, the buyer is getting the token
-    amount = utility.ethToWei(inputAmount, Main.getDivisor(order.tokenGet));
-  } else if (kind=='buy') {
-    //if I'm buying an offer, the seller is getting the base and giving the token, so must convert to get terms
-    amount = utility.ethToWei(inputAmount * Number(order.amountGet) / Number(order.amountGive), Main.getDivisor(order.tokenGive));
-  } else {
+  if (addrs[selectedAccount]=='0x0000000000000000000000000000000000000123') {
+    Main.alertError("You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Error',
+      eventAction: 'Trade - no account selected',
+      eventLabel: selectedToken.name+'/'+selectedBase.name
+    });
     return;
-  }
-  var token = Main.getToken(order.tokenGet);
-  utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [order.tokenGet, addrs[selectedAccount]], function(err, result) {
-    var availableBalance = result.toNumber();
-    utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s], function(err, result) {
-      var availableVolume = result.toNumber();
-      if (amount>availableBalance/1.0031) amount = availableBalance/1.0031; //balance adjusted for fees (0.0001 to avoid rounding error)
-      if (amount>availableVolume) amount = availableVolume;
-      var v = Number(order.v);
-      var r = order.r;
-      var s = order.s;
-      if (!(v && r && s)) {
-        v = 0;
-        r = '0x0';
-        s = '0x0';
-      }
-      utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, v, r, s, amount, addrs[selectedAccount]], function(err, result) {
-        if (result && amount>0) {
-          utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, v, r, s, amount, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
-            txHash = result.txHash;
-            nonce = result.nonce;
-            Main.addPending(err, {txHash: result.txHash});
-            Main.alertTxResult(err, result);
+  } else {
+    var amount;
+    if (kind=='sell') {
+      //if I'm selling a bid, the buyer is getting the token
+      amount = utility.ethToWei(inputAmount, Main.getDivisor(order.tokenGet));
+    } else if (kind=='buy') {
+      //if I'm buying an offer, the seller is getting the base and giving the token, so must convert to get terms
+      amount = utility.ethToWei(inputAmount * Number(order.amountGet) / Number(order.amountGive), Main.getDivisor(order.tokenGive));
+    } else {
+      return;
+    }
+    var token = Main.getToken(order.tokenGet);
+    utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'balanceOf', [order.tokenGet, addrs[selectedAccount]], function(err, result) {
+      var availableBalance = result.toNumber();
+      utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'availableVolume', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, Number(order.v), order.r, order.s], function(err, result) {
+        var availableVolume = result.toNumber();
+        if (amount>availableBalance/1.0031) amount = availableBalance/1.0031; //balance adjusted for fees (0.0001 to avoid rounding error)
+        if (amount>availableVolume) amount = availableVolume;
+        var v = Number(order.v);
+        var r = order.r;
+        var s = order.s;
+        if (!(v && r && s)) {
+          v = 0;
+          r = '0x0';
+          s = '0x0';
+        }
+        utility.call(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'testTrade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, v, r, s, amount, addrs[selectedAccount]], function(err, result) {
+          if (result && amount>0) {
+            utility.send(web3, contractEtherDelta, config.contractEtherDeltaAddr, 'trade', [order.tokenGet, Number(order.amountGet), order.tokenGive, Number(order.amountGive), Number(order.expires), Number(order.nonce), order.user, v, r, s, amount, {gas: token.gasTrade, value: 0}], addrs[selectedAccount], pks[selectedAccount], nonce, function(err, result) {
+              txHash = result.txHash;
+              nonce = result.nonce;
+              Main.addPending(err, {txHash: result.txHash});
+              Main.alertTxResult(err, result);
+              ga('send', {
+                hitType: 'event',
+                eventCategory: 'Action',
+                eventAction: 'Trade',
+                eventLabel: selectedToken.name+'/'+selectedBase.name,
+                eventValue: inputAmount
+              });
+            });
+          } else {
+            Main.alertError("You cannot trade this order. Either this order already traded, or you don't have enough funds. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
             ga('send', {
               hitType: 'event',
               eventCategory: 'Action',
-              eventAction: 'Trade',
+              eventAction: 'Trade - failed',
               eventLabel: selectedToken.name+'/'+selectedBase.name,
               eventValue: inputAmount
             });
-          });
-        } else {
-          Main.alertError("You cannot trade this order. Either this order already traded, or you don't have enough funds. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
-          ga('send', {
-            hitType: 'event',
-            eventCategory: 'Action',
-            eventAction: 'Trade - failed',
-            eventLabel: selectedToken.name+'/'+selectedBase.name,
-            eventValue: inputAmount
-          });
-        }
+          }
+        });
       });
     });
-  });
+  }
 }
 Main.blockTime = function(block) {
   return new Date(blockTimeSnapshot.date.getTime()+((block - blockTimeSnapshot.blockNumber)*1000*secondsPerBlock));
