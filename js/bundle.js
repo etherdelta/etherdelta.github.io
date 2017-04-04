@@ -1634,7 +1634,8 @@ Main.loadEvents = function(callback) {
           }
         }
       })
-      utility.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
+      // utility.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
+      utility.createCookie(config.eventsCacheCookie, JSON.stringify({}), 999);
       callback(newEvents);
     });
   });
