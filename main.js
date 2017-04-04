@@ -1540,8 +1540,8 @@ loadWeb3(function() {
     //translation
     translator = $('body').translate({lang: language, t: translations});
     //events cache cookie
-    var eventsCacheCookie = utility.readCookie(config.eventsCacheCookie);
-    if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
+    // var eventsCacheCookie = utility.readCookie(config.eventsCacheCookie);
+    // if (eventsCacheCookie) eventsCache = JSON.parse(eventsCacheCookie);
     //connection
     config.contractEtherDeltaAddr = config.contractEtherDeltaAddrs[0].addr;
     Main.ejs(config.homeURL+'/templates/'+'connection_description.ejs', 'connection', {connection: connection, contracts: config.contractEtherDeltaAddrs, contractAddr: config.contractEtherDeltaAddr, contractLink: 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/address/'+config.contractEtherDeltaAddr});
