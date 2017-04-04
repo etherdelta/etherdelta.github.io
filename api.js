@@ -211,7 +211,9 @@ API.getPrices = function(callback) {
 
 API.getCoinMarketCapTicker = function(callback) {
   var self = this;
-  request.get('https://api.coinmarketcap.com/v1/ticker/?limit=200', function(err, httpResponse, body) {
+  var url = 'https://api.coinmarketcap.com/v1/ticker/';
+  // var url = 'https://api.coinmarketcap.com/v1/ticker/?limit=200';
+  request.get(url, function(err, httpResponse, body) {
     ticker = JSON.parse(body);
     callback(null, ticker);
   });
