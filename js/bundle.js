@@ -1432,7 +1432,7 @@ Main.alertSuccess = function(message) {
 Main.alertTxResult = function(err, txs) {
   if (!Array.isArray(txs)) txs = [txs];
   if (err) {
-    Main.alertError('You tried to send an Ethereum transaction but there was an error: '+err);
+    Main.alertError("You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).");
     ga('send', {
       hitType: 'event',
       eventCategory: 'Ethereum',
