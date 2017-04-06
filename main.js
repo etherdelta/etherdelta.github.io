@@ -67,8 +67,8 @@ Main.alertTxResult = function(err, txs) {
     Main.alertError("You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).");
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Ethereum',
-      eventAction: 'Ethereum transaction error'
+      eventCategory: 'Error',
+      eventAction: 'Ethereum - transaction error'
     });
   } else {
     if (txs.length==1) {
@@ -147,14 +147,14 @@ Main.addAccount = function(addr, pk) {
     Main.alertError('For account '+addr+', the private key is invalid.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Add Account - invalid private key'
     });
   } else if (!web3.isAddress(addr)) {
     Main.alertError('The specified address, '+addr+', is invalid.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Add Account - invalid address'
     });
   } else {
@@ -177,14 +177,14 @@ Main.showPrivateKey = function() {
     Main.alertError('For account '+addr+', there is no private key available. You can still transact if you are connected to Ethereum and the account is unlocked.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Show private key - unavailable'
     });
   } else {
     Main.alertDialog('For account '+addr+', the private key is '+pk+'.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Show private key'
     });
   }
@@ -769,7 +769,7 @@ Main.transfer = function(addr, inputAmount, toAddr) {
     Main.alertError('You must specify a valid amount to transfer.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Transfer - invalid amount',
       eventLabel: token.name,
       eventValue: inputAmount
@@ -780,7 +780,7 @@ Main.transfer = function(addr, inputAmount, toAddr) {
     Main.alertError('Please specify a valid address.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Transfer - invalid address',
       eventLabel: token.name,
       eventValue: inputAmount
@@ -828,7 +828,7 @@ Main.deposit = function(addr, inputAmount) {
     Main.alertError('You must specify a valid amount to deposit.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Deposit - invalid amount',
       eventLabel: token.name,
       eventValue: inputAmount
@@ -856,7 +856,7 @@ Main.deposit = function(addr, inputAmount) {
         Main.alertError("You can't deposit more Ether than you have.")
         ga('send', {
           hitType: 'event',
-          eventCategory: 'Action',
+          eventCategory: 'Error',
           eventAction: 'Deposit - not enough balance',
           eventLabel: token.name,
           eventValue: inputAmount
@@ -891,7 +891,7 @@ Main.deposit = function(addr, inputAmount) {
         Main.alertError("You can't deposit more tokens than you have.")
         ga('send', {
           hitType: 'event',
-          eventCategory: 'Action',
+          eventCategory: 'Error',
           eventAction: 'Deposit - not enough balance',
           eventLabel: token.name,
           eventValue: inputAmount
@@ -907,7 +907,7 @@ Main.withdraw = function(addr, inputAmount) {
     Main.alertError('You must specify a valid amount to withdraw.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Withdraw - invalid amount',
       eventLabel: token.name,
       eventValue: inputAmount
@@ -924,7 +924,7 @@ Main.withdraw = function(addr, inputAmount) {
       Main.alertError('You don\'t have anything to withdraw.');
       ga('send', {
         hitType: 'event',
-        eventCategory: 'Action',
+        eventCategory: 'Error',
         eventAction: 'Withdraw - nothing to withdraw',
         eventLabel: token.name,
         eventValue: inputAmount
@@ -994,7 +994,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
     Main.alertError('The minimum order size is '+minOrderSize+'.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Action',
+      eventCategory: 'Error',
       eventAction: 'Order - below minimum size',
       eventLabel: selectedToken.name+'/'+selectedBase.name
     });
@@ -1019,7 +1019,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
       Main.alertError("You do not have enough funds to send this order. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
       ga('send', {
         hitType: 'event',
-        eventCategory: 'Action',
+        eventCategory: 'Error',
         eventAction: 'Order - not enough funds',
         eventLabel: selectedToken.name+'/'+selectedBase.name
       });
@@ -1033,7 +1033,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
             Main.alertError('Order signing failed. Make sure you have an account selected from the Accounts dropdown in the upper right.');
             ga('send', {
               hitType: 'event',
-              eventCategory: 'Action',
+              eventCategory: 'Error',
               eventAction: 'Order - could not sign',
               eventLabel: selectedToken.name+'/'+selectedBase.name
             });
@@ -1055,8 +1055,8 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
                 Main.alertError('You tried sending an order to the order book but there was an error: '+err);
                 ga('send', {
                   hitType: 'event',
-                  eventCategory: 'Action',
-                  eventAction: 'Order - error',
+                  eventCategory: 'Error',
+                  eventAction: 'Order - error sending to order book',
                   eventLabel: selectedToken.name+'/'+selectedBase.name
                 });
               }
@@ -1154,7 +1154,7 @@ Main.trade = function(kind, order, inputAmount) {
             Main.alertError("You cannot trade this order. Either this order already traded, or you don't have enough funds. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
             ga('send', {
               hitType: 'event',
-              eventCategory: 'Action',
+              eventCategory: 'Error',
               eventAction: 'Trade - failed',
               eventLabel: selectedToken.name+'/'+selectedBase.name,
               eventValue: inputAmount
