@@ -1,0 +1,70 @@
+<script src="https://rawgit.com/ethereumjs/browser-builds/master/dist/ethereumjs-all.js" type="text/JavaScript"></script>
+<script src="https://rawgit.com/ethereum/web3.js/develop/dist/web3.js" type="text/JavaScript"></script>
+
+<script>
+if(typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
+  web3 = new Web3(web3.currentProvider);
+} else if (typeof Web3 !== 'undefined' && window.location.protocol != "https:") {
+  web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+} else {
+  web3 = new Web3();
+}
+var ethUtil = EthJS.Util;
+var Buffer = EthJS.Buffer.Buffer;
+
+var msgToSign = web3.sha3('0x1234');
+
+function prefixMessage(msgToSign) {
+  var msg = new Buffer(msgToSign.slice(2), 'hex');
+  msg = Buffer.concat([new Buffer('\x19Ethereum Signed Message:\n' + msg.length.toString()), msg])
+  msg = web3.sha3('0x'+msg.toString('hex'), {encoding: 'hex'});
+  msg = new Buffer(msg.slice(2), 'hex');
+  return '0x'+msg.toString('hex');
+}
+
+function testSig(msg, sig, address) {
+  var recoveredAddress = '0x'+ethUtil.pubToAddress(ethUtil.ecrecover(msg, sig.v, sig.r, sig.s)).toString('hex');
+  return recoveredAddress==address;
+}
+
+web3.version.getNode(function(error, node){
+  web3.eth.getAccounts(function(e,accounts){
+    var account = accounts[0];
+    if (node.match('Parity') != null || true) {
+      msgToSign = prefixMessage(msgToSign);
+    }
+    web3.eth.sign(account, msgToSign, function(err, sig) {
+      sig = ethUtil.fromRpcSig(sig);
+      var msg;
+      if (node.match('Parity') != null || true) {
+        msg = msgToSign;
+      } else {
+        msg = prefixMessage(msgToSign);
+      }
+      msg = new Buffer(msg.slice(2),'hex');
+      if (testSig(msg, sig, account)) {
+        console.log('Success');
+        console.log(msgToSign);
+        console.log(sig.v);
+        console.log('0x'+sig.r.toString('hex'));
+        console.log('0x'+sig.s.toString('hex'));
+      } else {
+        console.log('Failure');
+      }
+    });
+  });
+});
+/*
+contract TestCases {
+  function test() constant returns (bool) {
+    bytes32 msgToSign = 0x1ac7d1b81b7ba1025b36ccb86723da6ee5a87259f1c2fd5abe69d3200b512ec8;
+    address user = 0xcdb1978195f0f6694d0fc4c5770660f12aad65c3;
+    uint8 v = 27;
+    bytes32 r = 0x05cabcc17e8906b3d3f8c1f0ea31c774cfd92eb97cdf9eef72bdd974bef8731d;
+    bytes32 s = 0x069b8b592acbb32b33a974099e31c024e4c9acbd5bebe096f0dce0fcbd2aab29;
+    bytes32 msg = sha3("\x19Ethereum Signed Message:\n32", msgToSign);
+    return ecrecover(msg, v, r, s)==user;
+  }
+}
+*/
+</script>
