@@ -2398,6 +2398,7 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
         var hash = sha256(new Buffer(condensed,'hex'));
         utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
           if (err) {
+            console.log(err);
             Main.alertError('Order signing failed. Make sure you have an account selected from the Accounts dropdown in the upper right.');
             ga('send', {
               hitType: 'event',
