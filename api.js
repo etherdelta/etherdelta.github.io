@@ -496,8 +496,8 @@ API.addOrderFromEvent = function(event, callback) {
 API.updateOrder = function(order, callback) {
   var self = this;
   API.getBlockNumber(function(err, blockNumber){
-    if (!(!err && blockNumber && blockNumber>0)) { //if the block number doesn't make sense, just assume the order is ok for now
-        callback(null, order);
+    if (!(!err && blockNumber && blockNumber>0)) {
+        callback(null, order); //if the block number doesn't make sense, assume the order is ok and try again later
     } else if (blockNumber<Number(order.order.expires)) {
       utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
         if (!err) {
@@ -525,14 +525,14 @@ API.updateOrder = function(order, callback) {
                   callback(true, undefined);
                 }
               } else {
-                callback(true, undefined);
+                callback(null, order); //if there's an error, assume the order is ok and try again later
               }
             });
           } else {
             callback(true, undefined);
           }
         } else {
-          callback(true, undefined);
+          callback(null, order); //if there's an error, assume the order is ok and try again later
         }
       });
     } else {
