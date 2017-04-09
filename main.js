@@ -184,7 +184,7 @@ Main.showPrivateKey = function() {
     Main.alertDialog('For account '+addr+', the private key is '+pk+'.');
     ga('send', {
       hitType: 'event',
-      eventCategory: 'Error',
+      eventCategory: 'Action',
       eventAction: 'Show private key'
     });
   }
