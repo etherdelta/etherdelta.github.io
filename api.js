@@ -394,6 +394,33 @@ API.getDivisor = function(tokenOrAddress) {
   return new BigNumber(result);
 }
 
+API.getTokenByAddr = function(addr, callback) {
+  var self = this;
+  var token = undefined;
+  var matchingTokens = self.config.tokens.filter(function(x){return x.addr==addr || x.name==addr});
+  if (matchingTokens.length>0) {
+    token = matchingTokens[0];
+    callback(token);
+  } else if (addr.slice(0,2)=='0x') {
+    token  = JSON.parse(JSON.stringify(self.config.tokens[0]));
+    token.addr = addr;
+    utility.call(self.web3, self.contractToken, token.addr, 'decimals', [], function(err, result) {
+      if (!err && result>=0) token.decimals = result.toNumber();
+      utility.call(self.web3, self.contractToken, token.addr, 'name', [], function(err, result) {
+        if (!err && result && result!='') {
+          token.name = result;
+        } else {
+          token.name = token.addr.slice(2,6);
+        }
+        self.config.tokens.push(token);
+        callback(token);
+      });
+    });
+  } else {
+    callback(token);
+  }
+}
+
 API.getToken = function(addrOrToken, name, decimals) {
   var self = this;
   var result = undefined;
@@ -499,42 +526,52 @@ API.updateOrder = function(order, callback) {
     if (!(!err && blockNumber && blockNumber>0)) {
         callback(null, order); //if the block number doesn't make sense, assume the order is ok and try again later
     } else if (blockNumber<Number(order.order.expires)) {
-      utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-        if (!err) {
-          var availableVolume = result;
-          if (order.amount>=0) {
-            order.availableVolume = availableVolume;
-            order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGet));
-          } else {
-            order.availableVolume = availableVolume.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
-            order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGive));
-          }
-          if (Number(order.ethAvailableVolume).toFixed(3)>=self.minOrderSize) {
-            utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'amountFilled', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-              if (!err) {
-                var amountFilled = result;
-                if (amountFilled.lessThan(order.order.amountGet)) {
-                  order.updated = new Date();
-                  if (order.amount>=0) {
-                    order.amountFilled = amountFilled;
-                  } else {
-                    order.amountFilled = amountFilled.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
-                  }
-                  callback(null, order);
-                } else {
-                  callback(true, undefined);
-                }
+      async.each(
+        [order.order.tokenGive, order.order.tokenGet],
+        function(tokenAddr, callbackEach) {
+          API.getTokenByAddr(tokenAddr, function(){ //this function will check if the token is already in the config, and if not, it will grab the details from the blockchain and save to config
+            callbackEach(null);
+          });
+        },
+        function(err) {
+          utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
+            if (!err) {
+              var availableVolume = result;
+              if (order.amount>=0) {
+                order.availableVolume = availableVolume;
+                order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGet));
               } else {
-                callback(null, order); //if there's an error, assume the order is ok and try again later
+                order.availableVolume = availableVolume.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
+                order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGive));
               }
-            });
-          } else {
-            callback(true, undefined);
-          }
-        } else {
-          callback(null, order); //if there's an error, assume the order is ok and try again later
+              if (Number(order.ethAvailableVolume).toFixed(3)>=self.minOrderSize) {
+                utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'amountFilled', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
+                  if (!err) {
+                    var amountFilled = result;
+                    if (amountFilled.lessThan(order.order.amountGet)) {
+                      order.updated = new Date();
+                      if (order.amount>=0) {
+                        order.amountFilled = amountFilled;
+                      } else {
+                        order.amountFilled = amountFilled.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
+                      }
+                      callback(null, order);
+                    } else {
+                      callback(true, undefined);
+                    }
+                  } else {
+                    callback(null, order); //if there's an error, assume the order is ok and try again later
+                  }
+                });
+              } else {
+                callback(true, undefined);
+              }
+            } else {
+              callback(null, order); //if there's an error, assume the order is ok and try again later
+            }
+          });
         }
-      });
+      );
     } else {
       callback(true, undefined);
     }
