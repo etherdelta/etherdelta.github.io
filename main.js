@@ -1003,13 +1003,13 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   if (direction=='buy') {
     tokenGet = tokenAddr;
     tokenGive = baseAddr;
-    amountGet = utility.ethToWei(amount, Main.getDivisor(tokenGet));
-    amountGive = utility.ethToWei(amount * price, Main.getDivisor(tokenGive));
+    amountGet = Math.ceil(utility.ethToWei(amount, Main.getDivisor(tokenGet)));
+    amountGive = Math.floor(utility.ethToWei(amount * price, Main.getDivisor(tokenGive)));
   } else if (direction=='sell') {
     tokenGet = baseAddr;
     tokenGive = tokenAddr;
-    amountGet = utility.ethToWei(amount * price, Main.getDivisor(tokenGet));
-    amountGive = utility.ethToWei(amount, Main.getDivisor(tokenGive));
+    amountGet = Math.ceil(utility.ethToWei(amount * price, Main.getDivisor(tokenGet)));
+    amountGive = Math.floor(utility.ethToWei(amount, Main.getDivisor(tokenGive)));
   } else {
     return;
   }
@@ -1025,7 +1025,6 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
       });
     } else {
       if (!config.ordersOnchain) { //offchain order
-        // console.log([config.contractEtherDeltaAddr, tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce]);
         var condensed = utility.pack([config.contractEtherDeltaAddr, tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 160, 256, 160, 256, 256, 256]);
         var hash = sha256(new Buffer(condensed,'hex'));
         utility.sign(web3, addrs[selectedAccount], hash, pks[selectedAccount], function(err, sig) {
