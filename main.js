@@ -1003,13 +1003,15 @@ Main.publishOrder = function(baseAddr, tokenAddr, direction, amount, price, expi
   if (direction=='buy') {
     tokenGet = tokenAddr;
     tokenGive = baseAddr;
-    amountGet = Math.ceil(utility.ethToWei(amount, Main.getDivisor(tokenGet)));
-    amountGive = Math.floor(utility.ethToWei(amount * price, Main.getDivisor(tokenGive)));
+    amountGet = Math.floor(utility.ethToWei(amount, Main.getDivisor(tokenGet)));
+    var amountGetEth = utility.weiToEth(amountGet, Main.getDivisor(tokenGet));
+    amountGive = Math.floor(utility.ethToWei(amountGetEth * price, Main.getDivisor(tokenGive)));
   } else if (direction=='sell') {
     tokenGet = baseAddr;
     tokenGive = tokenAddr;
-    amountGet = Math.ceil(utility.ethToWei(amount * price, Main.getDivisor(tokenGet)));
     amountGive = Math.floor(utility.ethToWei(amount, Main.getDivisor(tokenGive)));
+    var amountGiveEth = utility.weiToEth(amountGive, Main.getDivisor(tokenGive));
+    amountGet = Math.ceil(utility.ethToWei(amountGiveEth * price, Main.getDivisor(tokenGet)));
   } else {
     return;
   }
