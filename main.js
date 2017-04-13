@@ -250,26 +250,44 @@ Main.loadEvents = function(callback) {
       }
       if (event.blockNumber<startBlock) delete eventsCache[id]; //delete old events
     });
-    utility.logsOnce(web3, contractEtherDelta, config.contractEtherDeltaAddr, startBlock, 'latest', function(err, events) {
-      var newEvents = 0;
-      events.forEach(function(event){
-        if (!eventsCache[event.transactionHash+event.logIndex]) {
-          newEvents++;
-          event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-          eventsCache[event.transactionHash+event.logIndex] = event;
-          //users with orders to update
-          if (event.event=='Trade') {
-            usersWithOrdersToUpdate[event.args.give] = true;
-            usersWithOrdersToUpdate[event.args.get] = true;
-          } else if (event.event=='Deposit' || event.event=='Withdraw' || event.event=='Cancel') {
-            usersWithOrdersToUpdate[event.args.user] = true;
+    var blockInterval = 12500;
+    var searches = [];
+    for (var b = blockNumber; b > startBlock; b -= blockInterval) {
+      searches.push([Math.max(startBlock, b - blockInterval), b]);
+    }
+    async.map(
+      searches,
+      function(searchRange, callbackMap) {
+        utility.logsOnce(web3, contractEtherDelta, config.contractEtherDeltaAddr, searchRange[0], searchRange[1], function(err, events) {
+          var newEvents = 0;
+          events.forEach(function(event){
+            if (!eventsCache[event.transactionHash+event.logIndex]) {
+              newEvents++;
+              event.txLink = 'http://'+(config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
+              eventsCache[event.transactionHash+event.logIndex] = event;
+              //users with orders to update
+              if (event.event=='Trade') {
+                usersWithOrdersToUpdate[event.args.give] = true;
+                usersWithOrdersToUpdate[event.args.get] = true;
+              } else if (event.event=='Deposit' || event.event=='Withdraw' || event.event=='Cancel') {
+                usersWithOrdersToUpdate[event.args.user] = true;
+              }
+            }
+          })
+          if (newEvents) {
+            callbackMap(null, newEvents)
+          } else {
+            callbackMap(null, 0);
           }
-        }
-      })
-      // utility.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
-      utility.createCookie(config.eventsCacheCookie, JSON.stringify({}), 999);
-      callback(newEvents);
-    });
+        });
+      },
+      function(err, newEventsArr) {
+        var newEvents = newEventsArr.reduce((a,b) => a + b, 0);
+        // utility.createCookie(config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
+        utility.createCookie(config.eventsCacheCookie, JSON.stringify({}), 999);
+        callback(newEvents);
+      }
+    )
   });
 }
 Main.displayMyTransactions = function(orders, blockNumber, callback) {
