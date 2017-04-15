@@ -12,8 +12,8 @@
     <% trades.forEach(function(trade){ %>
       <tr>
         <td class="align-right"><span class="<%= trade.amount>0 ? 'buy' : 'sell' %>"><%= trade.price.toNumber().toFixed(5) %><i class="fa fa-arrow-<%= trade.amount>0 ? 'up' : 'down' %>" aria-hidden="true"></i></span></td>
-        <td class="align-right"><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.Main.getDivisor(selectedToken)) %></td>
-        <td class="align-right padding-right"><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.Main.getDivisor(selectedBase)/bundle.Main.getDivisor(selectedToken), bundle.Main.getDivisor(selectedBase)) %><a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+        <td class="align-right"><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.EtherDelta.getDivisor(selectedToken)) %></td>
+        <td class="align-right padding-right"><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.EtherDelta.getDivisor(selectedBase)/bundle.EtherDelta.getDivisor(selectedToken), bundle.EtherDelta.getDivisor(selectedBase)) %><a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
       </tr>
     <% }); %>
     <tr>

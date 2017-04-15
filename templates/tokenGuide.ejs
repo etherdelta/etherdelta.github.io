@@ -6,7 +6,7 @@
 
 <div class="token-container">
   <% tokens.forEach(function(token){ %>
-    <div class="token" onclick="bundle.Main.displayTokenGuide('<%= token.name %>')">
+    <div class="token" onclick="bundle.EtherDelta.displayTokenGuide('<%= token.name %>')">
       <%= token.name %>
     </div>
   <% }) %>
@@ -19,11 +19,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel"><div id="token_guide_title"></div></h4>
+        <h4 class="modal-title" id="myModalLabel"><div id="tokenGuideTitle"></div></h4>
       </div>
       <div class="modal-body">
-        <div id="token_guide_details"></div>
-        <div id="token_guide_body"></div>
+        <div id="tokenGuideDetails"></div>
+        <div id="tokenGuideBody"></div>
       </div>
     </div>
   </div>

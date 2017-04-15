@@ -1,121 +1,137 @@
-$(function () {
-  $('body').on('click', '#address_submit', function (e) {
+/* eslint-env browser */
+/* global $, bundle */
+
+$(() => {
+  $('body').on('click', '#accountSubmit', (e) => {
     e.preventDefault();
-    $('#address_modal').modal('hide');
-    bundle.Main.addAccount($('#address_addr').val(), $('#address_pk').val());
+    $('#accountModal').modal('hide');
+    bundle.EtherDelta.addAccount($('#accountAddr').val(), $('#accountPk').val());
   });
 });
-$(function() {
-  $('#clear-log').click(function(){
-    $('#notifications').empty();
-  });
-});
-function buy_change() {
-  var amount = Number($('#buy_amount').val());
-  var price = Number($('#buy_price').val());
-  var total = (amount * price).toFixed(3);
-  $('#buy_total').val(total);
+function buyChange() { // eslint-disable-line no-unused-vars
+  const amount = Number($('#buyAmount').val());
+  const price = Number($('#buyPrice').val());
+  const total = (amount * price).toFixed(3);
+  $('#buyTotal').val(total);
 }
-function sell_change() {
-  var amount = Number($('#sell_amount').val());
-  var price = Number($('#sell_price').val());
-  var total = (amount * price).toFixed(3);
-  $('#sell_total').val(total);
+function sellChange() { // eslint-disable-line no-unused-vars
+  const amount = Number($('#sellAmount').val());
+  const price = Number($('#sellPrice').val());
+  const total = (amount * price).toFixed(3);
+  $('#sellTotal').val(total);
 }
-$(function () {
-  $('body').on('click', '#buy_submit', function (e) {
+$(() => {
+  $('body').on('click', '#buySubmit', (e) => {
     e.preventDefault();
-    bundle.Main.order('buy', $('#buy_amount').val(), $('#buy_price').val(), $('#buy_expires').val(), false);
+    bundle.EtherDelta.order(
+      'buy',
+      $('#buyAmount').val(),
+      $('#buyPrice').val(),
+      $('#buyExpires').val(),
+      false);
   });
 });
-$(function () {
-  $('body').on('click', '#sell_submit', function (e) {
+$(() => {
+  $('body').on('click', '#sellSubmit', (e) => {
     e.preventDefault();
-    bundle.Main.order('sell', $('#sell_amount').val(), $('#sell_price').val(), $('#sell_expires').val(), false);
+    bundle.EtherDelta.order(
+      'sell',
+      $('#sellAmount').val(),
+      $('#sellPrice').val(),
+      $('#sellExpires').val(),
+      false);
   });
 });
-$('#buy_cross_modal').on('show.bs.modal', function(e) {
-  var order = $(e.relatedTarget).data('order');
-  var amount = $(e.relatedTarget).data('amount');
-  var desc = $(e.relatedTarget).data('desc');
-  var token = $(e.relatedTarget).data('token');
-  var base = $(e.relatedTarget).data('base');
-  var price = $(e.relatedTarget).data('price');
-  $('#buy_cross_order').val(JSON.stringify(order.order));
-  $('#buy_cross_amount').val(amount);
-  $('#buy_cross_desc').html(desc);
-  $('.buy_cross_token').html(token);
-  $('.buy_cross_base').html(base);
-  $('#buy_cross_base_amount').val((amount*price).toFixed(3));
-  $('#buy_cross_fee').val((amount*price*0.003).toFixed(3));
-  $('#buy_cross_base_amount').change(function(){
-    $('#buy_cross_amount').val((Number($('#buy_cross_base_amount').val()) / price).toFixed(3));
-    $('#buy_cross_fee').val(($('#buy_cross_base_amount').val()*0.003).toFixed(3));
+$('#buyCrossModal').on('show.bs.modal', (e) => {
+  const order = $(e.relatedTarget).data('order');
+  const amount = $(e.relatedTarget).data('amount');
+  const desc = $(e.relatedTarget).data('desc');
+  const token = $(e.relatedTarget).data('token');
+  const base = $(e.relatedTarget).data('base');
+  const price = $(e.relatedTarget).data('price');
+  $('#buyCrossOrder').val(JSON.stringify(order.order));
+  $('#buyCrossAmount').val(amount);
+  $('#buyCrossDesc').html(desc);
+  $('.buyCrossToken').html(token);
+  $('.buyCrossBase').html(base);
+  $('#buyCrossBaseAmount').val((amount * price).toFixed(3));
+  $('#buyCrossFee').val((amount * price * 0.003).toFixed(3));
+  $('#buyCrossBaseAmount').change(() => {
+    $('#buyCrossAmount').val((Number($('#buyCrossBaseAmount').val()) / price).toFixed(3));
+    $('#buyCrossFee').val(($('#buyCrossBaseAmount').val() * 0.003).toFixed(3));
   });
-  $('#buy_cross_amount').change(function(){
-    $('#buy_cross_base_amount').val((Number($('#buy_cross_amount').val()) * price).toFixed(3));
-    $('#buy_cross_fee').val(($('#buy_cross_base_amount').val()*0.003).toFixed(3));
-  });
-});
-$('#sell_cross_modal').on('show.bs.modal', function(e) {
-  var order = $(e.relatedTarget).data('order');
-  var amount = $(e.relatedTarget).data('amount');
-  var desc = $(e.relatedTarget).data('desc');
-  var token = $(e.relatedTarget).data('token');
-  var base = $(e.relatedTarget).data('base');
-  var price = $(e.relatedTarget).data('price');
-  $('#sell_cross_order').val(JSON.stringify(order.order));
-  $('#sell_cross_amount').val(amount);
-  $('#sell_cross_desc').html(desc);
-  $('.sell_cross_token').html(token);
-  $('.sell_cross_base').html(base);
-  $('#sell_cross_base_amount').val((amount*price).toFixed(3));
-  $('#sell_cross_fee').val((amount*0.003).toFixed(3));
-  $('#sell_cross_base_amount').change(function(){
-    $('#sell_cross_amount').val((Number($('#sell_cross_base_amount').val()) / price).toFixed(3));
-    $('#sell_cross_fee').val(($('#sell_cross_amount').val()*0.003).toFixed(3));
-  });
-  $('#sell_cross_amount').change(function(){
-    $('#sell_cross_base_amount').val((Number($('#sell_cross_amount').val()) * price).toFixed(3));
-    $('#sell_cross_fee').val(($('#sell_cross_amount').val()*0.003).toFixed(3));
+  $('#buyCrossAmount').change(() => {
+    $('#buyCrossBaseAmount').val((Number($('#buyCrossAmount').val()) * price).toFixed(3));
+    $('#buyCrossFee').val(($('#buyCrossBaseAmount').val() * 0.003).toFixed(3));
   });
 });
-$(function () {
-  $('body').on('click', '#buy_cross_submit', function (e) {
+$('#sellCrossModal').on('show.bs.modal', (e) => {
+  const order = $(e.relatedTarget).data('order');
+  const amount = $(e.relatedTarget).data('amount');
+  const desc = $(e.relatedTarget).data('desc');
+  const token = $(e.relatedTarget).data('token');
+  const base = $(e.relatedTarget).data('base');
+  const price = $(e.relatedTarget).data('price');
+  $('#sellCrossOrder').val(JSON.stringify(order.order));
+  $('#sellCrossAmount').val(amount);
+  $('#sellCrossDesc').html(desc);
+  $('.sellCrossToken').html(token);
+  $('.sellCrossBase').html(base);
+  $('#sellCrossBaseAmount').val((amount * price).toFixed(3));
+  $('#sellCrossFee').val((amount * 0.003).toFixed(3));
+  $('#sellCrossBaseAmount').change(() => {
+    $('#sellCrossAmount').val((Number($('#sellCrossBaseAmount').val()) / price).toFixed(3));
+    $('#sellCrossFee').val(($('#sellCrossAmount').val() * 0.003).toFixed(3));
+  });
+  $('#sellCrossAmount').change(() => {
+    $('#sellCrossBaseAmount').val((Number($('#sellCrossAmount').val()) * price).toFixed(3));
+    $('#sellCrossFee').val(($('#sellCrossAmount').val() * 0.003).toFixed(3));
+  });
+});
+$(() => {
+  $('body').on('click', '#buyCrossSubmit', (e) => {
     e.preventDefault();
-    $('#buy_cross_modal').modal('hide');
-    bundle.Main.trade('buy', JSON.parse($('#buy_cross_order').val()), $('#buy_cross_amount').val());
+    $('#buyCrossModal').modal('hide');
+    bundle.EtherDelta.trade('buy', JSON.parse($('#buyCrossOrder').val()), $('#buyCrossAmount').val());
   });
 });
-$(function () {
-  $('body').on('click', '#sell_cross_submit', function (e) {
+$(() => {
+  $('body').on('click', '#sellCrossSubmit', (e) => {
     e.preventDefault();
-    $('#sell_cross_modal').modal('hide');
-    bundle.Main.trade('sell', JSON.parse($('#sell_cross_order').val()), $('#sell_cross_amount').val());
+    $('#sellCrossModal').modal('hide');
+    bundle.EtherDelta.trade(
+      'sell',
+      JSON.parse($('#sellCrossOrder').val()),
+      $('#sellCrossAmount').val());
   });
 });
-$(function () {
-  $('body').on('click', '#other_token_submit', function (e) {
+$(() => {
+  $('body').on('click', '#otherTokenSubmit', (e) => {
     e.preventDefault();
-    $('#other_token_modal').modal('hide');
-    bundle.Main.selectToken($('#other_token_addr').val(), $('#other_token_name').val(), $('#other_token_decimals').val());
+    $('#otherTokenModal').modal('hide');
+    bundle.EtherDelta.selectToken(
+      $('#otherTokenAddr').val(),
+      $('#otherTokenName').val(),
+      $('#otherTokenDecimals').val());
   });
 });
-$(function () {
-  $('body').on('click', '#other_base_submit', function (e) {
+$(() => {
+  $('body').on('click', '#otherBaseSubmit', (e) => {
     e.preventDefault();
-    $('#other_base_modal').modal('hide');
-    bundle.Main.selectBase($('#other_base_addr').val(), $('#other_base_name').val(), $('#other_base_decimals').val());
+    $('#otherBaseModal').modal('hide');
+    bundle.EtherDelta.selectBase(
+      $('#otherBaseAddr').val(),
+      $('#otherBaseName').val(),
+      $('#otherBaseDecimals').val());
   });
 });
-function deposit_click(addr) {
-  bundle.Main.deposit(addr, $('#deposit_amount_'+addr).val());
+function depositClick(addr) { // eslint-disable-line no-unused-vars
+  bundle.EtherDelta.deposit(addr, $(`#depositAmount${addr}`).val());
 }
-function withdraw_click(addr) {
-  bundle.Main.withdraw(addr, $('#withdraw_amount_'+addr).val());
+function withdrawClick(addr) { // eslint-disable-line no-unused-vars
+  bundle.EtherDelta.withdraw(addr, $(`#withdrawAmount${addr}`).val());
 }
-function transfer_click(addr) {
-  bundle.Main.transfer(addr, $('#transfer_amount_'+addr).val(), $('#transfer_to_'+addr).val());
+function transferClick(addr) { // eslint-disable-line no-unused-vars
+  bundle.EtherDelta.transfer(addr, $(`#transferAmount${addr}`).val(), $(`#transferTo${addr}`).val());
 }
-$(function(){
-})
+$(() => {});

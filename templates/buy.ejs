@@ -2,30 +2,30 @@
   <div class="form-group">
     <label class="col-sm-4 control-label"><%= selectedToken.name %></label>
     <div class="col-sm-8">
-      <input type="text" class="form-control trn" id="buy_amount" onchange="buy_change()" placeholder="amount_to_buy" />
+      <input type="text" class="form-control trn" id="buyAmount" onchange="buyChange()" placeholder="amount_to_buy" />
     </div>
   </div>
   <div class="form-group">
     <label class="col-sm-4 control-label"><%= selectedToken.name %>/<%= selectedBase.name %></label>
     <div class="col-sm-8">
-      <input type="text" class="form-control trn" id="buy_price" onchange="buy_change()" placeholder="price" />
+      <input type="text" class="form-control trn" id="buyPrice" onchange="buyChange()" placeholder="price" />
     </div>
   </div>
   <div class="form-group">
     <label class="col-sm-4 control-label"><%= selectedBase.name %></label>
     <div class="col-sm-8">
-      <input type="text" class="form-control trn" id="buy_total" onchange="buy_change()" placeholder="total" />
+      <input type="text" class="form-control trn" id="buyTotal" onchange="buyChange()" placeholder="total" />
     </div>
   </div>
   <div class="form-group">
     <label class="col-sm-4 control-label trn">expires</label>
     <div class="col-sm-8">
-      <input type="text" class="form-control trn" id="buy_expires" placeholder="number_of_blocks" value="10000" />
+      <input type="text" class="form-control trn" id="buyExpires" placeholder="numberOfBlocks" value="10000" />
     </div>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-4 col-sm-8">
-      <button type="submit" style="width: 100%;" class="btn btn-success trn" id="buy_submit">buy</button>
+      <button type="submit" style="width: 100%;" class="btn btn-success trn" id="buySubmit">buy</button>
     </div>
   </div>
 </form>

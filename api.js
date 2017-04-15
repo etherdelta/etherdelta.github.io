@@ -1,116 +1,129 @@
-var config = require('./config.js');
-var utility = require('./common/utility.js');
-var Web3 = require('web3');
-var request = require('request');
-var async = require('async');
-var BigNumber = require('bignumber.js');
-var sha256 = require('js-sha256').sha256;
+/* eslint-env browser */
+/* global configs */
+/* eslint no-console: ["error", { allow: ["log"] }] */
 
-function API(){
-}
+const config = require('./config.js');
+const utility = require('./common/utility.js');
+const Web3 = require('web3');
+const request = require('request');
+const async = require('async');
+const BigNumber = require('bignumber.js');
+const sha256 = require('js-sha256').sha256;
 
-API.init = function(callback, allContracts, path, provider) {
-  var self = this;
+function API() {}
 
-  //self.config, utility
-  self.config = config;
-  self.utility = utility;
+API.init = function init(callback, allContracts, path, provider) {
+  const self = this;
+  this.config = config;
+  this.utility = utility;
 
-  //web3
-  self.web3 = new Web3();
-  self.web3.eth.defaultAccount = self.config.ethAddr;
+  // web3
+  this.web3 = new Web3();
+  this.web3.eth.defaultAccount = this.config.ethAddr;
   if (provider) {
-    self.config.ethProvider = provider;
+    this.config.ethProvider = provider;
   }
-  self.web3.setProvider(new self.web3.providers.HttpProvider(self.config.ethProvider));
+  this.web3.setProvider(new this.web3.providers.HttpProvider(this.config.ethProvider));
 
-  //check mainnet vs testnet
-  self.web3.version.getNetwork(function(error, version){
-    if (version in configs) self.config = configs[version];
+  // check mainnet vs testnet
+  this.web3.version.getNetwork((error, version) => {
+    if (version in configs) this.config = configs[version];
     try {
-      if (self.web3.currentProvider) {
-        self.web3.eth.accounts;
+      if (this.web3.currentProvider) {
+        const coinbase = this.web3.eth.coinbase;
+        console.log(`Coinbase: ${coinbase}`);
       }
-    } catch(err) {
-      self.web3.setProvider(undefined);
+    } catch (err) {
+      this.web3.setProvider(undefined);
     }
 
-    //path
+    // path
     if (path) {
-      self.config.contractEtherDelta = path + self.config.contractEtherDelta;
-      self.config.contractToken= path + self.config.contractToken;
+      this.config.contractEtherDelta = path + this.config.contractEtherDelta;
+      this.config.contractToken = path + this.config.contractToken;
     }
 
-    //contracts
-    self.contractEtherDelta;
-    self.contractEtherDeltaAddrs = [self.config.contractEtherDeltaAddrs[0].addr];
-    if (allContracts) self.contractEtherDeltaAddrs = self.config.contractEtherDeltaAddrs.map(function(x){return x.addr});
-    self.contractToken;
+    // contracts
+    this.contractEtherDelta = undefined;
+    this.contractEtherDeltaAddrs = [this.config.contractEtherDeltaAddrs[0].addr];
+    if (allContracts) {
+      this.contractEtherDeltaAddrs = this.config.contractEtherDeltaAddrs.map(x => x.addr);
+    }
+    this.contractToken = undefined;
 
-    //storage
-    self.storageEventsCache = 'storage_eventsCache';
-    self.storageOrdersCache = 'storage_ordersCache';
+    // storage
+    this.storageEventsCache = 'storage_eventsCache';
+    this.storageOrdersCache = 'storage_ordersCache';
 
-    //other variables
-    self.lastMessagesId = 0;
-    self.eventsCache = {};
-    self.ordersCache = {};
-    self.usersWithOrdersToUpdate = {};
-    self.blockTimeSnapshot = undefined;
-    self.minOrderSize = 0.1;
-    self.pricesCache = undefined;
+    // other constiables
+    this.lastMessagesId = 0;
+    this.eventsCache = {};
+    this.ordersCache = {};
+    this.usersWithOrdersToUpdate = {};
+    this.blockTimeSnapshot = undefined;
+    this.minOrderSize = 0.1;
+    this.pricesCache = undefined;
+    this.nonce = undefined;
 
     async.series(
       [
-        function(callback){
-          utility.loadContract(self.web3, self.config.contractEtherDelta, self.contractEtherDeltaAddrs[0], function(err, contract){
-            self.contractEtherDelta = contract;
-            callback(null, true);
+        (callbackSeries) => {
+          utility.loadContract(
+            this.web3,
+            this.config.contractEtherDelta,
+            this.contractEtherDeltaAddrs[0],
+            (err, contract) => {
+              this.contractEtherDelta = contract;
+              callbackSeries(null, true);
+            });
+        },
+        (callbackSeries) => {
+          utility.loadContract(this.web3, this.config.contractToken, this.config.ethAddr, (
+            err,
+            contract) => {
+            this.contractToken = contract;
+            callbackSeries(null, true);
           });
         },
-        function(callback){
-          utility.loadContract(self.web3, self.config.contractToken, self.config.ethAddr, function(err, contract){
-            self.contractToken = contract;
-            callback(null, true);
+        (callbackSeries) => {
+          API.readStorage(this.storageEventsCache, (err, result) => {
+            self.eventsCache = !err && result ? result : {};
+            callbackSeries(null, true);
           });
         },
-        function(callback){
-          API.readStorage(self.storageEventsCache, function(err, result){
-            self.eventsCache = !err ? result : {};
-            callback(null, true);
+        (callbackSeries) => {
+          API.readStorage(this.storageOrdersCache, (err, result) => {
+            self.ordersCache = !err && result ? result : {};
+            callbackSeries(null, true);
           });
         },
-        function(callback){
-          API.readStorage(self.storageOrdersCache, function(err, result){
-            self.ordersCache = !err ? result : {};
-            callback(null, true);
+        (callbackSeries) => {
+          API.getBlockNumber(() => {
+            callbackSeries(null, true);
           });
         },
-        function(callback) {
-          API.getBlockNumber(function(err, blockNumber){
-            callback(null, true);
-          })
-        },
-        function(callback) {
-          API.logs(function(err, numLogs) {
-            callback(null, true);
+        (callbackSeries) => {
+          API.logs(() => {
+            callbackSeries(null, true);
           });
-        }
+        },
       ],
-      function(err, results){
-        callback(null, {contractEtherDelta: self.contractEtherDelta, contractToken: self.contractToken});
-      }
-    );
+      () => {
+        callback(null, {
+          contractEtherDelta: this.contractEtherDelta,
+          contractToken: this.contractToken,
+        });
+      });
   });
-}
+};
 
-API.readStorage = function(name, callback) {
-  if (typeof(window)!='undefined') {
-    var result = utility.readCookie(name);
+API.readStorage = function readStorage(name, callback) {
+  if (typeof window !== 'undefined') {
+    const result = utility.readCookie(name);
     if (result) {
       try {
-        result = JSON.parse(result);
-        callback(null, result);
+        const resultObj = JSON.parse(result);
+        callback(null, resultObj);
       } catch (err) {
         callback('fail', undefined);
       }
@@ -118,12 +131,12 @@ API.readStorage = function(name, callback) {
       callback('fail', undefined);
     }
   } else {
-    utility.readFile(name, function(err, result){
+    utility.readFile(name, (err, result) => {
       if (!err) {
         try {
-          var result = JSON.parse(result);
-          callback(null, result);
-        } catch (err) {
+          const resultObj = JSON.parse(result);
+          callback(null, resultObj);
+        } catch (errTry) {
           callback(err, undefined);
         }
       } else {
@@ -131,15 +144,15 @@ API.readStorage = function(name, callback) {
       }
     });
   }
-}
+};
 
-API.writeStorage = function(name, obj, callback) {
-  obj = JSON.stringify(obj);
-  if (typeof(window)!='undefined') {
-    utility.createCookie(name, obj);
+API.writeStorage = function writeStorage(name, obj, callback) {
+  const objStr = JSON.stringify(obj);
+  if (typeof window !== 'undefined') {
+    utility.createCookie(name, objStr);
     callback(null, true);
   } else {
-    utility.writeFile(name, obj, function(err, result){
+    utility.writeFile(name, objStr, (err) => {
       if (!err) {
         callback(null, true);
       } else {
@@ -147,143 +160,179 @@ API.writeStorage = function(name, obj, callback) {
       }
     });
   }
-}
+};
 
-API.logs = function(callback) {
-  var self = this;
-  utility.blockNumber(self.web3, function(err, blockNumber) {
-    for (id in self.eventsCache) {
-      var event = self.eventsCache[id];
-      for (arg in event.args) {
-        if (typeof(event.args[arg])=='string' && event.args[arg].slice(0,2)!='0x') {
+API.logs = function logs(callback) {
+  utility.blockNumber(this.web3, (err, blockNumber) => {
+    Object.keys(this.eventsCache).forEach((id) => {
+      const event = this.eventsCache[id];
+      Object.keys(event.args).forEach((arg) => {
+        if (typeof event.args[arg] === 'string' && event.args[arg].slice(0, 2) !== '0x') {
           event.args[arg] = new BigNumber(event.args[arg]);
         }
-      }
-    }
-    async.map(self.contractEtherDeltaAddrs,
-      function(contractEtherDeltaAddr, callbackMap) {
-        var blocks = Object.values(self.eventsCache).filter(function(x){return x.address==contractEtherDeltaAddr}).map(function(x){return x.blockNumber});
-        var startBlock = 0;
-        if (blocks.length) startBlock = blocks.max();
-        utility.logsOnce(self.web3, self.contractEtherDelta, contractEtherDeltaAddr, startBlock, 'latest', function(err, events) {
-          var newEvents = 0;
-          events.forEach(function(event){
-            if (!self.eventsCache[event.transactionHash+event.logIndex]) {
-              newEvents++;
-              event.txLink = 'http://'+(self.config.ethTestnet ? 'testnet.' : '')+'etherscan.io/tx/'+event.transactionHash;
-              self.eventsCache[event.transactionHash+event.logIndex] = event;
-              //users with orders to update
-              if (event.event=='Trade') {
-                self.usersWithOrdersToUpdate[event.args.give] = true;
-                self.usersWithOrdersToUpdate[event.args.get] = true;
-              } else if (event.event=='Deposit' || event.event=='Withdraw' || event.event=='Cancel') {
-                self.usersWithOrdersToUpdate[event.args.user] = true;
-              }
-            }
+      });
+    });
+    async.map(
+      this.contractEtherDeltaAddrs,
+      (contractEtherDeltaAddr, callbackMap) => {
+        const blocks = Object.values(this.eventsCache)
+          .filter(x => x.address === contractEtherDeltaAddr)
+          .map(x => x.blockNumber);
+        const startBlock = 0;
+        const lastBlock = blocks.length ? blocks.max() : startBlock;
+        const searches = [];
+        const blockInterval = 12500;
+        for (let b = blockNumber; b > lastBlock; b -= blockInterval) {
+          searches.push([Math.max(lastBlock, b - blockInterval), b]);
+        }
+        async.map(
+          searches,
+          (searchRange, callbackMapSearch) => {
+            utility.logsOnce(
+              this.web3,
+              this.contractEtherDelta,
+              this.config.contractEtherDeltaAddr,
+              searchRange[0],
+              searchRange[1],
+              (errEvents, events) => {
+                let newEvents = 0;
+                events.forEach((event) => {
+                  if (!this.eventsCache[event.transactionHash + event.logIndex]) {
+                    newEvents += 1;
+                    Object.assign(event, { txLink: `http://${this.config.ethTestnet ? 'testnet.' : ''}etherscan.io/tx/${event.transactionHash}` });
+                    this.eventsCache[event.transactionHash + event.logIndex] = event;
+                    // users with orders to update
+                    if (event.event === 'Trade') {
+                      this.usersWithOrdersToUpdate[event.args.give] = true;
+                      this.usersWithOrdersToUpdate[event.args.get] = true;
+                    } else if (['Deposit', 'Withdraw', 'Cancel'].indexOf(event.event) >= 0) {
+                      this.usersWithOrdersToUpdate[event.args.user] = true;
+                    }
+                  }
+                });
+                if (newEvents) {
+                  callbackMapSearch(null, newEvents);
+                } else {
+                  callbackMapSearch(null, 0);
+                }
+              });
+          },
+          (errNewEvents, newEventsArr) => {
+            const newEvents = newEventsArr.reduce((a, b) => a + b, 0);
+            callbackMap(null, newEvents);
           });
-          callbackMap(null, newEvents);
-        });
       },
-      function(err, result) {
-        var newEvents = result.reduce(function(a,b){return a+b},0);
-        API.writeStorage(self.storageEventsCache, self.eventsCache, function(err, result){});
+      (errMap, result) => {
+        const newEvents = result.reduce((a, b) => a + b, 0);
+        API.writeStorage(this.storageEventsCache, this.eventsCache, () => {});
         callback(null, newEvents);
-      }
-    );
+      });
   });
-}
+};
 
-API.getPrices = function(callback) {
-  var self = this;
-  var ethBTC = undefined;
-  var btcUSD = undefined;
-  // request.get('https://poloniex.com/public?command=returnTicker', function(err, httpResponse, body) {
-  //   ethBTC = Number(JSON.parse(body).BTC_ETH.last.replace(',',''));
-  request.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC', function(err, httpResponse, body) {
-    ethBTC = Number(JSON.parse(body).ETH.BTC);
-    request.get('http://api.coindesk.com/v1/bpi/currentprice/USD.json', function(err, httpResponse, body) {
-      btcUSD = Number(JSON.parse(body).bpi.USD.rate.replace(',',''));
-      var price = ethBTC * btcUSD;
-      callback(null, {"ETHBTC": ethBTC, "BTCUSD": btcUSD, "ETHUSD": price});
+API.getPrices = function getPrices(callback) {
+  request.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC', (
+    err1,
+    httpResponse1,
+    body1) => {
+    const ethBTC = Number(JSON.parse(body1).ETH.BTC);
+    request.get('http://api.coindesk.com/v1/bpi/currentprice/USD.json', (
+      err2,
+      httpResponse2,
+      body2) => {
+      const btcUSD = Number(JSON.parse(body2).bpi.USD.rate.replace(',', ''));
+      const price = ethBTC * btcUSD;
+      callback(null, { ETHBTC: ethBTC, BTCUSD: btcUSD, ETHUSD: price });
     });
   });
-}
+};
 
-API.getCoinMarketCapTicker = function(callback) {
-  var self = this;
-  var url = 'https://api.coinmarketcap.com/v1/ticker/';
-  // var url = 'https://api.coinmarketcap.com/v1/ticker/?limit=200';
-  request.get(url, function(err, httpResponse, body) {
-    ticker = JSON.parse(body);
+API.getCoinMarketCapTicker = function getCoinMarketCapTicker(callback) {
+  const url = 'https://api.coinmarketcap.com/v1/ticker/';
+  request.get(url, (err, httpResponse, body) => {
+    const ticker = JSON.parse(body);
     callback(null, ticker);
   });
-}
+};
 
-API.getBalance = function(addr, callback) {
-  var self = this;
-  utility.getBalance(this.web3, addr, function(err, balance){
+API.getBalance = function getBalance(addr, callback) {
+  utility.getBalance(this.web3, addr, (err, balance) => {
     if (!err) {
       callback(null, balance);
     } else {
       callback(null, 0);
     }
-  })
-}
+  });
+};
 
-API.getEtherDeltaBalance = function(addr, callback) {
-  var self = this;
-  if (addr.length==42) {
-    var token = '0x0000000000000000000000000000000000000000'; //ether token
-    utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'balanceOf', [token, addr], function(err, result) {
-      if (!err) {
-        callback(null, result.toNumber());
-      } else {
-        callback(null, 0);
-      }
-    });
+API.getEtherDeltaBalance = function getEtherDeltaBalance(addr, callback) {
+  if (addr.length === 42) {
+    const token = '0x0000000000000000000000000000000000000000'; // ether token
+    utility.call(
+      this.web3,
+      this.contractEtherDelta,
+      this.contractEtherDeltaAddrs[0],
+      'balanceOf',
+      [token, addr],
+      (err, result) => {
+        if (!err) {
+          callback(null, result.toNumber());
+        } else {
+          callback(null, 0);
+        }
+      });
   } else {
     callback(null, 0);
   }
-}
+};
 
-API.getEtherDeltaTokenBalances = function(addr, callback){
-  var self = this;
-  if (addr.length==42) {
-    async.reduce(self.config.tokens, {},
-      function(memo, token, callbackReduce){
-        utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'balanceOf', [token.addr, addr], function(err, result) {
-          if (!err) {
-            memo[token.name] = result.toNumber();
-            callbackReduce(null, memo);
-          } else {
-            callbackReduce(null, memo);
-          }
-        });
+API.getEtherDeltaTokenBalances = function getEtherDeltaTokenBalances(addr, callback) {
+  if (addr.length === 42) {
+    async.reduce(
+      this.config.tokens,
+      {},
+      (memo, token, callbackReduce) => {
+        utility.call(
+          this.web3,
+          this.contractEtherDelta,
+          this.contractEtherDeltaAddrs[0],
+          'balanceOf',
+          [token.addr, addr],
+          (err, result) => {
+            if (!err) {
+              Object.assign(memo, { [token.name]: result.toNumber() });
+              callbackReduce(null, memo);
+            } else {
+              callbackReduce(null, memo);
+            }
+          });
       },
-      function(err, tokenBalances) {
+      (err, tokenBalances) => {
         callback(null, tokenBalances);
-      }
-    );
+      });
   } else {
     callback(null, {});
   }
-}
+};
 
-API.getTokenBalances = function(addr, callback){
-  var self = this;
-  if (addr.length==42) {
-    //Ethereum address
-    async.reduce(self.config.tokens, {},
-      function(memo, token, callbackReduce){
-        if (token.addr=='0x0000000000000000000000000000000000000000') {
-          API.getBalance(addr, function(err, result){
-            memo[token.name] = result;
+API.getTokenBalances = function getTokenBalances(addr, callback) {
+  if (addr.length === 42) {
+    // Ethereum address
+    async.reduce(
+      this.config.tokens,
+      {},
+      (memo, token, callbackReduce) => {
+        if (token.addr === '0x0000000000000000000000000000000000000000') {
+          API.getBalance(addr, (err, result) => {
+            Object.assign(memo, { [token.name]: result });
             callbackReduce(null, memo);
           });
         } else {
-          utility.call(self.web3, self.contractToken, token.addr, 'balanceOf', [addr], function(err, result) {
+          utility.call(this.web3, this.contractToken, token.addr, 'balanceOf', [addr], (
+            err,
+            result) => {
             if (!err) {
-              memo[token.name] = result.toNumber();
+              Object.assign(memo, { [token.name]: result.toNumber() });
               callbackReduce(null, memo);
             } else {
               callbackReduce(null, memo);
@@ -291,81 +340,87 @@ API.getTokenBalances = function(addr, callback){
           });
         }
       },
-      function(err, tokenBalances) {
+      (err, tokenBalances) => {
         callback(null, tokenBalances);
-      }
-    );
-  } else if (addr.length==34) {
-    //Bitcoin address
-    request.get('https://blockchain.info/q/addressbalance/'+addr, function(err, httpResponse, body) {
-      balance = Number(body) / Math.pow(10,8);
+      });
+  } else if (addr.length === 34) {
+    // Bitcoin address
+    request.get(`https://blockchain.info/q/addressbalance/${addr}`, (
+      err,
+      httpResponse,
+      body) => {
+      const balance = Number(body) /
+        Math.pow(10, 8); // eslint-disable-line no-restricted-properties
       callback(null, {
-        'BTC': balance
-      })
+        BTC: balance,
+      });
     });
   }
-}
+};
 
-API.getUSDValue = function(tokenName, balance, tokenPrices, tickers) {
-  var token = API.getToken(tokenName);
-  if (!token) token = {name: tokenName, decimals: 0};
-  var tokenBalance = balance / Math.pow(10,token.decimals);
-  var price = 0;
-  var tokenMatch = tokenPrices.filter(function(x){return x.name==token.name})[0];
-  var ETHUSD = Number(tickers.filter(x => x.symbol=='ETH')[0].price_usd);
-  var BTCUSD = Number(tickers.filter(x => x.symbol=='BTC')[0].price_usd);
+API.getUSDValue = function getUSDValue(tokenName, balance, tokenPrices, tickers) {
+  let token = API.getToken(tokenName);
+  if (!token) token = { name: tokenName, decimals: 0 };
+  const tokenBalance = balance /
+    Math.pow(10, token.decimals); // eslint-disable-line no-restricted-properties
+  let price = 0;
+  const tokenMatch = tokenPrices.filter(x => x.name === token.name)[0];
+  const ETHUSD = Number(tickers.filter(x => x.symbol === 'ETH')[0].price_usd);
   if (tokenMatch) {
     if (tokenMatch.price) {
-      if (tokenMatch.unit=='ETH') {
+      if (tokenMatch.unit === 'ETH') {
         price = tokenMatch.price;
-      } else if (tokenMatch.unit=='USD') {
+      } else if (tokenMatch.unit === 'USD') {
         price = tokenMatch.price / ETHUSD;
       }
     } else if (tokenMatch.api_symbol) {
-      var tickerMatch = tickers.filter(function(x){return x.symbol==tokenMatch.api_symbol || x.id==tokenMatch.api_symbol})[0];
+      const tickerMatch = tickers.filter(
+        x => x.symbol === tokenMatch.api_symbol ||
+        x.id === tokenMatch.api_symbol)[0];
       if (tickerMatch) {
         price = tickerMatch.price_usd / ETHUSD;
       }
     }
-  } else {
-    if (token.name.slice(-1)=='N') {
-      var yesVersion = token.name.replace(/N$/, 'Y');
-      var tokenYesMatches = tokenPrices.filter(function(x){return x.name==yesVersion});
-      if (tokenYesMatches.length==1) {
-        price = 1.0 - tokenYesMatches[0].price;
-      }
+  } else if (token.name.slice(-1) === 'N') {
+    const yesVersion = token.name.replace(/N$/, 'Y');
+    const tokenYesMatches = tokenPrices.filter(x => x.name === yesVersion);
+    if (tokenYesMatches.length === 1) {
+      price = 1.0 - tokenYesMatches[0].price;
     }
   }
-  return {price: price, eth: tokenBalance * price, usd: tokenBalance * price * ETHUSD, balance: tokenBalance};
-}
+  return {
+    price,
+    eth: tokenBalance * price,
+    usd: tokenBalance * price * ETHUSD,
+    balance: tokenBalance,
+  };
+};
 
-API.getUSDBalance = function(addr, tokenPrices, callback) {
-  var self = this;
+API.getUSDBalance = function getUSDBalance(addr, tokenPrices, callback) {
   async.parallel(
     [
-      function(callback){
-        API.getTokenBalances(addr, callback);
+      (callbackParallel) => {
+        API.getTokenBalances(addr, callbackParallel);
       },
-      function(callback){
-        API.getEtherDeltaTokenBalances(addr, callback);
+      (callbackParallel) => {
+        API.getEtherDeltaTokenBalances(addr, callbackParallel);
       },
-      function(callback){
-        API.getCoinMarketCapTicker(callback);
-      }
+      (callbackParallel) => {
+        API.getCoinMarketCapTicker(callbackParallel);
+      },
     ],
-    function(err, results){
-      var balances = {'Wallet': results[0], 'EtherDelta': results[1]};
-      var tickers = results[2];
-      var total = 0;
-      var ETHUSD = Number(tickers.filter(x => x.symbol=='ETH')[0].price_usd);
-      var BTCUSD = Number(tickers.filter(x => x.symbol=='BTC')[0].price_usd);
-      for (var dapp in balances) {
-        var balance = balances[dapp];
-        if (typeof(balance)=='object' && typeof(balance['ETH'])!=undefined) {
-          var totalBalance = 0;
-          var ethToken = self.config.tokens[0];
-          Object.keys(balance).forEach(function(name) {
-            var value = API.getUSDValue(name, balance[name], tokenPrices, tickers);
+    (err, results) => {
+      const balances = { Wallet: results[0], EtherDelta: results[1] };
+      const tickers = results[2];
+      let total = 0;
+      const ETHUSD = Number(tickers.filter(x => x.symbol === 'ETH')[0].price_usd);
+      const BTCUSD = Number(tickers.filter(x => x.symbol === 'BTC')[0].price_usd);
+      Object.keys(balances).forEach((dapp) => {
+        const balance = balances[dapp];
+        if (typeof balance === 'object' && balance.ETH !== undefined) {
+          let totalBalance = 0;
+          Object.keys(balance).forEach((name) => {
+            const value = API.getUSDValue(name, balance[name], tokenPrices, tickers);
             totalBalance += value.balance * value.price;
             if (!balances[name]) balances[name] = 0;
             balances[name] += value.usd;
@@ -375,221 +430,328 @@ API.getUSDBalance = function(addr, tokenPrices, callback) {
           balances[dapp] = balance;
         }
         total += balances[dapp];
-      }
-      var ethValue = total;
-      var usdValue = total * ETHUSD;
-      var result = {ethValue: ethValue, usdValue: usdValue, balances: balances, prices: {ETHUSD: ETHUSD, BTCUSD: BTCUSD}};
+      });
+      const ethValue = total;
+      const usdValue = total * ETHUSD;
+      const result = {
+        usdValue,
+        ethValue,
+        balances,
+        prices: { ETHUSD, BTCUSD },
+      };
       callback(null, result);
-    }
-  );
-}
+    });
+};
 
-API.getDivisor = function(tokenOrAddress) {
-  var self = this;
-  var result = 1000000000000000000;
-  var token = API.getToken(tokenOrAddress);
-  if (token && token.decimals!=undefined) {
-    result = Math.pow(10,token.decimals);
+API.getDivisor = function getDivisor(tokenOrAddress) {
+  let result = 1000000000000000000;
+  const token = API.getToken(tokenOrAddress);
+  if (token && token.decimals >= 0) {
+    result = Math.pow(10, token.decimals); // eslint-disable-line no-restricted-properties
   }
   return new BigNumber(result);
-}
+};
 
-API.getTokenByAddr = function(addr, callback) {
-  var self = this;
-  var token = undefined;
-  var matchingTokens = self.config.tokens.filter(function(x){return x.addr==addr || x.name==addr});
-  if (matchingTokens.length>0) {
+API.getTokenByAddr = function getTokenByAddr(addr, callback) {
+  let token;
+  const matchingTokens = this.config.tokens.filter(x => x.addr === addr || x.name === addr);
+  if (matchingTokens.length > 0) {
     token = matchingTokens[0];
     callback(token);
-  } else if (addr.slice(0,2)=='0x') {
-    token  = JSON.parse(JSON.stringify(self.config.tokens[0]));
+  } else if (addr.slice(0, 2) === '0x') {
+    token = JSON.parse(JSON.stringify(this.config.tokens[0]));
     token.addr = addr;
-    utility.call(self.web3, self.contractToken, token.addr, 'decimals', [], function(err, result) {
-      if (!err && result>=0) token.decimals = result.toNumber();
-      utility.call(self.web3, self.contractToken, token.addr, 'name', [], function(err, result) {
-        if (!err && result && result!='') {
-          token.name = result;
+    utility.call(this.web3, this.contractToken, token.addr, 'decimals', [], (errDecimals, resultDecimals) => {
+      if (!errDecimals && resultDecimals >= 0) token.decimals = resultDecimals.toNumber();
+      utility.call(this.web3, this.contractToken, token.addr, 'name', [], (errName, resultName) => {
+        if (!errName && resultName) {
+          token.name = resultName;
         } else {
-          token.name = token.addr.slice(2,6);
+          token.name = token.addr.slice(2, 6);
         }
-        self.config.tokens.push(token);
+        this.config.tokens.push(token);
         callback(token);
       });
     });
   } else {
     callback(token);
   }
-}
+};
 
-API.getToken = function(addrOrToken, name, decimals) {
-  var self = this;
-  var result = undefined;
-  var matchingTokens = self.config.tokens.filter(function(x){return x.addr==addrOrToken || x.name==addrOrToken});
-  var expectedKeys = JSON.stringify(['addr','decimals','gasApprove','gasDeposit','gasOrder','gasTrade','gasWithdraw','name']);
-  if (matchingTokens.length>0) {
+API.getToken = function getToken(addrOrToken, name, decimals) {
+  let result;
+  const matchingTokens = this.config.tokens.filter(
+    x => x.addr === addrOrToken ||
+    x.name === addrOrToken);
+  const expectedKeys = JSON.stringify([
+    'addr',
+    'decimals',
+    'gasApprove',
+    'gasDeposit',
+    'gasOrder',
+    'gasTrade',
+    'gasWithdraw',
+    'name',
+  ]);
+  if (matchingTokens.length > 0) {
     result = matchingTokens[0];
-  } else if (addrOrToken.addr && JSON.stringify(Object.keys(addrOrToken).sort())==expectedKeys) {
+  } else if (addrOrToken.addr && JSON.stringify(Object.keys(addrOrToken).sort()) === expectedKeys) {
     result = addrOrToken;
-  } else if (addrOrToken.slice(0,2)=='0x' && name!='' && decimals>=0) {
-    result = JSON.parse(JSON.stringify(self.config.tokens[0]));
+  } else if (addrOrToken.slice(0, 2) === '0x' && name && decimals >= 0) {
+    result = JSON.parse(JSON.stringify(this.config.tokens[0]));
     result.addr = addrOrToken;
     result.name = name;
     result.decimals = decimals;
   }
   return result;
-}
+};
 
-API.saveOrders = function(callback) {
-  var self = this;
-  API.writeStorage(self.storageOrdersCache, self.ordersCache, function(err, result){
+API.saveOrders = function saveOrders(callback) {
+  API.writeStorage(this.storageOrdersCache, this.ordersCache, (err, result) => {
     callback(err, result);
   });
-}
+};
 
-API.addOrderFromMessage = function(message, callback) {
-  var self = this;
-  for (key in message) {
-    if (typeof(message[key])=='number') message[key] = new BigNumber(message[key]);
-  }
-  var expectedKeys = JSON.stringify(['amountGet','amountGive','contractAddr','expires','nonce','r','s','tokenGet','tokenGive','user','v']);
-  if (typeof(message)=='object' && JSON.stringify(Object.keys(message).sort())==expectedKeys) {
-    var id = sha256(Math.random().toString());
-    var buyOrder = {amount: message.amountGet, price: message.amountGive.div(message.amountGet).mul(API.getDivisor(message.tokenGet)).div(API.getDivisor(message.tokenGive)), id: id+'_buy', order: message, updated: undefined};
-    var sellOrder = {amount: -message.amountGive, price: message.amountGet.div(message.amountGive).mul(API.getDivisor(message.tokenGive)).div(API.getDivisor(message.tokenGet)), id: id+'_sell', order: message, updated: undefined};
+API.addOrderFromMessage = function addOrderFromMessage(messageIn, callback) {
+  const message = messageIn;
+  Object.keys(message).forEach((key) => {
+    if (typeof message[key] === 'number') {
+      Object.assign(message, {
+        key: new BigNumber(message[key]),
+      });
+    }
+  });
+  const expectedKeys = JSON.stringify([
+    'amountGet',
+    'amountGive',
+    'contractAddr',
+    'expires',
+    'nonce',
+    'r',
+    's',
+    'tokenGet',
+    'tokenGive',
+    'user',
+    'v',
+  ]);
+  if (typeof message === 'object' && JSON.stringify(Object.keys(message).sort()) === expectedKeys) {
+    const id = sha256(Math.random().toString());
+    const buyOrder = {
+      amount: message.amountGet,
+      price: message.amountGive
+        .div(message.amountGet)
+        .mul(API.getDivisor(message.tokenGet))
+        .div(API.getDivisor(message.tokenGive)),
+      id: `${id}_buy`,
+      order: message,
+      updated: undefined,
+    };
+    const sellOrder = {
+      amount: -message.amountGive,
+      price: message.amountGet
+        .div(message.amountGive)
+        .mul(API.getDivisor(message.tokenGive))
+        .div(API.getDivisor(message.tokenGet)),
+      id: `${id}_sell`,
+      order: message,
+      updated: undefined,
+    };
     async.parallel(
       [
-        function(callbackParallel) {
-          API.updateOrder(buyOrder, function(err, result) {
-            if (!err) self.ordersCache[id+'_buy'] = result;
+        (callbackParallel) => {
+          API.updateOrder(buyOrder, (err, result) => {
+            if (!err) this.ordersCache[`${id}_buy`] = result;
             callbackParallel(null);
-          })
+          });
         },
-        function(callbackParallel) {
-          API.updateOrder(sellOrder, function(err, result) {
-            if (!err) self.ordersCache[id+'_sell'] = result;
+        (callbackParallel) => {
+          API.updateOrder(sellOrder, (err, result) => {
+            if (!err) this.ordersCache[`${id}_sell`] = result;
             callbackParallel(null);
-          })
-        }
+          });
+        },
       ],
-      function(err) {
+      () => {
         callback(null, true);
-      }
-    );
+      });
   } else {
     callback('Failed to add order.', false);
   }
-}
+};
 
-API.addOrderFromEvent = function(event, callback) {
-  var self = this;
-  if (event.event=='Order' && event.address==self.contractEtherDeltaAddrs[0]) {
-    var id = event.blockNumber*1000+event.transactionIndex;
-    if (!self.ordersCache[id+'_buy']) {
-      var buyOrder = {amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(API.getDivisor(event.args.tokenGet)).div(API.getDivisor(event.args.tokenGive)), id: id+'_buy', order: event.args, updated: undefined};
-      var sellOrder = {amount: -event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(API.getDivisor(event.args.tokenGive)).div(API.getDivisor(event.args.tokenGet)), id: id+'_sell', order: event.args, updated: undefined};
+API.addOrderFromEvent = function addOrderFromEvent(event, callback) {
+  if (event.event === 'Order' && event.address === this.contractEtherDeltaAddrs[0]) {
+    const id = (event.blockNumber * 1000) + event.transactionIndex;
+    if (!this.ordersCache[`${id}_buy`]) {
+      const buyOrder = {
+        amount: event.args.amountGet,
+        price: event.args.amountGive
+          .div(event.args.amountGet)
+          .mul(API.getDivisor(event.args.tokenGet))
+          .div(API.getDivisor(event.args.tokenGive)),
+        id: `${id}_buy`,
+        order: event.args,
+        updated: undefined,
+      };
+      const sellOrder = {
+        amount: -event.args.amountGive,
+        price: event.args.amountGet
+          .div(event.args.amountGive)
+          .mul(API.getDivisor(event.args.tokenGive))
+          .div(API.getDivisor(event.args.tokenGet)),
+        id: `${id}_sell`,
+        order: event.args,
+        updated: undefined,
+      };
       async.parallel(
         [
-          function(callbackParallel) {
-            API.updateOrder(buyOrder, function(err, result) {
+          (callbackParallel) => {
+            API.updateOrder(buyOrder, (err, result) => {
               if (!err) {
-                self.ordersCache[id+'_buy'] = result;
+                this.ordersCache[`${id}_buy`] = result;
               } else {
-                delete self.ordersCache[id+'_buy'];
+                delete this.ordersCache[`${id}_buy`];
               }
               callbackParallel(null);
-            })
+            });
           },
-          function(callbackParallel) {
-            API.updateOrder(sellOrder, function(err, result) {
+          (callbackParallel) => {
+            API.updateOrder(sellOrder, (err, result) => {
               if (!err) {
-                self.ordersCache[id+'_sell'] = result;
+                this.ordersCache[`${id}_sell`] = result;
               } else {
-                delete self.ordersCache[id+'_sell'];
+                delete this.ordersCache[`${id}_sell`];
               }
               callbackParallel(null);
-            })
-          }
+            });
+          },
         ],
-        function(err) {
+        () => {
           callback(null, true);
-        }
-      );
+        });
     }
   } else {
     callback('Failed to add order.', false);
   }
-}
+};
 
-API.updateOrder = function(order, callback) {
-  var self = this;
-  API.getBlockNumber(function(err, blockNumber){
-    if (!(!err && blockNumber && blockNumber>0)) {
-        callback(null, order); //if the block number doesn't make sense, assume the order is ok and try again later
-    } else if (blockNumber<Number(order.order.expires)) {
+API.updateOrder = function updateOrder(orderIn, callback) {
+  const order = orderIn;
+  API.getBlockNumber((err, blockNumber) => {
+    if (!(!err && blockNumber && blockNumber > 0)) {
+      // if the block number doesn't make sense, assume the order is ok and try again later
+      callback(null, order);
+    } else if (blockNumber < Number(order.order.expires)) {
       async.each(
         [order.order.tokenGive, order.order.tokenGet],
-        function(tokenAddr, callbackEach) {
-          API.getTokenByAddr(tokenAddr, function(){ //this function will check if the token is already in the config, and if not, it will grab the details from the blockchain and save to config
+        (tokenAddr, callbackEach) => {
+          API.getTokenByAddr(tokenAddr, () => {
+            // this function will check if the token is already in the config,
+            // and if not, it will grab the details from the blockchain and save to config
             callbackEach(null);
           });
         },
-        function(err) {
-          utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'availableVolume', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-            if (!err) {
-              var availableVolume = result;
-              if (order.amount>=0) {
-                order.availableVolume = availableVolume;
-                order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGet));
-              } else {
-                order.availableVolume = availableVolume.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
-                order.ethAvailableVolume = utility.weiToEth(Math.abs(order.availableVolume), API.getDivisor(order.order.tokenGive));
-              }
-              if (Number(order.ethAvailableVolume).toFixed(3)>=self.minOrderSize) {
-                utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'amountFilled', [order.order.tokenGet, Number(order.order.amountGet), order.order.tokenGive, Number(order.order.amountGive), Number(order.order.expires), Number(order.order.nonce), order.order.user, Number(order.order.v), order.order.r, order.order.s], function(err, result) {
-                  if (!err) {
-                    var amountFilled = result;
-                    if (amountFilled.lessThan(order.order.amountGet)) {
-                      order.updated = new Date();
-                      if (order.amount>=0) {
-                        order.amountFilled = amountFilled;
+        () => {
+          utility.call(
+            this.web3,
+            this.contractEtherDelta,
+            this.contractEtherDeltaAddrs[0],
+            'availableVolume',
+            [
+              order.order.tokenGet,
+              Number(order.order.amountGet),
+              order.order.tokenGive,
+              Number(order.order.amountGive),
+              Number(order.order.expires),
+              Number(order.order.nonce),
+              order.order.user,
+              Number(order.order.v),
+              order.order.r,
+              order.order.s,
+            ],
+            (errAvail, resultAvail) => {
+              if (!errAvail) {
+                const availableVolume = resultAvail;
+                if (order.amount >= 0) {
+                  order.availableVolume = availableVolume;
+                  order.ethAvailableVolume = utility.weiToEth(
+                    Math.abs(order.availableVolume),
+                    API.getDivisor(order.order.tokenGet));
+                } else {
+                  order.availableVolume = availableVolume
+                    .div(order.price)
+                    .mul(API.getDivisor(order.order.tokenGive))
+                    .div(API.getDivisor(order.order.tokenGet));
+                  order.ethAvailableVolume = utility.weiToEth(
+                    Math.abs(order.availableVolume),
+                    API.getDivisor(order.order.tokenGive));
+                }
+                if (Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize) {
+                  utility.call(
+                    this.web3,
+                    this.contractEtherDelta,
+                    this.contractEtherDeltaAddrs[0],
+                    'amountFilled',
+                    [
+                      order.order.tokenGet,
+                      Number(order.order.amountGet),
+                      order.order.tokenGive,
+                      Number(order.order.amountGive),
+                      Number(order.order.expires),
+                      Number(order.order.nonce),
+                      order.order.user,
+                      Number(order.order.v),
+                      order.order.r,
+                      order.order.s,
+                    ],
+                    (errFilled, resultFilled) => {
+                      if (!errFilled) {
+                        const amountFilled = resultFilled;
+                        if (amountFilled.lessThan(order.order.amountGet)) {
+                          order.updated = new Date();
+                          if (order.amount >= 0) {
+                            order.amountFilled = amountFilled;
+                          } else {
+                            order.amountFilled = amountFilled
+                              .div(order.price)
+                              .mul(API.getDivisor(order.order.tokenGive))
+                              .div(API.getDivisor(order.order.tokenGet));
+                          }
+                          callback(null, order);
+                        } else {
+                          callback(true, undefined);
+                        }
                       } else {
-                        order.amountFilled = amountFilled.div(order.price).mul(API.getDivisor(order.order.tokenGive)).div(API.getDivisor(order.order.tokenGet));
+                        // if there's an error, assume the order is ok and try again later
+                        callback(null, order);
                       }
-                      callback(null, order);
-                    } else {
-                      callback(true, undefined);
-                    }
-                  } else {
-                    callback(null, order); //if there's an error, assume the order is ok and try again later
-                  }
-                });
+                    });
+                } else {
+                  callback(true, undefined);
+                }
               } else {
-                callback(true, undefined);
+                // if there's an error, assume the order is ok and try again later
+                callback(null, order);
               }
-            } else {
-              callback(null, order); //if there's an error, assume the order is ok and try again later
-            }
-          });
-        }
-      );
+            });
+        });
     } else {
       callback(true, undefined);
     }
-  })
-}
+  });
+};
 
-API.getOrdersRemote = function(callback) {
-  var self = this;
-  utility.getURL(self.config.apiServer+'/orders', function(err, data){
+API.getOrdersRemote = function getOrdersRemote(callback) {
+  utility.getURL(`${this.config.apiServer}/orders`, (err, result) => {
     if (!err) {
-      data = JSON.parse(data);
-      var orders = undefined;
+      const data = JSON.parse(result);
+      let orders;
       if (Array.isArray(data.orders)) {
         orders = data.orders;
       } else {
         orders = Object.values(data.orders);
       }
-      orders.forEach(function(x){
+      orders.forEach((x) => {
         Object.assign(x, {
           price: new BigNumber(x.price),
           // amount: new BigNumber(x.amount),
@@ -606,127 +768,187 @@ API.getOrdersRemote = function(callback) {
             r: x.order.r,
             s: x.order.s,
             v: Number(x.order.v),
-          })
+          }),
         });
       });
-      callback(null, {orders: orders, blockNumber: data.blockNumber});
+      callback(null, { orders, blockNumber: data.blockNumber });
     } else {
       callback(err, []);
     }
-  })
-}
+  });
+};
 
-API.blockTime = function(block) {
-  var self = this;
-  return new Date(self.blockTimeSnapshot.date.getTime()+((block - self.blockTimeSnapshot.blockNumber)*1000*14));
-}
+API.blockTime = function blockTime(block) {
+  return new Date(
+    this.blockTimeSnapshot.date.getTime() +
+      ((block - this.blockTimeSnapshot.blockNumber) * 1000 * 14));
+};
 
-API.getBlockNumber = function(callback) {
-  var self = this;
-  if (!self.blockTimeSnapshot || (new Date() - self.blockTimeSnapshot.date) > 14*1000) {
-    utility.blockNumber(self.web3, function(err, blockNumber) {
-      self.blockTimeSnapshot = {blockNumber: blockNumber, date: new Date()};
-      callback(null, self.blockTimeSnapshot.blockNumber);
+API.getBlockNumber = function getBlockNumber(callback) {
+  if (!this.blockTimeSnapshot || new Date() - this.blockTimeSnapshot.date > 14 * 1000) {
+    utility.blockNumber(this.web3, (err, blockNumber) => {
+      this.blockTimeSnapshot = { blockNumber, date: new Date() };
+      callback(null, this.blockTimeSnapshot.blockNumber);
     });
   } else {
-    callback(null, self.blockTimeSnapshot.blockNumber);
+    callback(null, this.blockTimeSnapshot.blockNumber);
   }
-}
+};
 
-API.getTrades = function(callback) {
-  var self = this;
-  var trades = [];
-  var events = Object.values(self.eventsCache);
-  events.forEach(function(event){
-    if (event.event=='Trade' && self.contractEtherDeltaAddrs.indexOf(event.address)>=0) {
-      if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
-        //sell
-        trades.push({token: API.getToken(event.args.tokenGet), base: API.getToken(event.args.tokenGive), amount: event.args.amountGet, price: event.args.amountGive.div(event.args.amountGet).mul(API.getDivisor(event.args.tokenGet)).div(API.getDivisor(event.args.tokenGive)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.get, seller: event.args.give});
-        //buy
-        trades.push({token: API.getToken(event.args.tokenGive), base: API.getToken(event.args.tokenGet), amount: event.args.amountGive, price: event.args.amountGet.div(event.args.amountGive).mul(API.getDivisor(event.args.tokenGive)).div(API.getDivisor(event.args.tokenGet)), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber, buyer: event.args.give, seller: event.args.get});
+API.getTrades = function getTrades(callback) {
+  const trades = [];
+  const events = Object.values(this.eventsCache);
+  events.forEach((event) => {
+    if (event.event === 'Trade' && this.contractEtherDeltaAddrs.indexOf(event.address) >= 0) {
+      if (event.args.amountGive.toNumber() > 0 && event.args.amountGet.toNumber() > 0) {
+        // don't show trades involving 0 amounts
+        // sell
+        trades.push({
+          token: API.getToken(event.args.tokenGet),
+          base: API.getToken(event.args.tokenGive),
+          amount: event.args.amountGet,
+          price: event.args.amountGive
+            .div(event.args.amountGet)
+            .mul(API.getDivisor(event.args.tokenGet))
+            .div(API.getDivisor(event.args.tokenGive)),
+          id: (event.blockNumber * 1000) + event.transactionIndex,
+          blockNumber: event.blockNumber,
+          buyer: event.args.get,
+          seller: event.args.give,
+        });
+        // buy
+        trades.push({
+          token: API.getToken(event.args.tokenGive),
+          base: API.getToken(event.args.tokenGet),
+          amount: event.args.amountGive,
+          price: event.args.amountGet
+            .div(event.args.amountGive)
+            .mul(API.getDivisor(event.args.tokenGive))
+            .div(API.getDivisor(event.args.tokenGet)),
+          id: (event.blockNumber * 1000) + event.transactionIndex,
+          blockNumber: event.blockNumber,
+          buyer: event.args.give,
+          seller: event.args.get,
+        });
       }
     }
   });
-  trades.sort(function(a,b){ return b.id - a.id });
-  callback(null, {trades: trades});
-}
+  trades.sort((a, b) => b.id - a.id);
+  callback(null, { trades });
+};
 
-API.getFees = function(callback) {
-  var self = this;
-  var fees = [];
-  var feeTake = new BigNumber(0.003);
-  var feeMake = new BigNumber(0.000);
-  var events = Object.values(self.eventsCache);
-  events.forEach(function(event){
-    if (event.event=='Trade' && self.contractEtherDeltaAddrs.indexOf(event.address)>=0) {
-      if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
-        //take fee
-        fees.push({token: API.getToken(event.args.tokenGive), amount: event.args.amountGive.times(feeTake), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber});
-        //make fee
-        fees.push({token: API.getToken(event.args.tokenGet), amount: event.args.amountGet.times(feeMake), id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber});
+API.getFees = function getFees(callback) {
+  const fees = [];
+  const feeTake = new BigNumber(0.003);
+  const feeMake = new BigNumber(0.000);
+  const events = Object.values(this.eventsCache);
+  events.forEach((event) => {
+    if (event.event === 'Trade' && this.contractEtherDeltaAddrs.indexOf(event.address) >= 0) {
+      if (event.args.amountGive.toNumber() > 0 && event.args.amountGet.toNumber() > 0) {
+        // don't show trades involving 0 amounts
+        // take fee
+        fees.push({
+          token: API.getToken(event.args.tokenGive),
+          amount: event.args.amountGive.times(feeTake),
+          id: (event.blockNumber * 1000) + event.transactionIndex,
+          blockNumber: event.blockNumber,
+        });
+        // make fee
+        fees.push({
+          token: API.getToken(event.args.tokenGet),
+          amount: event.args.amountGet.times(feeMake),
+          id: (event.blockNumber * 1000) + event.transactionIndex,
+          blockNumber: event.blockNumber,
+        });
       }
     }
   });
-  fees.sort(function(a,b){ return b.id - a.id });
-  callback(null, {fees: fees});
-}
+  fees.sort((a, b) => b.id - a.id);
+  callback(null, { fees });
+};
 
-API.getVolumes = function(callback) {
-  var self = this;
-  var volumes = [];
-  var events = Object.values(self.eventsCache);
-  events.forEach(function(event){
-    if (event.event=='Trade' && self.contractEtherDeltaAddrs.indexOf(event.address)>=0) {
-      if (event.args.amountGive.toNumber()>0 && event.args.amountGet.toNumber()>0) { //don't show trades involving 0 amounts
-        volumes.push({token: API.getToken(event.args.tokenGive), amount: event.args.amountGive, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber});
-        volumes.push({token: API.getToken(event.args.tokenGet), amount: event.args.amountGet, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber});
+API.getVolumes = function getVolumes(callback) {
+  const volumes = [];
+  const events = Object.values(this.eventsCache);
+  events.forEach((event) => {
+    if (event.event === 'Trade' && this.contractEtherDeltaAddrs.indexOf(event.address) >= 0) {
+      if (event.args.amountGive.toNumber() > 0 && event.args.amountGet.toNumber() > 0) {
+        // don't show trades involving 0 amounts
+        volumes.push({
+          token: API.getToken(event.args.tokenGive),
+          amount: event.args.amountGive,
+          id: (event.blockNumber * 1000) + event.transactionIndex,
+          blockNumber: event.blockNumber,
+        });
+        volumes.push({
+          token: API.getToken(event.args.tokenGet),
+          amount: event.args.amountGet,
+          id: (event.blockNumber * 1000) + event.transactionIndex,
+          blockNumber: event.blockNumber,
+        });
       }
     }
   });
-  volumes.sort(function(a,b){ return b.id - a.id });
-  callback(null, {volumes: volumes});
-}
+  volumes.sort((a, b) => b.id - a.id);
+  callback(null, { volumes });
+};
 
-API.getDepositsWithdrawals = function(callback) {
-  var self = this;
-  var depositsWithdrawals = [];
-  var events = Object.values(self.eventsCache);
-  events.forEach(function(event){
-    if (event.event=='Deposit' && self.contractEtherDeltaAddrs.indexOf(event.address>=0)) {
-      if (event.args.amount.toNumber()>0) {
-        var token = API.getToken(event.args.token);
-        depositsWithdrawals.push({amount: event.args.amount, user: event.args.user, token: token, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber});
+API.getDepositsWithdrawals = function getDepositsWithdrawals(callback) {
+  const depositsWithdrawals = [];
+  const events = Object.values(this.eventsCache);
+  events.forEach((event) => {
+    if (event.event === 'Deposit' && this.contractEtherDeltaAddrs.indexOf(event.address >= 0)) {
+      if (event.args.amount.toNumber() > 0) {
+        const token = API.getToken(event.args.token);
+        depositsWithdrawals.push({
+          amount: event.args.amount,
+          user: event.args.user,
+          token,
+          id: (event.blockNumber * 1000) + event.transactionIndex,
+          blockNumber: event.blockNumber,
+        });
       }
-    } else if (event.event=='Withdraw' && self.contractEtherDeltaAddrs.indexOf(event.address)>=0) {
-      if (event.args.amount.toNumber()>0) {
-        var token = API.getToken(event.args.token);
-        depositsWithdrawals.push({amount: -event.args.amount, user: event.args.user, token: token, id: event.blockNumber*1000+event.transactionIndex, blockNumber: event.blockNumber});
+    } else if (
+      event.event === 'Withdraw' && this.contractEtherDeltaAddrs.indexOf(event.address) >= 0
+    ) {
+      if (event.args.amount.toNumber() > 0) {
+        const token = API.getToken(event.args.token);
+        depositsWithdrawals.push({
+          amount: -event.args.amount,
+          user: event.args.user,
+          token,
+          id: (event.blockNumber * 1000) + event.transactionIndex,
+          blockNumber: event.blockNumber,
+        });
       }
     }
   });
-  depositsWithdrawals.sort(function(a,b){ return b.id - a.id });
-  callback(null, {depositsWithdrawals: depositsWithdrawals});
-}
+  depositsWithdrawals.sort((a, b) => b.id - a.id);
+  callback(null, { depositsWithdrawals });
+};
 
-API.returnTicker = function(callback) {
-  var tickers = {};
-  var firstOldPrices = {};
-  API.getTrades(function(err, result){
-    var trades = result.trades;
-    trades.sort(function(a,b){return a.blockNumber-b.blockNumber});
-    trades.forEach(function(trade){
-      if (trade.token && trade.base && trade.base.name=='ETH') {
-        var pair = trade.base.name+'_'+trade.token.name;
+API.returnTicker = function returnTicker(callback) {
+  const tickers = {};
+  const firstOldPrices = {};
+  API.getTrades((err, result) => {
+    const trades = result.trades;
+    trades.sort((a, b) => a.blockNumber - b.blockNumber);
+    trades.forEach((trade) => {
+      if (trade.token && trade.base && trade.base.name === 'ETH') {
+        const pair = `${trade.base.name}_${trade.token.name}`;
         if (!tickers[pair]) {
-          tickers[pair] = {"last":undefined,"percentChange":0,"baseVolume":0,"quoteVolume":0};
+          tickers[pair] = { last: undefined, percentChange: 0, baseVolume: 0, quoteVolume: 0 };
         }
-        var tradeTime = API.blockTime(trade.blockNumber);
-        var price = Number(trade.price);
+        const tradeTime = API.blockTime(trade.blockNumber);
+        const price = Number(trade.price);
         tickers[pair].last = price;
         if (!firstOldPrices[pair]) firstOldPrices[pair] = price;
-        if (Date.now()-tradeTime.getTime() < 86400*1000*1) {
-          var quoteVolume = Number(API.utility.weiToEth(Math.abs(trade.amount), API.getDivisor(trade.token)));
-          var baseVolume = Number(API.utility.weiToEth(Math.abs(trade.amount * trade.price), API.getDivisor(trade.token)));
+        if (Date.now() - tradeTime.getTime() < 86400 * 1000 * 1) {
+          const quoteVolume = Number(
+            API.utility.weiToEth(Math.abs(trade.amount), API.getDivisor(trade.token)));
+          const baseVolume = Number(
+            API.utility.weiToEth(Math.abs(trade.amount * trade.price),
+            API.getDivisor(trade.token)));
           tickers[pair].quoteVolume += quoteVolume;
           tickers[pair].baseVolume += baseVolume;
           tickers[pair].percentChange = (price - firstOldPrices[pair]) / firstOldPrices[pair];
@@ -737,20 +959,29 @@ API.returnTicker = function(callback) {
     });
     callback(null, tickers);
   });
-}
+};
 
-API.publishOrder = function(addr, pk, baseAddr, tokenAddr, direction, amount, price, expires, orderNonce, callback) {
-  var self = this;
-  var tokenGet = undefined;
-  var tokenGive = undefined;
-  var amountGet = undefined;
-  var amountGive = undefined;
-  if (direction=='buy') {
+API.publishOrder = function publishOrder(
+  addr,
+  pk,
+  baseAddr,
+  tokenAddr,
+  direction,
+  amount,
+  price,
+  expires,
+  orderNonce,
+  callback) {
+  let tokenGet;
+  let tokenGive;
+  let amountGet;
+  let amountGive;
+  if (direction === 'buy') {
     tokenGet = tokenAddr;
     tokenGive = baseAddr;
     amountGet = utility.ethToWei(amount, API.getDivisor(tokenGet));
     amountGive = utility.ethToWei(amount * price, API.getDivisor(tokenGive));
-  } else if (direction=='sell') {
+  } else if (direction === 'sell') {
     tokenGet = baseAddr;
     tokenGive = tokenAddr;
     amountGet = utility.ethToWei(amount * price, API.getDivisor(tokenGet));
@@ -758,128 +989,244 @@ API.publishOrder = function(addr, pk, baseAddr, tokenAddr, direction, amount, pr
   } else {
     return;
   }
-  utility.call(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'balanceOf', [tokenGive, addr], function(err, result) {
-    var balance = result;
-    if (balance.lt(new BigNumber(amountGive))) {
-      callback('You do not have enough funds to send this order.', false);
-    } else {
-      if (!self.config.ordersOnchain) { //offchain order
-        var condensed = utility.pack([self.contractEtherDeltaAddrs[0], tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce], [160, 160, 256, 160, 256, 256, 256]);
-        var hash = sha256(new Buffer(condensed,'hex'));
-        utility.sign(self.web3, addr, hash, pk, function(err, sig) {
-          if (err) {
-            callback('Could not sign order because of an error: '+err, false);
+  utility.call(
+    this.web3,
+    this.contractEtherDelta,
+    this.contractEtherDeltaAddrs[0],
+    'balanceOf',
+    [tokenGive, addr],
+    (err, result) => {
+      const balance = result;
+      if (balance.lt(new BigNumber(amountGive))) {
+        callback('You do not have enough funds to send this order.', false);
+      } else if (!this.config.ordersOnchain) {
+          // offchain order
+        const condensed = utility.pack(
+          [
+            this.contractEtherDeltaAddrs[0],
+            tokenGet,
+            amountGet,
+            tokenGive,
+            amountGive,
+            expires,
+            orderNonce,
+          ],
+            [160, 160, 256, 160, 256, 256, 256]);
+        const hash = sha256(new Buffer(condensed, 'hex'));
+        utility.sign(this.web3, addr, hash, pk, (errSign, sig) => {
+          if (errSign) {
+            callback(`Could not sign order because of an error: ${err}`, false);
           } else {
-            // Send order to Gitter channel:
-            var order = {contractAddr: self.contractEtherDeltaAddrs[0], tokenGet: tokenGet, amountGet: amountGet, tokenGive: tokenGive, amountGive: amountGive, expires: expires, nonce: orderNonce, v: sig.v, r: sig.r, s: sig.s, user: addr};
-            utility.postURL(self.config.apiServer+'/message', {message: JSON.stringify(order)}, function(err, result){
-              if (!err) {
-                callback(null, true);
-              } else {
-                callback('You tried sending an order to the order book but there was an error.', false);
-              }
-            });
+              // Send order to Gitter channel:
+            const order = {
+              contractAddr: this.contractEtherDeltaAddrs[0],
+              tokenGet,
+              amountGet,
+              tokenGive,
+              amountGive,
+              expires,
+              nonce: orderNonce,
+              v: sig.v,
+              r: sig.r,
+              s: sig.s,
+              user: addr,
+            };
+            utility.postURL(
+                `${this.config.apiServer}/message`,
+                { message: JSON.stringify(order) },
+                (errPost) => {
+                  if (!errPost) {
+                    callback(null, true);
+                  } else {
+                    callback(
+                      'You tried sending an order to the order book but there was an error.',
+                      false);
+                  }
+                });
           }
         });
-      } else { //onchain order
-        var token = API.getToken(tokenGet);
-        API.utility.send(self.web3, self.contractEtherDelta, self.contractEtherDeltaAddrs[0], 'order', [tokenGet, amountGet, tokenGive, amountGive, expires, orderNonce, {gas: token.gasOrder, value: 0}], addr, pk, nonce, function(err, result) {
-          txHash = result.txHash;
-          nonce = result.nonce;
-          callback(null, true);
-        });
+      } else {
+          // onchain order
+        const token = API.getToken(tokenGet);
+        API.utility.send(
+            this.web3,
+            this.contractEtherDelta,
+            this.contractEtherDeltaAddrs[0],
+            'order',
+          [
+            tokenGet,
+            amountGet,
+            tokenGive,
+            amountGive,
+            expires,
+            orderNonce,
+              { gas: token.gasOrder, value: 0 },
+          ],
+            addr,
+            pk,
+            this.nonce,
+            (errSend, resultSend) => {
+              // const txHash = resultSend.txHash;
+              this.nonce = resultSend.nonce;
+              callback(null, true);
+            });
       }
-    }
-  });
-}
+    });
+};
 
-API.publishOrders = function(orders, addr, pk, expires, token, base, armed, callback, callbackSentOneOrder) {
-  API.utility.blockNumber(API.web3, function(err, blockNumber) {
-    orders.sort(function(a,b){return b.price-a.price});
-    async.eachSeries(orders,
-      function(order, callbackEach) {
-        var amount = utility.weiToEth(Math.abs(order.volume), API.getDivisor(token.addr));
-        var orderNonce = utility.getRandomInt(0,Math.pow(2,32));
+API.publishOrders = function publishOrders(
+  orders,
+  addr,
+  pk,
+  expires,
+  token,
+  base,
+  armed,
+  callback,
+  callbackSentOneOrder) {
+  API.utility.blockNumber(API.web3, (err, blockNumber) => {
+    orders.sort((a, b) => b.price - a.price);
+    async.eachSeries(
+      orders,
+      (order, callbackEach) => {
+        const amount = utility.weiToEth(Math.abs(order.volume), API.getDivisor(token.addr));
+        const orderNonce = utility.getRandomInt(0,
+          Math.pow(2, 32)); // eslint-disable-line no-restricted-properties
         if (armed) {
-          API.publishOrder(addr, pk, base.addr, token.addr, order.volume>0 ? 'buy' : 'sell', amount, order.price, blockNumber + expires, orderNonce, function(err, result){
-            if (!err && result) {
-              if (callbackSentOneOrder) {
-                var message = 'Sent order: ' + (order.volume>0 ? 'buy' : 'sell') + ' ' + amount + ' ' + (token.name+'/'+base.name) + ' ' +  '@' + ' ' + order.price;
-                callbackSentOneOrder(null, message);
+          API.publishOrder(
+            addr,
+            pk,
+            base.addr,
+            token.addr,
+            order.volume > 0 ? 'buy' : 'sell',
+            amount,
+            order.price,
+            blockNumber + expires,
+            orderNonce,
+            (errPublish, resultPublish) => {
+              if (!errPublish && resultPublish) {
+                if (callbackSentOneOrder) {
+                  const message =
+                    `Sent order: ${
+                    order.volume > 0 ? 'buy' : 'sell'
+                    } ${
+                    amount
+                    } ${
+                    token.name}/${base.name
+                    } ` +
+                    '@' +
+                    ` ${
+                    order.price}`;
+                  callbackSentOneOrder(null, message);
+                }
+                console.log(
+                  'Sent order:',
+                  order.volume > 0 ? 'buy' : 'sell',
+                  amount,
+                  `${token.name}/${base.name}`,
+                  '@',
+                  order.price);
+              } else {
+                console.log('Error sending order:', err);
               }
-              console.log('Sent order:', order.volume>0 ? 'buy' : 'sell', amount, token.name+'/'+base.name, '@', order.price);
-            } else {
-              console.log('Error sending order:', err);
-            }
-            callbackEach(null);
-          });
+              callbackEach(null);
+            });
         } else {
-          console.log('Order (not armed):', order.volume>0 ? 'buy' : 'sell', amount, token.name+'/'+base.name, '@', order.price);
+          console.log(
+            'Order (not armed):',
+            order.volume > 0 ? 'buy' : 'sell',
+            amount,
+            `${token.name}/${base.name}`,
+            '@',
+            order.price);
           callbackEach(null);
         }
       },
-      function(err) {
+      () => {
         callback(null, true);
-      }
-    );
+      });
   });
-}
+};
 
-API.formatOrder = function(order, token, base) {
-  if (order.amount>=0) {
-    return utility.weiToEth(order.availableVolume, API.getDivisor(token.addr))+' '+token.name+' @ '+order.price.toNumber().toFixed(5)+' '+token.name+'/'+base.name;
-  } else {
-    return utility.weiToEth(order.availableVolume, API.getDivisor(token.addr))+' '+token.name+' @ '+order.price.toNumber().toFixed(5)+' '+token.name+'/'+base.name;
+API.formatOrder = function formatOrder(order, token, base) {
+  if (order.amount >= 0) {
+    return (
+      `${utility.weiToEth(order.availableVolume, API.getDivisor(token.addr))
+      } ${
+      token.name
+      } @ ${
+      order.price.toNumber().toFixed(5)
+      } ${
+      token.name
+      }/${
+      base.name}`
+    );
   }
-}
+  return (
+      `${utility.weiToEth(order.availableVolume, API.getDivisor(token.addr))
+      } ${
+      token.name
+      } @ ${
+      order.price.toNumber().toFixed(5)
+      } ${
+      token.name
+      }/${
+      base.name}`
+  );
+};
 
-API.clip = function(value, min, max) {
-  if (min>max) {
-    var tmp = min;
+API.clip = function clip(valueIn, minIn, maxIn) {
+  let value = valueIn;
+  let min = minIn;
+  let max = maxIn;
+  if (min > max) {
+    const tmp = min;
     min = max;
     max = tmp;
   }
   if (min) value = Math.max(value, min);
   if (max) value = Math.min(value, max);
   return value;
-}
+};
 
-API.clone = function(obj) {
+API.clone = function clone(obj) {
   return JSON.parse(JSON.stringify(obj));
-}
+};
 
-API.generateImpliedPairs = function(pairs) {
-  var returnPairs = API.clone(pairs);
-  function splitPair(pair){
-    var pairSplit = pair.split("/");
-    if (pairSplit.length==2) {
-      var token = pairSplit[0];
-      var base = pairSplit[1];
-      return {token: token, base: base}
+API.generateImpliedPairs = function generateImpliedPairs(pairs) {
+  let returnPairs = API.clone(pairs);
+  function splitPair(pair) {
+    const pairSplit = pair.split('/');
+    if (pairSplit.length === 2) {
+      const token = pairSplit[0];
+      const base = pairSplit[1];
+      return { token, base };
     }
     return undefined;
   }
 
-  //split pairs
-  var newPairs = [];
-  returnPairs.forEach(function(pair){
-    var split = splitPair(pair.pair);
+  // split pairs
+  let newPairs = [];
+  returnPairs.forEach((pair) => {
+    const split = splitPair(pair.pair);
     if (split) {
-      pair.token = split.token;
-      pair.base = split.base;
+      Object.assign(pair, {
+        token: split.token,
+        base: split.base,
+      });
       newPairs.push(pair);
     }
   });
   returnPairs = API.clone(newPairs);
 
-  //set min and max price for Y and N
+  // set min and max price for Y and N
   newPairs = [];
-  returnPairs.forEach(function(pair){
-    var newPair = API.clone(pair);
-    if (pair.token.slice(-1)=='Y' && pair.base=='ETH') {
+  returnPairs.forEach((pair) => {
+    const newPair = API.clone(pair);
+    if (pair.token.slice(-1) === 'Y' && pair.base === 'ETH') {
       newPair.minPrice = 0;
       newPair.maxPrice = 1;
-    } else if (pair.token.slice(-1)=='N' && pair.base=='ETH') {
+    } else if (pair.token.slice(-1) === 'N' && pair.base === 'ETH') {
       newPair.minPrice = 1;
       newPair.maxPrice = 0;
     }
@@ -887,50 +1234,58 @@ API.generateImpliedPairs = function(pairs) {
   });
   returnPairs = API.clone(newPairs);
 
-  //generate N/ETH from Y/ETH and vice/versa
+  // generate N/ETH from Y/ETH and vice/versa
   newPairs = API.clone(returnPairs);
-  returnPairs.forEach(function(pair){
-    if (pair.token.slice(-1)=='Y' && pair.base=='ETH' && newPairs.filter(function(x){return x.token==pair.token.replace(/Y$/,'N')}).length==0) {
-      var newPair = API.clone(pair);
-      newPair.token = pair.token.replace(/Y$/,'N');
-      newPair.pair = newPair.token+'/'+newPair.base;
-      newPair.theo = 1-pair.theo;
+  returnPairs.forEach((pair) => {
+    if (
+      pair.token.slice(-1) === 'Y' &&
+      pair.base === 'ETH' &&
+      newPairs.filter(x => x.token === pair.token.replace(/Y$/, 'N')).length === 0
+    ) {
+      const newPair = API.clone(pair);
+      newPair.token = pair.token.replace(/Y$/, 'N');
+      newPair.pair = `${newPair.token}/${newPair.base}`;
+      newPair.theo = 1 - pair.theo;
       newPairs.push(newPair);
-    } else if (pair.token.slice(-1)=='N' && pair.base=='ETH' && newPairs.filter(function(x){return x.token==pair.token.replace(/N$/,'Y')}).length==0) {
-      var newPair = API.clone(pair);
-      newPair.token = pair.token.replace(/N$/,'Y');
-      newPair.pair = newPair.token+'/'+newPair.base;
-      newPair.theo = 1-pair.theo;
+    } else if (
+      pair.token.slice(-1) === 'N' &&
+      pair.base === 'ETH' &&
+      newPairs.filter(x => x.token === pair.token.replace(/N$/, 'Y')).length === 0
+    ) {
+      const newPair = API.clone(pair);
+      newPair.token = pair.token.replace(/N$/, 'Y');
+      newPair.pair = `${newPair.token}/${newPair.base}`;
+      newPair.theo = 1 - pair.theo;
       newPairs.push(newPair);
     }
   });
   returnPairs = API.clone(newPairs);
 
-  //generate Y/N from Y/ETH and N/ETH
+  // generate Y/N from Y/ETH and N/ETH
   newPairs = API.clone(returnPairs);
-  returnPairs.forEach(function(pair1){
-    returnPairs.forEach(function(pair2){
-      if (pair1.base==pair2.base && pair1.token!=pair2.token) {
-        var newPair = API.clone(pair1);
+  returnPairs.forEach((pair1) => {
+    returnPairs.forEach((pair2) => {
+      if (pair1.base === pair2.base && pair1.token !== pair2.token) {
+        const newPair = API.clone(pair1);
         newPair.token = pair1.token;
         newPair.base = pair2.token;
-        newPair.pair = newPair.token+'/'+newPair.base;
+        newPair.pair = `${newPair.token}/${newPair.base}`;
         newPair.theo = pair1.theo / pair2.theo;
-        if (pair1.minPrice==0) {
+        if (pair1.minPrice === 0) {
           newPair.minPrice = 0;
         } else {
           try {
             newPair.minPrice = pair1.minPrice / pair2.maxPrice;
-          } catch(err) {
+          } catch (err) {
             newPair.minPrice = null;
           }
         }
-        if (pair1.maxPrice==0) {
+        if (pair1.maxPrice === 0) {
           newPair.maxPrice = 0;
         } else {
           try {
             newPair.maxPrice = pair1.maxPrice / pair2.minPrice;
-          } catch(err) {
+          } catch (err) {
             newPair.maxPrice = undefined;
           }
         }
@@ -944,17 +1299,22 @@ API.generateImpliedPairs = function(pairs) {
   });
   returnPairs = API.clone(newPairs);
 
-  //remove duplicates
+  // remove duplicates
   newPairs = [];
-  returnPairs.forEach(function(pair){
-    var newPair = API.clone(pair);
-    if (newPairs.filter(function(x){return (x.token==newPair.token && x.base==newPair.base) || (x.token==newPair.base && x.base==newPair.token)}).length==0) {
+  returnPairs.forEach((pair) => {
+    const newPair = API.clone(pair);
+    if (
+      newPairs.filter(x => (
+          (x.token === newPair.token && x.base === newPair.base) ||
+          (x.token === newPair.base && x.base === newPair.token)
+        )).length === 0
+    ) {
       newPairs.push(newPair);
     }
   });
   returnPairs = API.clone(newPairs);
 
   return returnPairs;
-}
+};
 
 module.exports = API;
