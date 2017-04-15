@@ -178,7 +178,7 @@ API.logs = function logs(callback) {
         const blocks = Object.values(this.eventsCache)
           .filter(x => x.address === contractEtherDeltaAddr)
           .map(x => x.blockNumber);
-        const startBlock = 0;
+        const startBlock = 1848513;
         const lastBlock = blocks.length ? blocks.max() : startBlock;
         const searches = [];
         const blockInterval = 12500;
@@ -191,7 +191,7 @@ API.logs = function logs(callback) {
             utility.logsOnce(
               this.web3,
               this.contractEtherDelta,
-              this.config.contractEtherDeltaAddr,
+              contractEtherDeltaAddr,
               searchRange[0],
               searchRange[1],
               (errEvents, events) => {
