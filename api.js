@@ -517,7 +517,7 @@ API.addOrderFromMessage = function addOrderFromMessage(messageIn, callback) {
   Object.keys(message).forEach((key) => {
     if (typeof message[key] === 'number') {
       Object.assign(message, {
-        key: new BigNumber(message[key]),
+        [key]: new BigNumber(message[key]),
       });
     }
   });
