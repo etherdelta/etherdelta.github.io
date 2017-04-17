@@ -1806,13 +1806,19 @@ EtherDelta.prototype.alertTxResult = function alertTxResult(err, txsIn) {
       ) {
         this.alertDialog(
           `You just created an Ethereum transaction. Track its progress: <a href="http://${this.config.ethTestnet ? 'testnet.' : ''}etherscan.io/tx/${tx.txHash}" target="_blank">${tx.txHash}</a>.`);
+      } else {
+        this.alertError("You tried to send an Ethereum transaction but there was an error. If you imported your account, make sure it has a private key. You can check the private key using the 'Export private key' option under the account dropdown in the upper right.");
       }
     } else if (txs.length > 1) {
-      let message = 'You just created Ethereum transactions. Track their progress: <br />';
-      txs.forEach((tx) => {
-        message += `<a href="http://${this.config.ethTestnet ? 'testnet.' : ''}etherscan.io/tx/${tx.txHash}" target="_blank">${tx.txHash}</a><br />`;
-      });
-      this.alertDialog(message);
+      if (txs.findIndex(x => !x.txHash) < 0) {
+        let message = 'You just created Ethereum transactions. Track their progress: <br />';
+        txs.forEach((tx) => {
+          message += `<a href="http://${this.config.ethTestnet ? 'testnet.' : ''}etherscan.io/tx/${tx.txHash}" target="_blank">${tx.txHash}</a><br />`;
+        });
+        this.alertDialog(message);
+      } else {
+        this.alertError("You tried to send an Ethereum transaction but there was an error. If you imported your account, make sure it has a private key. You can check the private key using the 'Export private key' option under the account dropdown in the upper right.");
+      }
     }
     ga('send', {
       hitType: 'event',
@@ -3418,7 +3424,7 @@ EtherDelta.prototype.blockTime = function blockTime(block) {
 EtherDelta.prototype.addPending = function addPending(err, txsIn) {
   const txs = Array.isArray(txsIn) ? txsIn : [txsIn];
   txs.forEach((tx) => {
-    if (!err && tx.txHash !== '0x0000000000000000000000000000000000000000000000000000000000000000') {
+    if (!err && tx.txHash && tx.txHash !== '0x0000000000000000000000000000000000000000000000000000000000000000') {
       Object.assign(tx, { txLink: `https://${this.config.ethTestnet ? 'testnet.' : ''}etherscan.io/tx/${tx.txHash}` });
       this.pendingTransactions.push(tx);
     }
