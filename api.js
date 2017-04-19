@@ -172,7 +172,7 @@ API.logs = function logs(callback) {
         }
       });
     });
-    async.map(
+    async.mapSeries(
       this.contractEtherDeltaAddrs,
       (contractEtherDeltaAddr, callbackMap) => {
         const blocks = Object.values(this.eventsCache)
@@ -185,7 +185,7 @@ API.logs = function logs(callback) {
         for (let b = blockNumber; b > lastBlock; b -= blockInterval) {
           searches.push([Math.max(lastBlock, b - blockInterval), b]);
         }
-        async.map(
+        async.mapSeries(
           searches,
           (searchRange, callbackMapSearch) => {
             utility.logsOnce(
@@ -813,6 +813,7 @@ API.getTrades = function getTrades(callback) {
             .div(API.getDivisor(event.args.tokenGive)),
           id: (event.blockNumber * 1000) + event.transactionIndex,
           blockNumber: event.blockNumber,
+          date: new Date(utility.hexToDec(event.timeStamp) * 1000),
           buyer: event.args.get,
           seller: event.args.give,
         });
@@ -827,6 +828,7 @@ API.getTrades = function getTrades(callback) {
             .div(API.getDivisor(event.args.tokenGet)),
           id: (event.blockNumber * 1000) + event.transactionIndex,
           blockNumber: event.blockNumber,
+          date: new Date(utility.hexToDec(event.timeStamp) * 1000),
           buyer: event.args.give,
           seller: event.args.get,
         });
@@ -852,6 +854,7 @@ API.getFees = function getFees(callback) {
           amount: event.args.amountGive.times(feeTake),
           id: (event.blockNumber * 1000) + event.transactionIndex,
           blockNumber: event.blockNumber,
+          date: new Date(utility.hexToDec(event.timeStamp) * 1000),
         });
         // make fee
         fees.push({
@@ -859,6 +862,7 @@ API.getFees = function getFees(callback) {
           amount: event.args.amountGet.times(feeMake),
           id: (event.blockNumber * 1000) + event.transactionIndex,
           blockNumber: event.blockNumber,
+          date: new Date(utility.hexToDec(event.timeStamp) * 1000),
         });
       }
     }
@@ -879,12 +883,14 @@ API.getVolumes = function getVolumes(callback) {
           amount: event.args.amountGive,
           id: (event.blockNumber * 1000) + event.transactionIndex,
           blockNumber: event.blockNumber,
+          date: new Date(utility.hexToDec(event.timeStamp) * 1000),
         });
         volumes.push({
           token: API.getToken(event.args.tokenGet),
           amount: event.args.amountGet,
           id: (event.blockNumber * 1000) + event.transactionIndex,
           blockNumber: event.blockNumber,
+          date: new Date(utility.hexToDec(event.timeStamp) * 1000),
         });
       }
     }
@@ -906,6 +912,7 @@ API.getDepositsWithdrawals = function getDepositsWithdrawals(callback) {
           token,
           id: (event.blockNumber * 1000) + event.transactionIndex,
           blockNumber: event.blockNumber,
+          date: new Date(utility.hexToDec(event.timeStamp) * 1000),
         });
       }
     } else if (
@@ -919,6 +926,7 @@ API.getDepositsWithdrawals = function getDepositsWithdrawals(callback) {
           token,
           id: (event.blockNumber * 1000) + event.transactionIndex,
           blockNumber: event.blockNumber,
+          date: new Date(utility.hexToDec(event.timeStamp) * 1000),
         });
       }
     }
