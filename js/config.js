@@ -407,6 +407,7 @@ configs.mainnet = {
     { token: 'XAUR', base: 'ETH' },
     { token: 'TIME', base: 'ETH' },
     { token: 'GUP', base: 'ETH' },
+    { token: 'RLC', base: 'ETH' },
     { token: 'ETB', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
@@ -488,17 +489,21 @@ configs.testnet = {
   etherscanAPIKey: 'GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE',
 };
 
-function getParameterByName(nameIn, urlIn) {
+const getParameterByName = function getParameterByName(nameIn, urlIn) {
   const url = !urlIn ? window.location.href : urlIn;
   const name = nameIn.replace(/[\[\]]/g, '\\$&'); // eslint-disable-line no-useless-escape
   const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
   const results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
+  if (!results) {
+    return null;
+  }
+  if (!results[2]) {
+    return '';
+  }
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-// default config
-let index = 'mainnet'; // mainnet
+};
+
+let index = 'mainnet';
 if (typeof window !== 'undefined') {
   const network = getParameterByName('network');
   if (network) {
