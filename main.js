@@ -41,6 +41,7 @@ function EtherDelta() {
   this.ordersResult = { orders: [], blockNumber: 0 };
   this.selectedContract = undefined;
   this.web3 = undefined;
+  this.startEtherDelta();
 }
 EtherDelta.prototype.ejs = function ejs(url, element, data) {
   if ($(`#${element}`).length) {
@@ -1821,28 +1822,30 @@ EtherDelta.prototype.loadToken = function loadToken(addr, callback) {
 EtherDelta.prototype.selectToken = function selectToken(addrOrToken, name, decimals) {
   const token = this.getToken(addrOrToken, name, decimals);
   if (token) {
+    this.selectedToken = token;
     this.ordersResult = { orders: [], blockNumber: 0 };
     this.loading(() => {});
-    this.refresh(() => {}, true, true, token, this.selectedBase);
+    this.refresh(() => {}, true, true, this.selectedToken, this.selectedBase);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Token',
       eventAction: 'Select Token',
-      eventLabel: token.name,
+      eventLabel: this.selectedToken.name,
     });
   }
 };
 EtherDelta.prototype.selectBase = function selectBase(addrOrToken, name, decimals) {
   const base = this.getToken(addrOrToken, name, decimals);
   if (base) {
+    this.selectedBase = base;
     this.ordersResult = { orders: [], blockNumber: 0 };
     this.loading(() => {});
-    this.refresh(() => {}, true, true, this.selectedToken, base);
+    this.refresh(() => {}, true, true, this.selectedToken, this.selectedBase);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Token',
       eventAction: 'Select Base',
-      eventLabel: base.name,
+      eventLabel: this.selectedBase.name,
     });
   }
 };
@@ -1850,14 +1853,16 @@ EtherDelta.prototype.selectTokenAndBase = function selectTokenAndBase(tokenAddr,
   const token = this.getToken(tokenAddr);
   const base = this.getToken(baseAddr);
   if (token && base) {
+    this.selectedToken = token;
+    this.selectedBase = base;
     this.ordersResult = { orders: [], blockNumber: 0 };
     this.loading(() => {});
-    this.refresh(() => {}, true, true, token, base);
+    this.refresh(() => {}, true, true, this.selectedToken, this.selectedBase);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Token',
       eventAction: 'Select Pair',
-      eventLabel: `${token.name}/${base.name}`,
+      eventLabel: `${this.selectedToken.name}/${this.selectedBase.name}`,
     });
   }
 };
@@ -1978,8 +1983,10 @@ EtherDelta.prototype.loading = function loading(callback) {
   callback();
 };
 EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMarket, token, base) {
+  if (token) this.selectedToken = token;
+  if (base) this.selectedBase = base;
   this.q.push((done) => {
-    console.log('Beginning refresh', new Date());
+    console.log('Beginning refresh', new Date(), `${this.selectedToken.name}/${this.selectedBase.name}`);
     this.selectedContract = this.config.contractEtherDeltaAddr;
     utility.createCookie(
       this.config.userCookie,
@@ -1998,8 +2005,6 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
           if (initMarket) {
             this.apiServerNonce = Math.random().toString().slice(2) +
               Math.random().toString().slice(2);
-            if (token) this.selectedToken = token;
-            if (base) this.selectedBase = base;
             this.updateUrl();
             async.parallel(
               [
@@ -2238,7 +2243,7 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
       });
   });
 };
-EtherDelta.prototype.init = function init() {
+EtherDelta.prototype.startEtherDelta = function startEtherDelta() {
   console.log('Beginning init');
   this.loadWeb3(() => {
     this.initContracts(() => {
@@ -2250,6 +2255,5 @@ EtherDelta.prototype.init = function init() {
 };
 
 const etherDelta = new EtherDelta();
-etherDelta.init();
 
 module.exports = { EtherDelta: etherDelta, utility };
