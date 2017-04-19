@@ -374,6 +374,16 @@ configs.mainnet = {
       gasTrade: 250000,
       gasOrder: 250000,
     },
+    {
+      addr: '0x607f4c5bb672230e8672085532f7e901544a7375',
+      name: 'RLC',
+      decimals: 0,
+      gasApprove: 250000,
+      gasDeposit: 250000,
+      gasWithdraw: 250000,
+      gasTrade: 250000,
+      gasOrder: 250000,
+    },
   ],
   pairs: [
     { token: 'PLU', base: 'ETH' },
