@@ -191,7 +191,13 @@ EtherDelta.prototype.addAccount = function addAccount(newAddr, newPk) {
   if (addr.slice(0, 2) !== '0x') addr = `0x${addr}`;
   if (pk.slice(0, 2) === '0x') pk = pk.slice(2);
   addr = utility.toChecksumAddress(addr);
-  if (pk && !utility.verifyPrivateKey(addr, pk)) {
+  let verifyPrivateKey;
+  try {
+    verifyPrivateKey = utility.verifyPrivateKey(addr, pk);
+  } catch (err) {
+    verifyPrivateKey = false;
+  }
+  if (pk && !verifyPrivateKey) {
     this.alertError(`For account ${addr}, the private key is invalid.`);
     ga('send', {
       hitType: 'event',
