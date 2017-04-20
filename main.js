@@ -1107,7 +1107,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
     });
     return;
   }
-  if (!this.web3.isAddress(toAddr) || toAddr === '0x0000000000000000000000000000000000000000') {
+  if (!this.web3.isAddress(toAddr) || toAddr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
     this.alertError('Please specify a valid address.');
     ga('send', {
       hitType: 'event',
@@ -1116,7 +1116,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
       eventLabel: token.name,
       eventValue: inputAmount,
     });
-  } else if (addr === '0x0000000000000000000000000000000000000000') {
+  } else if (addr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
     // plain Ether transfer
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, balance) => {
       if (amount > balance) amount = balance;
@@ -1190,7 +1190,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
     });
     return;
   }
-  if (addr === '0x0000000000000000000000000000000000000000') {
+  if (addr.slice(0,39) === '0x0000000000000000000000000000000000000') {
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, result) => {
       if (amount > result && amount < result * 1.1) amount = result;
       if (amount <= result) {
@@ -1321,7 +1321,7 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
           eventLabel: token.name,
           eventValue: amountIn,
         });
-      } else if (addr === '0x0000000000000000000000000000000000000000') {
+      } else if (addr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
         utility.send(
           this.web3,
           this.contractEtherDelta,
@@ -1403,7 +1403,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
   let tokenGive;
   let amountGet;
   let amountGive;
-  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000000') {
+  if (this.addrs[this.selectedAccount].slice(0, 39) === '0x0000000000000000000000000000000000000') {
     this.alertError(
       "You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
     ga('send', {
@@ -1595,7 +1595,7 @@ EtherDelta.prototype.cancelOrder = function cancelOrder(orderIn) {
   }
 };
 EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
-  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000000') {
+  if (this.addrs[this.selectedAccount].slice(0, 39) === '0x0000000000000000000000000000000000000') {
     this.alertError(
       "You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
     ga('send', {
@@ -1942,7 +1942,7 @@ EtherDelta.prototype.checkContractUpgrade = function checkContractUpgrade() {
   if (
     (!this.selectedContract || this.selectedContract !== this.config.contractEtherDeltaAddr) &&
     (this.addrs.length > 1 ||
-      (this.addrs.length === 1 && this.addrs[0] !== '0x0000000000000000000000000000000000000000'))
+      (this.addrs.length === 1 && this.addrs[0].slice(0, 39) !== '0x0000000000000000000000000000000000000'))
   ) {
     this.alertDialog(
       '<p>EtherDelta has a new smart contract. It is now selected.</p><p>Please use the "Smart Contract" menu to select the old one and withdraw from it.</p><p><a href="javascript:;" class="btn btn-default" onclick="alertify.closeAll(); bundle.EtherDelta.displayHelp(\'smartContract\')">Smart contract changelog</a></p>');
