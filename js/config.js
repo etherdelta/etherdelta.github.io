@@ -258,6 +258,7 @@ module.exports = {
     { token: 'RLC', base: 'ETH' },
     { token: 'ETB', base: 'ETH' },
     { token: 'TRST', base: 'ETH' },
+    { token: 'DICE', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
