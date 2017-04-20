@@ -382,6 +382,16 @@ module.exports = {
       gasTrade: 250000,
       gasOrder: 250000,
     },
+    {
+      addr: '0xcb94be6f13a1182e4a4b6140cb7bf2025d28e41b',
+      name: 'TRST',
+      decimals: 6,
+      gasApprove: 250000,
+      gasDeposit: 250000,
+      gasWithdraw: 250000,
+      gasTrade: 250000,
+      gasOrder: 250000,
+    },
   ],
   pairs: [
     { token: 'PLU', base: 'ETH' },
