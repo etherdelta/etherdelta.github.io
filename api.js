@@ -189,7 +189,6 @@ API.logs = function logs(callback) {
         async.mapSeries(
           searches,
           (searchRange, callbackMapSearch) => {
-            console.log('Searching logs', searchRange[0], searchRange[1]);
             utility.logsOnce(
               this.web3,
               this.contractEtherDelta,
