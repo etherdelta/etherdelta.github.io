@@ -1,11 +1,7 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.config = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-(function (global){
 /* eslint-env browser */
 
-const configs = {};
-
-// mainnet
-configs.mainnet = {
+module.exports = {
   homeURL: 'https://etherdelta.github.io',
   // homeURL: 'http://localhost:8080',
   contractEtherDelta: 'smart_contract/etherdelta.sol',
@@ -429,99 +425,5 @@ configs.mainnet = {
   etherscanAPIKey: 'GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE',
 };
 
-// testnet
-configs.testnet = {
-  homeURL: 'https://etherdelta.github.io',
-  // homeURL: 'http://localhost:8080',
-  contractEtherDelta: 'smart_contract/etherdelta.sol',
-  contractToken: 'smart_contract/token.sol',
-  contractReserveToken: 'smart_contract/reservetoken.sol',
-  contractEtherDeltaAddrs: [
-    { addr: '0x228344536a03c0910fb8be9c2755c1a0ba6f89e1', info: 'Deployed 02/09/2017' },
-    { addr: '0xf80cd360e96fa96b8b7d9e95d5a7911ac5f09ec2', info: 'Deployed 10/24/2016' },
-    { addr: '0xcdd152384c55dd4e5b5a3128cc90e0d9311570de', info: 'Deployed 10/06/2016' },
-    { addr: '0x24b0ed7ba8d6d969bfe8409b4e6aeee3a40f8855', info: 'Deployed 08/03/2016' },
-    { addr: '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d', info: 'Deployed 06/30/2016' },
-    { addr: '0x0000000000000000000000000000000000000000', info: 'Zero contract' },
-  ],
-  ethTestnet: true,
-  ethProvider: 'http://localhost:8545',
-  ethGasPrice: 20000000000,
-  ethAddr: '0x0000000000000000000000000000000000000000',
-  ethAddrPrivateKey: '',
-  tokens: [
-    {
-      addr: '0x0000000000000000000000000000000000000000',
-      name: 'ETH',
-      decimals: 18,
-      gasApprove: 150000,
-      gasDeposit: 150000,
-      gasWithdraw: 150000,
-      gasTrade: 250000,
-      gasOrder: 250000,
-    },
-    {
-      addr: '0x40aade55175aaeed9c88612c3ed2ff91d8943964',
-      name: '1ST',
-      decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
-    },
-  ],
-  pairs: [{ token: '1ST', base: 'ETH' }],
-  ordersOnchain: false,
-  gitterHost: 'https://api.gitter.im',
-  gitterStream: 'stream.gitter.im',
-  gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
-  gitterRoomID: '57756375c2f0db084a20cf77',
-  chatServer: 'https://etherdeltachat.herokuapp.com:443',
-  apiServer: 'https://etherdeltapublicapi.herokuapp.com',
-  // apiServer: 'http://localhost:3000',
-  userCookie: 'EtherDelta_testnet',
-  eventsCacheCookie: 'EtherDelta_eventsCache_testnet',
-  deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache_testnet',
-  ordersCacheCookie: 'EtherDelta_ordersCache_testnet',
-  defaultToken: 0,
-  defaultBase: 1,
-  etherscanAPIKey: 'GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE',
-};
-
-const getParameterByName = function getParameterByName(nameIn, urlIn) {
-  const url = !urlIn ? window.location.href : urlIn;
-  const name = nameIn.replace(/[\[\]]/g, '\\$&'); // eslint-disable-line no-useless-escape
-  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-  const results = regex.exec(url);
-  if (!results) {
-    return null;
-  }
-  if (!results[2]) {
-    return '';
-  }
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-};
-
-let index = 'mainnet';
-if (typeof window !== 'undefined') {
-  const network = getParameterByName('network');
-  if (network) {
-    index = network;
-  }
-} else if (global.network) {
-  index = global.network;
-}
-const config = configs[index];
-
-try {
-  global.config = config;
-  global.configs = configs;
-  module.exports = config;
-} catch (err) {
-  console.log(err);
-}
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[1])(1)
 });

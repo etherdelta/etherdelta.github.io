@@ -1,9 +1,10 @@
 /* eslint-env browser */
-/* global $, config, configs, alertify, ga, EJS, google, web3 */
+/* global $, alertify, ga, EJS, google, web3 */
 /* eslint no-console: ["error", { allow: ["log"] }] */
 
+const config = require('./config.js');
 const Web3 = require('web3');
-const utility = require('./common/utility.js');
+const utility = require('./common/utility.js')(config);
 const sha256 = require('js-sha256').sha256;
 const BigNumber = require('bignumber.js');
 require('datejs');
@@ -2158,10 +2159,10 @@ EtherDelta.prototype.loadWeb3 = function loadWeb3(callback) {
 };
 EtherDelta.prototype.initContracts = function initContracts(callback) {
   this.web3.version.getNetwork((error, version) => {
-    // check mainnet vs testnet
-    if (version in configs) {
-      this.config = configs[version];
+    if (!error && version && Number(version) !== 1) {
+      this.alertError('You are connected to the Ethereum testnet. Please connect to the Ethereum mainnet.');
     }
+    this.config = config;
     // default selected token and base
     this.selectedToken = this.config.tokens[this.config.defaultToken];
     this.selectedBase = this.config.tokens[this.config.defaultBase];

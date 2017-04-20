@@ -1,9 +1,8 @@
 /* eslint-env browser */
-/* global configs */
 /* eslint no-console: ["error", { allow: ["log"] }] */
 
 const config = require('./config.js');
-const utility = require('./common/utility.js');
+const utility = require('./common/utility.js')(config);
 const Web3 = require('web3');
 const request = require('request');
 const async = require('async');
@@ -27,7 +26,9 @@ API.init = function init(callback, allContracts, path, provider) {
 
   // check mainnet vs testnet
   this.web3.version.getNetwork((error, version) => {
-    if (version in configs) this.config = configs[version];
+    if (!error && version && Number(version) !== 1) {
+      throw new Error('You are connected to the Ethereum testnet. Please connect to the Ethereum mainnet.');
+    }
     try {
       if (this.web3.currentProvider) {
         const coinbase = this.web3.eth.coinbase;
