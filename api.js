@@ -727,7 +727,8 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                       }
                     });
                 } else {
-                  callback('Below minimum volume', undefined);
+                  // if the available volume is too low, assume the order is ok and try again later
+                  callback(null, order);
                 }
               } else {
                 // if there's an error, assume the order is ok and try again later
