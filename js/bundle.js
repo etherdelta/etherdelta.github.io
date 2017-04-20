@@ -2365,7 +2365,7 @@ EtherDelta.prototype.getOrders = function getOrders(callback) {
               user: x.order.user,
               r: x.order.r,
               s: x.order.s,
-              v: Number(x.order.v),
+              v: x.order.v ? Number(x.order.v) : undefined,
             }),
           });
         });

@@ -586,7 +586,9 @@ API.addOrderFromEvent = function addOrderFromEvent(event, callback) {
           .mul(API.getDivisor(event.args.tokenGet))
           .div(API.getDivisor(event.args.tokenGive)),
         id: `${id}_buy`,
-        order: event.args,
+        order: Object.assign(event.args, {
+          contractAddr: event.address,
+        }),
         updated: undefined,
       };
       const sellOrder = {
@@ -596,7 +598,9 @@ API.addOrderFromEvent = function addOrderFromEvent(event, callback) {
           .mul(API.getDivisor(event.args.tokenGive))
           .div(API.getDivisor(event.args.tokenGet)),
         id: `${id}_sell`,
-        order: event.args,
+        order: Object.assign(event.args, {
+          contractAddr: event.address,
+        }),
         updated: undefined,
       };
       async.parallel(
