@@ -228,6 +228,11 @@ module.exports = {
       name: 'TRST',
       decimals: 6,
     },
+    {
+      addr: '0x2e071d2966aa7d8decb1005885ba1977d6038a65',
+      name: 'DICE',
+      decimals: 16,
+    },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
