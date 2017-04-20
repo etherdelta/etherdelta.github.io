@@ -1190,7 +1190,10 @@ module.exports = {
   contractToken: 'smart_contract/token.sol',
   contractReserveToken: 'smart_contract/reservetoken.sol',
   contractEtherDeltaAddrs: [
-    { addr: '0x8d12a197cb00d4747a1fe03395095ce2a5cc6819', info: 'Deployed 02/09/2017' },
+    {
+      addr: '0x8d12a197cb00d4747a1fe03395095ce2a5cc6819',
+      info: 'Deployed 02/09/2017',
+    },
     {
       addr: '0x373c55c277b866a69dc047cad488154ab9759466',
       info: 'Deployed 10/24/2016 -- please withdraw',
@@ -1211,370 +1214,204 @@ module.exports = {
   ethTestnet: false,
   ethProvider: 'http://localhost:8545',
   ethGasPrice: 20000000000,
-  ethAddr: '0x0000000000000000000000000000000000000123',
+  ethAddr: '0x0000000000000000000000000000000000000000',
   ethAddrPrivateKey: '',
+  gasApprove: 250000,
+  gasDeposit: 250000,
+  gasWithdraw: 250000,
+  gasTrade: 250000,
+  gasOrder: 250000,
+  ordersOnchain: false,
+  apiServer: 'https://api.etherdelta.com',
+  // apiServer: 'http://localhost:3000',
+  userCookie: 'EtherDelta',
+  eventsCacheCookie: 'EtherDelta_eventsCache',
+  deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
+  ordersCacheCookie: 'EtherDelta_ordersCache',
+  etherscanAPIKey: 'GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE',
   tokens: [
     {
       addr: '0x0000000000000000000000000000000000000000',
       name: 'ETH',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xd8912c10681d8b21fd3742244f44658dba12264e',
       name: 'PLU',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xaf30d2a7e90d7dc361c8c4585e9bb7d2f6f15bc7',
       name: '1ST',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x936f78b9852d12f5cb93177c1f84fb8513d06263',
       name: 'GNTW',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x01afc37f4f85babc47c0e2d0eababc7fb49793c8',
       name: 'GNTM',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xa74476443119a942de498590fe1f2454d7d4ac0d',
       name: 'GNT',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x5c543e7ae0a1104f78406c340e9c64fd9fce5170',
       name: 'VSL',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xac709fcb44a43c35f0da4e3163b117a17f3770f5',
       name: 'ARC',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x14f37b574242d366558db61f3335289a5035c506',
       name: 'HKG',
       decimals: 3,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x888666ca69e0f178ded6d75b5726cee99a87d698',
       name: 'ICN',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x48c80f1f4d53d5951e5d5438b54cba84f29f32a5',
       name: 'REP',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009',
       name: 'SNGLS',
       decimals: 0,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x4df812f6064def1e5e029f1ca858777cc98d2d81',
       name: 'XAUR',
       decimals: 8,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d',
       name: 'MKR',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a',
       name: 'DGD',
       decimals: 9,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd',
       name: 'EPOSY',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0',
       name: 'EPOSN',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413',
       name: 'DAO',
       decimals: 16,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x55e7c4a77821d5c50b4570b08f9f92896a25e012',
       name: 'P+',
       decimals: 0,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x45e42d659d9f9466cd5df622506033145a9b89bc',
       name: 'NXC',
       decimals: 3,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6',
       name: 'DCN',
       decimals: 0,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x01a7018e6d1fde8a68d12f59b6532fb523b6259d',
       name: 'USD.DC',
       decimals: 8,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xffad42d96e43df36652c8eaf61a7e6dba2ad0e41',
       name: 'BTC.DC',
       decimals: 8,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x949bed886c739f1a3273629b3320db0c5024c719',
       name: 'AMIS',
       decimals: 9,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xb9e7f8568e08d5659f5d29c4997173d84cdf2607',
       name: 'SWT',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xf77089f2f00fca83501705b711cbb10a0de77628',
       name: 'BME',
       decimals: 0,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xb802b24e0637c2b87d2e8b7784c055bbe921011a',
       name: 'EMV',
       decimals: 2,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x6531f133e6deebe7f2dce5a0441aa7ef330b4e53',
       name: 'TIME',
       decimals: 8,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x059d4329078dcA62c521779c0Ce98EB9329349e6',
       name: 'TIG',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xbeb9ef514a379b997e0798fdcc901ee474b6d9a1',
       name: 'MLN',
       decimals: 18,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x168296bb09e24a88805cb9c33356536b980d3fc5',
       name: 'RHOC',
       decimals: 8,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x08711d3b02c8758f2fb3ab4e80228418a7f8e39c',
       name: 'EDG',
       decimals: 0,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xf7b098298f7c69fc14610bf71d5e02c60792894c',
       name: 'GUP',
       decimals: 3,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xc2921ea1c150405ef952f73952f37fa2746168d8',
       name: 'ETB',
       decimals: 0,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0x607f4c5bb672230e8672085532f7e901544a7375',
       name: 'RLC',
       decimals: 9,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
     {
       addr: '0xcb94be6f13a1182e4a4b6140cb7bf2025d28e41b',
       name: 'TRST',
       decimals: 6,
-      gasApprove: 250000,
-      gasDeposit: 250000,
-      gasWithdraw: 250000,
-      gasTrade: 250000,
-      gasOrder: 250000,
     },
   ],
+  defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
     { token: 'PLU', base: 'ETH' },
     { token: '1ST', base: 'ETH' },
@@ -1597,24 +1434,10 @@ module.exports = {
     { token: 'GUP', base: 'ETH' },
     { token: 'RLC', base: 'ETH' },
     { token: 'ETB', base: 'ETH' },
+    { token: 'TRST', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
-  ordersOnchain: false,
-  gitterHost: 'https://api.gitter.im',
-  gitterStream: 'stream.gitter.im',
-  gitterToken: '7e7772f3f3b2b715122f0d1789cf173ef49238da',
-  gitterRoomID: '57756375c2f0db084a20cf77',
-  chatServer: 'https://etherdeltachat.herokuapp.com:443',
-  apiServer: 'https://api.etherdelta.com',
-  // apiServer: 'http://localhost:3000',
-  userCookie: 'EtherDelta',
-  eventsCacheCookie: 'EtherDelta_eventsCache',
-  deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
-  ordersCacheCookie: 'EtherDelta_ordersCache',
-  defaultToken: 1,
-  defaultBase: 0,
-  etherscanAPIKey: 'GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE',
 };
 
 },{}],3:[function(require,module,exports){
@@ -2746,7 +2569,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
         undefined,
         toAddr,
         undefined,
-        [{ gas: token.gasDeposit, value: amount }],
+        [{ gas: this.config.gasDeposit, value: amount }],
         this.addrs[this.selectedAccount],
         this.pks[this.selectedAccount],
         this.nonce,
@@ -2778,7 +2601,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
           this.contractToken,
           token.addr,
           'transfer',
-          [toAddr, amount, { gas: token.gasDeposit, value: 0 }],
+          [toAddr, amount, { gas: this.config.gasDeposit, value: 0 }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
@@ -2820,7 +2643,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
           this.contractEtherDelta,
           this.config.contractEtherDeltaAddr,
           'deposit',
-          [{ gas: token.gasDeposit, value: amount }],
+          [{ gas: this.config.gasDeposit, value: amount }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
@@ -2862,7 +2685,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
             this.contractToken,
             addr,
             'approve',
-            [this.config.contractEtherDeltaAddr, amount, { gas: token.gasApprove, value: 0 }],
+            [this.config.contractEtherDeltaAddr, amount, { gas: this.config.gasApprove, value: 0 }],
             this.addrs[this.selectedAccount],
             this.pks[this.selectedAccount],
             this.nonce,
@@ -2875,7 +2698,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
                 this.contractEtherDelta,
                 this.config.contractEtherDeltaAddr,
                 'depositToken',
-                [addr, amount, { gas: token.gasDeposit, value: 0 }],
+                [addr, amount, { gas: this.config.gasDeposit, value: 0 }],
                 this.addrs[this.selectedAccount],
                 this.pks[this.selectedAccount],
                 this.nonce,
@@ -2948,7 +2771,7 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
           this.contractEtherDelta,
           this.config.contractEtherDeltaAddr,
           'withdraw',
-          [amount, { gas: token.gasWithdraw, value: 0 }],
+          [amount, { gas: this.config.gasWithdraw, value: 0 }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
@@ -2970,7 +2793,7 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
           this.contractEtherDelta,
           this.config.contractEtherDeltaAddr,
           'withdrawToken',
-          [addr, amount, { gas: token.gasWithdraw, value: 0 }],
+          [addr, amount, { gas: this.config.gasWithdraw, value: 0 }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
@@ -3024,7 +2847,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
   let tokenGive;
   let amountGet;
   let amountGive;
-  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000123') {
+  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000000') {
     this.alertError(
       "You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
     ga('send', {
@@ -3147,7 +2970,6 @@ EtherDelta.prototype.publishOrder = function publishOrder(
         });
       } else {
         // onchain order
-        const token = this.getToken(tokenGet);
         utility.send(
           this.web3,
           this.contractEtherDelta,
@@ -3160,7 +2982,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
             amountGive,
             expires,
             orderNonce,
-            { gas: token.gasOrder, value: 0 },
+            { gas: this.config.gasOrder, value: 0 },
           ],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
@@ -3181,7 +3003,6 @@ EtherDelta.prototype.publishOrder = function publishOrder(
 };
 EtherDelta.prototype.cancelOrder = function cancelOrder(orderIn) {
   const order = JSON.parse(decodeURIComponent(orderIn));
-  const token = this.getToken(order.tokenGet);
   if (order.user.toLowerCase() === this.addrs[this.selectedAccount].toLowerCase()) {
     utility.send(
       this.web3,
@@ -3198,7 +3019,7 @@ EtherDelta.prototype.cancelOrder = function cancelOrder(orderIn) {
         Number(order.v),
         order.r,
         order.s,
-        { gas: token.gasTrade, value: 0 },
+        { gas: this.config.gasTrade, value: 0 },
       ],
       this.addrs[this.selectedAccount],
       this.pks[this.selectedAccount],
@@ -3218,7 +3039,7 @@ EtherDelta.prototype.cancelOrder = function cancelOrder(orderIn) {
   }
 };
 EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
-  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000123') {
+  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000000') {
     this.alertError(
       "You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
     ga('send', {
@@ -3242,7 +3063,6 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
   } else {
     return;
   }
-  const token = this.getToken(order.tokenGet);
   utility.call(
     this.web3,
     this.contractEtherDelta,
@@ -3321,7 +3141,7 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
                     r,
                     s,
                     amount,
-                    { gas: token.gasTrade, value: 0 },
+                    { gas: this.config.gasTrade, value: 0 },
                   ],
                   this.addrs[this.selectedAccount],
                   this.pks[this.selectedAccount],
@@ -3394,11 +3214,6 @@ EtherDelta.prototype.getToken = function getToken(addrOrToken, name, decimals) {
   const expectedKeys = JSON.stringify([
     'addr',
     'decimals',
-    'gasApprove',
-    'gasDeposit',
-    'gasOrder',
-    'gasTrade',
-    'gasWithdraw',
     'name',
   ]);
   if (matchingTokens.length > 0) {
@@ -3571,7 +3386,7 @@ EtherDelta.prototype.checkContractUpgrade = function checkContractUpgrade() {
   if (
     (!this.selectedContract || this.selectedContract !== this.config.contractEtherDeltaAddr) &&
     (this.addrs.length > 1 ||
-      (this.addrs.length === 1 && this.addrs[0] !== '0x0000000000000000000000000000000000000123'))
+      (this.addrs.length === 1 && this.addrs[0] !== '0x0000000000000000000000000000000000000000'))
   ) {
     this.alertDialog(
       '<p>EtherDelta has a new smart contract. It is now selected.</p><p>Please use the "Smart Contract" menu to select the old one and withdraw from it.</p><p><a href="javascript:;" class="btn btn-default" onclick="alertify.closeAll(); bundle.EtherDelta.displayHelp(\'smartContract\')">Smart contract changelog</a></p>');
@@ -3785,8 +3600,10 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
     }
     this.config = config;
     // default selected token and base
-    this.selectedToken = this.config.tokens[this.config.defaultToken];
-    this.selectedBase = this.config.tokens[this.config.defaultBase];
+    this.selectedToken = this.config.tokens.find(
+      x => x.name === this.config.defaultPair.token) || this.config.tokens[1];
+    this.selectedBase = this.config.tokens.find(
+      x => x.name === this.config.defaultPair.base) || this.config.tokens[0];
     // default addr, pk
     this.addrs = [this.config.ethAddr];
     this.pks = [this.config.ethAddrPrivateKey];

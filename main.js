@@ -1125,7 +1125,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
         undefined,
         toAddr,
         undefined,
-        [{ gas: token.gasDeposit, value: amount }],
+        [{ gas: this.config.gasDeposit, value: amount }],
         this.addrs[this.selectedAccount],
         this.pks[this.selectedAccount],
         this.nonce,
@@ -1157,7 +1157,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
           this.contractToken,
           token.addr,
           'transfer',
-          [toAddr, amount, { gas: token.gasDeposit, value: 0 }],
+          [toAddr, amount, { gas: this.config.gasDeposit, value: 0 }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
@@ -1199,7 +1199,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
           this.contractEtherDelta,
           this.config.contractEtherDeltaAddr,
           'deposit',
-          [{ gas: token.gasDeposit, value: amount }],
+          [{ gas: this.config.gasDeposit, value: amount }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
@@ -1241,7 +1241,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
             this.contractToken,
             addr,
             'approve',
-            [this.config.contractEtherDeltaAddr, amount, { gas: token.gasApprove, value: 0 }],
+            [this.config.contractEtherDeltaAddr, amount, { gas: this.config.gasApprove, value: 0 }],
             this.addrs[this.selectedAccount],
             this.pks[this.selectedAccount],
             this.nonce,
@@ -1254,7 +1254,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
                 this.contractEtherDelta,
                 this.config.contractEtherDeltaAddr,
                 'depositToken',
-                [addr, amount, { gas: token.gasDeposit, value: 0 }],
+                [addr, amount, { gas: this.config.gasDeposit, value: 0 }],
                 this.addrs[this.selectedAccount],
                 this.pks[this.selectedAccount],
                 this.nonce,
@@ -1327,7 +1327,7 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
           this.contractEtherDelta,
           this.config.contractEtherDeltaAddr,
           'withdraw',
-          [amount, { gas: token.gasWithdraw, value: 0 }],
+          [amount, { gas: this.config.gasWithdraw, value: 0 }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
@@ -1349,7 +1349,7 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
           this.contractEtherDelta,
           this.config.contractEtherDeltaAddr,
           'withdrawToken',
-          [addr, amount, { gas: token.gasWithdraw, value: 0 }],
+          [addr, amount, { gas: this.config.gasWithdraw, value: 0 }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
@@ -1403,7 +1403,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
   let tokenGive;
   let amountGet;
   let amountGive;
-  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000123') {
+  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000000') {
     this.alertError(
       "You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
     ga('send', {
@@ -1526,7 +1526,6 @@ EtherDelta.prototype.publishOrder = function publishOrder(
         });
       } else {
         // onchain order
-        const token = this.getToken(tokenGet);
         utility.send(
           this.web3,
           this.contractEtherDelta,
@@ -1539,7 +1538,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
             amountGive,
             expires,
             orderNonce,
-            { gas: token.gasOrder, value: 0 },
+            { gas: this.config.gasOrder, value: 0 },
           ],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
@@ -1560,7 +1559,6 @@ EtherDelta.prototype.publishOrder = function publishOrder(
 };
 EtherDelta.prototype.cancelOrder = function cancelOrder(orderIn) {
   const order = JSON.parse(decodeURIComponent(orderIn));
-  const token = this.getToken(order.tokenGet);
   if (order.user.toLowerCase() === this.addrs[this.selectedAccount].toLowerCase()) {
     utility.send(
       this.web3,
@@ -1577,7 +1575,7 @@ EtherDelta.prototype.cancelOrder = function cancelOrder(orderIn) {
         Number(order.v),
         order.r,
         order.s,
-        { gas: token.gasTrade, value: 0 },
+        { gas: this.config.gasTrade, value: 0 },
       ],
       this.addrs[this.selectedAccount],
       this.pks[this.selectedAccount],
@@ -1597,7 +1595,7 @@ EtherDelta.prototype.cancelOrder = function cancelOrder(orderIn) {
   }
 };
 EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
-  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000123') {
+  if (this.addrs[this.selectedAccount] === '0x0000000000000000000000000000000000000000') {
     this.alertError(
       "You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
     ga('send', {
@@ -1621,7 +1619,6 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
   } else {
     return;
   }
-  const token = this.getToken(order.tokenGet);
   utility.call(
     this.web3,
     this.contractEtherDelta,
@@ -1700,7 +1697,7 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
                     r,
                     s,
                     amount,
-                    { gas: token.gasTrade, value: 0 },
+                    { gas: this.config.gasTrade, value: 0 },
                   ],
                   this.addrs[this.selectedAccount],
                   this.pks[this.selectedAccount],
@@ -1773,11 +1770,6 @@ EtherDelta.prototype.getToken = function getToken(addrOrToken, name, decimals) {
   const expectedKeys = JSON.stringify([
     'addr',
     'decimals',
-    'gasApprove',
-    'gasDeposit',
-    'gasOrder',
-    'gasTrade',
-    'gasWithdraw',
     'name',
   ]);
   if (matchingTokens.length > 0) {
@@ -1950,7 +1942,7 @@ EtherDelta.prototype.checkContractUpgrade = function checkContractUpgrade() {
   if (
     (!this.selectedContract || this.selectedContract !== this.config.contractEtherDeltaAddr) &&
     (this.addrs.length > 1 ||
-      (this.addrs.length === 1 && this.addrs[0] !== '0x0000000000000000000000000000000000000123'))
+      (this.addrs.length === 1 && this.addrs[0] !== '0x0000000000000000000000000000000000000000'))
   ) {
     this.alertDialog(
       '<p>EtherDelta has a new smart contract. It is now selected.</p><p>Please use the "Smart Contract" menu to select the old one and withdraw from it.</p><p><a href="javascript:;" class="btn btn-default" onclick="alertify.closeAll(); bundle.EtherDelta.displayHelp(\'smartContract\')">Smart contract changelog</a></p>');
@@ -2164,8 +2156,10 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
     }
     this.config = config;
     // default selected token and base
-    this.selectedToken = this.config.tokens[this.config.defaultToken];
-    this.selectedBase = this.config.tokens[this.config.defaultBase];
+    this.selectedToken = this.config.tokens.find(
+      x => x.name === this.config.defaultPair.token) || this.config.tokens[1];
+    this.selectedBase = this.config.tokens.find(
+      x => x.name === this.config.defaultPair.base) || this.config.tokens[0];
     // default addr, pk
     this.addrs = [this.config.ethAddr];
     this.pks = [this.config.ethAddrPrivateKey];

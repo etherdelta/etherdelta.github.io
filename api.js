@@ -487,11 +487,6 @@ API.getToken = function getToken(addrOrToken, name, decimals) {
   const expectedKeys = JSON.stringify([
     'addr',
     'decimals',
-    'gasApprove',
-    'gasDeposit',
-    'gasOrder',
-    'gasTrade',
-    'gasWithdraw',
     'name',
   ]);
   if (matchingTokens.length > 0) {
@@ -1056,7 +1051,6 @@ API.publishOrder = function publishOrder(
         });
       } else {
           // onchain order
-        const token = API.getToken(tokenGet);
         API.utility.send(
             this.web3,
             this.contractEtherDelta,
@@ -1069,7 +1063,7 @@ API.publishOrder = function publishOrder(
             amountGive,
             expires,
             orderNonce,
-              { gas: token.gasOrder, value: 0 },
+              { gas: this.config.gasOrder, value: 0 },
           ],
             addr,
             pk,
