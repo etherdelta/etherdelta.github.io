@@ -715,7 +715,7 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                           }
                           callback(null, order);
                         } else {
-                          callback(true, undefined);
+                          callback('Order is filled', undefined);
                         }
                       } else {
                         // if there's an error, assume the order is ok and try again later
@@ -723,7 +723,7 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                       }
                     });
                 } else {
-                  callback(true, undefined);
+                  callback('Below minimum volume', undefined);
                 }
               } else {
                 // if there's an error, assume the order is ok and try again later
@@ -732,7 +732,7 @@ API.updateOrder = function updateOrder(orderIn, callback) {
             });
         });
     } else {
-      callback(true, undefined);
+      callback('Expired', undefined);
     }
   });
 };
