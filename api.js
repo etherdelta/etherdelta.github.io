@@ -189,6 +189,7 @@ API.logs = function logs(callback) {
         async.mapSeries(
           searches,
           (searchRange, callbackMapSearch) => {
+            console.log('Searching logs', searchRange[0], searchRange[1]);
             utility.logsOnce(
               this.web3,
               this.contractEtherDelta,
@@ -629,6 +630,8 @@ API.addOrderFromEvent = function addOrderFromEvent(event, callback) {
         () => {
           callback(null, true);
         });
+    } else {
+      callback('Order exists.', false);
     }
   } else {
     callback('Failed to add order.', false);
@@ -726,9 +729,12 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                         callback(null, order);
                       }
                     });
-                } else {
-                  // if the available volume is too low, assume the order is ok and try again later
+                } else if (!order.updated) {
+                  // if the available volume is too low,
+                  // but this is the first attempt, try again later
                   callback(null, order);
+                } else {
+                  callback('Volume too low', undefined);
                 }
               } else {
                 // if there's an error, assume the order is ok and try again later
