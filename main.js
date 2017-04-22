@@ -97,16 +97,76 @@ EtherDelta.prototype.alertSuccess = function alertSuccess(message) {
     eventAction: 'Success',
   });
 };
+EtherDelta.prototype.txError = function txError(err) {
+  console.log('Error', err);
+  utility.getBalance(this.web3, this.addrs[this.selectedAccount], (errBalance, resultBalance) => {
+    const balance = utility.weiToEth(resultBalance);
+    if (this.connection.connection === 'RPC') {
+      if (balance < 0.005) {
+        this.alertError(
+          `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Ethereum - transaction error',
+        });
+      } else {
+        this.alertError(
+          'You tried to send an Ethereum transaction but there was an error. Make sure the account you have selected in the account dropdown (upper right) matches the one you have selected in MetaMask.');
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Ethereum - transaction error',
+        });
+      }
+    } else if (this.connection.connection === 'Proxy') {
+      if (this.pks[this.selectedAccount] &&
+      !utility.verifyPrivateKey(this.addrs[this.selectedAccount], this.pks[this.selectedAccount])) {
+        this.alertError('You tried to send an Ethereum transaction but there was an error. The private key for your account is invalid. Please re-import your account with a valid private key and try again.');
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Ethereum - transaction error',
+        });
+      } else if (!this.pks[this.selectedAccount]) {
+        this.alertError('You tried to send an Ethereum transaction but there was an error. Your account has no private key. Please re-import your account with a valid private key and try again.');
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Ethereum - transaction error',
+        });
+      } else if (balance < 0.005) {
+        this.alertError(
+          `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Ethereum - transaction error',
+        });
+      } else {
+        this.alertError(
+          "You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).");
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Ethereum - transaction error',
+        });
+      }
+    } else {
+      this.alertError(
+        "You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).");
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Error',
+        eventAction: 'Ethereum - transaction error',
+      });
+    }
+  });
+};
 EtherDelta.prototype.alertTxResult = function alertTxResult(err, txsIn) {
   const txs = Array.isArray(txsIn) ? txsIn : [txsIn];
   if (err) {
-    this.alertError(
-      "You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).");
-    ga('send', {
-      hitType: 'event',
-      eventCategory: 'Error',
-      eventAction: 'Ethereum - transaction error',
-    });
+    this.txError(err);
   } else {
     if (txs.length === 1) {
       const tx = txs[0];
@@ -117,7 +177,7 @@ EtherDelta.prototype.alertTxResult = function alertTxResult(err, txsIn) {
         this.alertDialog(
           `You just created an Ethereum transaction. Track its progress: <a href="http://${this.config.ethTestnet ? 'testnet.' : ''}etherscan.io/tx/${tx.txHash}" target="_blank">${tx.txHash}</a>.`);
       } else {
-        this.alertError("You tried to send an Ethereum transaction but there was an error. If you imported your account, make sure it has a private key. You can check the private key using the 'Export private key' option under the account dropdown in the upper right.");
+        this.txError();
       }
     } else if (txs.length > 1) {
       if (txs.findIndex(x => !x.txHash) < 0) {
@@ -127,7 +187,7 @@ EtherDelta.prototype.alertTxResult = function alertTxResult(err, txsIn) {
         });
         this.alertDialog(message);
       } else {
-        this.alertError("You tried to send an Ethereum transaction but there was an error. If you imported your account, make sure it has a private key. You can check the private key using the 'Export private key' option under the account dropdown in the upper right.");
+        this.txError();
       }
     }
     ga('send', {
@@ -1107,7 +1167,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
     });
     return;
   }
-  if (!this.web3.isAddress(toAddr) || toAddr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
+  if (!this.web3.isAddress(toAddr) || toAddr.slice(0, 39) === '0x0000000000000000000000000000000000000' || toAddr.toLowerCase() === this.addrs[this.selectedAccount].toLowerCase()) {
     this.alertError('Please specify a valid address.');
     ga('send', {
       hitType: 'event',
@@ -1131,8 +1191,8 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
         this.nonce,
         (errSend, result) => {
           this.nonce = result.nonce;
-          this.addPending(err, { txHash: result.txHash });
-          this.alertTxResult(err, result);
+          this.addPending(errSend, { txHash: result.txHash });
+          this.alertTxResult(errSend, result);
           ga('send', {
             hitType: 'event',
             eventCategory: 'Action',
@@ -1163,8 +1223,8 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
           this.nonce,
           (errSend, resultSend) => {
             this.nonce = resultSend.nonce;
-            this.addPending(err, { txHash: resultSend.txHash });
-            this.alertTxResult(err, resultSend);
+            this.addPending(errSend, { txHash: resultSend.txHash });
+            this.alertTxResult(errSend, resultSend);
             ga('send', {
               hitType: 'event',
               eventCategory: 'Action',
@@ -1190,7 +1250,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
     });
     return;
   }
-  if (addr.slice(0,39) === '0x0000000000000000000000000000000000000') {
+  if (addr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, result) => {
       if (amount > result && amount < result * 1.1) amount = result;
       if (amount <= result) {
@@ -1205,8 +1265,8 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
           this.nonce,
           (errSend, resultSend) => {
             this.nonce = resultSend.nonce;
-            this.addPending(err, { txHash: resultSend.txHash });
-            this.alertTxResult(err, resultSend);
+            this.addPending(errSend, { txHash: resultSend.txHash });
+            this.alertTxResult(errSend, resultSend);
             ga('send', {
               hitType: 'event',
               eventCategory: 'Action',
@@ -1261,8 +1321,8 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
                 (errSend2, resultSend2) => {
                   this.nonce = resultSend2.nonce;
                   txs.push(resultSend2);
-                  this.addPending(err, txs);
-                  this.alertTxResult(err, txs);
+                  this.addPending(errSend || errSend2, txs);
+                  this.alertTxResult(errSend || errSend2, txs);
                   ga('send', {
                     hitType: 'event',
                     eventCategory: 'Action',
@@ -1333,8 +1393,8 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
           this.nonce,
           (errSend, resultSend) => {
             this.nonce = resultSend.nonce;
-            this.addPending(err, { txHash: resultSend.txHash });
-            this.alertTxResult(err, resultSend);
+            this.addPending(errSend, { txHash: resultSend.txHash });
+            this.alertTxResult(errSend, resultSend);
             ga('send', {
               hitType: 'event',
               eventCategory: 'Action',
@@ -1355,8 +1415,8 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
           this.nonce,
           (errSend, resultSend) => {
             this.nonce = resultSend.nonce;
-            this.addPending(err, { txHash: resultSend.txHash });
-            this.alertTxResult(err, resultSend);
+            this.addPending(errSend, { txHash: resultSend.txHash });
+            this.alertTxResult(errSend, resultSend);
             ga('send', {
               hitType: 'event',
               eventCategory: 'Action',
@@ -1545,8 +1605,8 @@ EtherDelta.prototype.publishOrder = function publishOrder(
           this.nonce,
           (errSend, resultSend) => {
             this.nonce = resultSend.nonce;
-            this.addPending(err, { txHash: resultSend.txHash });
-            this.alertTxResult(err, resultSend);
+            this.addPending(errSend, { txHash: resultSend.txHash });
+            this.alertTxResult(errSend, resultSend);
             ga('send', {
               hitType: 'event',
               eventCategory: 'Action',
@@ -1704,8 +1764,8 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
                   this.nonce,
                   (errSend, resultSend) => {
                     this.nonce = resultSend.nonce;
-                    this.addPending(err, { txHash: resultSend.txHash });
-                    this.alertTxResult(err, resultSend);
+                    this.addPending(errSend, { txHash: resultSend.txHash });
+                    this.alertTxResult(errSend, resultSend);
                     ga('send', {
                       hitType: 'event',
                       eventCategory: 'Action',
