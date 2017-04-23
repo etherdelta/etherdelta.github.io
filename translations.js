@@ -645,7 +645,7 @@ var translations = {
     en:'Under "Balances," you will see your balance for each of the two currencies you selected. This is the balance you have deposited to EtherDelta from your Ethereum account.',
     cn:'在“余额”下面，你可以看到两种币的各自的余额，这是从你的以太坊账号充值的余额。',
     fr:'Sous "Soldes" vous trouverez le solde pour chacune des deux devises selectionnées. C\'est le solde que vous venez de déposer sur etherdelta depuis votre compte Ethereum' ,
-    es:'En "Saldos" se encuentra el equilibrio para cada una de las dos monedas sélectionnées.
+    es:'En "Saldos" se encuentra el equilibrio para cada una de las dos monedas sélectionnées. Este es el saldo que acaba de asentarse en etherdelta de su cuenta Etereum'
   },
   deposit_withdraw_3:{
     en:'To deposit, withdraw, or transfer, scroll to the bottom of the page. Find the "Balances" section.',
@@ -677,7 +677,7 @@ var translations = {
     en:'Once the Ethereum transaction has been confirmed, your balance will automatically update. If you don\'t have the necessary funds available for the deposit or withdraw transaction, then the Ethereum transaction will fail.',
     cn:'一旦以太坊交易通过验证，你的余额就会自动更新。如果币值不足，充值和提取就会失败。',
     fr:'Une fois que la transaction Ethereum est confirmé, votre solde est automatiquement mis a jour. Au cas ou vous n\'auriez pas assez de fonds disponible pour le depot ou le retrait, alors l\'Ethereum transaction echouera.',
-    es:'Una vez confirmada la transacción Etereum, su saldo se actualiza automáticamente. En caso de que no disponga de fondos suficientes para el depósito o retiro, mientras que la transacción Ethereum fallará.'
+    es:'Una vez confirmada la transacción Ethereum, su saldo se actualiza automáticamente. En caso de que no disponga de fondos suficientes para el depósito o retiro, mientras que la transacción Ethereum fallará.'
 
   },
   trade_1:{
