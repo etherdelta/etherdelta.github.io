@@ -346,7 +346,7 @@ var translations = {
     cn:'币种',
     // cn:'币'
     fr:'Jetons',
-    es:'Simbolicso'
+    es:'Simbolico'
   },
   aug032016:{
     en:'August 3, 2016',
@@ -358,7 +358,8 @@ var translations = {
     en:'EtherDelta has moved to a new smart contract. Go to the bottom of the page and switch to the old one if you have a balance there you need to withdraw.',
     cn:'EtherDelta更新了智能合约。如果你要提取余额，请到本页底部转成旧的合约并进行提取。',
     // cn:'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。'
-    fr:'EtherDelta a ete modifié pour un nouveau smart contract. Allez au bas de page et permutez le avec l\'ancien s\'il reste du solde à retirer.'
+    fr:'EtherDelta a été modifié pour un nouveau smart contract. Allez au bas de page et permutez le avec l\'ancien s\'il reste du solde à retirer.',
+    es:'EtherDelta ha modificado para un nuevo contrato inteligente. Ir a la parte inferior de la página e intercambiarlo con el primero si hay algún saldo a retirar.'
   },
   aug302016:{
     en:'August 30, 2016',
@@ -371,7 +372,7 @@ var translations = {
     cn:'EtherDelta更新了智能合约。如果你要提取余额，请到本页底部转成旧的合约并进行提取。',
     // cn:'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。'
     fr:'EtherDelta utilise un nouveau smart contract. Allez au bas de page et permutez le avec l\'ancien s\'il vous reste du solde à retirer.',
-    es:'EtherDelta utiliza un nuevo contrato inteligente.'
+    es:'EtherDelta utiliza un nuevo contrato inteligente. Ir a la parte inferior de la página e intercambiarlo con el primero si hay algún saldo a retirar.'
   },
   new_account:{
     en:'New account',
