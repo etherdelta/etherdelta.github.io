@@ -1,4 +1,4 @@
 <% if (token.name!='ETH') { %>
-<p>The following address is for the token contract. It is NOT a deposit address. Do NOT send tokens to it or they will be lost forever. To deposit, use the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.<p>
-<p>Contract: <a href="<%= tokenLink %>" target="_blank"><%= token.addr %></a></p>
+<p class="trn">deposit_address<p>
+<p><span class="trn">Smart_Contract</span>: <a href="<%= tokenLink %>" target="_blank"><%= token.addr %></a></p>
 <% } %>
