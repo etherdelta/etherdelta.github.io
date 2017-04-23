@@ -33,7 +33,7 @@ var translations = {
     en:'EtherDelta is a decentralized exchange for Ethereum tokens.',
     cn:'EtherDelta是去中心化的以太坊交易平台。',
     fr:'EtherDelta est une bourse d\'échange de jetons ethereum décentralisé.',
-    es:'EtherDelta se ha posicionado como la primera bolsa de cambio de cryptomonedas y symbolicos de la blockchain Ethereum.'
+    es:'EtherDelta se ha posicionado como la primera bolsa de cambio de cryptomonedas y symbólicos de la blockchain Ethereum.'
     // cn:'EtherDelta是无中心的以太坊交易平台。'
   },
   Smart_Contract:{
@@ -150,7 +150,7 @@ var translations = {
   pair:{
     en:'Pair',
     cn:'交易币种',
-    fr:'Paire'
+    fr:'Paire',
     // cn:'名称'
     es:'Paras'
   },
@@ -180,13 +180,13 @@ var translations = {
     cn:'PredictionToken &#8212; 虚拟货币市场预测',
     // cn:'PredictionToken &#8212; 预测市场币'
     fr:'PredictionToken &#8212; marché de prédiction de jetons',
-    es:'PredictionToken &#8212; mercado de prédiccion de simbolicos'
+    es:'PredictionToken &#8212; mercado de prediccion de simbólicos'
   },
   ethereumdollar_desc:{
     en:'EthereumDollar &#8212; stable dollar token',
     cn:'EthereumDollar &#8212; 稳定美元币',
     fr:'EthereumDollar &#8212; jeton de dollar stable',
-    fr:'EthereumDollar &#8212; simbolico de dollar estable'
+    fr:'EthereumDollar &#8212; simbólico de dollar estable'
   },
   toggle_navigation:{
     en:'Toggle navigation',
@@ -230,7 +230,7 @@ var translations = {
     en:'Private key',
     cn:'密钥',
     fr:'clé privée',
-    es:'llave privada'
+    es:'clave privada'
   },
   buy:{
     en:'Buy',
@@ -339,14 +339,14 @@ var translations = {
     cn:'币种',
     // cn:'币'
     fr:'Jeton',
-    es:'Simbolico'
+    es:'Simbólico'
   },
   tokens:{
     en:'Tokens',
     cn:'币种',
     // cn:'币'
     fr:'Jetons',
-    es:'Simbolico'
+    es:'Simbólicos'
   },
   aug032016:{
     en:'August 3, 2016',
@@ -414,7 +414,7 @@ var translations = {
     en:'Deposit',
     cn:'充值',
     fr:'Dépot',
-    es:'Déposito'
+    es:'Depósito'
   },
   withdraw:{
     en:'Withdraw',
@@ -456,7 +456,7 @@ var translations = {
     en:'Other token',
     cn:'其它币',
     fr:'Autre jeton',
-    es:'Otro simbolico',
+    es:'Otro simbólico',
     
   },
   other_base:{
@@ -691,7 +691,7 @@ var translations = {
     en:'If you want to trade a token that doesn\'t appear in the list, you can choose "Other" and fill out the form. Different tokens have different multipliers, so fill out this form carefully.',
     cn:'如果你要交易的币种不在列表中，你可以选择“其它币”和填表。不同的币种乘数不同，请小心填表。',
     fr:'Il est possible de commercer un jeton qui n\'apparait pas dans la liste, choisir "Autre" et remplir les champs du formulaire. Different jetons ont different multiplicateurs, il est donc indispensable de remplir le formulaire avec soin.',
-    es:'Es posible que el comercio un símbolo que no aparece en la lista, seleccione "Otros" y rellena los campos del formulario. Differentes simbolicos tienen differentes multiplicadores, es pues indispensable cumplir el formulario con cuidado.' 
+    es:'Es posible que el comercio un símbolo que no aparece en la lista, seleccione "Otros" y rellena los campos del formulario. Differentes simbólicos tienen differentes multiplicadores, es pues indispensable cumplir el formulario con cuidado.' 
   },
   trade_3:{
     en:'EtherDelta supports resting orders (adding liquidity) and trading against existing resting orders (taking liquidity).',
@@ -907,14 +907,14 @@ var translations = {
     en:'Auto refresh',
     cn:'自动刷新',
     fr:'Auto rafraichir',
-    es:'Auto rafraichir'
+    es:'Auto refrescar'
   
   },
   my_transactions:{
     en:'My transactions',
     cn:'我的交易',
     fr:'Mes transactions',
-    es:'Meis transacciones'
+    es:'Mis transacciones'
   
   },
   or:{
@@ -941,7 +941,7 @@ var translations = {
   pending:{
     en:'Pending',
     cn:'待定',
-    fr:'En suspens'
+    fr:'En suspens',
     es:'En suspenso'
   
   },
@@ -955,7 +955,8 @@ var translations = {
   weekly:{
     en:'Weekly',
     cn:'每周的',
-    fr:'Semanal'
+    fr:'Hebdomadaire',
+    es:'Semanal'
   
   }
 };
