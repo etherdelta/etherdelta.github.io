@@ -101419,11 +101419,17 @@ module.exports = {
     fr: "Apercu d'ensemble du contrat dit smart",
     es: 'Estudio del contrato inteligente',
   },
-  please_select_account: {
-    en: 'Please select an account using the account dropdown in the upper right.',
+  select_account: {
+    en: 'Select account',
     cn: '选择账号',
     fr: 'Selection du compte',
     es: 'Selección de la cuenta',
+  },
+  please_select_account: {
+    en: 'Please select an account using the account dropdown in the upper right.',
+    cn: '请使用右上角的帐户下拉菜单选择一个帐户。',
+    fr: "S'il vous plaît sélectionner un compte en utilisant le menu déroulant de compte dans le coin supérieur droit.",
+    es: 'Por favor, seleccione una cuenta usando el desplegable de la cuenta en la parte superior derecha.',
   },
   howto_videos: {
     en: 'How-to videos',
