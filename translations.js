@@ -371,7 +371,7 @@ var translations = {
     cn:'EtherDelta更新了智能合约。如果你要提取余额，请到本页底部转成旧的合约并进行提取。',
     // cn:'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。'
     fr:'EtherDelta utilise un nouveau smart contract. Allez au bas de page et permutez le avec l\'ancien s\'il vous reste du solde à retirer.',
-    es:'EtherDelta utiliza un nuevo contrato inteligente.
+    es:'EtherDelta utiliza un nuevo contrato inteligente.'
   },
   new_account:{
     en:'New account',
@@ -556,21 +556,21 @@ var translations = {
     en:'Maker',
     cn:'Maker',
     fr:'Teneurs',
-    fr:'Teneurs',
+    es:'Creador de mercado',
     
   },
   taker:{
     en:'Taker',
     cn:'Taker',
     fr:'Preneur',
-    fr:'Preneur',
+    es:'Comprador de mercado',
     
   },
   maker_vs_taker:{
     en:'Maker vs taker',
     cn:'Maker 与 Taker',
     fr:'Teneurs vs Preneur',
-    es:'Teneurs vs Preneur',
+    es:'Creador vs Comprador',
     
   },
   need_help:{
@@ -913,7 +913,7 @@ var translations = {
     en:'My transactions',
     cn:'我的交易',
     fr:'Mes transactions',
-    es:'Mes transactions'
+    es:'Meis transacciones'
   
   },
   or:{
