@@ -232,6 +232,11 @@ module.exports = {
       name: 'DICE',
       decimals: 16,
     },
+    {
+      addr: '0xe7775a6e9bcf904eb39da2b68c5efb4f9360e08c',
+      name: 'TAAS',
+      decimals: 6,
+    },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -258,6 +263,7 @@ module.exports = {
     { token: 'ETB', base: 'ETH' },
     { token: 'TRST', base: 'ETH' },
     { token: 'DICE', base: 'ETH' },
+    { token: 'TAAS', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
