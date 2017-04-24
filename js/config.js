@@ -238,6 +238,11 @@ module.exports = {
       name: 'TAAS',
       decimals: 6,
     },
+    {
+      addr: '0x6810e776880c02933d47db1b9fc05908e5386b96',
+      name: 'GNO',
+      decimals: 18,
+    },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -265,6 +270,7 @@ module.exports = {
     { token: 'TRST', base: 'ETH' },
     { token: 'DICE', base: 'ETH' },
     { token: 'TAAS', base: 'ETH' },
+    { token: 'GNO', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
