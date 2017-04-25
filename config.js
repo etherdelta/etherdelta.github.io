@@ -242,6 +242,11 @@ module.exports = {
       name: 'GNO',
       decimals: 18,
     },
+    {
+      addr: '0x599a4b8188676224d4c9b393b947e332b60b15e3',
+      name: 'VERI',
+      decimals: 18,
+    },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -272,5 +277,6 @@ module.exports = {
     { token: 'GNO', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
+    { token: 'VERI', base: 'ETH' },
   ],
 };
