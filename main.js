@@ -39,7 +39,8 @@ function EtherDelta() {
   this.secondsPerBlock = 14;
   this.usersWithOrdersToUpdate = {};
   this.apiServerNonce = undefined;
-  this.ordersResult = { orders: [], blockNumber: 0 };
+  this.ordersResultByPair = { orders: [], blockNumber: 0 };
+  this.topOrdersResult = { orders: [], blockNumber: 0 };
   this.selectedContract = undefined;
   this.web3 = undefined;
   this.startEtherDelta();
@@ -994,6 +995,88 @@ EtherDelta.prototype.getOrders = function getOrders(callback) {
     }
   });
 };
+EtherDelta.prototype.getOrdersByPair = function getOrdersByPair(tokenA, tokenB, callback) {
+  utility.getURL(`${this.config.apiServer}/orders/${this.apiServerNonce}/${tokenA}/${tokenB}`, (err, result) => {
+    if (!err) {
+      try {
+        const res = JSON.parse(result);
+        const blockNumber = res.blockNumber;
+        let orders;
+        if (Array.isArray(res.orders)) {
+          orders = res.orders;
+        } else {
+          orders = Object.values(res.orders);
+        }
+        orders.forEach((x) => {
+          Object.assign(x, {
+            price: new BigNumber(x.price),
+            // amount: new BigNumber(x.amount),
+            // availableVolume: new BigNumber(x.availableVolume),
+            // ethAvailableVolume: x.ethAvailableVolume,
+            order: Object.assign(x.order, {
+              amountGet: new BigNumber(x.order.amountGet),
+              amountGive: new BigNumber(x.order.amountGive),
+              expires: Number(x.order.expires),
+              nonce: Number(x.order.nonce),
+              tokenGet: x.order.tokenGet,
+              tokenGive: x.order.tokenGive,
+              user: x.order.user,
+              r: x.order.r,
+              s: x.order.s,
+              v: x.order.v ? Number(x.order.v) : undefined,
+            }),
+          });
+        });
+        callback(null, { orders, blockNumber });
+      } catch (errCatch) {
+        callback(err, undefined);
+      }
+    } else {
+      callback(err, undefined);
+    }
+  });
+};
+EtherDelta.prototype.getTopOrders = function getTopOrders(callback) {
+  utility.getURL(`${this.config.apiServer}/topOrders/${this.apiServerNonce}`, (err, result) => {
+    if (!err) {
+      try {
+        const res = JSON.parse(result);
+        const blockNumber = res.blockNumber;
+        let orders;
+        if (Array.isArray(res.orders)) {
+          orders = res.orders;
+        } else {
+          orders = Object.values(res.orders);
+        }
+        orders.forEach((x) => {
+          Object.assign(x, {
+            price: new BigNumber(x.price),
+            // amount: new BigNumber(x.amount),
+            // availableVolume: new BigNumber(x.availableVolume),
+            // ethAvailableVolume: x.ethAvailableVolume,
+            order: Object.assign(x.order, {
+              amountGet: new BigNumber(x.order.amountGet),
+              amountGive: new BigNumber(x.order.amountGive),
+              expires: Number(x.order.expires),
+              nonce: Number(x.order.nonce),
+              tokenGet: x.order.tokenGet,
+              tokenGive: x.order.tokenGive,
+              user: x.order.user,
+              r: x.order.r,
+              s: x.order.s,
+              v: x.order.v ? Number(x.order.v) : undefined,
+            }),
+          });
+        });
+        callback(null, { orders, blockNumber });
+      } catch (errCatch) {
+        callback(err, undefined);
+      }
+    } else {
+      callback(err, undefined);
+    }
+  });
+};
 EtherDelta.prototype.displayOrderbook = function displayOrderbook(ordersIn, blockNumber, callback) {
   // only look at orders for the selected token and base
   let orders = ordersIn.filter(
@@ -1876,7 +1959,7 @@ EtherDelta.prototype.selectToken = function selectToken(addrOrToken, name, decim
   const token = this.getToken(addrOrToken, name, decimals);
   if (token) {
     this.selectedToken = token;
-    this.ordersResult = { orders: [], blockNumber: 0 };
+    this.ordersResultByPair = { orders: [], blockNumber: 0 };
     this.loading(() => {});
     this.refresh(() => {}, true, true, this.selectedToken, this.selectedBase);
     ga('send', {
@@ -1891,7 +1974,7 @@ EtherDelta.prototype.selectBase = function selectBase(addrOrToken, name, decimal
   const base = this.getToken(addrOrToken, name, decimals);
   if (base) {
     this.selectedBase = base;
-    this.ordersResult = { orders: [], blockNumber: 0 };
+    this.ordersResultByPair = { orders: [], blockNumber: 0 };
     this.loading(() => {});
     this.refresh(() => {}, true, true, this.selectedToken, this.selectedBase);
     ga('send', {
@@ -1908,7 +1991,7 @@ EtherDelta.prototype.selectTokenAndBase = function selectTokenAndBase(tokenAddr,
   if (token && base) {
     this.selectedToken = token;
     this.selectedBase = base;
-    this.ordersResult = { orders: [], blockNumber: 0 };
+    this.ordersResultByPair = { orders: [], blockNumber: 0 };
     this.loading(() => {});
     this.refresh(() => {}, true, true, this.selectedToken, this.selectedBase);
     ga('send', {
@@ -2092,38 +2175,59 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
                 });
               },
               (callbackParallel) => {
-                this.getOrders((err, result) => {
-                  if (!err && result) {
-                    this.ordersResult = result;
-                  } else {
-                    console.log('Order book has not changed since last refresh.');
-                  }
-                  async.parallel(
-                    [
-                      (callbackParallel2) => {
-                        this.displayMyTransactions(
-                          this.ordersResult.orders,
-                          this.ordersResult.blockNumber,
-                          () => {
+                async.parallel(
+                  [
+                    (callbackParallel2) => {
+                      this.getTopOrders((err, result) => {
+                        if (!err && result) {
+                          this.topOrdersResult = result;
+                        } else {
+                          console.log('Top levels have not changed since last refresh.');
+                        }
+                        callbackParallel2(null, undefined);
+                      });
+                    },
+                    (callbackParallel2) => {
+                      this.getOrdersByPair(
+                      this.selectedToken.addr,
+                      this.selectedBase.addr,
+                      (err, result) => {
+                        if (!err && result) {
+                          this.ordersResultByPair = result;
+                        } else {
+                          console.log('Order book has not changed since last refresh.');
+                        }
+                        callbackParallel2(null, undefined);
+                      });
+                    },
+                  ],
+                  () => {
+                    async.parallel(
+                      [
+                        (callbackParallel2) => {
+                          this.displayMyTransactions(
+                            this.ordersResultByPair.orders,
+                            this.ordersResultByPair.blockNumber,
+                            () => {
+                              callbackParallel2(null, undefined);
+                            });
+                        },
+                        (callbackParallel2) => {
+                          this.displayOrderbook(this.ordersResultByPair.orders,
+                          this.ordersResultByPair.blockNumber, () => {
                             callbackParallel2(null, undefined);
                           });
-                      },
-                      (callbackParallel2) => {
-                        this.displayOrderbook(this.ordersResult.orders,
-                        this.ordersResult.blockNumber, () => {
-                          callbackParallel2(null, undefined);
-                        });
-                      },
-                      (callbackParallel2) => {
-                        this.displayVolumes(this.ordersResult.orders,
-                        this.ordersResult.blockNumber, () => {
-                          callbackParallel2(null, undefined);
-                        });
-                      }],
-                    () => {
-                      callbackParallel(null, undefined);
-                    });
-                });
+                        },
+                        (callbackParallel2) => {
+                          this.displayVolumes(this.topOrdersResult.orders,
+                          this.topOrdersResult.blockNumber, () => {
+                            callbackParallel2(null, undefined);
+                          });
+                        }],
+                      () => {
+                        callbackParallel(null, undefined);
+                      });
+                  });
               }],
             () => {
               callbackSeries(null, undefined);

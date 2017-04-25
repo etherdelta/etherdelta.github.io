@@ -707,7 +707,7 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                       order.order.s,
                     ],
                     (errFilled, resultFilled) => {
-                      if (!errFilled) {
+                      if (!errFilled && resultFilled) {
                         const amountFilled = resultFilled;
                         if (amountFilled.lessThan(order.order.amountGet)) {
                           order.updated = new Date();
@@ -745,6 +745,57 @@ API.updateOrder = function updateOrder(orderIn, callback) {
       callback('Expired', undefined);
     }
   });
+};
+
+/*
+sell EDG/ETH, tokenGive: EDG, tokenGet: ETH 0.23
+  buy: amount +, price: 1/0.23
+  sell: amount -, price: 0.23
+sell EDG/ETH, tokenGive: EDG, tokenGet: ETH 0.20
+  buy: amount +, price: 1/0.20
+  sell: amount -, price: 0.20
+buy EDG/ETH, tokenGive: ETH, tokenGet: EDG 0.15
+  buy: amount +, price: 0.15
+  sell: amount -, price/0.15
+buy EDG/ETH, tokenGive: ETH, tokenGet: EDG 0.12
+  buy: amount +, price: 0.12
+  sell: amount -, price/0.12
+*/
+API.getTopOrders = function getTopOrders() {
+  const buys = {};
+  const sells = {};
+  Object.keys(API.ordersCache).forEach((key) => {
+    const order = API.ordersCache[key];
+    const keyKind = key.split('_')[1];
+    const tokenPair = `${order.order.tokenGive}/${order.order.tokenGet}_${keyKind}`;
+    if (keyKind === 'buy') {
+      if (!buys[tokenPair]) {
+        buys[tokenPair] = order;
+      } else if (Number(order.price) > Number(buys[tokenPair].price)) {
+        buys[tokenPair] = order;
+      }
+    } else if (keyKind === 'sell') {
+      if (!sells[tokenPair]) {
+        sells[tokenPair] = order;
+      } else if (Number(order.price) < Number(sells[tokenPair].price)) {
+        sells[tokenPair] = order;
+      }
+    }
+  });
+  const orders = Object.values(buys).concat(Object.values(sells));
+  return orders;
+};
+
+API.getOrdersByPair = function getOrdersByPair(tokenA, tokenB) {
+  const orders = [];
+  Object.keys(API.ordersCache).forEach((key) => {
+    const order = API.ordersCache[key];
+    if ((order.order.tokenGive === tokenA && order.order.tokenGet === tokenB)
+    || (order.order.tokenGive === tokenB && order.order.tokenGet === tokenA)) {
+      orders.push(order);
+    }
+  });
+  return orders;
 };
 
 API.getOrdersRemote = function getOrdersRemote(callback) {
