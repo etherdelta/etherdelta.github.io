@@ -62,7 +62,7 @@ API.init = function init(callback, allContracts, path, provider) {
     this.ordersCache = {};
     this.usersWithOrdersToUpdate = {};
     this.blockTimeSnapshot = undefined;
-    this.minOrderSize = 0.1;
+    this.minOrderSize = 0.01;
     this.pricesCache = undefined;
     this.nonce = undefined;
 
@@ -679,6 +679,12 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                   order.ethAvailableVolume = utility.weiToEth(
                     Math.abs(order.availableVolume),
                     API.getDivisor(order.order.tokenGet));
+                  order.availableVolumeBase = Math.abs(availableVolume
+                    .mul(order.price)
+                    .mul(API.getDivisor(order.order.tokenGive))
+                    .div(API.getDivisor(order.order.tokenGet)));
+                  order.ethAvailableVolumeBase = utility.weiToEth(order.availableVolumeBase,
+                    API.getDivisor(order.order.tokenGive));
                 } else {
                   order.availableVolume = availableVolume
                     .div(order.price)
@@ -687,8 +693,13 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                   order.ethAvailableVolume = utility.weiToEth(
                     Math.abs(order.availableVolume),
                     API.getDivisor(order.order.tokenGive));
+                  order.availableVolumeBase = Math.abs(availableVolume);
+                  order.ethAvailableVolumeBase = utility.weiToEth(
+                    order.availableVolumeBase,
+                    API.getDivisor(order.order.tokenGet));
                 }
-                if (Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize) {
+                if (Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+                Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize) {
                   utility.call(
                     this.web3,
                     this.contractEtherDelta,

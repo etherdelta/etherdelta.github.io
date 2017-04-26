@@ -1499,7 +1499,7 @@ function EtherDelta() {
   this.pendingTransactions = [];
   this.defaultdecimals = new BigNumber(1000000000000000000);
   this.language = 'en';
-  this.minOrderSize = 0.1;
+  this.minOrderSize = 0.01;
   this.messageToSend = undefined;
   this.blockTimeSnapshot = { blockNumber: 3154928, date: new Date('Feb-10-2017 01:40:47') }; // default snapshot
   this.translator = undefined;
@@ -1665,7 +1665,8 @@ EtherDelta.prototype.alertTxResult = function alertTxResult(err, txsIn) {
     });
   }
 };
-EtherDelta.prototype.enableTooltips = function enableTooltips() {
+EtherDelta.prototype.enableTooltipsAndPopovers = function enableTooltipsAndPopovers() {
+  $('[data-toggle="popover"]').popover({ trigger: 'hover' });
   $('[data-toggle="tooltip"]').tooltip();
 };
 EtherDelta.prototype.logout = function logout() {
@@ -2159,8 +2160,9 @@ EtherDelta.prototype.displayVolumes = function displayVolumes(orders, blockNumbe
         (x.order.tokenGet === token.addr && x.order.tokenGive === base.addr && x.amount > 0) ||
         (x.order.tokenGive === token.addr && x.order.tokenGet === base.addr && x.amount < 0));
     // remove orders below the min order limit
-    ordersFiltered = ordersFiltered.filter(
-      order => Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize);
+    ordersFiltered = ordersFiltered.filter(order =>
+      Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+      Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize);
     // filter only orders that match the smart contract address
     ordersFiltered = ordersFiltered.filter(
       order => order.order.contractAddr === this.config.contractEtherDeltaAddr);
@@ -2555,7 +2557,9 @@ EtherDelta.prototype.displayOrderbook = function displayOrderbook(ordersIn, bloc
         x.order.tokenGet === this.selectedBase.addr &&
         x.amount < 0));
   // remove orders below the min order limit
-  orders = orders.filter(order => Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize);
+  orders = orders.filter(order =>
+    Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+    Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize);
   // filter only orders that match the smart contract address
   orders = orders.filter(order => order.order.contractAddr === this.config.contractEtherDeltaAddr);
   // final order filtering and sorting
@@ -2730,27 +2734,38 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
     // plain Ether transfer
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, balance) => {
       if (amount > balance) amount = balance;
-      utility.send(
-        this.web3,
-        undefined,
-        toAddr,
-        undefined,
-        [{ gas: this.config.gasDeposit, value: amount }],
-        this.addrs[this.selectedAccount],
-        this.pks[this.selectedAccount],
-        this.nonce,
-        (errSend, result) => {
-          this.nonce = result.nonce;
-          this.addPending(errSend, { txHash: result.txHash });
-          this.alertTxResult(errSend, result);
-          ga('send', {
-            hitType: 'event',
-            eventCategory: 'Action',
-            eventAction: 'Transfer',
-            eventLabel: token.name,
-            eventValue: inputAmount,
-          });
+      if (amount <= 0) {
+        this.alertError('You do not have anything to transfer. Note: you can only transfer from your "Wallet." If you have Ether on deposit, please withdraw first, then transfer.');
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Transfer - nothing to transfer',
+          eventLabel: token.name,
+          eventValue: inputAmount,
         });
+      } else {
+        utility.send(
+          this.web3,
+          undefined,
+          toAddr,
+          undefined,
+          [{ gas: this.config.gasDeposit, value: amount }],
+          this.addrs[this.selectedAccount],
+          this.pks[this.selectedAccount],
+          this.nonce,
+          (errSend, result) => {
+            this.nonce = result.nonce;
+            this.addPending(errSend, { txHash: result.txHash });
+            this.alertTxResult(errSend, result);
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'Action',
+              eventAction: 'Transfer',
+              eventLabel: token.name,
+              eventValue: inputAmount,
+            });
+          });
+      }
     });
   } else {
     // token transfer
@@ -2762,27 +2777,38 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
       [this.addrs[this.selectedAccount]],
       (err, result) => {
         if (amount > result) amount = result;
-        utility.send(
-          this.web3,
-          this.contractToken,
-          token.addr,
-          'transfer',
-          [toAddr, amount, { gas: this.config.gasDeposit, value: 0 }],
-          this.addrs[this.selectedAccount],
-          this.pks[this.selectedAccount],
-          this.nonce,
-          (errSend, resultSend) => {
-            this.nonce = resultSend.nonce;
-            this.addPending(errSend, { txHash: resultSend.txHash });
-            this.alertTxResult(errSend, resultSend);
-            ga('send', {
-              hitType: 'event',
-              eventCategory: 'Action',
-              eventAction: 'Transfer',
-              eventLabel: token.name,
-              eventValue: inputAmount,
-            });
+        if (amount <= 0) {
+          this.alertError('You do not have anything to transfer. Note: you can only transfer from your "Wallet." If you have tokens on deposit, please withdraw first, then transfer.');
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'Error',
+            eventAction: 'Transfer - nothing to transfer',
+            eventLabel: token.name,
+            eventValue: inputAmount,
           });
+        } else {
+          utility.send(
+            this.web3,
+            this.contractToken,
+            token.addr,
+            'transfer',
+            [toAddr, amount, { gas: this.config.gasDeposit, value: 0 }],
+            this.addrs[this.selectedAccount],
+            this.pks[this.selectedAccount],
+            this.nonce,
+            (errSend, resultSend) => {
+              this.nonce = resultSend.nonce;
+              this.addPending(errSend, { txHash: resultSend.txHash });
+              this.alertTxResult(errSend, resultSend);
+              ga('send', {
+                hitType: 'event',
+                eventCategory: 'Action',
+                eventAction: 'Transfer',
+                eventLabel: token.name,
+                eventValue: inputAmount,
+              });
+            });
+        }
       });
   }
 };
@@ -3023,8 +3049,8 @@ EtherDelta.prototype.publishOrder = function publishOrder(
       eventLabel: `${this.selectedToken.name}/${this.selectedBase.name}`,
     });
     return;
-  } else if (amount < this.minOrderSize) {
-    this.alertError(`The minimum order size is ${this.minOrderSize}.`);
+  } else if (amount < this.minOrderSize || amount * price < this.minOrderSize) {
+    this.alertError(`The minimum order size (for both tokens in your order) is ${this.minOrderSize}.`);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Error',
@@ -3478,6 +3504,7 @@ EtherDelta.prototype.displayBuySell = function displayBuySell(callback) {
     selectedToken: this.selectedToken,
     selectedBase: this.selectedBase,
   });
+  this.enableTooltipsAndPopovers();
   callback();
 };
 EtherDelta.prototype.displayTokenGuidesDropdown = function displayTokenGuidesDropdown() {
@@ -101552,6 +101579,12 @@ module.exports = {
     cn: '说明视频',
     fr: 'How-to videos',
     es: 'A ver las videos',
+  },
+  expires_explanation: {
+    en: 'The number of Ethereum blocks until the order automatically expires. 10000 = 1 day.',
+    cn: '直到订单自动过期的Etherem块的数量。 10000 = 1天。',
+    fr: 'Le nombre de blocs Ethereum jusqu\'à ce que l\'ordre expire automatiquement. 10000 = 1 jour.',
+    es: 'El número de bloques Ethereum hasta que el pedido expire automáticamente. 10000 = 1 día.',
   },
   FAQ: {
     en: 'FAQ',
