@@ -247,6 +247,11 @@ module.exports = {
       name: 'WINGS',
       decimals: 18,
     },
+    {
+      addr: '0x22a3B451d60A72388a37c97Bc517E44ad76A50F7',
+      name: 'XBTY',
+      decimals: 18,
+    },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -276,6 +281,7 @@ module.exports = {
     { token: 'TAAS', base: 'ETH' },
     { token: 'GNO', base: 'ETH' },
     { token: 'WINGS', base: 'ETH' },
+    { token: 'XBTY', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
