@@ -1430,6 +1430,11 @@ module.exports = {
       name: 'GNO',
       decimals: 18,
     },
+    {
+      addr: '0x667088b212ce3d06a1b553a7221e1fd19000d9af',
+      name: 'WINGS',
+      decimals: 18,
+    },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1458,6 +1463,7 @@ module.exports = {
     { token: 'DICE', base: 'ETH' },
     { token: 'TAAS', base: 'ETH' },
     { token: 'GNO', base: 'ETH' },
+    { token: 'WINGS', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
