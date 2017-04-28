@@ -1838,7 +1838,7 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
   utility.blockNumber(this.web3, (err, blockNumber) => {
     this.blockTimeSnapshot = { blockNumber, date: new Date() };
     const startBlock = blockNumber - ((86400 * 7) / this.secondsPerBlock); // Approximately 7 days
-    let lastBlock = 0;
+    let lastBlock = startBlock;
     Object.keys(this.eventsCache).forEach((id) => {
       const event = this.eventsCache[id];
       if (event.blockNumber > lastBlock && event.address === this.config.contractEtherDeltaAddr) {
@@ -1891,7 +1891,7 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
       (errNewEvents, newEventsArr) => {
         const newEvents = newEventsArr.reduce((a, b) => a + b, 0);
         // utility.createCookie(this.config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
-        utility.createCookie(this.config.eventsCacheCookie, JSON.stringify({}), 999);
+        // utility.createCookie(this.config.eventsCacheCookie, JSON.stringify({}), 999);
         callback(newEvents);
       });
   });
