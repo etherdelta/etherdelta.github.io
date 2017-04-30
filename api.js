@@ -758,20 +758,6 @@ API.updateOrder = function updateOrder(orderIn, callback) {
   });
 };
 
-/*
-sell EDG/ETH, tokenGive: EDG, tokenGet: ETH 0.23
-  buy: amount +, price: 1/0.23
-  sell: amount -, price: 0.23
-sell EDG/ETH, tokenGive: EDG, tokenGet: ETH 0.20
-  buy: amount +, price: 1/0.20
-  sell: amount -, price: 0.20
-buy EDG/ETH, tokenGive: ETH, tokenGet: EDG 0.15
-  buy: amount +, price: 0.15
-  sell: amount -, price/0.15
-buy EDG/ETH, tokenGive: ETH, tokenGet: EDG 0.12
-  buy: amount +, price: 0.12
-  sell: amount -, price/0.12
-*/
 API.getTopOrders = function getTopOrders() {
   const buys = {};
   const sells = {};
@@ -779,17 +765,20 @@ API.getTopOrders = function getTopOrders() {
     const order = API.ordersCache[key];
     const keyKind = key.split('_')[1];
     const tokenPair = `${order.order.tokenGive}/${order.order.tokenGet}_${keyKind}`;
-    if (keyKind === 'buy') {
-      if (!buys[tokenPair]) {
-        buys[tokenPair] = order;
-      } else if (Number(order.price) > Number(buys[tokenPair].price)) {
-        buys[tokenPair] = order;
-      }
-    } else if (keyKind === 'sell') {
-      if (!sells[tokenPair]) {
-        sells[tokenPair] = order;
-      } else if (Number(order.price) < Number(sells[tokenPair].price)) {
-        sells[tokenPair] = order;
+    if (Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+    Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize) {
+      if (keyKind === 'buy') {
+        if (!buys[tokenPair]) {
+          buys[tokenPair] = order;
+        } else if (Number(order.price) > Number(buys[tokenPair].price)) {
+          buys[tokenPair] = order;
+        }
+      } else if (keyKind === 'sell') {
+        if (!sells[tokenPair]) {
+          sells[tokenPair] = order;
+        } else if (Number(order.price) < Number(sells[tokenPair].price)) {
+          sells[tokenPair] = order;
+        }
       }
     }
   });
