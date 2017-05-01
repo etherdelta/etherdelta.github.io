@@ -68,20 +68,28 @@
       var $this = $(this);
 
       var trn_key = $this.attr("data-trn-key");
+      var trn_key_placeholder = $this.attr("data-trn-key-placeholder");
+      var trn_key_data_content = $this.attr("data-trn-key-data-content");
 
       if ($this.attr("placeholder")) {
-        if (!trn_key) {
-          trn_key = $this.attr("placeholder");
-          $this.attr("data-trn-key", trn_key);   //store key for next time
+        if (!trn_key_placeholder) {
+          trn_key_placeholder = $this.attr("placeholder");
+          $this.attr("data-trn-key-placeholder", trn_key_placeholder);   //store key for next time
         }
-        $this.attr("placeholder", that.get(trn_key));
-      } else {
-        if (!trn_key) {
-          trn_key = $this.html();
-          $this.attr("data-trn-key", trn_key);   //store key for next time
-        }
-        $this.html(that.get(trn_key));
+        $this.attr("placeholder", that.get(trn_key_placeholder));
       }
+      if ($this.attr("data-content")) {
+        if (!trn_key_data_content) {
+          trn_key_data_content = $this.attr("data-content");
+          $this.attr("data-trn-key-data-content", trn_key_data_content);   //store key for next time
+        }
+        $this.attr("data-content", that.get(trn_key_data_content));
+      }
+      if (!trn_key) {
+        trn_key = $this.html();
+        $this.attr("data-trn-key", trn_key);   //store key for next time
+      }
+      $this.html(that.get(trn_key));
     });
 
 

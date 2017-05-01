@@ -62,7 +62,7 @@ API.init = function init(callback, allContracts, path, provider) {
     this.ordersCache = {};
     this.usersWithOrdersToUpdate = {};
     this.blockTimeSnapshot = undefined;
-    this.minOrderSize = 0.1;
+    this.minOrderSize = 0.01;
     this.pricesCache = undefined;
     this.nonce = undefined;
 
@@ -679,6 +679,12 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                   order.ethAvailableVolume = utility.weiToEth(
                     Math.abs(order.availableVolume),
                     API.getDivisor(order.order.tokenGet));
+                  order.availableVolumeBase = Math.abs(availableVolume
+                    .mul(order.price)
+                    .mul(API.getDivisor(order.order.tokenGive))
+                    .div(API.getDivisor(order.order.tokenGet)));
+                  order.ethAvailableVolumeBase = utility.weiToEth(order.availableVolumeBase,
+                    API.getDivisor(order.order.tokenGive));
                 } else {
                   order.availableVolume = availableVolume
                     .div(order.price)
@@ -687,8 +693,13 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                   order.ethAvailableVolume = utility.weiToEth(
                     Math.abs(order.availableVolume),
                     API.getDivisor(order.order.tokenGive));
+                  order.availableVolumeBase = Math.abs(availableVolume);
+                  order.ethAvailableVolumeBase = utility.weiToEth(
+                    order.availableVolumeBase,
+                    API.getDivisor(order.order.tokenGet));
                 }
-                if (Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize) {
+                if (Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+                Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize) {
                   utility.call(
                     this.web3,
                     this.contractEtherDelta,
@@ -707,7 +718,7 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                       order.order.s,
                     ],
                     (errFilled, resultFilled) => {
-                      if (!errFilled) {
+                      if (!errFilled && resultFilled) {
                         const amountFilled = resultFilled;
                         if (amountFilled.lessThan(order.order.amountGet)) {
                           order.updated = new Date();
@@ -745,6 +756,46 @@ API.updateOrder = function updateOrder(orderIn, callback) {
       callback('Expired', undefined);
     }
   });
+};
+
+API.getTopOrders = function getTopOrders() {
+  const buys = {};
+  const sells = {};
+  Object.keys(API.ordersCache).forEach((key) => {
+    const order = API.ordersCache[key];
+    const keyKind = key.split('_')[1];
+    const tokenPair = `${order.order.tokenGive}/${order.order.tokenGet}_${keyKind}`;
+    if (Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+    Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize) {
+      if (keyKind === 'buy') {
+        if (!buys[tokenPair]) {
+          buys[tokenPair] = order;
+        } else if (Number(order.price) > Number(buys[tokenPair].price)) {
+          buys[tokenPair] = order;
+        }
+      } else if (keyKind === 'sell') {
+        if (!sells[tokenPair]) {
+          sells[tokenPair] = order;
+        } else if (Number(order.price) < Number(sells[tokenPair].price)) {
+          sells[tokenPair] = order;
+        }
+      }
+    }
+  });
+  const orders = Object.values(buys).concat(Object.values(sells));
+  return orders;
+};
+
+API.getOrdersByPair = function getOrdersByPair(tokenA, tokenB) {
+  const orders = [];
+  Object.keys(API.ordersCache).forEach((key) => {
+    const order = API.ordersCache[key];
+    if ((order.order.tokenGive === tokenA && order.order.tokenGet === tokenB)
+    || (order.order.tokenGive === tokenB && order.order.tokenGet === tokenA)) {
+      orders.push(order);
+    }
+  });
+  return orders;
 };
 
 API.getOrdersRemote = function getOrdersRemote(callback) {
