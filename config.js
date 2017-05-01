@@ -247,6 +247,16 @@ module.exports = {
       name: 'VERI',
       decimals: 18,
     },
+    {
+      addr: '0x667088b212ce3d06a1b553a7221e1fd19000d9af',
+      name: 'WINGS',
+      decimals: 18,
+    },
+    {
+      addr: '0xfa05a73ffe78ef8f1a739473e462c54bae6567d9',
+      name: 'LUN',
+      decimals: 18,
+    },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -275,6 +285,8 @@ module.exports = {
     { token: 'DICE', base: 'ETH' },
     { token: 'TAAS', base: 'ETH' },
     { token: 'GNO', base: 'ETH' },
+    { token: 'WINGS', base: 'ETH' },
+    { token: 'LUN', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
     { token: 'VERI', base: 'ETH' },
