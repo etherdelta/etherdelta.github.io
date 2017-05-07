@@ -399,7 +399,7 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
     for (let b = blockNumber; b > lastBlock; b -= blockInterval) {
       searches.push([Math.max(lastBlock, b - blockInterval), b]);
     }
-    async.map(
+    async.mapSeries(
       searches,
       (searchRange, callbackMap) => {
         utility.logsOnce(
