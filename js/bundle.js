@@ -3041,7 +3041,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
                   });
                 } else {
                   this.alertError(
-                    `You tried sending an order to the order book but there was an error...`);
+                    'You tried sending an order to the order book but there was an error...');
                   ga('send', {
                     hitType: 'event',
                     eventCategory: 'Error',
@@ -3655,6 +3655,7 @@ EtherDelta.prototype.loadWeb3 = function loadWeb3(callback) {
   if (typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
     // metamask situation
     this.web3 = new Web3(web3.currentProvider);
+    console.log('Connecting to MetaMask', web3.currentProvider);
     async.until(
       () => this.connection,
       (callbackUntil) => {
@@ -3673,6 +3674,7 @@ EtherDelta.prototype.loadWeb3 = function loadWeb3(callback) {
       });
   } else if (typeof Web3 !== 'undefined' && window.location.protocol !== 'https:') {
     // mist/geth/parity situation
+    console.log('Connecting to Mist/Geth/Parity');
     this.web3 = new Web3(new Web3.providers.HttpProvider(this.config.ethProvider));
     try {
       this.connection = { connection: 'RPC', provider: this.config.ethProvider, testnet: this.config.ethTestnet };
@@ -3690,6 +3692,7 @@ EtherDelta.prototype.loadWeb3 = function loadWeb3(callback) {
     callback();
   } else {
     // etherscan proxy
+    console.log('Connecting to Etherscan proxy');
     this.web3 = new Web3();
     this.connection = {
       connection: 'Proxy',
