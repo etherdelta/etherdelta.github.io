@@ -243,11 +243,6 @@ module.exports = {
       decimals: 18,
     },
     {
-      addr: '0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374',
-      name: 'VERI',
-      decimals: 18,
-    },
-    {
       addr: '0x667088b212ce3d06a1b553a7221e1fd19000d9af',
       name: 'WINGS',
       decimals: 18,
@@ -289,6 +284,5 @@ module.exports = {
     { token: 'LUN', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
-    { token: 'VERI', base: 'ETH' },
   ],
 };
