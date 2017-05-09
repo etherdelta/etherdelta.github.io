@@ -67,10 +67,10 @@ module.exports = {
     es: 'A ver las videos',
   },
   expires_explanation: {
-    en: 'The number of Ethereum blocks until the order automatically expires. 10000 = 1 day.',
-    cn: '直到订单自动过期的Etherem块的数量。 10000 = 1天。',
-    fr: 'Le nombre de blocs Ethereum jusqu\'à ce que l\'ordre expire automatiquement. 10000 = 1 jour.',
-    es: 'El número de bloques Ethereum hasta que el pedido expire automáticamente. 10000 = 1 día.',
+    en: 'The number of Ethereum blocks until the order automatically expires. (14 seconds per block.)',
+    cn: '直到订单自动过期的Etherem块的数量。 (每个块都是14秒。)',
+    fr: 'Le nombre de blocs Ethereum jusqu\'à ce que l\'ordre expire automatiquement. (Chaque bloc est de 14 secondes.)',
+    es: 'El número de bloques Ethereum hasta que el pedido expire automáticamente. (Cada bloque es de 14 segundos.)',
   },
   FAQ: {
     en: 'FAQ',

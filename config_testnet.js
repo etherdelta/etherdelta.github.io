@@ -1,0 +1,41 @@
+/* eslint-env browser */
+
+module.exports = {
+  homeURL: 'http://localhost:8080',
+  contractEtherDelta: 'smart_contract/etherdelta.sol',
+  contractToken: 'smart_contract/token.sol',
+  contractReserveToken: 'smart_contract/reservetoken.sol',
+  contractEtherDeltaAddrs: [
+    { addr: '0x228344536a03c0910fb8be9c2755c1a0ba6f89e1', info: 'Deployed 02/09/2017' },
+    { addr: '0xf80cd360e96fa96b8b7d9e95d5a7911ac5f09ec2', info: 'Deployed 10/24/2016' },
+    { addr: '0xcdd152384c55dd4e5b5a3128cc90e0d9311570de', info: 'Deployed 10/06/2016' },
+    { addr: '0x24b0ed7ba8d6d969bfe8409b4e6aeee3a40f8855', info: 'Deployed 08/03/2016' },
+    { addr: '0x91739eeb4f3600442ea6a42c43f7fa8cd8f78a3d', info: 'Deployed 06/30/2016' },
+    { addr: '0x0000000000000000000000000000000000000000', info: 'Zero contract' },
+  ],
+  ethTestnet: 'ropsten',
+  ethProvider: 'http://localhost:8545',
+  ethGasPrice: 20000000000,
+  ethAddr: '0x0000000000000000000000000000000000000000',
+  ethAddrPrivateKey: '',
+  gasApprove: 250000,
+  gasDeposit: 250000,
+  gasWithdraw: 250000,
+  gasTrade: 250000,
+  gasOrder: 250000,
+  ordersOnchain: false,
+  apiServer: 'http://localhost:3000',
+  userCookie: 'EtherDelta',
+  eventsCacheCookie: 'EtherDelta_eventsCache',
+  deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
+  ordersCacheCookie: 'EtherDelta_ordersCache',
+  etherscanAPIKey: 'GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE',
+  tokens: [
+    { addr: '0x0000000000000000000000000000000000000000', name: 'ETH', decimals: 18 },
+    { addr: '0x40aade55175aaeed9c88612c3ed2ff91d8943964', name: '1ST', decimals: 18 },
+  ],
+  defaultPair: { token: '1ST', base: 'ETH' },
+  pairs: [
+    { token: '1ST', base: 'ETH' },
+  ],
+};

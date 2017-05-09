@@ -3,7 +3,7 @@
 /* eslint max-len: ["error", 300] */
 
 const config = require('./config.js');
-const utility = require('./common/utility.js');
+const utility = require('./common/utility.js')(config);
 const Web3 = require('web3');
 const assert = require('assert');
 const TestRPC = require('ethereumjs-testrpc');
