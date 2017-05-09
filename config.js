@@ -72,6 +72,7 @@ module.exports = {
     { addr: '0x667088b212ce3d06a1b553a7221e1fd19000d9af', name: 'WINGS', decimals: 18 },
     { addr: '0xfa05a73ffe78ef8f1a739473e462c54bae6567d9', name: 'LUN', decimals: 18 },
     { addr: '0xaaaf91d9b90df800df4f55c205fd6989c977e73a', name: 'TKN', decimals: 8 },
+    { addr: '0x599a4b8188676224d4c9b393b947e332b60b15e3', name: 'VERI', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -105,5 +106,6 @@ module.exports = {
     { token: 'TKN', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
+    { token: 'VERI', base: 'ETH' },
   ],
 };
