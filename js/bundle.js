@@ -809,8 +809,7 @@ module.exports = (config) => {
         // these nodes still use old-style eth_sign
         if (
           node &&
-          (node.match('Parity') ||
-            node.match('TestRPC') ||
+          (node.match('TestRPC') ||
             node.match('MetaMask'))
         ) {
           msgToSign = prefixMessage(msgToSign);
@@ -819,19 +818,14 @@ module.exports = (config) => {
           if (err) {
             callback('Failed to sign message', undefined);
           } else {
-            const sig = ethUtil.fromRpcSig(sigResult);
-            let msg;
-            if (
-              node &&
-              (node.match('Parity') ||
-                node.match('TestRPC') ||
-                node.match('MetaMask'))
-            ) {
-              msg = msgToSign;
+            let sigHash;
+            if (node.match('Parity')) {
+              sigHash = `0x${sigResult.substr(4, 64)}${sigResult.substr(68, 64)}${sigResult.substr(2, 2)}`;
             } else {
-              msg = prefixMessage(msgToSign);
+              sigHash = sigResult;
             }
-            msg = new Buffer(msg.slice(2), 'hex');
+            const sig = ethUtil.fromRpcSig(sigHash);
+            const msg = new Buffer(msgToSign.slice(2), 'hex');
             if (testSig(msg, sig, address)) {
               const r = `0x${sig.r.toString('hex')}`;
               const s = `0x${sig.s.toString('hex')}`;
