@@ -3292,7 +3292,9 @@ EtherDelta.prototype.getDivisor = function getDivisor(tokenOrAddress) {
 };
 EtherDelta.prototype.getToken = function getToken(addrOrToken, name, decimals) {
   let result;
-  const matchingTokens = this.config.tokens.filter(x => x.addr === addrOrToken ||
+  const lowerAddrOrToken = typeof addrOrToken === 'string' ? addrOrToken.toLowerCase() : addrOrToken;
+  const matchingTokens = this.config.tokens.filter(
+    x => x.addr.toLowerCase() === lowerAddrOrToken ||
     x.name === addrOrToken);
   const expectedKeys = JSON.stringify([
     'addr',
@@ -3301,15 +3303,15 @@ EtherDelta.prototype.getToken = function getToken(addrOrToken, name, decimals) {
   ]);
   if (matchingTokens.length > 0) {
     result = matchingTokens[0];
-  } else if (this.selectedToken.addr === addrOrToken) {
+  } else if (this.selectedToken.addr.toLowerCase() === lowerAddrOrToken) {
     result = this.selectedToken;
-  } else if (this.selectedBase.addr === addrOrToken) {
+  } else if (this.selectedBase.addr.toLowerCase() === lowerAddrOrToken) {
     result = this.selectedBase;
   } else if (addrOrToken.addr && JSON.stringify(Object.keys(addrOrToken).sort()) === expectedKeys) {
     result = addrOrToken;
   } else if (addrOrToken.slice(0, 2) === '0x' && name && decimals >= 0) {
     result = JSON.parse(JSON.stringify(this.config.tokens[0]));
-    result.addr = addrOrToken;
+    result.addr = lowerAddrOrToken;
     result.name = name;
     result.decimals = decimals;
   }
@@ -3322,7 +3324,7 @@ EtherDelta.prototype.loadToken = function loadToken(addr, callback) {
   } else {
     token = JSON.parse(JSON.stringify(this.config.tokens[0]));
     if (addr.slice(0, 2) === '0x') {
-      token.addr = addr;
+      token.addr = addr.toLowerCase();
       utility.call(this.web3, this.contractToken, token.addr, 'decimals', [], (err, result) => {
         if (!err && result >= 0) token.decimals = result.toNumber();
         utility.call(this.web3, this.contractToken, token.addr, 'name', [], (errName, resultName) => {
