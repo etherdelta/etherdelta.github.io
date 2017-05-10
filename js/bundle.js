@@ -1784,11 +1784,11 @@ function displayMyTransactions(ordersIn, blockNumber, callback) {
   // only look at orders for the selected token and base
   let orders = ordersIn.filter(
     x =>
-      (x.order.tokenGet === this.selectedToken.addr &&
-        x.order.tokenGive === this.selectedBase.addr &&
+      (x.order.tokenGet.toLowerCase() === this.selectedToken.addr.toLowerCase() &&
+        x.order.tokenGive.toLowerCase() === this.selectedBase.addr.toLowerCase() &&
         x.amount > 0) ||
-      (x.order.tokenGive === this.selectedToken.addr &&
-        x.order.tokenGet === this.selectedBase.addr &&
+      (x.order.tokenGive.toLowerCase() === this.selectedToken.addr.toLowerCase() &&
+        x.order.tokenGet.toLowerCase() === this.selectedBase.addr.toLowerCase() &&
         x.amount < 0));
   // only include orders by the selected user
   orders = orders.filter(
@@ -1815,8 +1815,8 @@ function displayMyTransactions(ordersIn, blockNumber, callback) {
         if (event.args.amountGive.toNumber() > 0 && event.args.amountGet.toNumber() > 0) {
           // don't show trades involving 0 amounts
           if (
-            event.args.tokenGet === this.selectedToken.addr &&
-            event.args.tokenGive === this.selectedBase.addr
+            event.args.tokenGet.toLowerCase() === this.selectedToken.addr.toLowerCase() &&
+            event.args.tokenGive.toLowerCase() === this.selectedBase.addr.toLowerCase()
           ) {
             // sell
             trade = {
@@ -1829,8 +1829,8 @@ function displayMyTransactions(ordersIn, blockNumber, callback) {
               seller: event.args.give,
             };
           } else if (
-            event.args.tokenGet === this.selectedBase.addr &&
-            event.args.tokenGive === this.selectedToken.addr
+            event.args.tokenGet.toLowerCase() === this.selectedBase.addr.toLowerCase() &&
+            event.args.tokenGive.toLowerCase() === this.selectedToken.addr.toLowerCase()
           ) {
             // buy
             trade = {
@@ -2046,8 +2046,10 @@ EtherDelta.prototype.displayVolumes = function displayVolumes(orders, blockNumbe
     // only look at orders for the selected token and base
     let ordersFiltered = orders.filter(
       x =>
-        (x.order.tokenGet === token.addr && x.order.tokenGive === base.addr && x.amount > 0) ||
-        (x.order.tokenGive === token.addr && x.order.tokenGet === base.addr && x.amount < 0));
+        (x.order.tokenGet.toLowerCase() === token.addr.toLowerCase() &&
+        x.order.tokenGive.toLowerCase() === base.addr.toLowerCase() && x.amount > 0) ||
+        (x.order.tokenGive.toLowerCase() === token.addr.toLowerCase() &&
+        x.order.tokenGet.toLowerCase() === base.addr.toLowerCase() && x.amount < 0));
     // remove orders below the min order limit
     ordersFiltered = ordersFiltered.filter(order =>
       Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
@@ -2085,8 +2087,8 @@ EtherDelta.prototype.displayTradesAndChart = function displayTradesAndChart(call
         // don't show trades involving 0 amounts
         let trade;
         if (
-          event.args.tokenGet === this.selectedToken.addr &&
-          event.args.tokenGive === this.selectedBase.addr
+          event.args.tokenGet.toLowerCase() === this.selectedToken.addr.toLowerCase() &&
+          event.args.tokenGive.toLowerCase() === this.selectedBase.addr.toLowerCase()
         ) {
           // sell
           trade = {
@@ -2101,8 +2103,8 @@ EtherDelta.prototype.displayTradesAndChart = function displayTradesAndChart(call
             seller: event.args.give,
           };
         } else if (
-          event.args.tokenGet === this.selectedBase.addr &&
-          event.args.tokenGive === this.selectedToken.addr
+          event.args.tokenGet.toLowerCase() === this.selectedBase.addr.toLowerCase() &&
+          event.args.tokenGive.toLowerCase() === this.selectedToken.addr.toLowerCase()
         ) {
           // buy
           trade = {
@@ -2439,11 +2441,11 @@ EtherDelta.prototype.displayOrderbook = function displayOrderbook(ordersIn, bloc
   // only look at orders for the selected token and base
   let orders = ordersIn.filter(
     x =>
-      (x.order.tokenGet === this.selectedToken.addr &&
-        x.order.tokenGive === this.selectedBase.addr &&
+      (x.order.tokenGet.toLowerCase() === this.selectedToken.addr.toLowerCase() &&
+        x.order.tokenGive.toLowerCase() === this.selectedBase.addr.toLowerCase() &&
         x.amount > 0) ||
-      (x.order.tokenGive === this.selectedToken.addr &&
-        x.order.tokenGet === this.selectedBase.addr &&
+      (x.order.tokenGive.toLowerCase() === this.selectedToken.addr.toLowerCase() &&
+        x.order.tokenGet.toLowerCase() === this.selectedBase.addr.toLowerCase() &&
         x.amount < 0));
   // remove orders below the min order limit
   orders = orders.filter(order =>

@@ -792,8 +792,10 @@ API.getOrdersByPair = function getOrdersByPair(tokenA, tokenB) {
   const orders = [];
   Object.keys(API.ordersCache).forEach((key) => {
     const order = API.ordersCache[key];
-    if ((order.order.tokenGive === tokenA && order.order.tokenGet === tokenB)
-    || (order.order.tokenGive === tokenB && order.order.tokenGet === tokenA)) {
+    if ((order.order.tokenGive.toLowerCase() === tokenA.toLowerCase() &&
+    order.order.tokenGet.toLowerCase() === tokenB.toLowerCase())
+    || (order.order.tokenGive.toLowerCase() === tokenB.toLowerCase() &&
+    order.order.tokenGet.toLowerCase() === tokenA.toLowerCase())) {
       orders.push(order);
     }
   });
