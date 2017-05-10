@@ -378,68 +378,45 @@ EtherDelta.prototype.selectLanguage = function selectLanguage(newLanguage) {
   });
 };
 EtherDelta.prototype.loadEvents = function loadEvents(callback) {
-  utility.blockNumber(this.web3, (err, blockNumber) => {
-    this.blockTimeSnapshot = { blockNumber, date: new Date() };
-    const startBlock = blockNumber - ((86400 * 7) / this.secondsPerBlock); // Approximately 7 days
-    let lastBlock = startBlock;
-    Object.keys(this.eventsCache).forEach((id) => {
-      const event = this.eventsCache[id];
-      if (event.blockNumber > lastBlock && event.address === this.config.contractEtherDeltaAddr) {
-        lastBlock = event.blockNumber;
-      }
-      Object.keys(event.args).forEach((arg) => {
-        if (typeof event.args[arg] === 'string' && event.args[arg].slice(0, 2) !== '0x') {
-          event.args[arg] = new BigNumber(event.args[arg]);
-        }
-      });
-      if (event.blockNumber < startBlock) delete this.eventsCache[id]; // delete old events
-    });
-    const blockInterval = 12500;
-    const searches = [];
-    for (let b = blockNumber; b > lastBlock; b -= blockInterval) {
-      searches.push([Math.max(lastBlock, b - blockInterval), b]);
+  let lastBlock = 0;
+  Object.keys(this.eventsCache).forEach((id) => {
+    const event = this.eventsCache[id];
+    if (event.blockNumber > lastBlock && event.address === this.config.contractEtherDeltaAddr) {
+      lastBlock = event.blockNumber;
     }
-    console.log('Loading logs');
-    async.mapSeries(
-      searches,
-      (searchRange, callbackMap) => {
-        console.log('Logs', searchRange[0], searchRange[1]);
-        utility.logsOnce(
-          this.web3,
-          this.contractEtherDelta,
-          this.config.contractEtherDeltaAddr,
-          searchRange[0],
-          searchRange[1],
-          (errEvents, events) => {
-            let newEvents = 0;
-            events.forEach((event) => {
-              if (!this.eventsCache[event.transactionHash + event.logIndex]) {
-                newEvents += 1;
-                Object.assign(event, { txLink: `https://${this.config.ethTestnet ? `${this.config.ethTestnet}.` : ''}etherscan.io/tx/${event.transactionHash}` });
-                this.eventsCache[event.transactionHash + event.logIndex] = event;
-                // users with orders to update
-                if (event.event === 'Trade') {
-                  this.usersWithOrdersToUpdate[event.args.give] = true;
-                  this.usersWithOrdersToUpdate[event.args.get] = true;
-                } else if (['Deposit', 'Withdraw', 'Cancel'].indexOf(event.event) >= 0) {
-                  this.usersWithOrdersToUpdate[event.args.user] = true;
-                }
+  });
+  utility.getURL(`${this.config.apiServer}/events/${this.apiServerNonce}/${lastBlock}`, (err, result) => {
+    if (!err) {
+      try {
+        const res = JSON.parse(result);
+        const blockNumber = res.blockNumber;
+        this.blockTimeSnapshot = { blockNumber, date: new Date() };
+        const events = res.events;
+        let newEvents = 0;
+        Object.values(events).forEach((event) => {
+          if (!this.eventsCache[event.transactionHash + event.logIndex]) {
+            Object.keys(event.args).forEach((arg) => {
+              if (typeof event.args[arg] === 'string' && event.args[arg].slice(0, 2) !== '0x') {
+                Object.assign(event.args, { [arg]: new BigNumber(event.args[arg]) });
               }
             });
-            if (newEvents) {
-              callbackMap(null, newEvents);
-            } else {
-              callbackMap(null, 0);
+            newEvents += 1;
+            this.eventsCache[event.transactionHash + event.logIndex] = event;
+            // users with orders to update
+            if (event.event === 'Trade') {
+              this.usersWithOrdersToUpdate[event.args.give] = true;
+              this.usersWithOrdersToUpdate[event.args.get] = true;
+            } else if (['Deposit', 'Withdraw', 'Cancel'].indexOf(event.event) >= 0) {
+              this.usersWithOrdersToUpdate[event.args.user] = true;
             }
-          });
-      },
-      (errNewEvents, newEventsArr) => {
-        const newEvents = newEventsArr.reduce((a, b) => a + b, 0);
-        console.log('Done loading logs', newEvents);
-        // utility.createCookie(this.config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
-        // utility.createCookie(this.config.eventsCacheCookie, JSON.stringify({}), 999);
-        callback(newEvents);
-      });
+          }
+        });
+        callback(null, newEvents);
+      } catch (errGet) {
+        console.log('Events log has not changed since last refresh.');
+        callback(null, 0);
+      }
+    }
   });
 };
 EtherDelta.prototype.displayMyTransactions =
@@ -979,7 +956,7 @@ function lineChart(elem, title, xtype, ytype, xtitle, ytitle, data) {
 };
 EtherDelta.prototype.getOrders = function getOrders(callback) {
   utility.getURL(`${this.config.apiServer}/orders/${this.apiServerNonce}`, (err, result) => {
-    if (!err) {
+    if (!err && result) {
       try {
         const res = JSON.parse(result);
         const blockNumber = res.blockNumber;
