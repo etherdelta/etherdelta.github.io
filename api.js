@@ -165,8 +165,9 @@ API.writeStorage = function writeStorage(name, obj, callback) {
   }
 };
 
-API.logs = function logs(callback) {
+API.logs = function logs(callback, lookbackIn) {
   this.utility.blockNumber(this.web3, (err, blockNumber) => {
+    const startBlock = lookbackIn ? blockNumber - lookbackIn : 1848513;
     Object.keys(this.eventsCache).forEach((id) => {
       const event = this.eventsCache[id];
       Object.keys(event.args).forEach((arg) => {
@@ -174,6 +175,7 @@ API.logs = function logs(callback) {
           event.args[arg] = new BigNumber(event.args[arg]);
         }
       });
+      if (event.blockNumber < startBlock) delete this.eventsCache[id]; // delete old events
     });
     async.mapSeries(
       this.contractEtherDeltaAddrs,
@@ -181,7 +183,6 @@ API.logs = function logs(callback) {
         const blocks = Object.values(this.eventsCache)
           .filter(x => x.address === contractEtherDeltaAddr)
           .map(x => x.blockNumber);
-        const startBlock = 1848513;
         const lastBlock = blocks.length ? blocks.max() : startBlock;
         const searches = [];
         const blockInterval = 12500;

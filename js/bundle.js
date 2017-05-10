@@ -1739,9 +1739,11 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
     for (let b = blockNumber; b > lastBlock; b -= blockInterval) {
       searches.push([Math.max(lastBlock, b - blockInterval), b]);
     }
+    console.log('Loading logs');
     async.mapSeries(
       searches,
       (searchRange, callbackMap) => {
+        console.log('Logs', searchRange[0], searchRange[1]);
         utility.logsOnce(
           this.web3,
           this.contractEtherDelta,
@@ -1773,6 +1775,7 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
       },
       (errNewEvents, newEventsArr) => {
         const newEvents = newEventsArr.reduce((a, b) => a + b, 0);
+        console.log('Done loading logs', newEvents);
         // utility.createCookie(this.config.eventsCacheCookie, JSON.stringify(eventsCache), 999);
         // utility.createCookie(this.config.eventsCacheCookie, JSON.stringify({}), 999);
         callback(newEvents);
