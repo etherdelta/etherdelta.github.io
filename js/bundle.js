@@ -819,13 +819,23 @@ module.exports = (config) => {
             callback('Failed to sign message', undefined);
           } else {
             let sigHash;
+            // When Parity 1.6.7 comes out, this special case will no longer be necessary
             if (node.match('Parity')) {
               sigHash = `0x${sigResult.substr(4, 64)}${sigResult.substr(68, 64)}${sigResult.substr(2, 2)}`;
             } else {
               sigHash = sigResult;
             }
             const sig = ethUtil.fromRpcSig(sigHash);
-            const msg = new Buffer(msgToSign.slice(2), 'hex');
+            let msg;
+            if (
+              node &&
+              (node.match('TestRPC') ||
+                node.match('MetaMask'))
+            ) {
+              msg = new Buffer(msgToSign.slice(2), 'hex');
+            } else {
+              msg = new Buffer(prefixMessage(msgToSign).slice(2), 'hex');
+            }
             if (testSig(msg, sig, address)) {
               const r = `0x${sig.r.toString('hex')}`;
               const s = `0x${sig.s.toString('hex')}`;
