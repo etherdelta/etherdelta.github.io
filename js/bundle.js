@@ -1267,6 +1267,7 @@ module.exports = {
     { addr: '0xaaaf91d9b90df800df4f55c205fd6989c977e73a', name: 'TKN', decimals: 8 },
     { addr: '0xcbcc0f036ed4788f63fc0fee32873d6a7487b908', name: 'HMQ', decimals: 8 },
     { addr: '0x960b236a07cf122663c4303350609a66a7b288c0', name: 'ANT', decimals: 18 },
+    { addr: '0xd248b0d48e44aaf9c49aea0312be7e13a6dc1468', name: 'SGT', decimals: 1 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
