@@ -1268,6 +1268,7 @@ module.exports = {
     { addr: '0xcbcc0f036ed4788f63fc0fee32873d6a7487b908', name: 'HMQ', decimals: 8 },
     { addr: '0x960b236a07cf122663c4303350609a66a7b288c0', name: 'ANT', decimals: 18 },
     { addr: '0xd248b0d48e44aaf9c49aea0312be7e13a6dc1468', name: 'SGT', decimals: 1 },
+    { addr: '0x1a95b271b0535d15fa49932daba31ba612b52946', name: 'MNE', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1301,6 +1302,7 @@ module.exports = {
     { token: 'TKN', base: 'ETH' },
     { token: 'HMQ', base: 'ETH' },
     { token: 'ANT', base: 'ETH' },
+    { token: 'MNE', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
