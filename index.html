@@ -41,8 +41,9 @@
             <li class="dropdown" id="basesDropdown"></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown" id="tokenGuidesDropdown"></li>
+            <li class="chat-button"><a href="javascript:;" class="js-gitter-toggle-chat-button">Chat</a></li>
             <li class="dropdown" id="helpDropdown"></li>
+            <li class="dropdown" id="tokenGuidesDropdown"></li>
             <li class="dropdown" id="connection"></li>
             <li class="dropdown" id="languages"></li>
             <li class="dropdown" id="addresses"></li>
@@ -378,7 +379,8 @@
     </script>
     <script>
       ((window.gitter = {}).chat = {}).options = {
-        room: 'etherdelta/etherdelta.github.io'
+        room: 'etherdelta/etherdelta.github.io',
+        activationElement: false
       };
     </script>
     <script src="/js/sidecar.v1.js" async defer></script>

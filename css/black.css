@@ -272,3 +272,11 @@ pre code {
     max-height: 500px;
     overflow-y: auto;
 }
+
+.chat-button {
+    background: #fc3;
+    color: #000;
+    vertical-align: middle;
+    outline: 5px #fff solid;
+    outline-offset: -5px;
+}
