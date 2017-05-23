@@ -1256,7 +1256,7 @@ module.exports = {
     { addr: '0x168296bb09e24a88805cb9c33356536b980d3fc5', name: 'RHOC', decimals: 8 },
     { addr: '0x08711d3b02c8758f2fb3ab4e80228418a7f8e39c', name: 'EDG', decimals: 0 },
     { addr: '0xf7b098298f7c69fc14610bf71d5e02c60792894c', name: 'GUP', decimals: 3 },
-    { addr: '0xc2921ea1c150405ef952f73952f37fa2746168d8', name: 'ETB', decimals: 0 },
+    { addr: '0x807b9487aaf00629b674bd6d02e4917453bc5939', name: 'ETB', decimals: 12 },
     { addr: '0x607f4c5bb672230e8672085532f7e901544a7375', name: 'RLC', decimals: 9 },
     { addr: '0xcb94be6f13a1182e4a4b6140cb7bf2025d28e41b', name: 'TRST', decimals: 6 },
     { addr: '0x2e071d2966aa7d8decb1005885ba1977d6038a65', name: 'DICE', decimals: 16 },
