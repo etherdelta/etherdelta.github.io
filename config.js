@@ -77,6 +77,7 @@ module.exports = {
     { addr: '0xd248b0d48e44aaf9c49aea0312be7e13a6dc1468', name: 'SGT', decimals: 1 },
     // MNE is not ERC-20 compliant (no approve and transferFrom):
     // { addr: '0x1a95b271b0535d15fa49932daba31ba612b52946', name: 'MNE', decimals: 8 },
+    { addr: '0xff3519eeeea3e76f1f699ccce5e23ee0bdda41ac', name: 'BCAP', decimals: 0 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -110,6 +111,7 @@ module.exports = {
     { token: 'TKN', base: 'ETH' },
     { token: 'HMQ', base: 'ETH' },
     { token: 'ANT', base: 'ETH' },
+    { token: 'BCAP', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
