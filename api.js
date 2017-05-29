@@ -1009,7 +1009,7 @@ API.returnTicker = function returnTicker(callback) {
         if (!tickers[pair]) {
           tickers[pair] = { last: undefined, percentChange: 0, baseVolume: 0, quoteVolume: 0 };
         }
-        const tradeTime = API.blockTime(trade.blockNumber);
+        const tradeTime = trade.date;
         const price = Number(trade.price);
         tickers[pair].last = price;
         if (!firstOldPrices[pair]) firstOldPrices[pair] = price;
