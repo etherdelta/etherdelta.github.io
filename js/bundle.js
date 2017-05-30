@@ -1271,6 +1271,7 @@ module.exports = {
     // MNE is not ERC-20 compliant (no approve and transferFrom):
     // { addr: '0x1a95b271b0535d15fa49932daba31ba612b52946', name: 'MNE', decimals: 8 },
     { addr: '0xff3519eeeea3e76f1f699ccce5e23ee0bdda41ac', name: 'BCAP', decimals: 0 },
+    { addr: '0x0d8775f648430679a709e98d2b0cb6250d2887ef', name: 'BAT', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
