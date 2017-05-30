@@ -113,6 +113,7 @@ module.exports = {
     { token: 'HMQ', base: 'ETH' },
     { token: 'ANT', base: 'ETH' },
     { token: 'BCAP', base: 'ETH' },
+    { token: 'BAT', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
