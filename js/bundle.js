@@ -818,13 +818,7 @@ module.exports = (config) => {
           if (err) {
             callback('Failed to sign message', undefined);
           } else {
-            let sigHash;
-            // When Parity 1.6.7 comes out, this special case will no longer be necessary
-            if (node.match('Parity')) {
-              sigHash = `0x${sigResult.substr(4, 64)}${sigResult.substr(68, 64)}${sigResult.substr(2, 2)}`;
-            } else {
-              sigHash = sigResult;
-            }
+            const sigHash = sigResult;
             const sig = ethUtil.fromRpcSig(sigHash);
             let msg;
             if (
