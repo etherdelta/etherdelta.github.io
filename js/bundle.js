@@ -1414,7 +1414,9 @@ function EtherDelta() {
   this.topOrdersResult = { orders: [], blockNumber: 0 };
   this.selectedContract = undefined;
   this.web3 = undefined;
-  this.startEtherDelta();
+  window.addEventListener('load', () => {
+    this.startEtherDelta();
+  });
 }
 EtherDelta.prototype.ejs = function ejs(url, element, data) {
   if ($(`#${element}`).length) {
