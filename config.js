@@ -80,6 +80,7 @@ module.exports = {
     { addr: '0xff3519eeeea3e76f1f699ccce5e23ee0bdda41ac', name: 'BCAP', decimals: 0 },
     { addr: '0x0d8775f648430679a709e98d2b0cb6250d2887ef', name: 'BAT', decimals: 18 },
     { addr: '0xa645264c5603e96c3b0b078cdab68733794b0a71', name: 'MYST', decimals: 8 },
+    { addr: '0x82665764ea0b58157e1e5e9bab32f68c76ec0cdf', name: 'VSM', decimals: 0 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -116,6 +117,7 @@ module.exports = {
     { token: 'BCAP', base: 'ETH' },
     { token: 'BAT', base: 'ETH' },
     { token: 'MYST', base: 'ETH' },
+    { token: 'VSM', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
