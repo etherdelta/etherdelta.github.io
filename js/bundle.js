@@ -1269,6 +1269,7 @@ module.exports = {
     { addr: '0xa645264c5603e96c3b0b078cdab68733794b0a71', name: 'MYST', decimals: 8 },
     { addr: '0x82665764ea0b58157e1e5e9bab32f68c76ec0cdf', name: 'VSM', decimals: 0 },
     { addr: '0x12fef5e57bf45873cd9b62e9dbd7bfb99e32d73e', name: 'CFI', decimals: 18 },
+    { addr: '0x8ae4bf2c33a8e667de34b54938b0ccd03eb8cc06', name: 'PTOY', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1309,6 +1310,7 @@ module.exports = {
     { token: 'CFI', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
+    { token: 'PTOY', base: 'ETH' },
   ],
 };
 
