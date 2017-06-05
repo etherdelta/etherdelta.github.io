@@ -122,5 +122,6 @@ module.exports = {
     { token: 'CFI', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
+    { token: 'VERI', base: 'ETH' },
   ],
 };
