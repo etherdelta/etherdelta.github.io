@@ -1150,7 +1150,11 @@ EtherDelta.prototype.displayOrderbook = function displayOrderbook(ordersIn, bloc
     $('#orderBookMid').position().top -
     ($('#orderBookScroll')[0].clientHeight / 2) -
     $('#orderBookMid')[0].clientHeight;
-  this.depthChart('chartDepth', '', '', '', depthData, median * 0.25, median * 1.75);
+  const depthDataFiltered = depthData.slice(0, 1).concat(depthData.slice(1)
+    .map(x => [x[0], Number(x[1]), x[2]])
+    .filter(x => x[0] > median * 0.025 && x[0] < median * 1.75));
+  console.log(depthDataFiltered);
+  this.depthChart('chartDepth', '', '', '', depthDataFiltered, median * 0.25, median * 1.75);
   callback();
 };
 EtherDelta.prototype.displayTokensAndBases = function displayTokensAndBases(callback) {
