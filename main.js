@@ -666,7 +666,7 @@ EtherDelta.prototype.displayVolumes = function displayVolumes(orders, blockNumbe
         }
         for (let i = 0; i < timeFrames.length; i += 1) {
           const timeFrame = timeFrames[i];
-          if (now - this.blockTime(event.blockNumber) < timeFrame) {
+          if (now - new Date(utility.hexToDec(event.timeStamp) * 1000) < timeFrame) {
             tokenVolumes[tokenGet.name].volumes[i] += Number(amountGet);
             tokenVolumes[tokenGive.name].volumes[i] += Number(amountGive);
             pairVolumes[pair].volumes[i] += Number(volume);
@@ -741,6 +741,7 @@ EtherDelta.prototype.displayTradesAndChart = function displayTradesAndChart(call
               .div(this.getDivisor(event.args.tokenGive)),
             id: (event.blockNumber * 1000) + event.transactionIndex,
             blockNumber: event.blockNumber,
+            date: new Date(utility.hexToDec(event.timeStamp) * 1000),
             buyer: event.args.get,
             seller: event.args.give,
           };
@@ -757,6 +758,7 @@ EtherDelta.prototype.displayTradesAndChart = function displayTradesAndChart(call
               .div(this.getDivisor(event.args.tokenGet)),
             id: (event.blockNumber * 1000) + event.transactionIndex,
             blockNumber: event.blockNumber,
+            date: new Date(utility.hexToDec(event.timeStamp) * 1000),
             buyer: event.args.give,
             seller: event.args.get,
           };
@@ -782,7 +784,7 @@ EtherDelta.prototype.displayTradesAndChart = function displayTradesAndChart(call
   }
   const now = new Date();
   const data = trades
-    .map(trade => [this.blockTime(trade.blockNumber), trade.price.toNumber()])
+    .map(trade => [trade.date, trade.price.toNumber()])
     .filter(x => now - x[0] < 86400 * 1000 * 7);
   const values = data.map(x => x[1]);
   values.sort();
