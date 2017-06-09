@@ -9,7 +9,7 @@ const sha256 = require('js-sha256').sha256;
 
 function API() {}
 
-API.init = function init(callback, allContracts, path, provider, configName) {
+API.init = function init(callback, allContracts, path, provider, configName, lookbackIn) {
   const self = this;
   if (configName === 'testnet') {
     this.config = require('./config_testnet.js'); // eslint-disable-line global-require
@@ -108,7 +108,7 @@ API.init = function init(callback, allContracts, path, provider, configName) {
         (callbackSeries) => {
           API.logs(() => {
             callbackSeries(null, true);
-          });
+          }, lookbackIn);
         },
       ],
       () => {
@@ -678,6 +678,10 @@ API.updateOrder = function updateOrder(orderIn, callback) {
               if (!errAvail) {
                 const availableVolume = resultAvail;
                 if (order.amount >= 0) {
+                  order.price = new BigNumber(order.order.amountGive)
+                    .div(new BigNumber(order.order.amountGet))
+                    .mul(API.getDivisor(order.order.tokenGet))
+                    .div(API.getDivisor(order.order.tokenGive));
                   order.availableVolume = availableVolume;
                   order.ethAvailableVolume = this.utility.weiToEth(
                     Math.abs(order.availableVolume),
@@ -689,6 +693,10 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                   order.ethAvailableVolumeBase = this.utility.weiToEth(order.availableVolumeBase,
                     API.getDivisor(order.order.tokenGive));
                 } else {
+                  order.price = new BigNumber(order.order.amountGet)
+                    .div(new BigNumber(order.order.amountGive))
+                    .mul(API.getDivisor(order.order.tokenGive))
+                    .div(API.getDivisor(order.order.tokenGet));
                   order.availableVolume = availableVolume
                     .div(order.price)
                     .mul(API.getDivisor(order.order.tokenGive))
