@@ -1210,7 +1210,7 @@ module.exports = {
   gasTrade: 250000,
   gasOrder: 250000,
   ordersOnchain: false,
-  apiServer: 'https://api.etherdelta.com',
+  apiServer: 'https://etherdelta.com',
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
@@ -2514,7 +2514,6 @@ EtherDelta.prototype.displayOrderbook = function displayOrderbook(ordersIn, bloc
   const depthDataFiltered = depthData.slice(0, 1).concat(depthData.slice(1)
     .map(x => [x[0], Number(x[1]), x[2]])
     .filter(x => x[0] > median * 0.025 && x[0] < median * 1.75));
-  console.log(depthDataFiltered);
   this.depthChart('chartDepth', '', '', '', depthDataFiltered, median * 0.25, median * 1.75);
   callback();
 };
