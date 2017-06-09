@@ -1779,6 +1779,8 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
         console.log('Events log has not changed since last refresh.');
         callback(null, 0);
       }
+    } else {
+      callback(null, 0);
     }
   });
 };
@@ -2319,47 +2321,6 @@ function lineChart(elem, title, xtype, ytype, xtitle, ytitle, data) {
     }
   });
 };
-EtherDelta.prototype.getOrders = function getOrders(callback) {
-  utility.getURL(`${this.config.apiServer}/orders/${this.apiServerNonce}`, (err, result) => {
-    if (!err && result) {
-      try {
-        const res = JSON.parse(result);
-        const blockNumber = res.blockNumber;
-        let orders;
-        if (Array.isArray(res.orders)) {
-          orders = res.orders;
-        } else {
-          orders = Object.values(res.orders);
-        }
-        orders.forEach((x) => {
-          Object.assign(x, {
-            price: new BigNumber(x.price),
-            // amount: new BigNumber(x.amount),
-            // availableVolume: new BigNumber(x.availableVolume),
-            // ethAvailableVolume: x.ethAvailableVolume,
-            order: Object.assign(x.order, {
-              amountGet: new BigNumber(x.order.amountGet),
-              amountGive: new BigNumber(x.order.amountGive),
-              expires: Number(x.order.expires),
-              nonce: Number(x.order.nonce),
-              tokenGet: x.order.tokenGet,
-              tokenGive: x.order.tokenGive,
-              user: x.order.user,
-              r: x.order.r,
-              s: x.order.s,
-              v: x.order.v ? Number(x.order.v) : undefined,
-            }),
-          });
-        });
-        callback(null, { orders, blockNumber });
-      } catch (errCatch) {
-        callback(err, undefined);
-      }
-    } else {
-      callback(err, undefined);
-    }
-  });
-};
 EtherDelta.prototype.getOrdersByPair = function getOrdersByPair(tokenA, tokenB, callback) {
   utility.getURL(`${this.config.apiServer}/orders/${this.apiServerNonce}/${tokenA}/${tokenB}`, (err, result) => {
     if (!err) {
@@ -2394,10 +2355,10 @@ EtherDelta.prototype.getOrdersByPair = function getOrdersByPair(tokenA, tokenB, 
         });
         callback(null, { orders, blockNumber });
       } catch (errCatch) {
-        callback(err, undefined);
+        callback(err, this.ordersResultByPair);
       }
     } else {
-      callback(err, undefined);
+      callback(err, this.ordersResultByPair);
     }
   });
 };
@@ -2435,10 +2396,10 @@ EtherDelta.prototype.getTopOrders = function getTopOrders(callback) {
         });
         callback(null, { orders, blockNumber });
       } catch (errCatch) {
-        callback(err, undefined);
+        callback(err, this.topOrdersResult);
       }
     } else {
-      callback(err, undefined);
+      callback(err, this.topOrdersResult);
     }
   });
 };
