@@ -2259,7 +2259,7 @@ EtherDelta.prototype.refreshLoop = function refreshLoop() {
   const self = this;
   function loop() {
     self.refresh(() => {
-      setTimeout(loop, 10 * 1000);
+      setTimeout(loop, 60 * 1000);
     });
   }
   loop();
