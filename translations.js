@@ -103,11 +103,10 @@ module.exports = {
     es: 'Profundidad',
   },
   only_7_days: {
-    en: 'Note: EtherDelta will only show transactions from the last 7 days.',
-    cn: 'Note: EtherDelta 只会显示近7天的交易记录',
-    // cn:'Note: EtherDelta will only show transactions from the last 7 days.'
-    fr: 'Note: EtherDelta ne montrera que les 7 derniers jours de transactions.',
-    es: 'Nota Bene: EtherDelta sólo mostrará las transacciones de los últimos 7 días.',
+    en: 'Note: EtherDelta will only show recent transactions.',
+    cn: '注意：EtherDelta只会显示最近的交易。',
+    fr: 'Remarque: EtherDelta affichera uniquement les transactions récentes.',
+    es: 'Nota: EtherDelta sólo mostrará transacciones recientes.',
   },
 
   announcements: {
