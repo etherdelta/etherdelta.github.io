@@ -746,14 +746,12 @@ API.updateOrder = function updateOrder(orderIn, callback) {
                           callback('Order is filled', undefined);
                         }
                       } else {
-                        // if there's an error, assume the order is ok and try again later
                         callback(null, order);
                       }
                     });
                 } else if (!order.updated) {
-                  // if the available volume is too low,
-                  // but this is the first attempt, try again later
-                  callback(null, order);
+                  // may want to not count this as an error and try again
+                  callback('Volume too low', undefined);
                 } else {
                   callback('Volume too low', undefined);
                 }

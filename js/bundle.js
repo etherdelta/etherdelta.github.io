@@ -1270,6 +1270,7 @@ module.exports = {
     { addr: '0x82665764ea0b58157e1e5e9bab32f68c76ec0cdf', name: 'VSM', decimals: 0 },
     { addr: '0x12fef5e57bf45873cd9b62e9dbd7bfb99e32d73e', name: 'CFI', decimals: 18 },
     { addr: '0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374', name: 'VERI', decimals: 18 },
+    // { addr: '0x40395044ac3c0c57051906da938b54bd6557f212', name: 'MGO', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1309,6 +1310,7 @@ module.exports = {
     { token: 'VSM', base: 'ETH' },
     { token: 'CFI', base: 'ETH' },
     { token: 'VERI', base: 'ETH' },
+    // { token: 'MGO', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
@@ -1411,15 +1413,15 @@ function EtherDelta() {
   this.language = 'en';
   this.minOrderSize = 0.01;
   this.messageToSend = undefined;
-  this.blockTimeSnapshot = { blockNumber: 3154928, date: new Date('Feb-10-2017 01:40:47') }; // default snapshot
   this.translator = undefined;
-  this.secondsPerBlock = 14;
+  this.secondsPerBlock = 15;
   this.usersWithOrdersToUpdate = {};
   this.apiServerNonce = undefined;
   this.ordersResultByPair = { orders: [], blockNumber: 0 };
   this.topOrdersResult = { orders: [], blockNumber: 0 };
   this.selectedContract = undefined;
   this.web3 = undefined;
+  this.daysOfData = 7;
   window.addEventListener('load', () => {
     this.startEtherDelta();
   });
@@ -1629,7 +1631,7 @@ EtherDelta.prototype.selectAccount = function selectAccount(i) {
   });
 };
 EtherDelta.prototype.addAccount = function addAccount(newAddr, newPk) {
-  let addr = newAddr;
+  let addr = newAddr.toLowerCase();
   let pk = newPk;
   if (addr.slice(0, 2) !== '0x') addr = `0x${addr}`;
   if (pk.slice(0, 2) === '0x') pk = pk.slice(2);
@@ -1748,13 +1750,14 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
       lastBlock = event.blockNumber;
     }
   });
+  console.log('lastBlock', lastBlock);
   utility.getURL(`${this.config.apiServer}/events/${this.apiServerNonce}/${lastBlock}`, (err, result) => {
     if (!err) {
       try {
         const res = JSON.parse(result);
         const blockNumber = res.blockNumber;
-        this.blockTimeSnapshot = { blockNumber, date: new Date() };
         const events = res.events;
+        console.log('Events discovered', Object.values(events).length);
         let newEvents = 0;
         Object.values(events).forEach((event) => {
           if (!this.eventsCache[event.transactionHash + event.logIndex]) {
@@ -1774,12 +1777,20 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
             }
           }
         });
+        Object.keys(this.eventsCache).forEach((key) => {
+          if (this.eventsCache[key].blockNumber <
+          blockNumber - ((86400 * this.daysOfData) / this.secondsPerBlock)) {
+            delete this.eventsCache[key];
+          }
+        });
         callback(null, newEvents);
       } catch (errGet) {
         console.log('Events log has not changed since last refresh.');
         callback(null, 0);
       }
     } else {
+      this.apiServerNonce = Math.random().toString().slice(2) +
+        Math.random().toString().slice(2);
       callback(null, 0);
     }
   });
@@ -2358,6 +2369,8 @@ EtherDelta.prototype.getOrdersByPair = function getOrdersByPair(tokenA, tokenB, 
         callback(err, this.ordersResultByPair);
       }
     } else {
+      this.apiServerNonce = Math.random().toString().slice(2) +
+        Math.random().toString().slice(2);
       callback(err, this.ordersResultByPair);
     }
   });
@@ -3225,11 +3238,6 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
         });
     });
 };
-EtherDelta.prototype.blockTime = function blockTime(block) {
-  return new Date(
-    this.blockTimeSnapshot.date.getTime() +
-      ((block - this.blockTimeSnapshot.blockNumber) * 1000 * this.secondsPerBlock));
-};
 EtherDelta.prototype.addPending = function addPending(err, txsIn) {
   const txs = Array.isArray(txsIn) ? txsIn : [txsIn];
   txs.forEach((tx) => {
@@ -3521,12 +3529,26 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
           async.parallel(
             [
               (callbackParallel) => {
+                console.log('Displaying my account balances', new Date());
+                this.displayAccounts(() => {});
+                this.displayAllBalances(() => {
+                  console.log('Done displaying my account balances', new Date());
+                });
+                callbackParallel();
+              },
+              (callbackParallel) => {
+                console.log('Loading events', new Date());
                 this.loadEvents((newEvents) => {
+                  console.log('Done loading events', new Date());
                   callbackParallel(null, undefined);
                   if (newEvents > 0 || forceEventRead) {
-                    this.displayAccounts(() => {});
-                    this.displayAllBalances(() => {});
-                    this.displayTradesAndChart(() => {});
+                    console.log('Displaying my transactions', new Date());
+                    this.displayMyTransactions(
+                      this.ordersResultByPair.orders,
+                      this.ordersResultByPair.blockNumber,
+                      () => {
+                        console.log('Done displaying my transactions', new Date());
+                      });
                   }
                 });
               },
@@ -3558,39 +3580,39 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
                     },
                   ],
                   () => {
-                    async.parallel(
-                      [
-                        (callbackParallel2) => {
-                          this.displayMyTransactions(
-                            this.ordersResultByPair.orders,
-                            this.ordersResultByPair.blockNumber,
-                            () => {
-                              callbackParallel2(null, undefined);
-                            });
-                        },
-                        (callbackParallel2) => {
-                          this.displayOrderbook(this.ordersResultByPair.orders,
-                          this.ordersResultByPair.blockNumber, () => {
-                            callbackParallel2(null, undefined);
-                          });
-                        },
-                        (callbackParallel2) => {
-                          this.displayVolumes(this.topOrdersResult.orders,
-                          this.topOrdersResult.blockNumber, () => {
-                            callbackParallel2(null, undefined);
-                          });
-                        }],
-                      () => {
-                        callbackParallel(null, undefined);
-                      });
+                    console.log('Displaying order book', new Date());
+                    this.displayOrderbook(this.ordersResultByPair.orders,
+                    this.ordersResultByPair.blockNumber, () => {
+                      console.log('Done displaying order book', new Date());
+                      callbackParallel(null, undefined);
+                    });
                   });
               }],
             () => {
-              callbackSeries(null, undefined);
+              async.parallel(
+                [
+                  (callbackParallel3) => {
+                    console.log('Displaying volumes', new Date());
+                    this.displayVolumes(this.topOrdersResult.orders,
+                    this.topOrdersResult.blockNumber, () => {
+                      console.log('Done displaying volumes', new Date());
+                      callbackParallel3();
+                    });
+                  },
+                  (callbackParallel3) => {
+                    console.log('Displaying trades and chart', new Date());
+                    this.displayTradesAndChart(() => {
+                      console.log('Done displaying trades and chart', new Date());
+                      callbackParallel3();
+                    });
+                  }],
+                () => {
+                  callbackSeries(null, undefined);
+                });
             });
         }],
       () => {
-        console.log('Ending refresh');
+        console.log('Ending refresh', new Date());
         done();
         callback();
       });
@@ -3762,10 +3784,13 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
   });
 };
 EtherDelta.prototype.startEtherDelta = function startEtherDelta() {
-  console.log('Beginning init');
+  console.log('Beginning init', new Date());
   this.loadWeb3(() => {
+    console.log('Web3 done', new Date());
     this.initContracts(() => {
+      console.log('Init contracts done', new Date());
       this.initDisplays(() => {
+        console.log('Displays done', new Date());
         this.refreshLoop();
       });
     });

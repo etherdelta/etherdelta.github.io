@@ -83,6 +83,7 @@ module.exports = {
     { addr: '0x82665764ea0b58157e1e5e9bab32f68c76ec0cdf', name: 'VSM', decimals: 0 },
     { addr: '0x12fef5e57bf45873cd9b62e9dbd7bfb99e32d73e', name: 'CFI', decimals: 18 },
     { addr: '0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374', name: 'VERI', decimals: 18 },
+    // { addr: '0x40395044ac3c0c57051906da938b54bd6557f212', name: 'MGO', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -122,6 +123,7 @@ module.exports = {
     { token: 'VSM', base: 'ETH' },
     { token: 'CFI', base: 'ETH' },
     { token: 'VERI', base: 'ETH' },
+    // { token: 'MGO', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
