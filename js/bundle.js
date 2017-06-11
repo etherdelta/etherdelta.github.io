@@ -1759,7 +1759,6 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
         const res = JSON.parse(result);
         const blockNumber = res.blockNumber;
         const events = res.events;
-        console.log('Events discovered', Object.values(events).length);
         let newEvents = 0;
         Object.values(events).forEach((event) => {
           if (!this.eventsCache[event.transactionHash + event.logIndex]) {
@@ -3552,17 +3551,8 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
               (callbackParallel) => {
                 console.log('Loading events', new Date());
                 this.loadEvents((newEvents) => {
-                  console.log('Done loading events', new Date());
+                  console.log('Done loading events', newEvents, new Date());
                   callbackParallel(null, undefined);
-                  if (newEvents > 0 || forceEventRead) {
-                    console.log('Displaying my transactions', new Date());
-                    this.displayMyTransactions(
-                      this.ordersResultByPair.orders,
-                      this.ordersResultByPair.blockNumber,
-                      () => {
-                        console.log('Done displaying my transactions', new Date());
-                      });
-                  }
                 });
               },
               (callbackParallel) => {
@@ -3618,6 +3608,16 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
                       console.log('Done displaying trades and chart', new Date());
                       callbackParallel3();
                     });
+                  },
+                  (callbackParallel3) => {
+                    console.log('Displaying my transactions', new Date());
+                    this.displayMyTransactions(
+                      this.ordersResultByPair.orders,
+                      this.ordersResultByPair.blockNumber,
+                      () => {
+                        console.log('Done displaying my transactions', new Date());
+                        callbackParallel3();
+                      });
                   }],
                 () => {
                   callbackSeries(null, undefined);
