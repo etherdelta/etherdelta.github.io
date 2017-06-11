@@ -3225,9 +3225,19 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
                       eventValue: inputAmount,
                     });
                   });
+              } else if (availableVolume < this.minOrderSize) {
+                this.alertError(
+                  "You cannot trade this order because it already traded. Someone else already traded this order and the order book hasn't updated yet.");
+                ga('send', {
+                  hitType: 'event',
+                  eventCategory: 'Error',
+                  eventAction: 'Trade - failed',
+                  eventLabel: `${this.selectedToken.name}/${this.selectedBase.name}`,
+                  eventValue: inputAmount,
+                });
               } else {
                 this.alertError(
-                  "You cannot trade this order. Either this order already traded, or you don't have enough funds. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
+                  "You cannot trade this order because you don't have enough funds. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
                 ga('send', {
                   hitType: 'event',
                   eventCategory: 'Error',
