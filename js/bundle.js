@@ -3225,7 +3225,8 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
                       eventValue: inputAmount,
                     });
                   });
-              } else if (availableVolume < this.minOrderSize) {
+              } else if (utility.weiToEth(availableVolume,
+              this.getDivisor(this.selectedToken)) < this.minOrderSize) {
                 this.alertError(
                   "You cannot trade this order because it already traded. Someone else already traded this order and the order book hasn't updated yet.");
                 ga('send', {
