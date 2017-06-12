@@ -2161,7 +2161,7 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
               },
               (callbackParallel) => {
                 console.log('Loading events', new Date());
-                this.loadEvents((newEvents) => {
+                this.loadEvents((err, newEvents) => {
                   console.log('Done loading events', newEvents, new Date());
                   callbackParallel(null, undefined);
                 });
