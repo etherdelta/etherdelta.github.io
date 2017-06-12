@@ -1211,7 +1211,6 @@ module.exports = {
   gasOrder: 250000,
   ordersOnchain: false,
   apiServer: 'https://api.etherdelta.com',
-  // apiServer: 'http://localhost:8001',
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
@@ -3311,10 +3310,8 @@ EtherDelta.prototype.loadToken = function loadToken(addr, callback) {
 EtherDelta.prototype.selectToken = function selectToken(addrOrToken, name, decimals) {
   const token = this.getToken(addrOrToken, name, decimals);
   if (token) {
-    this.selectedToken = token;
-    this.ordersResultByPair = { orders: [], blockNumber: 0 };
     this.loading(() => {});
-    this.refresh(() => {}, true, true, this.selectedToken, this.selectedBase);
+    this.refresh(() => {}, true, true, token, this.selectedBase);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Token',
@@ -3326,10 +3323,8 @@ EtherDelta.prototype.selectToken = function selectToken(addrOrToken, name, decim
 EtherDelta.prototype.selectBase = function selectBase(addrOrToken, name, decimals) {
   const base = this.getToken(addrOrToken, name, decimals);
   if (base) {
-    this.selectedBase = base;
-    this.ordersResultByPair = { orders: [], blockNumber: 0 };
     this.loading(() => {});
-    this.refresh(() => {}, true, true, this.selectedToken, this.selectedBase);
+    this.refresh(() => {}, true, true, this.selectedToken, base);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Token',
@@ -3342,11 +3337,8 @@ EtherDelta.prototype.selectTokenAndBase = function selectTokenAndBase(tokenAddr,
   const token = this.getToken(tokenAddr);
   const base = this.getToken(baseAddr);
   if (token && base) {
-    this.selectedToken = token;
-    this.selectedBase = base;
-    this.ordersResultByPair = { orders: [], blockNumber: 0 };
     this.loading(() => {});
-    this.refresh(() => {}, true, true, this.selectedToken, this.selectedBase);
+    this.refresh(() => {}, true, true, token, base);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Token',
@@ -3473,9 +3465,12 @@ EtherDelta.prototype.loading = function loading(callback) {
   callback();
 };
 EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMarket, token, base) {
-  if (token) this.selectedToken = token;
-  if (base) this.selectedBase = base;
   this.q.push((done) => {
+    if (token && base) {
+      this.selectedToken = token;
+      this.selectedBase = base;
+      this.ordersResultByPair = { orders: [], blockNumber: 0 };
+    }
     console.log('Beginning refresh', new Date(), `${this.selectedToken.name}/${this.selectedBase.name}`);
     this.selectedContract = this.config.contractEtherDeltaAddr;
     utility.createCookie(
