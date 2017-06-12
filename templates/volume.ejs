@@ -3,7 +3,7 @@
     <% pairVolumes.forEach(function(pairVolume){ %>
       <tr>
         <td><a href="javascript:;" onclick="bundle.EtherDelta.selectTokenAndBase('<%= pairVolume.token.addr %>','<%= pairVolume.base.addr %>');"><%= pairVolume.token.name+'/'+pairVolume.base.name %></a></td>
-        <td class="align-right"><%= bundle.utility.weiToEth(pairVolume.volumes[1], bundle.EtherDelta.getDivisor(pairVolume.token)) %></td>
+        <td class="align-right"><%= Math.round(pairVolume.volume) %></td>
         <td class="align-right"><%= pairVolume.bid ? pairVolume.bid.toNumber().toFixed(5) : '' %></td>
         <td class="align-right padding-right"><%= pairVolume.ask ? pairVolume.ask.toNumber().toFixed(5) : '' %></td>
       </tr>
@@ -17,7 +17,7 @@
     <% tokenVolumes.forEach(function(tokenVolume){ %>
       <tr>
         <td><a href="javascript:;" onclick="bundle.EtherDelta.displayTokenGuide('<%= tokenVolume.token.name %>')"><%= tokenVolume.token.name %></a></td>
-        <td class="align-right"><%= bundle.utility.weiToEth(tokenVolume.volumes[1], bundle.EtherDelta.getDivisor(tokenVolume.token)) %></td>
+        <td class="align-right"><%= Math.round(tokenVolume.volume) %></td>
         <td class="align-right"></td>
         <td class="align-right padding-right"></td>
       </tr>

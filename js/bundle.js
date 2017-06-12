@@ -1422,6 +1422,7 @@ function EtherDelta() {
   this.ordersResultByPair = { orders: [], blockNumber: 0 };
   this.topOrdersResult = { orders: [], blockNumber: 0 };
   this.selectedContract = undefined;
+  this.returnTicker = {};
   this.web3 = undefined;
   this.daysOfData = 7;
   window.addEventListener('load', () => {
@@ -1956,12 +1957,10 @@ function displayMyTransactions(ordersIn, blockNumber, callback) {
       callback();
     });
 };
-EtherDelta.prototype.displayVolumes = function displayVolumes(orders, blockNumber, callback) {
+EtherDelta.prototype.displayVolumes = function displayVolumes(
+  orders, returnTicker, blockNumber, callback) {
   let tokenVolumes = {};
   let pairVolumes = {};
-  const timeFrames = [86400 * 1000 * 7, 86400 * 1000 * 1];
-  const mainBases = ['DUSD', 'ETH']; // in order of priority
-  const now = new Date();
   // the default pairs
   for (let i = 0; i < this.config.pairs.length; i += 1) {
     const token = this.getToken(this.config.pairs[i].token);
@@ -1972,86 +1971,49 @@ EtherDelta.prototype.displayVolumes = function displayVolumes(orders, blockNumbe
         pairVolumes[pair] = {
           token,
           base,
-          volumes: Array(timeFrames.length).fill(0),
-          ethVolumes: Array(timeFrames.length).fill(0),
+          volume: 0,
+          ethVolume: 0,
         };
       }
     }
   }
   // get trading volume
-  const events = Object.values(this.eventsCache);
-  events.forEach((event) => {
-    if (event.event === 'Trade' && event.address === this.config.contractEtherDeltaAddr) {
-      const tokenGet = this.getToken(event.args.tokenGet);
-      const tokenGive = this.getToken(event.args.tokenGive);
-      const amountGet = event.args.amountGet;
-      const amountGive = event.args.amountGive;
-      if (tokenGet && tokenGive) {
-        if (!tokenVolumes[tokenGet.name]) {
-          tokenVolumes[tokenGet.name] = {
-            token: tokenGet,
-            volumes: Array(timeFrames.length).fill(0),
-            ethVolumes: Array(timeFrames.length).fill(0),
-          };
-        }
-        if (!tokenVolumes[tokenGive.name]) {
-          tokenVolumes[tokenGive.name] = {
-            token: tokenGive,
-            volumes: Array(timeFrames.length).fill(0),
-            ethVolumes: Array(timeFrames.length).fill(0),
-          };
-        }
-        let token;
-        let base;
-        let volume = 0;
-        let ethVolume;
-        mainBases.some((mainBase) => {
-          if (tokenGive.name === mainBase) {
-            token = tokenGet;
-            base = tokenGive;
-            volume = amountGet;
-            return true;
-          } else if (tokenGet.name === mainBase) {
-            token = tokenGive;
-            base = tokenGet;
-            volume = amountGive;
-            return true;
-          }
-          return false;
-        });
-        if (!token && !base && tokenGive.name >= tokenGet.name) {
-          token = tokenGive;
-          base = tokenGet;
-          volume = amountGive;
-        } else if (!token && !base && tokenGive.name < tokenGet.name) {
-          token = tokenGet;
-          base = tokenGive;
-          volume = amountGet;
-        }
-        if (tokenGive.name === 'ETH') ethVolume = amountGive;
-        if (tokenGet.name === 'ETH') ethVolume = amountGet;
-        const pair = `${token.name}/${base.name}`;
-        if (!pairVolumes[pair]) {
-          pairVolumes[pair] = {
-            token,
-            base,
-            volumes: Array(timeFrames.length).fill(0),
-            ethVolumes: Array(timeFrames.length).fill(0),
-          };
-        }
-        for (let i = 0; i < timeFrames.length; i += 1) {
-          const timeFrame = timeFrames[i];
-          if (now - new Date(utility.hexToDec(event.timeStamp) * 1000) < timeFrame) {
-            tokenVolumes[tokenGet.name].volumes[i] += Number(amountGet);
-            tokenVolumes[tokenGive.name].volumes[i] += Number(amountGive);
-            pairVolumes[pair].volumes[i] += Number(volume);
-            if (ethVolume) {
-              tokenVolumes[tokenGet.name].ethVolumes[i] += Number(ethVolume);
-              tokenVolumes[tokenGive.name].ethVolumes[i] += Number(ethVolume);
-              pairVolumes[pair].ethVolumes[i] += Number(ethVolume);
-            }
-          }
-        }
+  Object.keys(this.returnTicker).forEach((returnKey) => {
+    const ret = this.returnTicker[returnKey];
+    const spl = returnKey.split('_');
+    const A = spl[0];
+    const B = spl[1];
+    const pair = `${B}/${A}`;
+    // console.log(pair)
+    if (pairVolumes[pair]) {
+      // console.log(pair, ret)
+      pairVolumes[pair].volume = Number(ret.quoteVolume);
+      pairVolumes[pair].ethVolume = Number(ret.baseVolume);
+    }
+    const tokenA = this.getToken(A);
+    const tokenB = this.getToken(B);
+    if (tokenA) {
+      if (tokenVolumes[A]) {
+        tokenVolumes[A].volume += Number(ret.baseVolume);
+        tokenVolumes[A].ethVolume += Number(ret.baseVolume);
+      } else {
+        tokenVolumes[A] = {
+          token: tokenA,
+          volume: Number(ret.baseVolume),
+          ethVolume: Number(ret.baseVolume),
+        };
+      }
+    }
+    if (tokenB) {
+      if (tokenVolumes[B]) {
+        tokenVolumes[B].volume += Number(ret.quoteVolume);
+        tokenVolumes[B].ethVolume += Number(ret.baseVolume);
+      } else {
+        tokenVolumes[B] = {
+          token: tokenB,
+          volume: Number(ret.quoteVolume),
+          ethVolume: Number(ret.baseVolume),
+        };
       }
     }
   });
@@ -2085,9 +2047,9 @@ EtherDelta.prototype.displayVolumes = function displayVolumes(orders, blockNumbe
     pairVolume.ask = ask;
   });
   tokenVolumes = Object.values(tokenVolumes);
-  tokenVolumes.sort((a, b) => b.ethVolumes[0] - a.ethVolumes[0]);
+  tokenVolumes.sort((a, b) => b.ethVolume - a.ethVolume);
   pairVolumes = Object.values(pairVolumes);
-  pairVolumes.sort((a, b) => b.ethVolumes[0] - a.ethVolumes[0]);
+  pairVolumes.sort((a, b) => b.ethVolume - a.ethVolume);
   this.ejs(`${this.config.homeURL}/templates/volume.ejs`, 'volume', {
     tokenVolumes,
     pairVolumes,
@@ -2373,6 +2335,20 @@ EtherDelta.prototype.getOrdersByPair = function getOrdersByPair(tokenA, tokenB, 
       this.apiServerNonce = Math.random().toString().slice(2) +
         Math.random().toString().slice(2);
       callback(err, this.ordersResultByPair);
+    }
+  });
+};
+EtherDelta.prototype.getReturnTicker = function getTopOrders(callback) {
+  utility.getURL(`${this.config.apiServer}/returnTicker`, (err, result) => {
+    if (!err) {
+      try {
+        const res = JSON.parse(result);
+        callback(null, res);
+      } catch (errCatch) {
+        callback(err, this.returnTicker);
+      }
+    } else {
+      callback(err, this.returnTicker);
     }
   });
 };
@@ -3569,6 +3545,16 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
                       });
                     },
                     (callbackParallel2) => {
+                      this.getReturnTicker((err, result) => {
+                        if (!err && result) {
+                          this.returnTicker = result;
+                        } else {
+                          console.log('Return ticker has not changed since last refresh.');
+                        }
+                        callbackParallel2(null, undefined);
+                      });
+                    },
+                    (callbackParallel2) => {
                       this.getOrdersByPair(
                       this.selectedToken.addr,
                       this.selectedBase.addr,
@@ -3597,6 +3583,7 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
                   (callbackParallel3) => {
                     console.log('Displaying volumes', new Date());
                     this.displayVolumes(this.topOrdersResult.orders,
+                    this.returnTicker,
                     this.topOrdersResult.blockNumber, () => {
                       console.log('Done displaying volumes', new Date());
                       callbackParallel3();

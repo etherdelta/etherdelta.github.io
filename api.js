@@ -795,17 +795,42 @@ API.getTopOrders = function getTopOrders() {
   return orders;
 };
 
-API.getOrdersByPair = function getOrdersByPair(tokenA, tokenB) {
+API.getOrdersByPair = function getOrdersByPair(tokenA, tokenB, n) {
   const orders = [];
   Object.keys(API.ordersCache).forEach((key) => {
     const order = API.ordersCache[key];
-    if ((order.order.tokenGive.toLowerCase() === tokenA.toLowerCase() &&
+    if (((order.order.tokenGive.toLowerCase() === tokenA.toLowerCase() &&
     order.order.tokenGet.toLowerCase() === tokenB.toLowerCase())
     || (order.order.tokenGive.toLowerCase() === tokenB.toLowerCase() &&
-    order.order.tokenGet.toLowerCase() === tokenA.toLowerCase())) {
+    order.order.tokenGet.toLowerCase() === tokenA.toLowerCase())) &&
+    Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+    Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize) {
       orders.push(order);
     }
   });
+  if (n) {
+    const topNOrders = [];
+    const buys = [];
+    const sells = [];
+    orders.forEach((order) => {
+      if (order.amount > 0 && order.order.tokenGive === tokenB &&
+      order.order.tokenGet === tokenA) {
+        buys.push(order);
+      } else if (order.amount < 0 && order.order.tokenGive === tokenA &&
+      order.order.tokenGet === tokenB) {
+        sells.push(order);
+      }
+    });
+    sells.sort((a, b) => a.price - b.price || a.id - b.id);
+    buys.sort((a, b) => b.price - a.price || a.id - b.id);
+    buys.slice(0, n).forEach((order) => {
+      topNOrders.push(order);
+    });
+    sells.slice(0, n).forEach((order) => {
+      topNOrders.push(order);
+    });
+    return topNOrders;
+  }
   return orders;
 };
 
