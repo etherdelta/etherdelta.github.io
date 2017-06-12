@@ -390,7 +390,7 @@ EtherDelta.prototype.loadEvents = function loadEvents(callback) {
   });
   console.log('lastBlock', lastBlock);
   utility.getURL(`${this.config.apiServer}/events/${this.apiServerNonce}/${lastBlock}`, (err, result) => {
-    if (!err) {
+    if (!err && result !== 'error') {
       try {
         const res = JSON.parse(result);
         const blockNumber = res.blockNumber;
@@ -932,7 +932,7 @@ function lineChart(elem, title, xtype, ytype, xtitle, ytitle, data) {
 };
 EtherDelta.prototype.getOrdersByPair = function getOrdersByPair(tokenA, tokenB, callback) {
   utility.getURL(`${this.config.apiServer}/orders/${this.apiServerNonce}/${tokenA}/${tokenB}`, (err, result) => {
-    if (!err) {
+    if (!err && result !== 'error') {
       try {
         const res = JSON.parse(result);
         const blockNumber = res.blockNumber;
@@ -975,7 +975,7 @@ EtherDelta.prototype.getOrdersByPair = function getOrdersByPair(tokenA, tokenB, 
 };
 EtherDelta.prototype.getReturnTicker = function getTopOrders(callback) {
   utility.getURL(`${this.config.apiServer}/returnTicker`, (err, result) => {
-    if (!err) {
+    if (!err && result !== 'error') {
       try {
         const res = JSON.parse(result);
         callback(null, res);
@@ -1907,9 +1907,10 @@ EtherDelta.prototype.getToken = function getToken(addrOrToken, name, decimals) {
     result = this.selectedToken;
   } else if (this.selectedBase.addr.toLowerCase() === lowerAddrOrToken) {
     result = this.selectedBase;
-  } else if (addrOrToken.addr && JSON.stringify(Object.keys(addrOrToken).sort()) === expectedKeys) {
+  } else if (addrOrToken && addrOrToken.addr &&
+  JSON.stringify(Object.keys(addrOrToken).sort()) === expectedKeys) {
     result = addrOrToken;
-  } else if (addrOrToken.slice(0, 2) === '0x' && name && decimals >= 0) {
+  } else if (typeof addrOrToken === 'string' && addrOrToken.slice(0, 2) === '0x' && name && decimals >= 0) {
     result = JSON.parse(JSON.stringify(this.config.tokens[0]));
     result.addr = lowerAddrOrToken;
     result.name = name;

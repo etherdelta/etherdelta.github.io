@@ -24,6 +24,7 @@ module.exports = {
   gasOrder: 250000,
   ordersOnchain: false,
   apiServer: 'https://api.etherdelta.com',
+  // apiServer: 'http://localhost:8001',
   userCookie: 'EtherDelta',
   eventsCacheCookie: 'EtherDelta_eventsCache',
   deadOrdersCacheCookie: 'EtherDelta_deadOrdersCache',
