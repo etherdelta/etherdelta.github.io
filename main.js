@@ -1193,7 +1193,7 @@ EtherDelta.prototype.displayAllBalances = function displayAllBalances(callback) 
     });
 };
 EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
-  let amount = utility.ethToWei(inputAmount, this.getDivisor(addr));
+  let amount = new BigNumber(utility.ethToWei(inputAmount, this.getDivisor(addr)));
   const token = this.getToken(addr);
   if (amount <= 0) {
     this.alertError('You must specify a valid amount to transfer.');
@@ -1407,7 +1407,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
   }
 };
 EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
-  let amount = utility.ethToWei(amountIn, this.getDivisor(addr));
+  let amount = new BigNumber(utility.ethToWei(amountIn, this.getDivisor(addr)));
   const token = this.getToken(addr);
   if (amount <= 0) {
     this.alertError('You must specify a valid amount to withdraw.');
@@ -1730,13 +1730,13 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
   let amount;
   if (kind === 'sell') {
     // if I'm selling a bid, the buyer is getting the token
-    amount = utility.ethToWei(inputAmount, this.getDivisor(order.tokenGet));
+    amount = new BigNumber(utility.ethToWei(inputAmount, this.getDivisor(order.tokenGet)));
   } else if (kind === 'buy') {
     // if I'm buying an offer, the seller is getting
     // the base and giving the token, so must convert to get terms
-    amount = utility.ethToWei(
+    amount = new BigNumber(utility.ethToWei(
       inputAmount * (Number(order.amountGet) / Number(order.amountGive)),
-      this.getDivisor(order.tokenGive));
+      this.getDivisor(order.tokenGive)));
   } else {
     return;
   }
@@ -1747,7 +1747,7 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
     'balanceOf',
     [order.tokenGet, this.addrs[this.selectedAccount]],
     (err, result) => {
-      const availableBalance = result.toNumber();
+      const availableBalance = result;
       utility.call(
         this.web3,
         this.contractEtherDelta,
@@ -1766,12 +1766,12 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
           order.s,
         ],
         (errAvailableVolume, resultAvailableVolume) => {
-          const availableVolume = resultAvailableVolume.toNumber();
-          if (amount > availableBalance / 1.0031) {
+          const availableVolume = resultAvailableVolume;
+          if (amount.gt(availableBalance.divToInt(1.0031))) {
             // balance adjusted for fees (0.0001 to avoid rounding error)
-            amount = availableBalance / 1.0031;
+            amount = availableBalance.divToInt(1.0031);
           }
-          if (amount > availableVolume) amount = availableVolume;
+          if (amount.gt(availableVolume)) amount = availableVolume;
           let v = Number(order.v);
           let r = order.r;
           let s = order.s;
