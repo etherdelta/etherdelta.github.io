@@ -1234,7 +1234,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
           undefined,
           toAddr,
           undefined,
-          [{ gas: this.config.gasDeposit, value: amount }],
+          [{ gas: this.config.gasDeposit, value: amount.toNumber() }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
