@@ -2106,6 +2106,11 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
       this.selectedBase = base;
       this.ordersResultByPair = { orders: [], blockNumber: 0 };
     }
+    if (this.selectedToken.name === 'ETH' && ['USD.DC', 'BTC.DC'].indexOf(this.selectedBase.name) < 0) {
+      const temp = this.selectedBase;
+      this.selectedBase = this.selectedToken;
+      this.selectedToken = temp;
+    }
     console.log('Beginning refresh', new Date(), `${this.selectedToken.name}/${this.selectedBase.name}`);
     this.selectedContract = this.config.contractEtherDeltaAddr;
     utility.createCookie(
