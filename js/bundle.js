@@ -2562,9 +2562,9 @@ EtherDelta.prototype.displayAllBalances = function displayAllBalances(callback) 
     });
 };
 EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
-  let amount = new BigNumber(utility.ethToWei(inputAmount, this.getDivisor(addr)));
+  let amount = new BigNumber(Number(utility.ethToWei(inputAmount, this.getDivisor(addr))));
   const token = this.getToken(addr);
-  if (amount <= 0) {
+  if (amount.lte(0)) {
     this.alertError('You must specify a valid amount to transfer.');
     ga('send', {
       hitType: 'event',
@@ -2587,8 +2587,8 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
   } else if (addr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
     // plain Ether transfer
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, balance) => {
-      if (amount > balance) amount = balance;
-      if (amount <= 0) {
+      if (amount.gt(balance)) amount = balance;
+      if (amount.lte(0)) {
         this.alertError('You do not have anything to transfer. Note: you can only transfer from your "Wallet." If you have Ether on deposit, please withdraw first, then transfer.');
         ga('send', {
           hitType: 'event',
@@ -2630,8 +2630,8 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
       'balanceOf',
       [this.addrs[this.selectedAccount]],
       (err, result) => {
-        if (amount > result) amount = result;
-        if (amount <= 0) {
+        if (amount.gt(result)) amount = result;
+        if (amount.lte(0)) {
           this.alertError('You do not have anything to transfer. Note: you can only transfer from your "Wallet." If you have tokens on deposit, please withdraw first, then transfer.');
           ga('send', {
             hitType: 'event',
@@ -2667,9 +2667,9 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
   }
 };
 EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
-  let amount = utility.ethToWei(inputAmount, this.getDivisor(addr));
+  let amount = new BigNumber(Number(utility.ethToWei(inputAmount, this.getDivisor(addr))));
   const token = this.getToken(addr);
-  if (amount <= 0) {
+  if (amount.lte(0)) {
     this.alertError('You must specify a valid amount to deposit.');
     ga('send', {
       hitType: 'event',
@@ -2682,14 +2682,14 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
   }
   if (addr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, result) => {
-      if (amount > result && amount < result * 1.1) amount = result;
-      if (amount <= result) {
+      if (amount.gt(result) && amount.lt(result.times(new BigNumber(1.1)))) amount = result;
+      if (amount.lte(result)) {
         utility.send(
           this.web3,
           this.contractEtherDelta,
           this.config.contractEtherDeltaAddr,
           'deposit',
-          [{ gas: this.config.gasDeposit, value: amount }],
+          [{ gas: this.config.gasDeposit, value: amount.toNumber() }],
           this.addrs[this.selectedAccount],
           this.pks[this.selectedAccount],
           this.nonce,
@@ -2724,8 +2724,8 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
       'balanceOf',
       [this.addrs[this.selectedAccount]],
       (err, result) => {
-        if (amount > result && amount < result * 1.1) amount = result;
-        if (amount <= result) {
+        if (amount.gt(result) && amount.lt(result.times(new BigNumber(1.1)))) amount = result;
+        if (amount.lte(result)) {
           utility.send(
             this.web3,
             this.contractToken,
@@ -2776,9 +2776,9 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
   }
 };
 EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
-  let amount = new BigNumber(utility.ethToWei(amountIn, this.getDivisor(addr)));
+  let amount = new BigNumber(Number(utility.ethToWei(amountIn, this.getDivisor(addr))));
   const token = this.getToken(addr);
-  if (amount <= 0) {
+  if (amount.lte(0)) {
     this.alertError('You must specify a valid amount to withdraw.');
     ga('send', {
       hitType: 'event',
@@ -2802,7 +2802,7 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
       if (amount > balance) {
         amount = balance;
       }
-      if (amount <= 0) {
+      if (amount.lte(0)) {
         this.alertError("You don't have anything to withdraw.");
         ga('send', {
           hitType: 'event',
