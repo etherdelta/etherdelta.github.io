@@ -1272,9 +1272,10 @@ module.exports = {
     { addr: '0x12fef5e57bf45873cd9b62e9dbd7bfb99e32d73e', name: 'CFI', decimals: 18 },
     { addr: '0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374', name: 'VERI', decimals: 18 },
     // { addr: '0x40395044ac3c0c57051906da938b54bd6557f212', name: 'MGO', decimals: 8 },
-    // { addr: '0x8ae4bf2c33a8e667de34b54938b0ccd03eb8cc06', name: 'PTOY', decimals: 8 },
+    { addr: '0x8ae4bf2c33a8e667de34b54938b0ccd03eb8cc06', name: 'PTOY', decimals: 8 },
     { addr: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c', name: 'BNT', decimals: 18 },
     { addr: '0x697beac28B09E122C4332D163985e8a73121b97F', name: 'QRL', decimals: 8 },
+    { addr: '0x0d547f8b8d7201523a834addbb27e40140ee6f18', name: 'GOOD', decimals: 0 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1316,9 +1317,10 @@ module.exports = {
     { token: 'CFI', base: 'ETH' },
     { token: 'VERI', base: 'ETH' },
     // { token: 'MGO', base: 'ETH' },
-    // { token: 'PTOY', base: 'ETH' },
+    { token: 'PTOY', base: 'ETH' },
     { token: 'BNT', base: 'ETH' },
     { token: 'QRL', base: 'ETH' },
+    { token: 'GOOD', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
@@ -2671,6 +2673,10 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
 EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
   let amount = new BigNumber(Number(utility.ethToWei(inputAmount, this.getDivisor(addr))));
   const token = this.getToken(addr);
+  if (token && token.name === 'PTOY') {
+    this.alertError('PTOY is completing a token upgrade. You can trade, but please refrain from depositing/withdrawing until the token upgrade is complete.');
+    return;
+  }
   if (amount.lte(0)) {
     this.alertError('You must specify a valid amount to deposit.');
     ga('send', {
@@ -2780,6 +2786,10 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
 EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
   let amount = new BigNumber(Number(utility.ethToWei(amountIn, this.getDivisor(addr))));
   const token = this.getToken(addr);
+  if (token && token.name === 'PTOY') {
+    this.alertError('PTOY is completing a token upgrade. You can trade, but please refrain from depositing/withdrawing until the token upgrade is complete.');
+    return;
+  }
   if (amount.lte(0)) {
     this.alertError('You must specify a valid amount to withdraw.');
     ga('send', {
