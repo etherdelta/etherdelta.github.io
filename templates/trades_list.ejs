@@ -1,0 +1,40 @@
+<table class="table table-condensed">
+  <tr>
+    <th>Transaction hash</th>
+    <th>Date</th>
+    <th>Pair</th>
+    <th>Price</th>
+    <th>Side</th>
+    <th>Amount</th>
+    <th>Amount (ETH)</th>
+    <th>Buyer</th>
+    <th>Seller</th>
+  </tr>
+  <% trades.forEach((trade) => { %>
+    <% if (trade.tokenGet.name === 'ETH') { %>
+      <tr>
+        <td><a href="https://etherscan.io/tx/<%= trade.txHash %>" target="_blank"><%= trade.txHash.slice(0, 10) %></a></td>
+        <td><%= trade.date.toISOString() %></td>
+        <td><a href="https://etherscan.io/token/<%= trade.tokenGive.addr %>"><%= trade.tokenGive.name %></a>/<%= trade.tokenGet.name %></td>
+        <td><%= trade.amountGet.div(trade.amountGive).toFixed(5) %></td>
+        <td>Buy</td>
+        <td><%= trade.amountGive.toFixed(3) %></td>
+        <td><%= trade.amountGet.toFixed(3) %></td>
+        <td><a href="https://etherscan.io/address/<%= trade.give %>" target="_blank"><%= trade.give.slice(0, 10) %></a></td>
+        <td><a href="https://etherscan.io/address/<%= trade.get %>" target="_blank"><%= trade.get.slice(0, 10) %></a></td>
+      </tr>
+    <% } else if (trade.tokenGive.name === 'ETH') { %>
+      <tr>
+        <td><a href="https://etherscan.io/tx/<%= trade.txHash %>" target="_blank"><%= trade.txHash.slice(0, 10) %></a></td>
+        <td><%= trade.date.toISOString() %></td>
+        <td><a href="https://etherscan.io/token/<%= trade.tokenGet.addr %>"><%= trade.tokenGet.name %></a>/<%= trade.tokenGive.name %></td>
+        <td><%= trade.amountGive.div(trade.amountGet).toFixed(5) %></td>
+        <td>Sell</td>
+        <td><%= trade.amountGet.toFixed(3) %></td>
+        <td><%= trade.amountGive.toFixed(3) %></td>
+        <td><a href="https://etherscan.io/address/<%= trade.get %>" target="_blank"><%= trade.get.slice(0, 10) %></a></td>
+        <td><a href="https://etherscan.io/address/<%= trade.give %>" target="_blank"><%= trade.give.slice(0, 10) %></a></td>
+      </tr>
+    <% } %>
+  <% }); %>
+</table>

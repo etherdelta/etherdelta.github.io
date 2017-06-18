@@ -1,0 +1,35 @@
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,700';
+
+html,body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  background: #fff;
+}
+
+.navbar.navbar-default {
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+}
+a.navbar-brand {
+  height: 50px;
+  padding: 0;
+}
+.navbar-brand img {
+  height: 100%;
+}
+
+.container-white {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  margin-top: -20px;
+  font-size: 90%;
+  padding: 20px;
+  background: #fff;
+}
+
+#trades_nav {
+  margin-top: 20px;
+}

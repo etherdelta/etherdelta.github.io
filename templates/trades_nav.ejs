@@ -1,0 +1,15 @@
+<form class="form-inline">
+  <div class="form-group">
+    <label class="sr-only">Ethereum address</label>
+    <input type="email" class="form-control" id="inputEthereumAddress" placeholder="Ethereum address 0x..." value="<%= inputEthereumAddress %>">
+  </div>
+  <div class="form-group">
+    <label class="sr-only">Token address</label>
+    <input type="email" class="form-control" id="inputTokenAddress" placeholder="Token address 0x..." value="<%= inputTokenAddress %>">
+  </div>
+  <button type="button" class="btn btn-primary" id="clickFilter">Filter</button>
+  <button type="button" class="btn btn-primary" id="clickEarlier">Download earlier transactions</button>
+  <button type="button" class="btn btn-primary" id="clickLater">Download later transactions</button>
+</form>
+
+<div style="margin-top: 20px;">Block range: <%= earliestBlock %> &#8212; <%= latestBlock %></div>
