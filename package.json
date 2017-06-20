@@ -16,6 +16,7 @@
     "keythereum": "0.2.6",
     "request": "2.72.0",
     "solc": "0.4.2",
+    "stats-lite": "^2.0.4",
     "web3": "0.17.0-alpha"
   },
   "devDependencies": {

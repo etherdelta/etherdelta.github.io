@@ -1275,7 +1275,7 @@ module.exports = {
     { addr: '0x8ae4bf2c33a8e667de34b54938b0ccd03eb8cc06', name: 'PTOY', decimals: 8 },
     { addr: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c', name: 'BNT', decimals: 18 },
     { addr: '0x697beac28B09E122C4332D163985e8a73121b97F', name: 'QRL', decimals: 8 },
-    { addr: '0x0d547f8b8d7201523a834addbb27e40140ee6f18', name: 'GOOD', decimals: 0 },
+    { addr: '0xbbb88154f8fa94c3b5bc65088ac7db80a926e9b4', name: 'GOOD', decimals: 18 },
     // { addr: '0x983f6d60db79ea8ca4eb9968c6aff8cfa04b3c63', name: 'SONM', decimals: 18 }, // not verified on Etherscan yet...
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },

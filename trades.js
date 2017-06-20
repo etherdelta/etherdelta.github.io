@@ -1,5 +1,5 @@
 /* eslint-env browser */
-/* global $, EJS */
+/* global $, EJS, google */
 
 const Web3 = require('web3');
 const BigNumber = require('bignumber.js');
@@ -7,6 +7,7 @@ const async = require('async');
 const request = require('request');
 const sha3 = require('web3/lib/utils/sha3.js');
 const SolidityEvent = require('web3/lib/web3/event.js');
+const stats = require('stats-lite');
 
 const addressEtherDelta = '0x8d12a197cb00d4747a1fe03395095ce2a5cc6819';
 const addressToken = '0xAf30D2a7E90d7DC361c8C4585e9BB7D2F6f15bc7';
@@ -152,13 +153,17 @@ function TradeUtil() {
       self.getCall(self.contractToken, addr, 'symbol', [], (errSymbol, dataSymbol) => {
         self.getCall(self.contractToken, addr, 'decimals', [], (errDecimals, dataDecimals) => {
           if (!errSymbol && !errDecimals) {
-            const symbol = web3.toAscii(dataSymbol.result).replace(/[\u{0000}-\u{0020}]/gu, '');
-            const decimals = web3.toDecimal(dataDecimals.result);
-            self.tokens[addr] = {
-              addr,
-              decimals,
-              name: symbol,
-            };
+            try {
+              const symbol = web3.toAscii(dataSymbol.result).replace(/[\u{0000}-\u{0020}]/gu, '');
+              const decimals = web3.toDecimal(dataDecimals.result);
+              self.tokens[addr] = {
+                addr,
+                decimals,
+                name: symbol,
+              };
+            } catch (err) {
+              console.log('Error getting token', addr);
+            }
             callback(null, self.tokens[addr]);
           } else {
             callback('Failed to get token', null);
@@ -169,38 +174,50 @@ function TradeUtil() {
   };
 
   self.processTrades = function processTrades(events, filter, callback) {
+    let i = 0;
     async.eachSeries(
       events,
       (event, callbackEach) => {
+        i += 1;
+        self.ejs('trades_progress.ejs', 'trades_progress', {
+          percent: Math.round((100 * i) / events.length),
+          display: true,
+        });
         if (event.event === 'Trade') {
           self.getTokenInfo(event.args.tokenGet, (errTokenGet, tokenGet) => {
             self.getTokenInfo(event.args.tokenGive, (errTokenGive, tokenGive) => {
-              if (!errTokenGet && !errTokenGive) {
-                const amountGet = event.args.amountGet
-                  .div(new BigNumber(10).pow(tokenGet.decimals));
-                const amountGive = event.args.amountGive
-                  .div(new BigNumber(10).pow(tokenGive.decimals));
-                const trade = {
-                  txHash: event.transactionHash,
-                  tokenGet,
-                  tokenGive,
-                  amountGet,
-                  amountGive,
-                  get: event.args.get,
-                  give: event.args.give,
-                  date: new Date(parseInt(event.timeStamp, 16) * 1000),
-                };
-                if ((trade.tokenGet.name === 'ETH' || trade.tokenGive.name === 'ETH')
-                 && trade.amountGive.gt(0) && trade.amountGet.gt(0)
-                ) {
-                  self.tradesCache.push(trade);
+              if (!errTokenGet && !errTokenGive && tokenGet && tokenGive) {
+                try {
+                  const amountGet = event.args.amountGet
+                    .div(new BigNumber(10).pow(new BigNumber(tokenGet.decimals)));
+                  const amountGive = event.args.amountGive
+                    .div(new BigNumber(10).pow(new BigNumber(tokenGive.decimals)));
+                  const trade = {
+                    txHash: event.transactionHash,
+                    tokenGet,
+                    tokenGive,
+                    amountGet,
+                    amountGive,
+                    get: event.args.get,
+                    give: event.args.give,
+                    date: new Date(parseInt(event.timeStamp, 16) * 1000),
+                  };
+                  if ((trade.tokenGet.name === 'ETH' || trade.tokenGive.name === 'ETH')
+                   && trade.amountGive.gt(0) && trade.amountGet.gt(0)
+                  ) {
+                    self.tradesCache.push(trade);
+                  }
+                } catch (err) {
+                  console.log(err);
                 }
+                setTimeout(callbackEach, 0);
+              } else {
+                setTimeout(callbackEach, 0);
               }
-              callbackEach();
             });
           });
         } else {
-          callbackEach();
+          setTimeout(callbackEach, 0);
         }
       },
       () => {
@@ -214,7 +231,7 @@ function TradeUtil() {
       if (kind === 'earlier') {
         let block = self.earliestBlock;
         const perBlock = 250;
-        const n = 10;
+        const n = 5;
         for (let i = 0; i < n && block > 0; i += 1) {
           ranges.push([Math.max(block - perBlock, 1), block]);
           block -= perBlock;
@@ -228,17 +245,23 @@ function TradeUtil() {
           block += perBlock;
         }
       }
-      async.map(
+      let i = 0;
+      async.mapSeries(
         ranges,
         (range, callbackMap) => {
           self.getLog(range[0], range[1], (err, events) => {
+            i += 1;
+            self.ejs('trades_progress.ejs', 'trades_progress', {
+              percent: Math.round((100 * i) / ranges.length),
+              display: true,
+            });
             callbackMap(err, events);
           });
         },
         (err, events) => {
           const newEvents = [];
           if (err) {
-            callback(err, 0);
+            callback(err, []);
           } else {
             const merged = [].concat.apply([], events); // eslint-disable-line
             merged.forEach((event) => {
@@ -268,8 +291,13 @@ function TradeUtil() {
                    trade.give.toLowerCase() === filter.inputEthereumAddress.toLowerCase())));
               trades.sort((a, b) => b.date - a.date);
 
+              self.ejs('trades_progress.ejs', 'trades_progress', {
+                display: false,
+                progress: 0,
+              });
               self.ejs('trades_list.ejs', 'trades_list', { trades });
-              callback(null, newEvents);
+              self.drawChart(filter);
+              callback(null, trades);
             });
           }
         });
@@ -292,8 +320,9 @@ function TradeUtil() {
           inputEthereumAddress: self.inputEthereumAddress,
           inputTokenAddress: self.inputTokenAddress,
         });
-        self.downloadTrades(null, {});
-        callback();
+        self.downloadTrades(null, {}, () => {
+          callback();
+        });
       });
   };
 
@@ -332,6 +361,91 @@ function TradeUtil() {
     }, () => {
       console.log('Filtered trades');
     });
+  };
+
+  self.drawChart = function drawChart(filter) {
+    $('#trades_chart').html('');
+    if (filter.inputTokenAddress) {
+      const trades = self.tradesCache.filter(trade =>
+        (!filter.inputTokenAddress ||
+         (trade.tokenGet.addr.toLowerCase() === filter.inputTokenAddress.toLowerCase() ||
+          trade.tokenGive.addr.toLowerCase() === filter.inputTokenAddress.toLowerCase())))
+      .sort((a, b) => a.date - b.date);
+
+      const rows = trades.map((trade) => {
+        const price = trade.tokenGet.name === 'ETH' ?
+          trade.amountGet.div(trade.amountGive).toNumber() :
+          trade.amountGive.div(trade.amountGet).toNumber();
+        return [trade.date, price];
+      });
+
+      const values = rows.map(x => x[1]);
+      const phigh = stats.percentile(values, 0.95);
+      const plow = stats.percentile(values, 0.05);
+
+      const filteredRows = rows.filter(x => x[1] >= plow && x[1] <= phigh);
+
+      if (filteredRows.length > 1) {
+        const interval = 1 * 60 * 60 * 1000;
+        let start = filteredRows[0][0];
+        let points = [];
+        const intervals = [];
+        filteredRows.forEach((row) => {
+          const [date, point] = row;
+          if (date - start > interval) {
+            if (points.length > 0) {
+              const low = Math.min.apply(null, points);
+              const high = Math.max.apply(null, points);
+              const open = points[0];
+              const close = points[points.length - 1];
+              if (close > open) {
+                intervals.push([start, low, open, close, high]);
+              } else {
+                intervals.push([start, high, close, open, low]);
+              }
+            }
+            start = new Date(start.getTime() + interval);
+            points = [];
+          }
+          points.push(point);
+        });
+
+        const data = google.visualization.arrayToDataTable(intervals, true);
+
+        const options = {
+          width: 900,
+          height: 500,
+          legend: { position: 'none' },
+          enableInteractivity: false,
+          chartArea: {
+            width: '85%',
+          },
+          hAxis: {
+            viewWindow: {
+              min: filteredRows[0].date,
+              max: filteredRows[filteredRows.length - 1].date,
+            },
+            gridlines: {
+              count: -1,
+              units: {
+                days: { format: ['MMM dd'] },
+                hours: { format: ['HH:mm', 'ha'] },
+              },
+            },
+            minorGridlines: {
+              units: {
+                hours: { format: ['hh:mm:ss a', 'ha'] },
+                minutes: { format: ['HH:mm a Z', ':mm'] },
+              },
+            },
+          },
+        };
+
+        const chart = new google.visualization.CandlestickChart(
+          document.getElementById('trades_chart'));
+        chart.draw(data, options);
+      }
+    }
   };
 
   self.ejs = function ejs(urlIn, element, data) {
