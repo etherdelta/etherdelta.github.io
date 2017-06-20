@@ -1276,6 +1276,7 @@ module.exports = {
     { addr: '0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c', name: 'BNT', decimals: 18 },
     { addr: '0x697beac28B09E122C4332D163985e8a73121b97F', name: 'QRL', decimals: 8 },
     { addr: '0xbbb88154f8fa94c3b5bc65088ac7db80a926e9b4', name: 'GOOD', decimals: 18 },
+    { addr: '0x744d70fdbe2ba4cf95131626614a1763df805b9e', name: 'SNT', decimals: 18 },
     // { addr: '0x983f6d60db79ea8ca4eb9968c6aff8cfa04b3c63', name: 'SONM', decimals: 18 }, // not verified on Etherscan yet...
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
@@ -1322,6 +1323,7 @@ module.exports = {
     { token: 'BNT', base: 'ETH' },
     { token: 'QRL', base: 'ETH' },
     { token: 'GOOD', base: 'ETH' },
+    { token: 'SNT', base: 'ETH' },
     // { token: 'SONM', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
