@@ -1278,6 +1278,7 @@ module.exports = {
     { addr: '0xae616e72d3d89e847f74e8ace41ca68bbf56af79', name: 'GOOD', decimals: 6 },
     { addr: '0x744d70fdbe2ba4cf95131626614a1763df805b9e', name: 'SNT', decimals: 18 },
     // { addr: '0x983f6d60db79ea8ca4eb9968c6aff8cfa04b3c63', name: 'SONM', decimals: 18 }, // not verified on Etherscan yet...
+    { addr: '0xb64ef51c888972c908cfacf59b47c1afbc0ab8ac', name: 'STORJ', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1325,6 +1326,7 @@ module.exports = {
     { token: 'GOOD', base: 'ETH' },
     { token: 'SNT', base: 'ETH' },
     // { token: 'SONM', base: 'ETH' },
+    { token: 'STORJ', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
