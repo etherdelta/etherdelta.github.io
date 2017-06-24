@@ -33,3 +33,7 @@ a.navbar-brand {
 #trades_nav {
   margin-top: 20px;
 }
+
+.form-row {
+  margin-bottom: 10px;
+}

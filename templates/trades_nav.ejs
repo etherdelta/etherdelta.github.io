@@ -1,4 +1,18 @@
-<form class="form-inline">
+<form class="form-inline form-row">
+  <div class="form-group">
+    <label class="sr-only">Start block</label>
+    <input type="text" class="form-control" id="inputStartBlock" value="<%= earliestBlock %>">
+  </div>
+  <div class="form-group">
+    <label class="sr-only">End block</label>
+    <input type="text" class="form-control" id="inputEndBlock" value="<%= latestBlock %>">
+  </div>
+  <button type="button" class="btn btn-primary" id="clickRange">Download transactions in block range</button>
+  <button type="button" class="btn btn-primary" id="clickEarlier">Download earlier transactions</button>
+  <button type="button" class="btn btn-primary" id="clickLater">Download later transactions</button>
+</form>
+
+<form class="form-inline form-row">
   <div class="form-group">
     <label class="sr-only">Ethereum address</label>
     <input type="email" class="form-control" id="inputEthereumAddress" placeholder="Ethereum address 0x..." value="<%= inputEthereumAddress %>">
@@ -8,8 +22,4 @@
     <input type="email" class="form-control" id="inputTokenAddress" placeholder="Token address 0x..." value="<%= inputTokenAddress %>">
   </div>
   <button type="button" class="btn btn-primary" id="clickFilter">Filter</button>
-  <button type="button" class="btn btn-primary" id="clickEarlier">Download earlier transactions</button>
-  <button type="button" class="btn btn-primary" id="clickLater">Download later transactions</button>
 </form>
-
-<div style="margin-top: 20px;">Block range: <%= earliestBlock %> &#8212; <%= latestBlock %></div>

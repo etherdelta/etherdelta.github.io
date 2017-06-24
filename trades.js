@@ -228,21 +228,24 @@ function TradeUtil() {
   self.downloadTrades = function downloadTrades(kind, filter, callback) {
     self.getBlockNumber(() => {
       const ranges = [];
+      const perBlock = 250;
+      const n = 10;
       if (kind === 'earlier') {
         let block = self.earliestBlock;
-        const perBlock = 250;
-        const n = 5;
         for (let i = 0; i < n && block > 0; i += 1) {
           ranges.push([Math.max(block - perBlock, 1), block]);
           block -= perBlock;
         }
       } else if (kind === 'later') {
         let block = self.latestBlock;
-        const perBlock = 250;
-        const n = 10;
         for (let i = 0; i < n && block <= self.blockNumber; i += 1) {
           ranges.push([block, Math.min(block + perBlock, self.blockNumber)]);
           block += perBlock;
+        }
+      } else if (Array.isArray(kind)) {
+        const [startBlock, endBlock] = kind;
+        for (let i = startBlock; i <= endBlock; i += perBlock) {
+          ranges.push([Math.max(i, 1), Math.min(i + perBlock, self.blockNumber)]);
         }
       }
       let i = 0;
@@ -274,6 +277,9 @@ function TradeUtil() {
               if (kind === 'earlier' && ranges.length > 0) {
                 self.earliestBlock = ranges[ranges.length - 1][0];
               } else if (kind === 'later' && ranges.length > 0) {
+                self.latestBlock = ranges[ranges.length - 1][1];
+              } else if (Array.isArray(kind)) {
+                self.earliestBlock = ranges[0][0];
                 self.latestBlock = ranges[ranges.length - 1][1];
               }
               self.ejs('trades_nav.ejs', 'trades_nav', {
@@ -331,6 +337,7 @@ function TradeUtil() {
     self.inputTokenAddress = $('#inputTokenAddress').val();
     $('#clickEarlier').prop('disabled', true);
     $('#clickLater').prop('disabled', true);
+    $('#clickRange').prop('disabled', true);
     self.downloadTrades('earlier', {
       inputEthereumAddress: self.inputEthereumAddress,
       inputTokenAddress: self.inputTokenAddress,
@@ -344,7 +351,22 @@ function TradeUtil() {
     self.inputTokenAddress = $('#inputTokenAddress').val();
     $('#clickEarlier').prop('disabled', true);
     $('#clickLater').prop('disabled', true);
+    $('#clickRange').prop('disabled', true);
     self.downloadTrades('later', {
+      inputEthereumAddress: self.inputEthereumAddress,
+      inputTokenAddress: self.inputTokenAddress,
+    }, () => {
+      console.log('Downloaded trades');
+    });
+  };
+
+  self.clickRange = function clickLater() {
+    self.inputEthereumAddress = $('#inputEthereumAddress').val();
+    self.inputTokenAddress = $('#inputTokenAddress').val();
+    $('#clickEarlier').prop('disabled', true);
+    $('#clickLater').prop('disabled', true);
+    $('#clickRange').prop('disabled', true);
+    self.downloadTrades([Number($('#inputStartBlock').val()), Number($('#inputEndBlock').val())], {
       inputEthereumAddress: self.inputEthereumAddress,
       inputTokenAddress: self.inputTokenAddress,
     }, () => {
