@@ -93,6 +93,7 @@ module.exports = {
     // { addr: '0x983f6d60db79ea8ca4eb9968c6aff8cfa04b3c63', name: 'SONM', decimals: 18 }, // not verified on Etherscan yet...
     { addr: '0x1776e1f26f98b1a5df9cd347953a26dd3cb46671', name: 'NMR', decimals: 18 },
     { addr: '0x93e682107d1e9defb0b5ee701c71707a4b2e46bc', name: 'MCAP', decimals: 8 },
+    { addr: '0xb97048628db6b661d4c2aa833e95dbe1a905b280', name: 'PAY', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -142,6 +143,7 @@ module.exports = {
     // { token: 'SONM', base: 'ETH' },
     { token: 'NMR', base: 'ETH' },
     { token: 'MCAP', base: 'ETH' },
+    { token: 'PAY', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
