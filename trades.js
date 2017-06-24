@@ -388,6 +388,8 @@ function TradeUtil() {
       if (filteredRows.length > 1) {
         const interval = 1 * 60 * 60 * 1000;
         let start = filteredRows[0][0];
+        const p = 60 * 60 * 1000;
+        start = new Date(Math.round(start.getTime() / p) * p); // round to nearest hour
         let points = [];
         const intervals = [];
         filteredRows.forEach((row) => {
@@ -401,7 +403,7 @@ function TradeUtil() {
               if (close > open) {
                 intervals.push([start, low, open, close, high]);
               } else {
-                intervals.push([start, high, close, open, low]);
+                intervals.push([start, high, open, close, low]);
               }
             }
             start = new Date(start.getTime() + interval);
@@ -416,7 +418,7 @@ function TradeUtil() {
           width: 900,
           height: 500,
           legend: { position: 'none' },
-          enableInteractivity: false,
+          enableInteractivity: true,
           chartArea: {
             width: '85%',
           },
