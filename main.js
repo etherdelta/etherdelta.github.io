@@ -60,6 +60,7 @@ function EtherDelta() {
   this.returnTicker = {};
   this.web3 = undefined;
   this.daysOfData = 7;
+  this.minGas = 0.005;
   window.addEventListener('load', () => {
     this.startEtherDelta();
   });
@@ -119,12 +120,13 @@ EtherDelta.prototype.alertSuccess = function alertSuccess(message) {
 };
 EtherDelta.prototype.txError = function txError(err) {
   console.log('Error', err);
+  const minGas = this.minGas;
   utility.getBalance(this.web3, this.addrs[this.selectedAccount], (errBalance, resultBalance) => {
     const balance = utility.weiToEth(resultBalance);
     if (this.connection.connection === 'RPC') {
-      if (balance < 0.005) {
+      if (balance < minGas) {
         this.alertError(
-          `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
+          `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
         ga('send', {
           hitType: 'event',
           eventCategory: 'Error',
@@ -155,9 +157,9 @@ EtherDelta.prototype.txError = function txError(err) {
           eventCategory: 'Error',
           eventAction: 'Ethereum - transaction error',
         });
-      } else if (balance < 0.005) {
+      } else if (balance < minGas) {
         this.alertError(
-          `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
+          `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
         ga('send', {
           hitType: 'event',
           eventCategory: 'Error',
@@ -165,7 +167,7 @@ EtherDelta.prototype.txError = function txError(err) {
         });
       } else {
         this.alertError(
-          "You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).");
+          `You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
         ga('send', {
           hitType: 'event',
           eventCategory: 'Error',
@@ -174,7 +176,7 @@ EtherDelta.prototype.txError = function txError(err) {
       }
     } else {
       this.alertError(
-        "You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends 0.005 ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than 0.005 so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).");
+        `You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
       ga('send', {
         hitType: 'event',
         eventCategory: 'Error',
@@ -1990,6 +1992,11 @@ EtherDelta.prototype.selectTokenAndBase = function selectTokenAndBase(tokenAddr,
     });
   }
 };
+EtherDelta.prototype.setGasPrice = function setGasPrice(gasPrice) {
+  if (gasPrice) {
+    this.config.ethGasPrice = Number(gasPrice) * 1000000000;
+  }
+};
 EtherDelta.prototype.displayBuySell = function displayBuySell(callback) {
   this.ejs(`${this.config.homeURL}/templates/buy.ejs`, 'buy', {
     selectedToken: this.selectedToken,
@@ -2302,6 +2309,7 @@ EtherDelta.prototype.loadWeb3 = function loadWeb3(callback) {
           testnet: this.config.ethTestnet,
         };
         $('#pkDiv').hide();
+        $('#gasPrice').replaceWith('<p>Set in MetaMask</p>');
         setTimeout(() => {
           callbackUntil(null);
         }, 500);
@@ -2318,12 +2326,14 @@ EtherDelta.prototype.loadWeb3 = function loadWeb3(callback) {
       const coinbase = this.web3.eth.coinbase;
       console.log(`Coinbase: ${coinbase}`);
       $('#pkDiv').hide();
+      $('#gasPrice').replaceWith('<p>Set in MetaMask</p>');
     } catch (err) {
       this.connection = {
         connection: 'Proxy',
         provider: `https://${this.config.ethTestnet ? `${this.config.ethTestnet}.` : ''}etherscan.io`,
         testnet: this.config.ethTestnet,
       };
+      $('#gasPrice').val(this.config.ethGasPrice / 1000000000);
       this.web3.setProvider(undefined);
     }
     callback();

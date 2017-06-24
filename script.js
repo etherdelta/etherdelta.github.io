@@ -125,6 +125,17 @@ $(() => {
       $('#otherBaseDecimals').val());
   });
 });
+$('#gasPriceModal').on('show.bs.modal', () => {
+  $('#gasPrice').val(bundle.EtherDelta.config.ethGasPrice / 1000000000);
+});
+$(() => {
+  $('body').on('click', '#gasPriceSubmit', (e) => {
+    e.preventDefault();
+    $('#gasPriceModal').modal('hide');
+    bundle.EtherDelta.setGasPrice(
+      $('#gasPrice').val());
+  });
+});
 function depositClick(addr) { // eslint-disable-line no-unused-vars
   bundle.EtherDelta.deposit(addr, $(`#depositAmount${addr}`).val());
 }

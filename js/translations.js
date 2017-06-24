@@ -73,6 +73,24 @@ module.exports = {
     fr: 'Le nombre de blocs Ethereum jusqu\'à ce que l\'ordre expire automatiquement. (Chaque bloc est de 14 secondes.)',
     es: 'El número de bloques Ethereum hasta que el pedido expire automáticamente. (Cada bloque es de 14 segundos.)',
   },
+  gas_price: {
+    en: 'Gas price',
+    cn: '气体价格',
+    fr: 'Prix de l\'essence',
+    es: 'Precio del gas',
+  },
+  gas_price_gwei: {
+    en: 'Gas price (gwei)',
+    cn: '气体价格 (gwei)',
+    fr: 'Prix de l\'essence (gwei)',
+    es: 'Precio del gas (gwei)',
+  },
+  set_gas_price: {
+    en: 'Set gas price',
+    cn: '气体价格',
+    fr: 'Prix de l\'essence',
+    es: 'Precio del gas',
+  },
   FAQ: {
     en: 'FAQ',
     cn: 'FAQ',
