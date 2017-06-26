@@ -1282,6 +1282,7 @@ module.exports = {
     { addr: '0x93e682107d1e9defb0b5ee701c71707a4b2e46bc', name: 'MCAP', decimals: 8 },
     { addr: '0xb97048628db6b661d4c2aa833e95dbe1a905b280', name: 'PAY', decimals: 18 },
     { addr: '0x5a84969bb663fb64f6d015dcf9f622aedc796750', name: 'ICE', decimals: 18 },
+    { addr: '0xd14ccc72df063db59386c371e00292ca529400ac', name: 'PPT', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1333,6 +1334,7 @@ module.exports = {
     { token: 'MCAP', base: 'ETH' },
     { token: 'PAY', base: 'ETH' },
     { token: 'ICE', base: 'ETH' },
+    { token: 'PPT', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
