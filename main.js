@@ -2355,6 +2355,11 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
       this.alertError('You are connected to the Ethereum testnet. Please connect to the Ethereum mainnet.');
     }
     this.config = config;
+    if (Array.isArray(this.config.apiServer)) {
+      this.config.apiServer = this.config.apiServer[
+        Math.floor(Math.random() * this.config.apiServer.length)];
+      console.log('Selected API', this.config.apiServer);
+    }
     // default selected token and base
     this.selectedToken = this.config.tokens.find(
       x => x.name === this.config.defaultPair.token) || this.config.tokens[1];
