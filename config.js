@@ -153,7 +153,7 @@ module.exports = {
     { token: 'PPT', base: 'ETH' },
     { token: 'FUN', base: 'ETH' },
     { token: 'ADT', base: 'ETH' },
-    { token: 'E4O', base: 'ETH' },
+    { token: 'E4ROW', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
