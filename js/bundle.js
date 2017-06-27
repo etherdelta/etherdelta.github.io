@@ -1277,7 +1277,7 @@ module.exports = {
     { addr: '0x697beac28B09E122C4332D163985e8a73121b97F', name: 'QRL', decimals: 8 },
     { addr: '0xae616e72d3d89e847f74e8ace41ca68bbf56af79', name: 'GOOD', decimals: 6 },
     { addr: '0x744d70fdbe2ba4cf95131626614a1763df805b9e', name: 'SNT', decimals: 18 },
-    // { addr: '0x983f6d60db79ea8ca4eb9968c6aff8cfa04b3c63', name: 'SONM', decimals: 18 }, // not verified on Etherscan yet...
+    // { addr: '0x983f6d60db79ea8ca4eb9968c6aff8cfa04b3c63', name: 'SONM', decimals: 18 }, // not verified on Etherscan yet....
     { addr: '0x1776e1f26f98b1a5df9cd347953a26dd3cb46671', name: 'NMR', decimals: 18 },
     { addr: '0x93e682107d1e9defb0b5ee701c71707a4b2e46bc', name: 'MCAP', decimals: 8 },
     { addr: '0xb97048628db6b661d4c2aa833e95dbe1a905b280', name: 'PAY', decimals: 18 },
@@ -1285,6 +1285,7 @@ module.exports = {
     { addr: '0xd14ccc72df063db59386c371e00292ca529400ac', name: 'PPT', decimals: 8 },
     { addr: '0xbbb1bd2d741f05e144e6c4517676a15554fd4b8d', name: 'FUN', decimals: 8 },
     { addr: '0xd0d6d6c5fe4a677d343cc433536bb717bae167dd', name: 'ADT', decimals: 9 },
+    { addr: '0xce5c603c78d047ef43032e96b5b785324f753a4f', name: 'E4O', decimals: 2 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1339,6 +1340,7 @@ module.exports = {
     { token: 'PPT', base: 'ETH' },
     { token: 'FUN', base: 'ETH' },
     { token: 'ADT', base: 'ETH' },
+    { token: 'E4O', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
