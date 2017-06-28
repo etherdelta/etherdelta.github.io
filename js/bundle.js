@@ -1286,6 +1286,7 @@ module.exports = {
     { addr: '0xbbb1bd2d741f05e144e6c4517676a15554fd4b8d', name: 'FUN', decimals: 8 },
     { addr: '0xd0d6d6c5fe4a677d343cc433536bb717bae167dd', name: 'ADT', decimals: 9 },
     { addr: '0xce5c603c78d047ef43032e96b5b785324f753a4f', name: 'E4ROW', decimals: 2 },
+    { addr: '0xb64ef51c888972c908cfacf59b47c1afbc0ab8ac', name: 'STORJ', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1341,6 +1342,7 @@ module.exports = {
     { token: 'FUN', base: 'ETH' },
     { token: 'ADT', base: 'ETH' },
     { token: 'E4ROW', base: 'ETH' },
+    { token: 'STORJ', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
