@@ -2,7 +2,7 @@
 <ul class="dropdown-menu">
   <li><a href="javascript:;"><span class="trn">connection</span>: <%= connection.connection %> (<%= connection.provider %>) <%= connection.testnet ? 'TESTNET' : ''%></a></li>
   <li><a href="<%= contractLink%>" target="_blank"><span class="trn">etherscan_contract</span></a></li>
-  <li><a href="javascript:;" onclick="bundle.EtherDelta.displayHelp('smartContract')"><span class="trn">smart_contract_overview</span></a></li>
+  <li><a href="https://www.reddit.com/r/EtherDelta/comments/6kdiyl/smart_contract_overview/" target="_blank"><span class="trn">smart_contract_overview</span></a></li>
   <li role="separator" class="divider"></li>
   <% contracts.forEach(function(contract){ %>
     <li style="<%= contractAddr==contract.addr ? 'background: #999;' : ''%>"><a href="javascript:;" onclick="bundle.EtherDelta.contractAddr('<%= contract.addr %>');"><%= contract.addr.substring(0,12) %>... (<%= contract.info %>)</a></li>

@@ -33,6 +33,7 @@ function EtherDelta() {
   }, 1);
   this.addrs = undefined;
   this.pks = undefined;
+  this.addrKinds = {};
   this.selectedAccount = 0;
   this.selectedToken = undefined;
   this.selectedBase = undefined;
@@ -123,60 +124,37 @@ EtherDelta.prototype.txError = function txError(err) {
   const minGas = this.minGas;
   utility.getBalance(this.web3, this.addrs[this.selectedAccount], (errBalance, resultBalance) => {
     const balance = utility.weiToEth(resultBalance);
-    if (this.connection.connection === 'RPC') {
-      if (balance < minGas) {
-        this.alertError(
-          `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'Error',
-          eventAction: 'Ethereum - transaction error',
-        });
-      } else {
-        this.alertError(
-          'You tried to send an Ethereum transaction but there was an error. Make sure the account you have selected in the account dropdown (upper right) matches the one you have selected in MetaMask.');
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'Error',
-          eventAction: 'Ethereum - transaction error',
-        });
-      }
-    } else if (this.connection.connection === 'Proxy') {
-      if (this.pks[this.selectedAccount] &&
-      !utility.verifyPrivateKey(this.addrs[this.selectedAccount], this.pks[this.selectedAccount])) {
-        this.alertError('You tried to send an Ethereum transaction but there was an error. The private key for your account is invalid. Please re-import your account with a valid private key and try again.');
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'Error',
-          eventAction: 'Ethereum - transaction error',
-        });
-      } else if (!this.pks[this.selectedAccount]) {
-        this.alertError('You tried to send an Ethereum transaction but there was an error. Your account has no private key. Please re-import your account with a valid private key and try again.');
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'Error',
-          eventAction: 'Ethereum - transaction error',
-        });
-      } else if (balance < minGas) {
-        this.alertError(
-          `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'Error',
-          eventAction: 'Ethereum - transaction error',
-        });
-      } else {
-        this.alertError(
-          `You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'Error',
-          eventAction: 'Ethereum - transaction error',
-        });
-      }
-    } else {
+    if (this.connection.connection === 'RPC' && this.addrKinds[this.selectedAccount] !== 'MetaMask') {
+      this.alertError('You tried to send an Ethereum transaction but there was an error. You are connected to MetaMask, but you are trying to use a non-MetaMask account. Please switch to a MetaMask account, or disable MetaMask (from Chrome\'s Window -> Extensions menu), then refresh and try again.');
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Error',
+        eventAction: 'Ethereum - transaction error',
+      });
+    } else if (this.connection.connection === 'Proxy' && !this.pks[this.selectedAccount]) {
+      this.alertError('You tried to send an Ethereum transaction but there was an error. You are using an EtherDelta account that doesn\'t have a private key attached. Perhaps you created the account using MetaMask, in which case you should enable MetaMask and refresh. Or, if you have the private key, you can choose "Import account" from the accounts dropdown (upper right) to re-import the account with its privte key.');
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Error',
+        eventAction: 'Ethereum - transaction error',
+      });
+    } else if (this.connection.connection === 'Proxy' && !utility.verifyPrivateKey(this.addrs[this.selectedAccount], this.pks[this.selectedAccount])) {
+      this.alertError('You tried to send an Ethereum transaction but there was an error. You are using an EtherDelta account that has an invalid private key.');
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Error',
+        eventAction: 'Ethereum - transaction error',
+      });
+    } else if (this.connection.connection === 'Proxy' && balance < minGas) {
       this.alertError(
-        `You tried to send an Ethereum transaction but there was an error. Make sure you have enough ETH in your wallet to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
+        `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
+      ga('send', {
+        hitType: 'event',
+        eventCategory: 'Error',
+        eventAction: 'Ethereum - transaction error',
+      });
+    } else {
+      this.alertError('You tried to send an Ethereum transaction but there was an error.');
       ga('send', {
         hitType: 'event',
         eventCategory: 'Error',
@@ -223,18 +201,6 @@ EtherDelta.prototype.enableTooltipsAndPopovers = function enableTooltipsAndPopov
   $('[data-toggle="popover"]').popover({ trigger: 'hover' });
   $('[data-toggle="tooltip"]').tooltip();
 };
-EtherDelta.prototype.logout = function logout() {
-  this.addrs = [this.config.ethAddr];
-  this.pks = [this.config.ethAddrPrivateKey];
-  this.selectedAccount = 0;
-  this.nonce = undefined;
-  this.refresh(() => {}, true, true);
-  ga('send', {
-    hitType: 'event',
-    eventCategory: 'Action',
-    eventAction: 'Logout',
-  });
-};
 EtherDelta.prototype.createAccount = function createAccount() {
   const newAccount = utility.createAccount();
   const addr = newAccount.address;
@@ -249,6 +215,17 @@ EtherDelta.prototype.createAccount = function createAccount() {
   });
 };
 EtherDelta.prototype.deleteAccount = function deleteAccount() {
+  if (this.pks[this.selectedAccount]) {
+    const addr = this.addrs[this.selectedAccount];
+    const pk = this.pks[this.selectedAccount];
+    this.alertDialog(
+      `You are about to remove an Ethereum account: ${addr}<br /><br />If it has funds, please BACKUP the private key for this account: ${pk}`);
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Action',
+      eventAction: 'Show private key and delete',
+    });
+  }
   this.addrs.splice(this.selectedAccount, 1);
   this.pks.splice(this.selectedAccount, 1);
   this.selectedAccount = 0;
@@ -345,10 +322,13 @@ EtherDelta.prototype.displayAccounts = function displayAccounts(callback) {
     this.selectedAccount = 0;
   }
   async.map(
-    this.addrs,
-    (addr, callbackMap) => {
+    this.addrs.map((x, i) => i),
+    (i, callbackMap) => {
+      const addr = this.addrs[i];
+      const pk = this.pks[i] ? true : false; // eslint-disable-line no-unneeded-ternary
+      const kind = this.addrKinds[i];
       utility.getBalance(this.web3, addr, (err, balance) => {
-        callbackMap(null, { addr, balance });
+        callbackMap(null, { addr, balance, pk, kind });
       });
     },
     (err, addresses) => {
@@ -357,6 +337,7 @@ EtherDelta.prototype.displayAccounts = function displayAccounts(callback) {
         addresses,
         selectedAccount: this.selectedAccount,
         addressLink,
+        connection: this.connection.connection,
       });
       callback();
     });
@@ -1991,6 +1972,7 @@ EtherDelta.prototype.selectTokenAndBase = function selectTokenAndBase(tokenAddr,
 EtherDelta.prototype.setGasPrice = function setGasPrice(gasPrice) {
   if (gasPrice) {
     this.config.ethGasPrice = Number(gasPrice) * 1000000000;
+    this.minGas = (this.config.ethGasPrice * this.config.gasDeposit) / (10 ** 18);
   }
 };
 EtherDelta.prototype.displayBuySell = function displayBuySell(callback) {
@@ -2351,6 +2333,7 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
       this.alertError('You are connected to the Ethereum testnet. Please connect to the Ethereum mainnet.');
     }
     this.config = config;
+    this.minGas = (this.config.ethGasPrice * this.config.gasDeposit) / (10 ** 18);
     if (Array.isArray(this.config.apiServer)) {
       this.config.apiServer = this.config.apiServer[
         Math.floor(Math.random() * this.config.apiServer.length)];
@@ -2384,12 +2367,25 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
     // get accounts
     this.web3.eth.defaultAccount = this.config.ethAddr;
     this.web3.eth.getAccounts((e, accounts) => {
-      if (!e) {
+      if (!e && accounts && accounts.length > 0) {
         accounts.forEach((addr) => {
-          if (this.addrs.indexOf(addr) < 0) {
+          const index = this.addrs.indexOf(addr);
+          if (index < 0) {
             this.addrs.push(addr);
             this.pks.push(undefined);
           }
+        });
+        this.addrs.forEach((addr, i) => {
+          if (accounts.indexOf(addr) >= 0) {
+            this.addrKinds[i] = 'MetaMask';
+          }
+        });
+      } else if (this.connection.connection === 'RPC') {
+        this.alertError('You are using MetaMask but you are not logged in. Please log in to MetaMask and refresh.');
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Ethereum - MetaMask not logged in',
         });
       }
     });
