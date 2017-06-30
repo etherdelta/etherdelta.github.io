@@ -1411,39 +1411,41 @@ EtherDelta.prototype.ejs = function ejs(url, element, data) {
     console.log(`Failed to render template because ${element} does not exist.`);
   }
 };
-EtherDelta.prototype.alertInfo = function alertInfo(message) {
+if (!alertify.dialogError) {
+  alertify.dialog('dialogError', function factory() { // eslint-disable-line prefer-arrow-callback
+    const header = '<span class="fa fa-times-circle fa-2x" style="vertical-align: middle; color: #ff0000;"></span> Error';
+    return {
+      build() {
+        this.setHeader(header);
+      },
+    };
+  }, true, 'alert');
+}
+if (!alertify.dialogInfo) {
+  alertify.dialog('dialogInfo', function factory() { // eslint-disable-line prefer-arrow-callback
+    const header = '<span class="fa fa-info-circle fa-2x" style="vertical-align: middle; color: #0000ff;"></span>';
+    return {
+      build() {
+        this.setHeader(header);
+      },
+    };
+  }, true, 'alert');
+}
+EtherDelta.prototype.dialogInfo = function dialogInfo(message) {
   console.log(message);
-  alertify.message(message);
+  alertify.dialogInfo(message);
   ga('send', {
     hitType: 'event',
-    eventCategory: 'Alert',
+    eventCategory: 'Dialog',
     eventAction: 'Info',
   });
 };
-EtherDelta.prototype.alertDialog = function alertDialog(message) {
+EtherDelta.prototype.dialogError = function dialogError(message) {
   console.log(message);
-  alertify.alert('Alert', message, () => {});
+  alertify.dialogError(message);
   ga('send', {
     hitType: 'event',
-    eventCategory: 'Alert',
-    eventAction: 'Dialog',
-  });
-};
-EtherDelta.prototype.alertWarning = function alertWarning(message) {
-  console.log(message);
-  alertify.warning(message);
-  ga('send', {
-    hitType: 'event',
-    eventCategory: 'Alert',
-    eventAction: 'Warning',
-  });
-};
-EtherDelta.prototype.alertError = function alertError(message) {
-  console.log(message);
-  alertify.alert('Error', message, () => {});
-  ga('send', {
-    hitType: 'event',
-    eventCategory: 'Alert',
+    eventCategory: 'Dialog',
     eventAction: 'Error',
   });
 };
@@ -1462,28 +1464,28 @@ EtherDelta.prototype.txError = function txError(err) {
   utility.getBalance(this.web3, this.addrs[this.selectedAccount], (errBalance, resultBalance) => {
     const balance = utility.weiToEth(resultBalance);
     if (this.connection.connection === 'RPC' && this.addrKinds[this.selectedAccount] !== 'MetaMask') {
-      this.alertError('You tried to send an Ethereum transaction but there was an error. You are connected to MetaMask, but you are trying to use a non-MetaMask account. Please switch to a MetaMask account, or disable MetaMask (from Chrome\'s Window -> Extensions menu), then refresh and try again.');
+      this.dialogError('You tried to send an Ethereum transaction but there was an error. You are connected to MetaMask, but you are either using a non-MetaMask account, or you are not logged into the MetaMask account you have selected (check this in MetaMask, then refresh and try again!). If you don\'t want to use MetMask, please disable it (from Chrome\'s Window -> Extensions menu), then refresh and try again.');
       ga('send', {
         hitType: 'event',
         eventCategory: 'Error',
         eventAction: 'Ethereum - transaction error',
       });
     } else if (this.connection.connection === 'Proxy' && !this.pks[this.selectedAccount]) {
-      this.alertError('You tried to send an Ethereum transaction but there was an error. You are using an EtherDelta account that doesn\'t have a private key attached. Perhaps you created the account using MetaMask, in which case you should enable MetaMask and refresh. Or, if you have the private key, you can choose "Import account" from the accounts dropdown (upper right) to re-import the account with its privte key.');
+      this.dialogError('You tried to send an Ethereum transaction but there was an error. You are using an EtherDelta account that doesn\'t have a private key attached. Perhaps you created the account using MetaMask, in which case you should enable MetaMask and refresh. Or, if you have the private key, you can choose "Import account" from the accounts dropdown (upper right) to re-import the account with its privte key.');
       ga('send', {
         hitType: 'event',
         eventCategory: 'Error',
         eventAction: 'Ethereum - transaction error',
       });
     } else if (this.connection.connection === 'Proxy' && !utility.verifyPrivateKey(this.addrs[this.selectedAccount], this.pks[this.selectedAccount])) {
-      this.alertError('You tried to send an Ethereum transaction but there was an error. You are using an EtherDelta account that has an invalid private key.');
+      this.dialogError('You tried to send an Ethereum transaction but there was an error. You are using an EtherDelta account that has an invalid private key.');
       ga('send', {
         hitType: 'event',
         eventCategory: 'Error',
         eventAction: 'Ethereum - transaction error',
       });
     } else if (this.connection.connection === 'Proxy' && balance < minGas) {
-      this.alertError(
+      this.dialogError(
         `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
       ga('send', {
         hitType: 'event',
@@ -1491,7 +1493,7 @@ EtherDelta.prototype.txError = function txError(err) {
         eventAction: 'Ethereum - transaction error',
       });
     } else {
-      this.alertError('You tried to send an Ethereum transaction but there was an error.');
+      this.dialogError('You tried to send an Ethereum transaction but there was an error.');
       ga('send', {
         hitType: 'event',
         eventCategory: 'Error',
@@ -1511,7 +1513,7 @@ EtherDelta.prototype.alertTxResult = function alertTxResult(err, txsIn) {
         tx.txHash &&
         tx.txHash !== '0x0000000000000000000000000000000000000000000000000000000000000000'
       ) {
-        this.alertDialog(
+        this.dialogInfo(
           `You just created an Ethereum transaction. Track its progress: <a href="https://${this.config.ethTestnet ? `${this.config.ethTestnet}.` : ''}etherscan.io/tx/${tx.txHash}" target="_blank">${tx.txHash}</a>.`);
       } else {
         this.txError();
@@ -1522,7 +1524,7 @@ EtherDelta.prototype.alertTxResult = function alertTxResult(err, txsIn) {
         txs.forEach((tx) => {
           message += `<a href="https://${this.config.ethTestnet ? `${this.config.ethTestnet}.` : ''}etherscan.io/tx/${tx.txHash}" target="_blank">${tx.txHash}</a><br />`;
         });
-        this.alertDialog(message);
+        this.dialogInfo(message);
       } else {
         this.txError();
       }
@@ -1543,7 +1545,7 @@ EtherDelta.prototype.createAccount = function createAccount() {
   const addr = newAccount.address;
   const pk = newAccount.privateKey;
   this.addAccount(addr, pk);
-  this.alertDialog(
+  this.dialogInfo(
     `You just created an Ethereum account: ${addr}<br /><br />Please BACKUP the private key for this account: ${pk}`);
   ga('send', {
     hitType: 'event',
@@ -1555,7 +1557,7 @@ EtherDelta.prototype.deleteAccount = function deleteAccount() {
   if (this.pks[this.selectedAccount]) {
     const addr = this.addrs[this.selectedAccount];
     const pk = this.pks[this.selectedAccount];
-    this.alertDialog(
+    this.dialogInfo(
       `You are about to remove an Ethereum account: ${addr}<br /><br />If it has funds, please BACKUP the private key for this account: ${pk}`);
     ga('send', {
       hitType: 'event',
@@ -1597,14 +1599,14 @@ EtherDelta.prototype.addAccount = function addAccount(newAddr, newPk) {
     verifyPrivateKey = false;
   }
   if (pk && !verifyPrivateKey) {
-    this.alertError(`For account ${addr}, the private key is invalid.`);
+    this.dialogError(`For account ${addr}, the private key is invalid.`);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Error',
       eventAction: 'Add Account - invalid private key',
     });
   } else if (!this.web3.isAddress(addr)) {
-    this.alertError(`The specified address, ${addr}, is invalid.`);
+    this.dialogError(`The specified address, ${addr}, is invalid.`);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Error',
@@ -1627,7 +1629,7 @@ EtherDelta.prototype.showPrivateKey = function showPrivateKey() {
   const addr = this.addrs[this.selectedAccount];
   const pk = this.pks[this.selectedAccount];
   if (!pk) {
-    this.alertError(
+    this.dialogError(
       `For account ${addr}, there is no private key available. You can still transact if you are connected to Ethereum and the account is unlocked.`);
     ga('send', {
       hitType: 'event',
@@ -1635,7 +1637,7 @@ EtherDelta.prototype.showPrivateKey = function showPrivateKey() {
       eventAction: 'Show private key - unavailable',
     });
   } else {
-    this.alertDialog(`For account ${addr}, the private key is ${pk}.`);
+    this.dialogInfo(`For account ${addr}, the private key is ${pk}.`);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Action',
@@ -2516,7 +2518,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
   let amount = new BigNumber(Number(utility.ethToWei(inputAmount, this.getDivisor(addr))));
   const token = this.getToken(addr);
   if (amount.lte(0)) {
-    this.alertError('You must specify a valid amount to transfer.');
+    this.dialogError('You must specify a valid amount to transfer.');
     ga('send', {
       hitType: 'event',
       eventCategory: 'Error',
@@ -2527,7 +2529,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
     return;
   }
   if (!this.web3.isAddress(toAddr) || toAddr.slice(0, 39) === '0x0000000000000000000000000000000000000' || toAddr.toLowerCase() === this.addrs[this.selectedAccount].toLowerCase()) {
-    this.alertError('Please specify a valid address.');
+    this.dialogError('Please specify a valid address.');
     ga('send', {
       hitType: 'event',
       eventCategory: 'Error',
@@ -2540,7 +2542,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, balance) => {
       if (amount.gt(balance)) amount = balance;
       if (amount.lte(0)) {
-        this.alertError('You do not have anything to transfer. Note: you can only transfer from your "Wallet." If you have Ether on deposit, please withdraw first, then transfer.');
+        this.dialogError('You do not have anything to transfer. Note: you can only transfer from your "Wallet." If you have Ether on deposit, please withdraw first, then transfer.');
         ga('send', {
           hitType: 'event',
           eventCategory: 'Error',
@@ -2583,7 +2585,7 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
       (err, result) => {
         if (amount.gt(result)) amount = result;
         if (amount.lte(0)) {
-          this.alertError('You do not have anything to transfer. Note: you can only transfer from your "Wallet." If you have tokens on deposit, please withdraw first, then transfer.');
+          this.dialogError('You do not have anything to transfer. Note: you can only transfer from your "Wallet." If you have tokens on deposit, please withdraw first, then transfer.');
           ga('send', {
             hitType: 'event',
             eventCategory: 'Error',
@@ -2621,7 +2623,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
   let amount = new BigNumber(Number(utility.ethToWei(inputAmount, this.getDivisor(addr))));
   const token = this.getToken(addr);
   if (amount.lte(0)) {
-    this.alertError('You must specify a valid amount to deposit.');
+    this.dialogError('You must specify a valid amount to deposit.');
     ga('send', {
       hitType: 'event',
       eventCategory: 'Error',
@@ -2657,7 +2659,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
             });
           });
       } else {
-        this.alertError("You can't deposit more Ether than you have.");
+        this.dialogError("You can't deposit more Ether than you have.");
         ga('send', {
           hitType: 'event',
           eventCategory: 'Error',
@@ -2714,7 +2716,7 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
                 });
             });
         } else {
-          this.alertError("You can't deposit more tokens than you have.");
+          this.dialogError("You can't deposit more tokens than you have.");
           ga('send', {
             hitType: 'event',
             eventCategory: 'Error',
@@ -2730,11 +2732,11 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
   let amount = new BigNumber(Number(utility.ethToWei(amountIn, this.getDivisor(addr))));
   const token = this.getToken(addr);
   if (token && token.name === 'PTOY') {
-    this.alertError('PTOY is completing a token upgrade. You can trade, but please refrain from depositing/withdrawing until the token upgrade is complete.');
+    this.dialogError('PTOY is completing a token upgrade. You can trade, but please refrain from depositing/withdrawing until the token upgrade is complete.');
     return;
   }
   if (amount.lte(0)) {
-    this.alertError('You must specify a valid amount to withdraw.');
+    this.dialogError('You must specify a valid amount to withdraw.');
     ga('send', {
       hitType: 'event',
       eventCategory: 'Error',
@@ -2758,7 +2760,7 @@ EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
         amount = balance;
       }
       if (amount.lte(0)) {
-        this.alertError("You don't have anything to withdraw.");
+        this.dialogError("You don't have anything to withdraw.");
         ga('send', {
           hitType: 'event',
           eventCategory: 'Error',
@@ -2849,7 +2851,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
   let amountGet;
   let amountGive;
   if (this.addrs[this.selectedAccount].slice(0, 39) === '0x0000000000000000000000000000000000000') {
-    this.alertError(
+    this.dialogError(
       "You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
     ga('send', {
       hitType: 'event',
@@ -2859,7 +2861,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
     });
     return;
   } else if (amount < this.minOrderSize || amount * price < this.minOrderSize) {
-    this.alertError(`The minimum order size (for both tokens in your order) is ${this.minOrderSize}.`);
+    this.dialogError(`The minimum order size (for both tokens in your order) is ${this.minOrderSize}.`);
     ga('send', {
       hitType: 'event',
       eventCategory: 'Error',
@@ -2892,7 +2894,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
     (err, result) => {
       const balance = result;
       if (balance.lt(new BigNumber(amountGive))) {
-        this.alertError(
+        this.dialogError(
           "You do not have enough funds to send this order. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
         ga('send', {
           hitType: 'event',
@@ -2918,7 +2920,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
         hash, this.pks[this.selectedAccount], (errSign, sig) => {
           if (errSign) {
             console.log(errSign);
-            this.alertError(
+            this.dialogError(
               'Order signing failed. Make sure you have an account selected from the Accounts dropdown in the upper right.');
             ga('send', {
               hitType: 'event',
@@ -2957,7 +2959,7 @@ EtherDelta.prototype.publishOrder = function publishOrder(
                     eventLabel: `${this.selectedToken.name}/${this.selectedBase.name}`,
                   });
                 } else {
-                  this.alertError(
+                  this.dialogError(
                     'You tried sending an order to the order book but there was an error...');
                   ga('send', {
                     hitType: 'event',
@@ -3041,7 +3043,7 @@ EtherDelta.prototype.cancelOrder = function cancelOrder(orderIn) {
 };
 EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
   if (this.addrs[this.selectedAccount].slice(0, 39) === '0x0000000000000000000000000000000000000') {
-    this.alertError(
+    this.dialogError(
       "You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
     ga('send', {
       hitType: 'event',
@@ -3161,7 +3163,7 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
                   });
               } else if (utility.weiToEth(availableVolume,
               this.getDivisor(this.selectedToken)) < this.minOrderSize) {
-                this.alertError(
+                this.dialogError(
                   "You cannot trade this order because it already traded. Someone else already traded this order and the order book hasn't updated yet.");
                 ga('send', {
                   hitType: 'event',
@@ -3171,7 +3173,7 @@ EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
                   eventValue: inputAmount,
                 });
               } else {
-                this.alertError(
+                this.dialogError(
                   "You cannot trade this order because you don't have enough funds. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
                 ga('send', {
                   hitType: 'event',
@@ -3398,7 +3400,7 @@ EtherDelta.prototype.checkContractUpgrade = function checkContractUpgrade() {
     (this.addrs.length > 1 ||
       (this.addrs.length === 1 && this.addrs[0].slice(0, 39) !== '0x0000000000000000000000000000000000000'))
   ) {
-    this.alertDialog(
+    this.dialogInfo(
       '<p>EtherDelta has a new smart contract. It is now selected.</p><p>Please use the "Smart Contract" menu to select the old one and withdraw from it.</p><p><a href="javascript:;" class="btn btn-default" onclick="alertify.closeAll(); bundle.EtherDelta.displayHelp(\'smartContract\')">Smart contract changelog</a></p>');
   }
 };
@@ -3667,7 +3669,7 @@ EtherDelta.prototype.loadWeb3 = function loadWeb3(callback) {
 EtherDelta.prototype.initContracts = function initContracts(callback) {
   this.web3.version.getNetwork((error, version) => {
     if (!error && version && Number(version) !== 1 && configName !== 'testnet') {
-      this.alertError('You are connected to the Ethereum testnet. Please connect to the Ethereum mainnet.');
+      this.dialogError('You are connected to the Ethereum testnet. Please connect to the Ethereum mainnet.');
     }
     this.config = config;
     this.minGas = (this.config.ethGasPrice * this.config.gasDeposit) / (10 ** 18);
@@ -3718,7 +3720,7 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
           }
         });
       } else if (this.connection.connection === 'RPC') {
-        this.alertError('You are using MetaMask but you are not logged in. Please log in to MetaMask and refresh.');
+        this.dialogError('You are using MetaMask but you are not logged in. Please log in to MetaMask and refresh.');
         ga('send', {
           hitType: 'event',
           eventCategory: 'Error',
