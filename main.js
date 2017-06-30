@@ -123,33 +123,41 @@ EtherDelta.prototype.alertSuccess = function alertSuccess(message) {
 };
 EtherDelta.prototype.txError = function txError(err) {
   console.log('Error', err);
-  const minGas = this.minGas;
   utility.getBalance(this.web3, this.addrs[this.selectedAccount], (errBalance, resultBalance) => {
     const balance = utility.weiToEth(resultBalance);
     if (this.connection.connection === 'RPC' && this.addrKinds[this.selectedAccount] !== 'MetaMask') {
-      this.dialogError('You tried to send an Ethereum transaction but there was an error. You are connected to MetaMask, but you are either using a non-MetaMask account, or you are not logged into the MetaMask account you have selected (check this in MetaMask, then refresh and try again!). If you don\'t want to use MetMask, please disable it (from Chrome\'s Window -> Extensions menu), then refresh and try again.');
-      ga('send', {
-        hitType: 'event',
-        eventCategory: 'Error',
-        eventAction: 'Ethereum - transaction error',
-      });
+      if (this.pks[this.selectedAccount]) {
+        this.dialogError('You are using an EtherDelta account that has a private key attached, but you\'re connected to MetaMask. You should disable MetaMask from Chrome\'s Window -> Extensions menu (don\'t worry, this won\'t lose your MetaMask data), then refresh EtherDelta.');
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Ethereum - transaction error',
+        });
+      } else {
+        this.dialogError('You are connected to MetaMask, but you are either using a non-MetaMask account, or you are not logged into the MetaMask account you have selected. Check this in MetaMask, then refresh and try again.');
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Error',
+          eventAction: 'Ethereum - transaction error',
+        });
+      }
     } else if (this.connection.connection === 'Proxy' && !this.pks[this.selectedAccount]) {
-      this.dialogError('You tried to send an Ethereum transaction but there was an error. You are using an EtherDelta account that doesn\'t have a private key attached. Perhaps you created the account using MetaMask, in which case you should enable MetaMask and refresh. Or, if you have the private key, you can choose "Import account" from the accounts dropdown (upper right) to re-import the account with its privte key.');
+      this.dialogError('You are using an EtherDelta account that doesn\'t have a private key attached. Perhaps you created the account using MetaMask, in which case you should make sure MetaMask is enabled and logged in to this account, then refresh EtherDelta. Or, if you have the private key, you can choose "Import account" from the accounts dropdown (upper right) to re-import the account with its private key.');
       ga('send', {
         hitType: 'event',
         eventCategory: 'Error',
         eventAction: 'Ethereum - transaction error',
       });
     } else if (this.connection.connection === 'Proxy' && !utility.verifyPrivateKey(this.addrs[this.selectedAccount], this.pks[this.selectedAccount])) {
-      this.dialogError('You tried to send an Ethereum transaction but there was an error. You are using an EtherDelta account that has an invalid private key.');
+      this.dialogError('You are using an EtherDelta account that has an invalid private key.');
       ga('send', {
         hitType: 'event',
         eventCategory: 'Error',
         eventAction: 'Ethereum - transaction error',
       });
-    } else if (this.connection.connection === 'Proxy' && balance < minGas) {
+    } else if (this.connection.connection === 'Proxy' && balance < 2 * this.minGas) {
       this.dialogError(
-        `You tried to send an Ethereum transaction but there was an error. Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends ${minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
+        `Your wallet's ETH balance (${balance} ETH) is not enough to cover the gas cost (Ethereum network fee). EtherDelta sends ${this.minGas} ETH with each transaction. This is an overestimate and the excess will get refunded to you. It's a good idea to send more than ${this.minGas} so you can pay for not only this transaction, but also future transactions you do on EtherDelta. The gas has to come directly from your Wallet (EtherDelta has no physical way of paying gas from your deposited ETH).`);
       ga('send', {
         hitType: 'event',
         eventCategory: 'Error',

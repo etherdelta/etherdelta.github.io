@@ -1031,14 +1031,43 @@ API.getDepositsWithdrawals = function getDepositsWithdrawals(callback) {
 API.returnTicker = function returnTicker(callback) {
   const tickers = {};
   const firstOldPrices = {};
+  const topOrders = API.getTopOrders();
   API.getTrades((err, result) => {
     const trades = result.trades;
     trades.sort((a, b) => a.blockNumber - b.blockNumber);
     trades.forEach((trade) => {
       if (trade.token && trade.base && trade.base.name === 'ETH') {
         const pair = `${trade.base.name}_${trade.token.name}`;
+        const { token, base } = trade;
         if (!tickers[pair]) {
-          tickers[pair] = { last: undefined, percentChange: 0, baseVolume: 0, quoteVolume: 0 };
+          let ordersFiltered = topOrders.filter(
+            x =>
+            (x.order.tokenGet.toLowerCase() === token.addr.toLowerCase() &&
+            x.order.tokenGive.toLowerCase() === base.addr.toLowerCase() && x.amount > 0) ||
+            (x.order.tokenGive.toLowerCase() === token.addr.toLowerCase() &&
+            x.order.tokenGet.toLowerCase() === base.addr.toLowerCase() && x.amount < 0));
+          // remove orders below the min order limit
+          ordersFiltered = ordersFiltered.filter(order =>
+            Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+            Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize);
+          // filter only orders that match the smart contract address
+          ordersFiltered = ordersFiltered.filter(
+            order => order.order.contractAddr === this.config.contractEtherDeltaAddrs[0].addr);
+          // final order filtering and sorting
+          const buyOrders = ordersFiltered.filter(x => x.amount > 0);
+          const sellOrders = ordersFiltered.filter(x => x.amount < 0);
+          sellOrders.sort((a, b) => b.price - a.price || b.id - a.id);
+          buyOrders.sort((a, b) => b.price - a.price || a.id - b.id);
+          const bid = buyOrders.length > 0 ? buyOrders[0].price : undefined;
+          const ask = sellOrders.length > 0 ? sellOrders[sellOrders.length - 1].price : undefined;
+          tickers[pair] = {
+            last: undefined,
+            percentChange: 0,
+            baseVolume: 0,
+            quoteVolume: 0,
+            bid,
+            ask,
+          };
         }
         const tradeTime = trade.date;
         const price = Number(trade.price);
