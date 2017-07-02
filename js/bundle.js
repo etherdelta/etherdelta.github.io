@@ -1229,6 +1229,7 @@ module.exports = {
     { addr: '0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0', name: 'EOS', decimals: 18 },
     { addr: '0x4470bb87d77b963a013db939be332f927f2b992e', name: 'ADX', decimals: 4 },
     { addr: '0x621d78f2ef2fd937bfca696cabaf9a779f59b3ed', name: 'DCP', decimals: 2 },
+    { addr: '0x725803315519de78d232265a8f1040f054e70b98', name: 'BET', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1289,6 +1290,7 @@ module.exports = {
     { token: 'EOS', base: 'ETH' },
     { token: 'ADX', base: 'ETH' },
     { token: 'DCP', base: 'ETH' },
+    { token: 'BET', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
