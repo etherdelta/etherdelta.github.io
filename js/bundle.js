@@ -2745,10 +2745,6 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
 EtherDelta.prototype.withdraw = function withdraw(addr, amountIn) {
   let amount = new BigNumber(Number(utility.ethToWei(amountIn, this.getDivisor(addr))));
   const token = this.getToken(addr);
-  if (token && token.name === 'PTOY') {
-    this.dialogError('PTOY is completing a token upgrade. You can trade, but please refrain from depositing/withdrawing until the token upgrade is complete.');
-    return;
-  }
   if (amount.lte(0)) {
     this.dialogError('You must specify a valid amount to withdraw.');
     ga('send', {
