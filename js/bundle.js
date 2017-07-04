@@ -2650,8 +2650,13 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
   }
   if (addr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, result) => {
+      console.log('Depositing');
+      console.log(amount.toNumber());
+      console.log(err);
+      console.log(result.toNumber());
       if (amount.gt(result) && amount.lt(result.times(new BigNumber(1.1)))) amount = result;
       if (amount.lte(result)) {
+        console.log(amount.toNumber());
         utility.send(
           this.web3,
           this.contractEtherDelta,
