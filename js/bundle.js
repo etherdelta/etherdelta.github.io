@@ -593,7 +593,8 @@ module.exports = (config) => {
       utility.getURL(url, (err, body) => {
         if (!err) {
           const result = JSON.parse(body);
-          callback(undefined, result.result);
+          const balance = new BigNumber(result.result);
+          callback(undefined, balance);
         } else {
           callback(err, undefined);
         }
