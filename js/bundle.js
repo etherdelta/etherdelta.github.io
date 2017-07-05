@@ -2554,6 +2554,15 @@ EtherDelta.prototype.transfer = function transfer(addr, inputAmount, toAddr) {
       eventLabel: token.name,
       eventValue: inputAmount,
     });
+  } else if (toAddr.toLowerCase() === this.config.contractEtherDeltaAddr.toLowerCase()) {
+    this.dialogError('If you send funds directly to the EtherDelta smart contract, they will be lost. You need to use the Deposit tab to deposit.');
+    ga('send', {
+      hitType: 'event',
+      eventCategory: 'Error',
+      eventAction: 'Transfer - invalid address',
+      eventLabel: token.name,
+      eventValue: inputAmount,
+    });
   } else if (addr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
     // plain Ether transfer
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, balance) => {
@@ -2652,13 +2661,8 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
   }
   if (addr.slice(0, 39) === '0x0000000000000000000000000000000000000') {
     utility.getBalance(this.web3, this.addrs[this.selectedAccount], (err, result) => {
-      console.log('Depositing');
-      console.log(amount.toNumber());
-      console.log(err);
-      console.log(result.toNumber());
       if (amount.gt(result) && amount.lt(result.times(new BigNumber(1.1)))) amount = result;
       if (amount.lte(result)) {
-        console.log(amount.toNumber());
         utility.send(
           this.web3,
           this.contractEtherDelta,
@@ -2696,38 +2700,71 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
       this.web3,
       this.contractToken,
       token.addr,
-      'balanceOf',
-      [this.addrs[this.selectedAccount]],
-      (err, result) => {
-        if (amount.gt(result) && amount.lt(result.times(new BigNumber(1.1)))) amount = result;
-        if (amount.lte(result)) {
-          utility.send(
-            this.web3,
-            this.contractToken,
-            addr,
-            'approve',
-            [this.config.contractEtherDeltaAddr, amount, { gas: this.config.gasApprove, value: 0 }],
-            this.addrs[this.selectedAccount],
-            this.pks[this.selectedAccount],
-            this.nonce,
-            (errSend, resultSend) => {
-              this.nonce = resultSend.nonce;
+      'allowance',
+      [this.addrs[this.selectedAccount], this.config.contractEtherDeltaAddr],
+      (errAllowance, resultAllowance) => {
+        console.log(errAllowance, resultAllowance)
+        if (resultAllowance.gt(0) && amount.gt(resultAllowance)) amount = resultAllowance;
+        utility.call(
+          this.web3,
+          this.contractToken,
+          token.addr,
+          'balanceOf',
+          [this.addrs[this.selectedAccount]],
+          (errBalanceOf, resultBalanceOf) => {
+            console.log(resultBalanceOf, amount)
+            if (amount.gt(resultBalanceOf) &&
+              amount.lt(resultBalanceOf.times(new BigNumber(1.1)))) amount = resultBalanceOf;
+            if (amount.lte(resultBalanceOf)) {
               const txs = [];
-              txs.push(resultSend);
-              utility.send(
-                this.web3,
-                this.contractEtherDelta,
-                this.config.contractEtherDeltaAddr,
-                'depositToken',
-                [addr, amount, { gas: this.config.gasDeposit, value: 0 }],
-                this.addrs[this.selectedAccount],
-                this.pks[this.selectedAccount],
-                this.nonce,
-                (errSend2, resultSend2) => {
-                  this.nonce = resultSend2.nonce;
-                  txs.push(resultSend2);
-                  this.addPending(errSend || errSend2, txs);
-                  this.alertTxResult(errSend || errSend2, txs);
+              async.series(
+                [
+                  (callbackSeries) => {
+                    if (resultAllowance.eq(0)) {
+                      console.log('resultAllowance=0, so would send approval')
+                      utility.send(
+                        this.web3,
+                        this.contractToken,
+                        addr,
+                        'approve',
+                        [this.config.contractEtherDeltaAddr, amount,
+                          { gas: this.config.gasApprove, value: 0 }],
+                        this.addrs[this.selectedAccount],
+                        this.pks[this.selectedAccount],
+                        this.nonce,
+                        (errSend, resultSend) => {
+                          this.nonce = resultSend.nonce;
+                          txs.push(resultSend);
+                          callbackSeries(null, { errSend, resultSend });
+                        });
+                    } else {
+                      console.log('resultAllowance>0, so would not send approval')
+                      callbackSeries(null, undefined);
+                    }
+                  },
+                  (callbackSeries) => {
+                    utility.send(
+                      this.web3,
+                      this.contractEtherDelta,
+                      this.config.contractEtherDeltaAddr,
+                      'depositToken',
+                      [addr, amount, { gas: this.config.gasDeposit, value: 0 }],
+                      this.addrs[this.selectedAccount],
+                      this.pks[this.selectedAccount],
+                      this.nonce,
+                      (errSend, resultSend) => {
+                        this.nonce = resultSend.nonce;
+                        txs.push(resultSend);
+                        callbackSeries(null, { errSend, resultSend });
+                      });
+                  },
+                ],
+                (err, results) => {
+                  const [tx1, tx2] = results;
+                  const errSend1 = tx1 ? tx1.errSend1 : undefined;
+                  const errSend2 = tx2 ? tx2.errSend1 : undefined;
+                  this.addPending(errSend1 || errSend2, txs);
+                  this.alertTxResult(errSend1 || errSend2, txs);
                   ga('send', {
                     hitType: 'event',
                     eventCategory: 'Action',
@@ -2736,17 +2773,17 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
                     eventValue: inputAmount,
                   });
                 });
-            });
-        } else {
-          this.dialogError("You can't deposit more tokens than you have.");
-          ga('send', {
-            hitType: 'event',
-            eventCategory: 'Error',
-            eventAction: 'Deposit - not enough balance',
-            eventLabel: token.name,
-            eventValue: inputAmount,
+            } else {
+              this.dialogError("You can't deposit more tokens than you have.");
+              ga('send', {
+                hitType: 'event',
+                eventCategory: 'Error',
+                eventAction: 'Deposit - not enough balance',
+                eventLabel: token.name,
+                eventValue: inputAmount,
+              });
+            }
           });
-        }
       });
   }
 };
