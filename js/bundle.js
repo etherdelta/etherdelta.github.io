@@ -1231,6 +1231,7 @@ module.exports = {
     { addr: '0x4470bb87d77b963a013db939be332f927f2b992e', name: 'ADX', decimals: 4 },
     { addr: '0x621d78f2ef2fd937bfca696cabaf9a779f59b3ed', name: 'DRP', decimals: 2 },
     { addr: '0x725803315519de78d232265a8f1040f054e70b98', name: 'BET', decimals: 18 },
+    { addr: '0x0affa06e7fbe5bc9a764c979aa66e8256a631f02', name: 'PLBT', decimals: 6 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1292,6 +1293,7 @@ module.exports = {
     { token: 'ADX', base: 'ETH' },
     { token: 'DRP', base: 'ETH' },
     { token: 'BET', base: 'ETH' },
+    { token: 'PLBT', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
