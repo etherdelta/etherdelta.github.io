@@ -2703,7 +2703,6 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
       'allowance',
       [this.addrs[this.selectedAccount], this.config.contractEtherDeltaAddr],
       (errAllowance, resultAllowance) => {
-        console.log(errAllowance, resultAllowance)
         if (resultAllowance.gt(0) && amount.gt(resultAllowance)) amount = resultAllowance;
         utility.call(
           this.web3,
@@ -2712,7 +2711,6 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
           'balanceOf',
           [this.addrs[this.selectedAccount]],
           (errBalanceOf, resultBalanceOf) => {
-            console.log(resultBalanceOf, amount)
             if (amount.gt(resultBalanceOf) &&
               amount.lt(resultBalanceOf.times(new BigNumber(1.1)))) amount = resultBalanceOf;
             if (amount.lte(resultBalanceOf)) {
@@ -2721,7 +2719,6 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
                 [
                   (callbackSeries) => {
                     if (resultAllowance.eq(0)) {
-                      console.log('resultAllowance=0, so would send approval')
                       utility.send(
                         this.web3,
                         this.contractToken,
@@ -2738,7 +2735,6 @@ EtherDelta.prototype.deposit = function deposit(addr, inputAmount) {
                           callbackSeries(null, { errSend, resultSend });
                         });
                     } else {
-                      console.log('resultAllowance>0, so would not send approval')
                       callbackSeries(null, undefined);
                     }
                   },
