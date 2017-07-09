@@ -106,6 +106,8 @@ module.exports = {
     { addr: '0x621d78f2ef2fd937bfca696cabaf9a779f59b3ed', name: 'DRP', decimals: 2 },
     { addr: '0x725803315519de78d232265a8f1040f054e70b98', name: 'BET', decimals: 18 },
     { addr: '0x0affa06e7fbe5bc9a764c979aa66e8256a631f02', name: 'PLBT', decimals: 6 },
+    { addr: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07', name: 'OMG', decimals: 18 },
+    { addr: '0xb8c77482e45f1f44de1745f52c74426c631bdd52', name: 'BNB', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -168,6 +170,8 @@ module.exports = {
     { token: 'DRP', base: 'ETH' },
     { token: 'BET', base: 'ETH' },
     { token: 'PLBT', base: 'ETH' },
+    { token: 'OMG', base: 'ETH' },
+    { token: 'BNB', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
