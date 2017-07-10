@@ -108,6 +108,7 @@ module.exports = {
     { addr: '0x0affa06e7fbe5bc9a764c979aa66e8256a631f02', name: 'PLBT', decimals: 6 },
     { addr: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07', name: 'OMG', decimals: 18 },
     { addr: '0xb8c77482e45f1f44de1745f52c74426c631bdd52', name: 'BNB', decimals: 18 },
+    { addr: '0xB110eC7B1dcb8FAB8dEDbf28f53Bc63eA5BEdd84', name: 'XID', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -172,6 +173,7 @@ module.exports = {
     { token: 'PLBT', base: 'ETH' },
     { token: 'OMG', base: 'ETH' },
     { token: 'BNB', base: 'ETH' },
+    { token: 'XID', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
