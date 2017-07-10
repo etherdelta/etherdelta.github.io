@@ -95,7 +95,7 @@ module.exports = {
     { addr: '0x93e682107d1e9defb0b5ee701c71707a4b2e46bc', name: 'MCAP', decimals: 8 },
     { addr: '0xb97048628db6b661d4c2aa833e95dbe1a905b280', name: 'PAY', decimals: 18 },
     { addr: '0x5a84969bb663fb64f6d015dcf9f622aedc796750', name: 'ICE', decimals: 18 },
-    { addr: '0xd14ccc72df063db59386c371e00292ca529400ac', name: 'PPT', decimals: 8 },
+    { addr: '0xd4fa1460f537bb9085d22c7bccb5dd450ef28e3a', name: 'PPT', decimals: 8 },
     { addr: '0xbbb1bd2d741f05e144e6c4517676a15554fd4b8d', name: 'FUN', decimals: 8 },
     { addr: '0xd0d6d6c5fe4a677d343cc433536bb717bae167dd', name: 'ADT', decimals: 9 },
     { addr: '0xce5c603c78d047ef43032e96b5b785324f753a4f', name: 'E4ROW', decimals: 2 },
