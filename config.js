@@ -111,6 +111,7 @@ module.exports = {
     { addr: '0x814964b1bceaf24e26296d031eadf134a2ca4105', name: 'NEWB', decimals: 0 },
     { addr: '0xb24754be79281553dc1adc160ddf5cd9b74361a4', name: 'XRL', decimals: 9 },
     { addr: '0x386467f1f3ddbe832448650418311a479eecfc57', name: 'EMB', decimals: 0 },
+    { addr: '0x7C5A0CE9267ED19B22F8cae653F198e3E8daf098', name: 'SAN', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -178,6 +179,7 @@ module.exports = {
     { token: 'NEWB', base: 'ETH' },
     { token: 'XRL', base: 'ETH' },
     { token: 'EMB', base: 'ETH' },
+    { token: 'SAN', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
