@@ -1238,6 +1238,8 @@ module.exports = {
     { addr: '0xb24754be79281553dc1adc160ddf5cd9b74361a4', name: 'XRL', decimals: 9 },
     { addr: '0x386467f1f3ddbe832448650418311a479eecfc57', name: 'MBRS', decimals: 0 },
     { addr: '0xf433089366899d83a9f26a773d59ec7ecf30355e', name: 'MTL', decimals: 8 },
+    { addr: '0xc63e7b1dece63a77ed7e4aeef5efb3b05c81438d', name: 'FUCK', decimals: 4 },
+    // { addr: '0x0e6e0796f6289d1d887b1067979bf724b50bac00', name: 'NEX', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1306,6 +1308,8 @@ module.exports = {
     { token: 'XRL', base: 'ETH' },
     { token: 'MBRS', base: 'ETH' },
     { token: 'MTL', base: 'ETH' },
+    { token: 'FUCK', base: 'ETH' },
+    // { token: 'NEX', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
