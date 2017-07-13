@@ -909,6 +909,7 @@ API.getTrades = function getTrades(callback) {
           date: new Date(this.utility.hexToDec(event.timeStamp) * 1000),
           buyer: event.args.get,
           seller: event.args.give,
+          txHash: event.transactionHash,
         });
         // buy
         trades.push({
@@ -924,6 +925,7 @@ API.getTrades = function getTrades(callback) {
           date: new Date(this.utility.hexToDec(event.timeStamp) * 1000),
           buyer: event.args.give,
           seller: event.args.get,
+          txHash: event.transactionHash,
         });
       }
     }

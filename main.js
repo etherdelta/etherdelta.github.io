@@ -2016,6 +2016,7 @@ EtherDelta.prototype.selectTokenAndBase = function selectTokenAndBase(tokenAddr,
 EtherDelta.prototype.setGasPrice = function setGasPrice(gasPrice) {
   if (gasPrice) {
     this.config.ethGasPrice = Number(gasPrice) * 1000000000;
+    utility.createCookie('ethGasPrice', JSON.stringify(this.config.ethGasPrice), 999);
     this.minGas = (this.config.ethGasPrice * this.config.gasDeposit) / (10 ** 18);
   }
 };
@@ -2377,6 +2378,10 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
       this.dialogError('You are connected to the Ethereum testnet. Please connect to the Ethereum mainnet.');
     }
     this.config = config;
+    const gasCookie = utility.readCookie('ethGasPrice');
+    if (gasCookie) {
+      this.config.ethGasPrice = JSON.parse(gasCookie);
+    }
     this.minGas = (this.config.ethGasPrice * this.config.gasDeposit) / (10 ** 18);
     if (Array.isArray(this.config.apiServer)) {
       this.config.apiServer = this.config.apiServer[

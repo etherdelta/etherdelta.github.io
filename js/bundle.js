@@ -1240,6 +1240,7 @@ module.exports = {
     { addr: '0xf433089366899d83a9f26a773d59ec7ecf30355e', name: 'MTL', decimals: 8 },
     { addr: '0xc63e7b1dece63a77ed7e4aeef5efb3b05c81438d', name: 'FUCK', decimals: 4 },
     // { addr: '0x0e6e0796f6289d1d887b1067979bf724b50bac00', name: 'NEX', decimals: 8 },
+    { addr: '0xd5b9a2737c9b2ff35ecb23b884eb039303bbbb61', name: 'BETH', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1310,6 +1311,7 @@ module.exports = {
     { token: 'MTL', base: 'ETH' },
     { token: 'FUCK', base: 'ETH' },
     // { token: 'NEX', base: 'ETH' },
+    { token: 'BTH', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
@@ -3378,6 +3380,7 @@ EtherDelta.prototype.selectTokenAndBase = function selectTokenAndBase(tokenAddr,
 EtherDelta.prototype.setGasPrice = function setGasPrice(gasPrice) {
   if (gasPrice) {
     this.config.ethGasPrice = Number(gasPrice) * 1000000000;
+    utility.createCookie('ethGasPrice', JSON.stringify(this.config.ethGasPrice), 999);
     this.minGas = (this.config.ethGasPrice * this.config.gasDeposit) / (10 ** 18);
   }
 };
@@ -3739,6 +3742,10 @@ EtherDelta.prototype.initContracts = function initContracts(callback) {
       this.dialogError('You are connected to the Ethereum testnet. Please connect to the Ethereum mainnet.');
     }
     this.config = config;
+    const gasCookie = utility.readCookie('ethGasPrice');
+    if (gasCookie) {
+      this.config.ethGasPrice = JSON.parse(gasCookie);
+    }
     this.minGas = (this.config.ethGasPrice * this.config.gasDeposit) / (10 ** 18);
     if (Array.isArray(this.config.apiServer)) {
       this.config.apiServer = this.config.apiServer[
