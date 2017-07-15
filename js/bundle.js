@@ -1241,6 +1241,7 @@ module.exports = {
     { addr: '0xc63e7b1dece63a77ed7e4aeef5efb3b05c81438d', name: 'FUCK', decimals: 4 },
     // { addr: '0x0e6e0796f6289d1d887b1067979bf724b50bac00', name: 'NEX', decimals: 8 },
     { addr: '0xd5b9a2737c9b2ff35ecb23b884eb039303bbbb61', name: 'BTH', decimals: 18 },
+    { addr: '0xe3818504c1b32bf1557b16c238b2e01fd3149c17', name: 'PLR', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1312,6 +1313,7 @@ module.exports = {
     { token: 'FUCK', base: 'ETH' },
     // { token: 'NEX', base: 'ETH' },
     { token: 'BTH', base: 'ETH' },
+    { token: 'PLR', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
