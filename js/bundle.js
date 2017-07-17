@@ -1124,7 +1124,7 @@ module.exports = (config) => {
 
 }).call(this,require("buffer").Buffer)
 },{"async":12,"async/dist/async.min.js":13,"bignumber.js":18,"buffer":373,"ethereumjs-tx":98,"ethereumjs-util":101,"fs":324,"keythereum":162,"request":200,"web3":272,"web3/lib/solidity/coder.js":279,"web3/lib/utils/sha3.js":291,"web3/lib/utils/utils.js":292,"web3/lib/web3/event.js":299,"web3/lib/web3/function.js":303}],2:[function(require,module,exports){
-/* eslint-env browser */
+/* eslint-env browser  */
 
 module.exports = {
   homeURL: 'https://etherdelta.github.io',
@@ -1954,6 +1954,30 @@ function displayMyTransactions(ordersIn, blockNumber, callback) {
       });
       callback();
     });
+};
+EtherDelta.prototype.isInCross = function isInCross(priceIn, kind) {
+  const price = new BigNumber(priceIn);
+  if (price === undefined || price <= 0) return undefined;
+  const orders = this.ordersResultByPair.orders;
+  // remove orders below the min order limit
+  const ordersFiltered = orders.filter(order =>
+    Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+    Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize)
+  .filter(
+    order => order.order.contractAddr === this.config.contractEtherDeltaAddr);
+  // final order filtering and sorting
+  const buyOrders = ordersFiltered.filter(x => x.amount > 0);
+  const sellOrders = ordersFiltered.filter(x => x.amount < 0);
+  sellOrders.sort((a, b) => b.price - a.price || b.id - a.id);
+  buyOrders.sort((a, b) => b.price - a.price || a.id - b.id);
+  const bid = buyOrders.length > 0 ? buyOrders[0].price : undefined;
+  const ask = sellOrders.length > 0 ? sellOrders[sellOrders.length - 1].price : undefined;
+  if (kind === 'buy' && ask && price > ask * 1.5) {
+    return ask;
+  } if (kind === 'sell' && bid && price < bid * 0.5) {
+    return bid;
+  }
+  return undefined;
 };
 EtherDelta.prototype.displayVolumes = function displayVolumes(
   orders, returnTicker, blockNumber, callback) {

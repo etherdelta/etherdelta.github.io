@@ -274,3 +274,7 @@ pre code {
   outline: 5px #fff solid;
   outline-offset: -5px;
 }
+
+.warning {
+  color: #f00;
+}

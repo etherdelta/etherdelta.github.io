@@ -585,6 +585,30 @@ function displayMyTransactions(ordersIn, blockNumber, callback) {
       callback();
     });
 };
+EtherDelta.prototype.isInCross = function isInCross(priceIn, kind) {
+  const price = new BigNumber(priceIn);
+  if (price === undefined || price <= 0) return undefined;
+  const orders = this.ordersResultByPair.orders;
+  // remove orders below the min order limit
+  const ordersFiltered = orders.filter(order =>
+    Number(order.ethAvailableVolume).toFixed(3) >= this.minOrderSize &&
+    Number(order.ethAvailableVolumeBase).toFixed(3) >= this.minOrderSize)
+  .filter(
+    order => order.order.contractAddr === this.config.contractEtherDeltaAddr);
+  // final order filtering and sorting
+  const buyOrders = ordersFiltered.filter(x => x.amount > 0);
+  const sellOrders = ordersFiltered.filter(x => x.amount < 0);
+  sellOrders.sort((a, b) => b.price - a.price || b.id - a.id);
+  buyOrders.sort((a, b) => b.price - a.price || a.id - b.id);
+  const bid = buyOrders.length > 0 ? buyOrders[0].price : undefined;
+  const ask = sellOrders.length > 0 ? sellOrders[sellOrders.length - 1].price : undefined;
+  if (kind === 'buy' && ask && price > ask * 1.5) {
+    return ask;
+  } if (kind === 'sell' && bid && price < bid * 0.5) {
+    return bid;
+  }
+  return undefined;
+};
 EtherDelta.prototype.displayVolumes = function displayVolumes(
   orders, returnTicker, blockNumber, callback) {
   let tokenVolumes = {};

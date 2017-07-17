@@ -12,12 +12,24 @@ function buyChange() { // eslint-disable-line no-unused-vars
   const amount = Number($('#buyAmount').val());
   const price = Number($('#buyPrice').val());
   const total = (amount * price).toFixed(3);
+  const isInCross = bundle.EtherDelta.isInCross(price, 'buy');
+  if (isInCross) {
+    $('#buyInCross').html(`Your order is in cross with the best sell order in the order book (price = ${isInCross}).`);
+  } else {
+    $('#buyInCross').html('');
+  }
   $('#buyTotal').val(total);
 }
 function sellChange() { // eslint-disable-line no-unused-vars
   const amount = Number($('#sellAmount').val());
   const price = Number($('#sellPrice').val());
   const total = (amount * price).toFixed(3);
+  const isInCross = bundle.EtherDelta.isInCross(price, 'sell');
+  if (isInCross) {
+    $('#sellInCross').html(`Your order is in cross with the best buy order in the order book (price = ${isInCross}).`);
+  } else {
+    $('#sellInCross').html('');
+  }
   $('#sellTotal').val(total);
 }
 $(() => {
