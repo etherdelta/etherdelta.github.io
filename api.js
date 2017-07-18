@@ -1074,13 +1074,17 @@ API.returnTicker = function returnTicker(callback) {
         const tradeTime = trade.date;
         const price = Number(trade.price);
         tickers[pair].last = price;
-        if (!firstOldPrices[pair]) firstOldPrices[pair] = price;
-        if (Date.now() - tradeTime.getTime() < 86400 * 1000 * 1) {
+        if (!tickers[pair].prices) tickers[pair].prices = [];
+        if (Date.now() - tradeTime.getTime() < 86400 * 1000 * 1) { // 24 hours
+          if (!firstOldPrices[pair]) firstOldPrices[pair] = price;
           const quoteVolume = Number(
             API.utility.weiToEth(Math.abs(trade.amount), API.getDivisor(trade.token)));
           const baseVolume = Number(
             API.utility.weiToEth(Math.abs(trade.amount * trade.price),
             API.getDivisor(trade.token)));
+          if (Date.now() - tradeTime.getTime() < 60 * 60 * 1000) { // 1 hour
+            tickers[pair].prices.push({ price, volume: quoteVolume });
+          }
           tickers[pair].quoteVolume += quoteVolume;
           tickers[pair].baseVolume += baseVolume;
           tickers[pair].percentChange = (price - firstOldPrices[pair]) / firstOldPrices[pair];
@@ -1088,6 +1092,20 @@ API.returnTicker = function returnTicker(callback) {
           firstOldPrices[pair] = price;
         }
       }
+    });
+    // 1 hour vwap
+    Object.keys(tickers).forEach((pair) => {
+      const volumeSum = tickers[pair].prices
+        .map(x => x.volume)
+        .reduce((a, b) => a + b, 0);
+      if (volumeSum > 0) {
+        tickers[pair].last = tickers[pair].prices
+          .map(x => x.price * x.volume)
+          .reduce((a, b) => a + b, 0) / volumeSum;
+      }
+      delete tickers[pair].prices;
+      tickers[pair].percentChange =
+        (tickers[pair].last - firstOldPrices[pair]) / firstOldPrices[pair];
     });
     callback(null, tickers);
   });
