@@ -60646,29 +60646,30 @@ function TradeUtil() {
   self.downloadTrades = function downloadTrades(kind, filter, callback) {
     self.getBlockNumber(() => {
       const ranges = [];
-      const perBlock = 250;
-      const n = 10;
+      const perBlock = 10;
+      const n = 250;
       if (kind === 'earlier') {
         let block = self.earliestBlock;
         for (let i = 0; i < n && block > 0; i += 1) {
-          ranges.push([Math.max(block - perBlock, 1), block]);
+          ranges.push([Math.max(block - perBlock, 1), block - 1]);
           block -= perBlock;
         }
       } else if (kind === 'later') {
         let block = self.latestBlock;
         for (let i = 0; i < n && block <= self.blockNumber; i += 1) {
-          ranges.push([block, Math.min(block + perBlock, self.blockNumber)]);
+          ranges.push([block, Math.min((i + perBlock) - 1, self.blockNumber)]);
           block += perBlock;
         }
       } else if (Array.isArray(kind)) {
         const [startBlock, endBlock] = kind;
         for (let i = startBlock; i <= endBlock; i += perBlock) {
-          ranges.push([Math.max(i, 1), Math.min(i + perBlock, self.blockNumber)]);
+          ranges.push([Math.max(i, 1), Math.min((i + perBlock) - 1, self.blockNumber)]);
         }
       }
       let i = 0;
-      async.mapSeries(
+      async.mapLimit(
         ranges,
+        10,
         (range, callbackMap) => {
           self.getLog(range[0], range[1], (err, events) => {
             i += 1;
@@ -60676,7 +60677,11 @@ function TradeUtil() {
               percent: Math.round((100 * i) / ranges.length),
               display: true,
             });
-            callbackMap(err, events);
+            if (!err) {
+              callbackMap(null, events);
+            } else {
+              callbackMap(null, []);
+            }
           });
         },
         (err, events) => {

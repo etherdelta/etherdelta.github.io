@@ -823,10 +823,25 @@ API.getOrdersByPair = function getOrdersByPair(tokenA, tokenB, n) {
     });
     sells.sort((a, b) => a.price - b.price || a.id - b.id);
     buys.sort((a, b) => b.price - a.price || a.id - b.id);
-    buys.slice(0, n).forEach((order) => {
+    const limitPerAddr = 5;
+    const addrsBuy = {};
+    const addrsSell = {};
+    const limitedBuys = [];
+    const limitedSells = [];
+    buys.forEach((x) => {
+      if (!addrsBuy[x.order.user]) addrsBuy[x.order.user] = 0;
+      addrsBuy[x.order.user] += 1;
+      if (addrsBuy[x.order.user] <= limitPerAddr) limitedBuys.push(x);
+    });
+    sells.forEach((x) => {
+      if (!addrsSell[x.order.user]) addrsSell[x.order.user] = 0;
+      addrsSell[x.order.user] += 1;
+      if (addrsSell[x.order.user] <= limitPerAddr) limitedSells.push(x);
+    });
+    limitedBuys.slice(0, n).forEach((order) => {
       topNOrders.push(order);
     });
-    sells.slice(0, n).forEach((order) => {
+    limitedSells.slice(0, n).forEach((order) => {
       topNOrders.push(order);
     });
     return topNOrders;
