@@ -121,6 +121,7 @@ module.exports = {
     { addr: '0xbfa4d71a51b9e0968be4bc299f8ba6cbb2f86789', name: 'MAYY', decimals: 18 },
     { addr: '0xab130bc7ff83192656a4b3079741c296615899c0', name: 'MAYN', decimals: 18 },
     { addr: '0xe2e6d4be086c6938b53b22144855eef674281639', name: 'LNK', decimals: 18 },
+    { addr: '0x2bdc0d42996017fce214b21607a515da41a9e0c5', name: 'SKIN', decimals: 6 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -198,6 +199,7 @@ module.exports = {
     { token: 'MAYY', base: 'ETH' },
     { token: 'MAYN', base: 'ETH' },
     { token: 'LNK', base: 'ETH' },
+    { token: 'SKIN', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
