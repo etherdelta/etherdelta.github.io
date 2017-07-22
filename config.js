@@ -123,6 +123,7 @@ module.exports = {
     { addr: '0xe2e6d4be086c6938b53b22144855eef674281639', name: 'LNK', decimals: 18 },
     { addr: '0x2bdc0d42996017fce214b21607a515da41a9e0c5', name: 'SKIN', decimals: 6 },
     { addr: '0x8b9c35c79af5319c70dd9a3e3850f368822ed64e', name: 'DGT', decimals: 18 },
+    { addr: '0x515e0743f73f032b4f39492d431899b4f7ca14f1', name: 'ECN', decimals: 0 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -202,6 +203,7 @@ module.exports = {
     { token: 'LNK', base: 'ETH' },
     { token: 'SKIN', base: 'ETH' },
     { token: 'DGT', base: 'ETH' },
+    { token: 'ECN', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
