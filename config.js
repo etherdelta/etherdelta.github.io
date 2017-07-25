@@ -105,7 +105,7 @@ module.exports = {
     { addr: '0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0', name: 'EOS', decimals: 18 },
     { addr: '0x4470bb87d77b963a013db939be332f927f2b992e', name: 'ADX', decimals: 4 },
     { addr: '0x621d78f2ef2fd937bfca696cabaf9a779f59b3ed', name: 'DRP', decimals: 2 },
-    { addr: '0x725803315519de78d232265a8f1040f054e70b98', name: 'BET', decimals: 18 },
+    { addr: '0x8aa33a7899fcc8ea5fbe6a608a109c3893a1b8b2', name: 'BET', decimals: 18 },
     { addr: '0x0affa06e7fbe5bc9a764c979aa66e8256a631f02', name: 'PLBT', decimals: 6 },
     { addr: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07', name: 'OMG', decimals: 18 },
     { addr: '0xb8c77482e45f1f44de1745f52c74426c631bdd52', name: 'BNB', decimals: 18 },
@@ -123,9 +123,10 @@ module.exports = {
     { addr: '0xe2e6d4be086c6938b53b22144855eef674281639', name: 'LNK', decimals: 18 },
     { addr: '0x2bdc0d42996017fce214b21607a515da41a9e0c5', name: 'SKIN', decimals: 6 },
     { addr: '0x8b9c35c79af5319c70dd9a3e3850f368822ed64e', name: 'DGT', decimals: 18 },
-    { addr: '0x515e0743f73f032b4f39492d431899b4f7ca14f1', name: 'ECN', decimals: 0 },
-    { addr: '0xee22430595ae400a30ffba37883363fbf293e24e', name: 'TME', decimals: 18 },
+    // { addr: '0x515e0743f73f032b4f39492d431899b4f7ca14f1', name: 'ECN', decimals: 0 }, // missing a transferFrom function
+    // { addr: '0xee22430595ae400a30ffba37883363fbf293e24e', name: 'TME', decimals: 18 }, // missing a transferFrom function
     { addr: '0x660b612ec57754d949ac1a09d0c2937a010dee05', name: 'BCD', decimals: 6 },
+    // { addr: '0xb6cf43b24c69b37536181ce2bc0797df3afa0ac1', name: 'IDX', decimals: 2 }, // needs to verify code on Etherscan
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -205,9 +206,10 @@ module.exports = {
     { token: 'LNK', base: 'ETH' },
     { token: 'SKIN', base: 'ETH' },
     { token: 'DGT', base: 'ETH' },
-    { token: 'ECN', base: 'ETH' },
-    { token: 'TME', base: 'ETH' },
+    // { token: 'ECN', base: 'ETH' },
+    // { token: 'TME', base: 'ETH' },
     { token: 'BCD', base: 'ETH' },
+    // { token: 'IDX', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
