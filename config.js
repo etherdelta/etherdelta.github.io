@@ -125,6 +125,7 @@ module.exports = {
     { addr: '0x8b9c35c79af5319c70dd9a3e3850f368822ed64e', name: 'DGT', decimals: 18 },
     { addr: '0x515e0743f73f032b4f39492d431899b4f7ca14f1', name: 'ECN', decimals: 0 },
     { addr: '0xee22430595ae400a30ffba37883363fbf293e24e', name: 'TME', decimals: 18 },
+    { addr: '0x660b612ec57754d949ac1a09d0c2937a010dee05', name: 'BCD', decimals: 6 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -206,6 +207,7 @@ module.exports = {
     { token: 'DGT', base: 'ETH' },
     { token: 'ECN', base: 'ETH' },
     { token: 'TME', base: 'ETH' },
+    { token: 'BCD', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
