@@ -126,7 +126,7 @@ module.exports = {
     // { addr: '0x515e0743f73f032b4f39492d431899b4f7ca14f1', name: 'ECN', decimals: 0 }, // missing a transferFrom function
     // { addr: '0xee22430595ae400a30ffba37883363fbf293e24e', name: 'TME', decimals: 18 }, // missing a transferFrom function
     { addr: '0x660b612ec57754d949ac1a09d0c2937a010dee05', name: 'BCD', decimals: 6 },
-    // { addr: '0xb6cf43b24c69b37536181ce2bc0797df3afa0ac1', name: 'IDX', decimals: 2 }, // needs to verify code on Etherscan
+    { addr: '0x8ef59b92f21f9e5f21f5f71510d1a7f87a5420be', name: 'DEX', decimals: 2 }, // needs to verify code on Etherscan
     { addr: '0xea1f346faf023f974eb5adaf088bbcdf02d761f4', name: 'TIX', decimals: 18 },
     // { addr: '0x2fe6ab85ebbf7776fee46d191ee4cea322cecf51', name: 'CDT', decimals: 18 }, // needs to verify code on Etherscan
   ],
@@ -211,7 +211,7 @@ module.exports = {
     // { token: 'ECN', base: 'ETH' },
     // { token: 'TME', base: 'ETH' },
     { token: 'BCD', base: 'ETH' },
-    // { token: 'IDX', base: 'ETH' },
+    { token: 'DEX', base: 'ETH' },
     { token: 'TIX', base: 'ETH' },
     // { token: 'CDT', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
