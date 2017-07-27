@@ -1255,6 +1255,7 @@ module.exports = {
     { addr: '0x8ef59b92f21f9e5f21f5f71510d1a7f87a5420be', name: 'DEX', decimals: 2 }, // needs to verify code on Etherscan
     { addr: '0xea1f346faf023f974eb5adaf088bbcdf02d761f4', name: 'TIX', decimals: 18 },
     // { addr: '0x2fe6ab85ebbf7776fee46d191ee4cea322cecf51', name: 'CDT', decimals: 18 }, // needs to verify code on Etherscan
+    { addr: '0xfca47962d45adfdfd1ab2d972315db4ce7ccf094', name: 'IXT', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1340,6 +1341,7 @@ module.exports = {
     { token: 'DEX', base: 'ETH' },
     { token: 'TIX', base: 'ETH' },
     // { token: 'CDT', base: 'ETH' },
+    { token: 'IXT', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
