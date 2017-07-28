@@ -2168,9 +2168,6 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
       this.selectedBase = base;
       this.ordersResultByPair = { orders: [], blockNumber: 0 };
     }
-    if (this.selectedToken.addr.toLowerCase() === '0x48c80f1f4d53d5951e5d5438b54cba84f29f32a5') {
-      this.selectedToken = this.config.tokens[0];
-    }
     if (this.selectedToken.name === 'ETH' && ['USD.DC', 'BTC.DC'].indexOf(this.selectedBase.name) < 0) {
       const temp = this.selectedBase;
       this.selectedBase = this.selectedToken;

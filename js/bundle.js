@@ -1166,7 +1166,7 @@ module.exports = {
     { addr: '0xac709fcb44a43c35f0da4e3163b117a17f3770f5', name: 'ARC', decimals: 18 },
     { addr: '0x14f37b574242d366558db61f3335289a5035c506', name: 'HKG', decimals: 3 },
     { addr: '0x888666ca69e0f178ded6d75b5726cee99a87d698', name: 'ICN', decimals: 18 },
-    // { addr: '0x48c80f1f4d53d5951e5d5438b54cba84f29f32a5', name: 'REP', decimals: 18 },
+    { addr: '0xe94327d07fc17907b4db788e5adf2ed424addff6', name: 'REP', decimals: 18 },
     { addr: '0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009', name: 'SNGLS', decimals: 0 },
     { addr: '0x4df812f6064def1e5e029f1ca858777cc98d2d81', name: 'XAUR', decimals: 8 },
     { addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', decimals: 18 },
@@ -1269,7 +1269,7 @@ module.exports = {
     { token: 'GNTM', base: 'ETH' },
     { token: 'NXC', base: 'ETH' },
     { token: 'ICN', base: 'ETH' },
-    // { token: 'REP', base: 'ETH' },
+    { token: 'REP', base: 'ETH' },
     { token: 'MLN', base: 'ETH' },
     { token: 'SNGLS', base: 'ETH' },
     { token: 'MKR', base: 'ETH' },
@@ -3565,9 +3565,6 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
       this.selectedToken = token;
       this.selectedBase = base;
       this.ordersResultByPair = { orders: [], blockNumber: 0 };
-    }
-    if (this.selectedToken.addr.toLowerCase() === '0x48c80f1f4d53d5951e5d5438b54cba84f29f32a5') {
-      this.selectedToken = this.config.tokens[0];
     }
     if (this.selectedToken.name === 'ETH' && ['USD.DC', 'BTC.DC'].indexOf(this.selectedBase.name) < 0) {
       const temp = this.selectedBase;
