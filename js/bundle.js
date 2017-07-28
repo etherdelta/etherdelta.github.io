@@ -1258,6 +1258,7 @@ module.exports = {
     { addr: '0xfca47962d45adfdfd1ab2d972315db4ce7ccf094', name: 'IXT', decimals: 8 },
     { addr: '0xa2f4fcb0fde2dd59f7a1873e121bc5623e3164eb', name: 'AIR', decimals: 0 },
     { addr: '0x56ba2ee7890461f463f7be02aac3099f6d5811a8', name: 'CAT', decimals: 18 },
+    { addr: '0x701c244b988a513c945973defa05de933b23fe1d', name: 'OAX', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1346,6 +1347,7 @@ module.exports = {
     { token: 'IXT', base: 'ETH' },
     { token: 'AIR', base: 'ETH' },
     { token: 'CAT', base: 'ETH' },
+    { token: 'OAX', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
