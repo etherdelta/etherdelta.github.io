@@ -101564,7 +101564,7 @@ module.exports = {
     en: 'EtherDelta is a decentralized exchange for Ethereum tokens.',
     cn: 'EtherDelta是去中心化的以太坊交易平台。',
     fr: "EtherDelta est une bourse d'échange de jetons ethereum décentralisé.",
-    es: 'EtherDelta se ha posicionado como la primera bolsa de cambio de cryptomonedas y symbolicos de la blockchain Ethereum.',
+    es: 'EtherDelta se ha posicionado como la primera bolsa de cambio de cryptomonedas y tokens de la blockchain Ethereum.',
     // cn:'EtherDelta是无中心的以太坊交易平台。'
   },
   Smart_Contract: {
@@ -101892,7 +101892,7 @@ module.exports = {
     en: 'Token',
     cn: '币种',
     fr: 'Jeton',
-    es: 'Simbolico',
+    es: 'Token',
   },
   tokens: {
     en: 'Tokens',
