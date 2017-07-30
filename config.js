@@ -136,6 +136,7 @@ module.exports = {
     { addr: '0x08fd34559f2ed8585d3810b4d96ab8a05c9f97c5', name: 'CLRT', decimals: 18 },
     { addr: '0x68aa3f232da9bdc2343465545794ef3eea5209bd', name: 'MSP', decimals: 18 },
     { addr: '0x2a05d22db079bc40c2f77a1d1ff703a56e631cc1', name: 'BAS', decimals: 8 },
+    { addr: '0xdc0c22285b61405aae01cba2530b6dd5cd328da7', name: 'KTN', decimals: 6 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -228,6 +229,7 @@ module.exports = {
     { token: 'CLRT', base: 'ETH' },
     { token: 'MSP', base: 'ETH' },
     { token: 'BAS', base: 'ETH' },
+    { token: 'KTN', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
