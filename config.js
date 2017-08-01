@@ -137,6 +137,8 @@ module.exports = {
     { addr: '0x68aa3f232da9bdc2343465545794ef3eea5209bd', name: 'MSP', decimals: 18 },
     { addr: '0x2a05d22db079bc40c2f77a1d1ff703a56e631cc1', name: 'BAS', decimals: 8 },
     { addr: '0xdc0c22285b61405aae01cba2530b6dd5cd328da7', name: 'KTN', decimals: 6 },
+    // { addr: '0xc1e6c6c681b286fb503b36a9dd6c1dbff85e73cf', name: 'JET', decimals: 18 }, // needs to verify code on Etherscan
+    { addr: '0xdd6bf56ca2ada24c683fac50e37783e55b57af9f', name: 'BNC', decimals: 12 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -230,6 +232,8 @@ module.exports = {
     { token: 'MSP', base: 'ETH' },
     { token: 'BAS', base: 'ETH' },
     { token: 'KTN', base: 'ETH' },
+    // { token: 'JET', base: 'ETH' },
+    { token: 'BNC', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
