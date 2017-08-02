@@ -408,7 +408,124 @@ module.exports = (config) => {
       }
     });
   };
-
+  utility.nOnceSend = function nOnceSend(
+    web3,
+    contract,
+    address,
+    functionName,
+    argsIn,
+    fromAddress,
+    privateKeyIn,
+    nonceIn,
+    callback) {
+    let privateKey = privateKeyIn;
+    if (privateKeyIn && privateKeyIn.substring(0, 2) === '0x') {
+      privateKey = privateKeyIn.substring(2, privateKeyIn.length);
+    }
+    function encodeConstructorParams(abi, params) {
+      return (
+        abi
+          .filter(json => json.type === 'constructor' && json.inputs.length === params.length)
+          .map(json => json.inputs.map(input => input.type))
+          .map(types => coder.encodeParams(types, params))[0] || ''
+      );
+    }
+    const args = Array.prototype.slice.call(argsIn).filter(a => a !== undefined);
+    let options = {};
+    if (typeof args[args.length - 1] === 'object' && args[args.length - 1].gas) {
+      args[args.length - 1].gasPrice = config.ethGasPrice;
+      args[args.length - 1].gasLimit = args[args.length - 1].gas;
+      delete args[args.length - 1].gas;
+    }
+    if (utils.isObject(args[args.length - 1])) {
+      options = args.pop();
+    }
+    utility.getNextNonce(web3, fromAddress, (err, nextNonce) => {
+      let nonce = nonceIn;
+      if (nonceIn === undefined) {
+        nonce = nextNonce;
+      }
+      console.log("Nonce:", nonce);
+      options.nonce = nonce;
+      if (functionName === 'constructor') {
+        if (options.data.slice(0, 2) !== '0x') {
+          options.data = `0x${options.data}`;
+        }
+        const encodedParams = encodeConstructorParams(contract.abi, args);
+        console.log(encodedParams);
+        options.data += encodedParams;
+      } else if (!contract || !functionName) {
+        options.to = address;
+      } else {
+        options.to = address;
+        const functionAbi = contract.abi.find(element => element.name === functionName);
+        const inputTypes = functionAbi.inputs.map(x => x.type);
+        const typeName = inputTypes.join();
+        options.data =
+          `0x${
+          sha3(`${functionName}(${typeName})`).slice(0, 8)
+          }${coder.encodeParams(inputTypes, args)}`;
+      }
+      let tx;
+      try {
+        tx = new Tx(options);
+        function proxy() { // eslint-disable-line no-inner-declarations
+          if (privateKey) {
+            utility.signTx(web3, fromAddress, tx, privateKey, (errSignTx, txSigned) => {
+              if (!errSignTx) {
+                const serializedTx = txSigned.serialize().toString('hex');
+                const url = `https://${config.ethTestnet ? config.ethTestnet : 'api'}.etherscan.io/api`;
+                const formData = { module: 'proxy', action: 'eth_sendRawTransaction', hex: serializedTx };
+                if (config.etherscanAPIKey) formData.apikey = config.etherscanAPIKey;
+                utility.postURL(url, formData, (errPostURL, body) => {
+                  if (!errPostURL) {
+                    try {
+                      const result = JSON.parse(body);
+                      if (result.result) {
+                        callback(undefined, { txHash: result.result, nonce: nonce + 1 });
+                      } else if (result.error) {
+                        callback(result.error.message, { txHash: undefined, nonce });
+                      }
+                    } catch (errTry) {
+                      callback(errTry, { txHash: undefined, nonce });
+                    }
+                  } else {
+                    callback(err, { txHash: undefined, nonce });
+                  }
+                });
+              } else {
+                console.log(err);
+                callback('Failed to sign transaction', { txHash: undefined, nonce });
+              }
+            });
+          } else {
+            callback('Failed to sign transaction', { txHash: undefined, nonce });
+          }
+        }
+        try {
+          if (web3.currentProvider) {
+            options.from = fromAddress;
+            options.gas = options.gasLimit;
+            delete options.gasLimit;
+            web3.eth.sendTransaction(options, (errSend, hash) => {
+              if (!errSend) {
+                callback(undefined, { txHash: hash, nonce: nonce + 1 });
+              } else {
+                console.log(err);
+                proxy();
+              }
+            });
+          } else {
+            proxy();
+          }
+        } catch (errSend) {
+          proxy();
+        }
+      } catch (errCatch) {
+        callback(errCatch, { txHash: undefined, nonce });
+      }
+    });
+  };
   utility.estimateGas = function estimateGas(
     web3,
     contract,
