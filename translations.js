@@ -33,7 +33,7 @@ module.exports = {
     en: 'EtherDelta is a decentralized exchange for Ethereum tokens.',
     cn: 'EtherDelta是去中心化的以太坊交易平台。',
     fr: "EtherDelta est une bourse d'échange de jetons ethereum décentralisé.",
-    es: 'EtherDelta se ha posicionado como la primera bolsa de cambio de cryptomonedas y symbolicos de la blockchain Ethereum.',
+    es: 'EtherDelta se ha posicionado como la primera bolsa de cambio de cryptomonedas y tokens de la blockchain Ethereum.',
     // cn:'EtherDelta是无中心的以太坊交易平台。'
   },
   Smart_Contract: {
@@ -144,7 +144,7 @@ module.exports = {
     cn: '订单',
     // cn:'订单簿'
     fr: 'Ordres',
-    es: 'Pedidas',
+    es: 'Pedidos',
   },
   follow_twitter: {
     en: 'Follow us on Twitter',
@@ -158,7 +158,7 @@ module.exports = {
     cn: '聊天',
     // cn:'聊'
     fr: 'Causerie',
-    es: 'Hogar del chat',
+    es: 'Chat',
   },
   send: {
     en: 'Send',
@@ -177,7 +177,7 @@ module.exports = {
     en: 'Pair',
     cn: '交易币种',
     fr: 'Paire',
-    es: 'Paras',
+    es: 'Parejas',
   },
   produced_etherboost: {
     en: 'Produced by Etherboost',
@@ -360,16 +360,14 @@ module.exports = {
   token: {
     en: 'Token',
     cn: '币种',
-    // cn:'币'
     fr: 'Jeton',
-    es: 'Simbolico',
+    es: 'Token',
   },
   tokens: {
     en: 'Tokens',
     cn: '币种',
-    // cn:'币'
     fr: 'Jetons',
-    es: 'Simbolicso',
+    es: 'Tokens',
   },
   aug032016: {
     en: 'August 3, 2016',
@@ -380,7 +378,6 @@ module.exports = {
   aug032016_announcement: {
     en: 'EtherDelta has moved to a new smart contract. Go to the bottom of the page and switch to the old one if you have a balance there you need to withdraw.',
     cn: 'EtherDelta更新了智能合约。如果你要提取余额，请到本页底部转成旧的合约并进行提取。',
-    // cn:'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。'
     fr: "EtherDelta a ete modifié pour un nouveau smart contract. Allez au bas de page et permutez le avec l'ancien s'il reste du solde à retirer.",
   },
   aug302016: {
@@ -881,7 +878,7 @@ module.exports = {
     en: 'Trades',
     cn: '交易',
     fr: 'Trades',
-    es: 'Trades',
+    es: 'Historial',
   },
   auto_refresh: {
     en: 'Auto refresh',
@@ -893,7 +890,7 @@ module.exports = {
     en: 'My transactions',
     cn: '我的交易',
     fr: 'Mes transactions',
-    es: 'Meis transacciones',
+    es: 'Mis transacciones',
   },
   or: {
     en: 'or',

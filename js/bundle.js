@@ -1166,14 +1166,14 @@ module.exports = {
     { addr: '0xac709fcb44a43c35f0da4e3163b117a17f3770f5', name: 'ARC', decimals: 18 },
     { addr: '0x14f37b574242d366558db61f3335289a5035c506', name: 'HKG', decimals: 3 },
     { addr: '0x888666ca69e0f178ded6d75b5726cee99a87d698', name: 'ICN', decimals: 18 },
-    { addr: '0x48c80f1f4d53d5951e5d5438b54cba84f29f32a5', name: 'REP', decimals: 18 },
+    { addr: '0xe94327d07fc17907b4db788e5adf2ed424addff6', name: 'REP', decimals: 18 },
     { addr: '0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009', name: 'SNGLS', decimals: 0 },
     { addr: '0x4df812f6064def1e5e029f1ca858777cc98d2d81', name: 'XAUR', decimals: 8 },
     { addr: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d', name: 'MKR', decimals: 18 },
     { addr: '0xe0b7927c4af23765cb51314a0e0521a9645f0e2a', name: 'DGD', decimals: 9 },
     { addr: '0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd', name: 'EPOSY', decimals: 18 },
     { addr: '0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0', name: 'EPOSN', decimals: 18 },
-    { addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', decimals: 16 },
+    // { addr: '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', name: 'DAO', decimals: 16 },
     { addr: '0x55e7c4a77821d5c50b4570b08f9f92896a25e012', name: 'P+', decimals: 0 },
     { addr: '0x45e42d659d9f9466cd5df622506033145a9b89bc', name: 'NXC', decimals: 3 },
     { addr: '0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6', name: 'DCN', decimals: 0 },
@@ -1231,7 +1231,7 @@ module.exports = {
     { addr: '0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0', name: 'EOS', decimals: 18 },
     { addr: '0x4470bb87d77b963a013db939be332f927f2b992e', name: 'ADX', decimals: 4 },
     { addr: '0x621d78f2ef2fd937bfca696cabaf9a779f59b3ed', name: 'DRP', decimals: 2 },
-    { addr: '0x725803315519de78d232265a8f1040f054e70b98', name: 'BET', decimals: 18 },
+    { addr: '0x8aa33a7899fcc8ea5fbe6a608a109c3893a1b8b2', name: 'BET', decimals: 18 },
     { addr: '0x0affa06e7fbe5bc9a764c979aa66e8256a631f02', name: 'PLBT', decimals: 6 },
     { addr: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07', name: 'OMG', decimals: 18 },
     { addr: '0xb8c77482e45f1f44de1745f52c74426c631bdd52', name: 'BNB', decimals: 18 },
@@ -1240,7 +1240,7 @@ module.exports = {
     { addr: '0x386467f1f3ddbe832448650418311a479eecfc57', name: 'MBRS', decimals: 0 },
     { addr: '0xf433089366899d83a9f26a773d59ec7ecf30355e', name: 'MTL', decimals: 8 },
     { addr: '0xc63e7b1dece63a77ed7e4aeef5efb3b05c81438d', name: 'FUCK', decimals: 4 },
-    // { addr: '0x0e6e0796f6289d1d887b1067979bf724b50bac00', name: 'NEX', decimals: 8 },
+    { addr: '0x5c6183d10a00cd747a6dbb5f658ad514383e9419', name: 'NXX', decimals: 8 },
     { addr: '0xd5b9a2737c9b2ff35ecb23b884eb039303bbbb61', name: 'BTH', decimals: 18 },
     { addr: '0xe3818504c1b32bf1557b16c238b2e01fd3149c17', name: 'PLR', decimals: 18 },
     { addr: '0x41e5560054824ea6b0732e656e3ad64e20e94e45', name: 'CVC', decimals: 8 },
@@ -1249,7 +1249,23 @@ module.exports = {
     { addr: '0xe2e6d4be086c6938b53b22144855eef674281639', name: 'LNK', decimals: 18 },
     { addr: '0x2bdc0d42996017fce214b21607a515da41a9e0c5', name: 'SKIN', decimals: 6 },
     { addr: '0x8b9c35c79af5319c70dd9a3e3850f368822ed64e', name: 'DGT', decimals: 18 },
-    { addr: '0x515e0743f73f032b4f39492d431899b4f7ca14f1', name: 'ECN', decimals: 0 },
+    // { addr: '0x515e0743f73f032b4f39492d431899b4f7ca14f1', name: 'ECN', decimals: 0 }, // missing a transferFrom function
+    // { addr: '0xee22430595ae400a30ffba37883363fbf293e24e', name: 'TME', decimals: 18 }, // missing a transferFrom function
+    { addr: '0x660b612ec57754d949ac1a09d0c2937a010dee05', name: 'BCD', decimals: 6 },
+    { addr: '0x8ef59b92f21f9e5f21f5f71510d1a7f87a5420be', name: 'DEX', decimals: 2 }, // needs to verify code on Etherscan
+    { addr: '0xea1f346faf023f974eb5adaf088bbcdf02d761f4', name: 'TIX', decimals: 18 },
+    { addr: '0x177d39ac676ed1c67a2b268ad7f1e58826e5b0af', name: 'CDT', decimals: 18 },
+    { addr: '0xfca47962d45adfdfd1ab2d972315db4ce7ccf094', name: 'IXT', decimals: 8 },
+    { addr: '0xa2f4fcb0fde2dd59f7a1873e121bc5623e3164eb', name: 'AIR', decimals: 0 },
+    { addr: '0x56ba2ee7890461f463f7be02aac3099f6d5811a8', name: 'CAT', decimals: 18 },
+    { addr: '0x701c244b988a513c945973defa05de933b23fe1d', name: 'OAX', decimals: 18 },
+    { addr: '0x08fd34559f2ed8585d3810b4d96ab8a05c9f97c5', name: 'CLRT', decimals: 18 },
+    { addr: '0x68aa3f232da9bdc2343465545794ef3eea5209bd', name: 'MSP', decimals: 18 },
+    { addr: '0x2a05d22db079bc40c2f77a1d1ff703a56e631cc1', name: 'BAS', decimals: 8 },
+    { addr: '0xdc0c22285b61405aae01cba2530b6dd5cd328da7', name: 'KTN', decimals: 6 },
+    // { addr: '0xc1e6c6c681b286fb503b36a9dd6c1dbff85e73cf', name: 'JET', decimals: 18 }, // needs to verify code on Etherscan
+    { addr: '0xdd6bf56ca2ada24c683fac50e37783e55b57af9f', name: 'BNC', decimals: 12 },
+    { addr: '0x0abdace70d3790235af448c88547603b945604ea', name: 'DNT', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1320,7 +1336,7 @@ module.exports = {
     { token: 'MBRS', base: 'ETH' },
     { token: 'MTL', base: 'ETH' },
     { token: 'FUCK', base: 'ETH' },
-    // { token: 'NEX', base: 'ETH' },
+    { token: 'NXX', base: 'ETH' },
     { token: 'BTH', base: 'ETH' },
     { token: 'PLR', base: 'ETH' },
     { token: 'CVC', base: 'ETH' },
@@ -1329,7 +1345,23 @@ module.exports = {
     { token: 'LNK', base: 'ETH' },
     { token: 'SKIN', base: 'ETH' },
     { token: 'DGT', base: 'ETH' },
-    { token: 'ECN', base: 'ETH' },
+    // { token: 'ECN', base: 'ETH' },
+    // { token: 'TME', base: 'ETH' },
+    { token: 'BCD', base: 'ETH' },
+    { token: 'DEX', base: 'ETH' },
+    { token: 'TIX', base: 'ETH' },
+    { token: 'CDT', base: 'ETH' },
+    { token: 'IXT', base: 'ETH' },
+    { token: 'AIR', base: 'ETH' },
+    { token: 'CAT', base: 'ETH' },
+    { token: 'OAX', base: 'ETH' },
+    { token: 'CLRT', base: 'ETH' },
+    { token: 'MSP', base: 'ETH' },
+    { token: 'BAS', base: 'ETH' },
+    { token: 'KTN', base: 'ETH' },
+    // { token: 'JET', base: 'ETH' },
+    { token: 'BNC', base: 'ETH' },
+    { token: 'DNT', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
@@ -101544,7 +101576,7 @@ module.exports = {
     en: 'EtherDelta is a decentralized exchange for Ethereum tokens.',
     cn: 'EtherDelta是去中心化的以太坊交易平台。',
     fr: "EtherDelta est une bourse d'échange de jetons ethereum décentralisé.",
-    es: 'EtherDelta se ha posicionado como la primera bolsa de cambio de cryptomonedas y symbolicos de la blockchain Ethereum.',
+    es: 'EtherDelta se ha posicionado como la primera bolsa de cambio de cryptomonedas y tokens de la blockchain Ethereum.',
     // cn:'EtherDelta是无中心的以太坊交易平台。'
   },
   Smart_Contract: {
@@ -101655,7 +101687,7 @@ module.exports = {
     cn: '订单',
     // cn:'订单簿'
     fr: 'Ordres',
-    es: 'Pedidas',
+    es: 'Pedidos',
   },
   follow_twitter: {
     en: 'Follow us on Twitter',
@@ -101669,7 +101701,7 @@ module.exports = {
     cn: '聊天',
     // cn:'聊'
     fr: 'Causerie',
-    es: 'Hogar del chat',
+    es: 'Chat',
   },
   send: {
     en: 'Send',
@@ -101688,7 +101720,7 @@ module.exports = {
     en: 'Pair',
     cn: '交易币种',
     fr: 'Paire',
-    es: 'Paras',
+    es: 'Parejas',
   },
   produced_etherboost: {
     en: 'Produced by Etherboost',
@@ -101871,16 +101903,14 @@ module.exports = {
   token: {
     en: 'Token',
     cn: '币种',
-    // cn:'币'
     fr: 'Jeton',
-    es: 'Simbolico',
+    es: 'Token',
   },
   tokens: {
     en: 'Tokens',
     cn: '币种',
-    // cn:'币'
     fr: 'Jetons',
-    es: 'Simbolicso',
+    es: 'Tokens',
   },
   aug032016: {
     en: 'August 3, 2016',
@@ -101891,7 +101921,6 @@ module.exports = {
   aug032016_announcement: {
     en: 'EtherDelta has moved to a new smart contract. Go to the bottom of the page and switch to the old one if you have a balance there you need to withdraw.',
     cn: 'EtherDelta更新了智能合约。如果你要提取余额，请到本页底部转成旧的合约并进行提取。',
-    // cn:'EtherDelta迁移到了新的智能合约。如果你要提取余额，请到本页底部转成旧的。'
     fr: "EtherDelta a ete modifié pour un nouveau smart contract. Allez au bas de page et permutez le avec l'ancien s'il reste du solde à retirer.",
   },
   aug302016: {
@@ -102392,7 +102421,7 @@ module.exports = {
     en: 'Trades',
     cn: '交易',
     fr: 'Trades',
-    es: 'Trades',
+    es: 'Historial',
   },
   auto_refresh: {
     en: 'Auto refresh',
@@ -102404,7 +102433,7 @@ module.exports = {
     en: 'My transactions',
     cn: '我的交易',
     fr: 'Mes transactions',
-    es: 'Meis transacciones',
+    es: 'Mis transacciones',
   },
   or: {
     en: 'or',
