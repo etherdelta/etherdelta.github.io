@@ -128,7 +128,7 @@ module.exports = {
     { addr: '0x660b612ec57754d949ac1a09d0c2937a010dee05', name: 'BCD', decimals: 6 },
     { addr: '0x8ef59b92f21f9e5f21f5f71510d1a7f87a5420be', name: 'DEX', decimals: 2 }, // needs to verify code on Etherscan
     { addr: '0xea1f346faf023f974eb5adaf088bbcdf02d761f4', name: 'TIX', decimals: 18 },
-    // { addr: '0x2fe6ab85ebbf7776fee46d191ee4cea322cecf51', name: 'CDT', decimals: 18 }, // needs to verify code on Etherscan
+    { addr: '0x177d39ac676ed1c67a2b268ad7f1e58826e5b0af', name: 'CDT', decimals: 18 },
     { addr: '0xfca47962d45adfdfd1ab2d972315db4ce7ccf094', name: 'IXT', decimals: 8 },
     { addr: '0xa2f4fcb0fde2dd59f7a1873e121bc5623e3164eb', name: 'AIR', decimals: 0 },
     { addr: '0x56ba2ee7890461f463f7be02aac3099f6d5811a8', name: 'CAT', decimals: 18 },
@@ -224,7 +224,7 @@ module.exports = {
     { token: 'BCD', base: 'ETH' },
     { token: 'DEX', base: 'ETH' },
     { token: 'TIX', base: 'ETH' },
-    // { token: 'CDT', base: 'ETH' },
+    { token: 'CDT', base: 'ETH' },
     { token: 'IXT', base: 'ETH' },
     { token: 'AIR', base: 'ETH' },
     { token: 'CAT', base: 'ETH' },
