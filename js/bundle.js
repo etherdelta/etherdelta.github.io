@@ -1268,6 +1268,7 @@ module.exports = {
     { addr: '0x0abdace70d3790235af448c88547603b945604ea', name: 'DNT', decimals: 18 },
     { addr: '0x96a65609a7b84e8842732deb08f56c3e21ac6f8a', name: 'CTR', decimals: 18 },
     { addr: '0x9e77d5a1251b6f7d456722a6eac6d2d5980bd891', name: 'BRAT', decimals: 8 },
+    { addr: '0x5af2be193a6abca9c8817001f45744777db30756', name: 'BQX', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1366,6 +1367,7 @@ module.exports = {
     { token: 'DNT', base: 'ETH' },
     { token: 'CTR', base: 'ETH' },
     { token: 'BRAT', base: 'ETH' },
+    { token: 'BQX', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
