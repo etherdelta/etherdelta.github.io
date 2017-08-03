@@ -140,6 +140,7 @@ module.exports = {
     // { addr: '0xc1e6c6c681b286fb503b36a9dd6c1dbff85e73cf', name: 'JET', decimals: 18 }, // needs to verify code on Etherscan
     { addr: '0xdd6bf56ca2ada24c683fac50e37783e55b57af9f', name: 'BNC', decimals: 12 },
     { addr: '0x0abdace70d3790235af448c88547603b945604ea', name: 'DNT', decimals: 18 },
+    { addr: '0x96a65609a7b84e8842732deb08f56c3e21ac6f8a', name: 'CENTRA', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -236,6 +237,7 @@ module.exports = {
     // { token: 'JET', base: 'ETH' },
     { token: 'BNC', base: 'ETH' },
     { token: 'DNT', base: 'ETH' },
+    { token: 'CENTRA', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
