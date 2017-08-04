@@ -144,6 +144,8 @@ module.exports = {
     { addr: '0x9e77d5a1251b6f7d456722a6eac6d2d5980bd891', name: 'BRAT', decimals: 8 },
     { addr: '0x5af2be193a6abca9c8817001f45744777db30756', name: 'BQX', decimals: 8 },
     { addr: '0x006bea43baa3f7a6f765f14f10a1a1b08334ef45', name: 'STX', decimals: 18 },
+    { addr: '0x88fcfbc22c6d3dbaa25af478c578978339bde77a', name: 'FYN', decimals: 18 },
+    { addr: '0x4e0603e2a27a30480e5e3a4fe548e29ef12f64be', name: 'CREDO', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -244,6 +246,8 @@ module.exports = {
     { token: 'BRAT', base: 'ETH' },
     { token: 'BQX', base: 'ETH' },
     { token: 'STX', base: 'ETH' },
+    { token: 'FYN', base: 'ETH' },
+    { token: 'CREDO', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
