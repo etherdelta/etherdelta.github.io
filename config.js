@@ -146,6 +146,7 @@ module.exports = {
     { addr: '0x006bea43baa3f7a6f765f14f10a1a1b08334ef45', name: 'STX', decimals: 18 },
     { addr: '0x88fcfbc22c6d3dbaa25af478c578978339bde77a', name: 'FYN', decimals: 18 },
     { addr: '0x4e0603e2a27a30480e5e3a4fe548e29ef12f64be', name: 'CREDO', decimals: 18 },
+    { addr: '0x3c75226555FC496168d48B88DF83B95F16771F37', name: 'DROP', decimals: 0 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -248,6 +249,7 @@ module.exports = {
     { token: 'STX', base: 'ETH' },
     { token: 'FYN', base: 'ETH' },
     { token: 'CREDO', base: 'ETH' },
+    { token: 'DROP', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
