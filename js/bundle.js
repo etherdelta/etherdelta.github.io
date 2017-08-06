@@ -1249,7 +1249,7 @@ module.exports = {
     { addr: '0xe2e6d4be086c6938b53b22144855eef674281639', name: 'LNK', decimals: 18 },
     { addr: '0x2bdc0d42996017fce214b21607a515da41a9e0c5', name: 'SKIN', decimals: 6 },
     { addr: '0x8b9c35c79af5319c70dd9a3e3850f368822ed64e', name: 'DGT', decimals: 18 },
-    // { addr: '0xf0090f47a7d0c024aacc0c2d7afa49fcfad4a5ce', name: 'ECB', decimals: 18 },
+    { addr: '0xa578acc0cb7875781b7880903f4594d13cfa8b98', name: 'ECN', decimals: 2 },
     // { addr: '0xee22430595ae400a30ffba37883363fbf293e24e', name: 'TME', decimals: 18 }, // missing a transferFrom function
     { addr: '0x660b612ec57754d949ac1a09d0c2937a010dee05', name: 'BCD', decimals: 6 },
     { addr: '0x8ef59b92f21f9e5f21f5f71510d1a7f87a5420be', name: 'DEX', decimals: 2 }, // needs to verify code on Etherscan
@@ -1352,7 +1352,7 @@ module.exports = {
     { token: 'LNK', base: 'ETH' },
     { token: 'SKIN', base: 'ETH' },
     { token: 'DGT', base: 'ETH' },
-    // { token: 'ECB', base: 'ETH' },
+    { token: 'ECN', base: 'ETH' },
     // { token: 'TME', base: 'ETH' },
     { token: 'BCD', base: 'ETH' },
     { token: 'DEX', base: 'ETH' },
