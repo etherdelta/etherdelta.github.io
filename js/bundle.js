@@ -1249,7 +1249,7 @@ module.exports = {
     { addr: '0xe2e6d4be086c6938b53b22144855eef674281639', name: 'LNK', decimals: 18 },
     { addr: '0x2bdc0d42996017fce214b21607a515da41a9e0c5', name: 'SKIN', decimals: 6 },
     { addr: '0x8b9c35c79af5319c70dd9a3e3850f368822ed64e', name: 'DGT', decimals: 18 },
-    // { addr: '0x515e0743f73f032b4f39492d431899b4f7ca14f1', name: 'ECN', decimals: 0 }, // missing a transferFrom function
+    // { addr: '0xf0090f47a7d0c024aacc0c2d7afa49fcfad4a5ce', name: 'ECB', decimals: 18 },
     // { addr: '0xee22430595ae400a30ffba37883363fbf293e24e', name: 'TME', decimals: 18 }, // missing a transferFrom function
     { addr: '0x660b612ec57754d949ac1a09d0c2937a010dee05', name: 'BCD', decimals: 6 },
     { addr: '0x8ef59b92f21f9e5f21f5f71510d1a7f87a5420be', name: 'DEX', decimals: 2 }, // needs to verify code on Etherscan
@@ -1272,6 +1272,7 @@ module.exports = {
     { addr: '0x006bea43baa3f7a6f765f14f10a1a1b08334ef45', name: 'STX', decimals: 18 },
     { addr: '0x88fcfbc22c6d3dbaa25af478c578978339bde77a', name: 'FYN', decimals: 18 },
     { addr: '0x4e0603e2a27a30480e5e3a4fe548e29ef12f64be', name: 'CREDO', decimals: 18 },
+    { addr: '0x202e295df742befa5e94e9123149360db9d9f2dc', name: 'NIH', decimals: 8 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1351,7 +1352,7 @@ module.exports = {
     { token: 'LNK', base: 'ETH' },
     { token: 'SKIN', base: 'ETH' },
     { token: 'DGT', base: 'ETH' },
-    // { token: 'ECN', base: 'ETH' },
+    // { token: 'ECB', base: 'ETH' },
     // { token: 'TME', base: 'ETH' },
     { token: 'BCD', base: 'ETH' },
     { token: 'DEX', base: 'ETH' },
@@ -1374,6 +1375,7 @@ module.exports = {
     { token: 'STX', base: 'ETH' },
     { token: 'FYN', base: 'ETH' },
     { token: 'CREDO', base: 'ETH' },
+    { token: 'NIH', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
