@@ -1275,6 +1275,8 @@ module.exports = {
     { addr: '0x202e295df742befa5e94e9123149360db9d9f2dc', name: 'NIH', decimals: 8 },
     { addr: '0x671abbe5ce652491985342e85428eb1b07bc6c64', name: 'QAU', decimals: 8 },
     { addr: '0x3597bfd533a99c9aa083587b074434e61eb0a258', name: 'DENT', decimals: 8 },
+    // { addr: '0xbc7de10afe530843e71dfb2e3872405191e8d14a', name: 'SHOUC', decimals: 18 },
+    { addr: '0x2ca72c9699b92b47272c9716c664cad6167c80b0', name: 'GUNS', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -1380,6 +1382,8 @@ module.exports = {
     { token: 'NIH', base: 'ETH' },
     { token: 'QAU', base: 'ETH' },
     { token: 'DENT', base: 'ETH' },
+    // { token: 'SHOUC', base: 'ETH' },
+    { token: 'GUNS', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
