@@ -1,23 +1,19 @@
-<div class="row-box table-header">
-  <table class="table table-condensed table-borderless">
-    <tr>
-      <th class="align-right"><%= selectedToken.name %>/<%= selectedBase.name %></th>
-      <th class="align-right"><%= selectedToken.name %></th>
-      <th style="text-align: right; padding-right: 12px;"><%= selectedBase.name %></th>
-    </tr>
-  </table>
-</div>
 <div class="row-box height1 scroll">
   <table class="table table-condensed table-borderless">
+    <tr class="table-header">
+      <th><%= selectedToken.name %>/<%= selectedBase.name %></th>
+      <th><%= selectedToken.name %></th>
+      <th><%= selectedBase.name %></th>
+    </tr>
     <% trades.forEach(function(trade){ %>
       <tr>
-        <td class="align-right"><span class="<%= trade.amount>0 ? 'buy' : 'sell' %>"><%= trade.price.toNumber().toFixed(5) %><i class="fa fa-arrow-<%= trade.amount>0 ? 'up' : 'down' %>" aria-hidden="true"></i></span></td>
-        <td class="align-right"><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.EtherDelta.getDivisor(selectedToken)) %></td>
-        <td class="align-right padding-right"><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.EtherDelta.getDivisor(selectedBase)/bundle.EtherDelta.getDivisor(selectedToken), bundle.EtherDelta.getDivisor(selectedBase)) %><a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+        <td><span class="<%= trade.amount>0 ? 'buy' : 'sell' %>"><%= trade.price.toNumber().toFixed(9) %><i class="fa fa-arrow-<%= trade.amount>0 ? 'up' : 'down' %>" aria-hidden="true"></i></span></td>
+        <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.EtherDelta.getDivisor(selectedToken)) %></td>
+        <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.EtherDelta.getDivisor(selectedBase)/bundle.EtherDelta.getDivisor(selectedToken), bundle.EtherDelta.getDivisor(selectedBase)) %><a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
       </tr>
     <% }); %>
     <tr>
-      <td colspan="3" class="trn padding-right">only_7_days</td>
+      <td colspan="3" class="trn">only_7_days</td>
     </tr>
   </table>
 </div>

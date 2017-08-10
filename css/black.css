@@ -84,34 +84,39 @@ a.navbar-brand {
 }
 
 .row-box.height1 {
-  height: calc(100vh - 123px);
+  height: calc(100vh - 89px);
 }
 .row-box.height2 {
-  height: calc(50vh - 116px);
+  height: calc(50vh - 100px);
 }
 .row-box.height3 {
   height: calc(50vh - 81px);
 }
 .row-box.height4 {
-  height: calc(40vh - 116px);
+  height: calc(40vh - 81px);
 }
 .row-box.height5 {
-  height: calc(60vh - 116px);
+  height: calc(60vh - 81px);
 }
 .row-box.table-header {
   height: 35px;
   border-bottom: 1px solid #666;
   padding-top: 5px;
 }
+tr.table-header {
+  height: 25px;
+  border-bottom: 1px solid #666;
+  vertical-align:bottom;
+}
 tr.mid-header {
   border-top: 1px solid #666;
   border-bottom: 1px solid #666;
 }
 .table {
- table-layout: fixed;
  border: 0;
+ margin-top: 5px;
 }
-.table td,th {
+.table td,th,tr {
   text-align: center;
 }
 .table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {

@@ -4,6 +4,9 @@
   balanceBase = balances.filter(function(x){return x.token.addr==selectedBase.addr})[0]
   %>
   <table class="table table-borderless">
+    <tr class="table-header">
+      <th class="trn">token</th><th class="trn">balance_in_your_wallet</th><th class="trn">balance_etherdelta</th>
+    </tr>
     <tr>
       <td><a href="javascript:;" onclick="bundle.EtherDelta.displayTokenGuide('<%= selectedToken.name %>')"><%= selectedToken.name %></a></td><td><%= bundle.utility.weiToEth(balanceToken.balanceOutside, bundle.EtherDelta.getDivisor(balanceToken.token)) %></td><td><%= bundle.utility.weiToEth(balanceToken.balance, bundle.EtherDelta.getDivisor(balanceToken.token)) %></td>
     </tr>
