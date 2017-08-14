@@ -154,6 +154,7 @@ module.exports = {
     { addr: '0x02b9806a64cb05f02aa8dcc1c178b88159a61304', name: 'DEL', decimals: 18 },
     { addr: '0x7c5a0ce9267ed19b22f8cae653f198e3e8daf098', name: 'SAN', decimals: 18 },
     { addr: '0xf8e386eda857484f5a12e4b5daa9984e06e73705', name: 'IND', decimals: 18 },
+    { addr: '0xfb12e3cca983b9f59d90912fd17f8d745a8b2953', name: 'LUCK', decimals: 0 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -264,6 +265,7 @@ module.exports = {
     { token: 'DEL', base: 'ETH' },
     { token: 'SAN', base: 'ETH' },
     { token: 'IND', base: 'ETH' },
+    { token: 'LUCK', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
