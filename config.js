@@ -157,6 +157,7 @@ module.exports = {
     { addr: '0xfb12e3cca983b9f59d90912fd17f8d745a8b2953', name: 'LUCK', decimals: 0 },
     { addr: '0x0b1724cc9fda0186911ef6a75949e9c0d3f0f2f3', name: 'RIYA', decimals: 8 },
     // { addr: '0x5ddab66da218fb05dfeda07f1afc4ea0738ee234', name: 'RARE', decimals: 8 }, // needs to verify token on web site
+    { addr: '0xe41d2489571d322189246dafa5ebde1f4699f498', name: 'ZRX', decimals: 18 },
   ],
   defaultPair: { token: 'PLU', base: 'ETH' },
   pairs: [
@@ -270,6 +271,7 @@ module.exports = {
     { token: 'LUCK', base: 'ETH' },
     { token: 'RIYA', base: 'ETH' },
     // { token: 'RARE', base: 'ETH' },
+    { token: 'ZRX', base: 'ETH' },
     { token: 'ETH', base: 'USD.DC' },
     { token: 'ETH', base: 'BTC.DC' },
   ],
