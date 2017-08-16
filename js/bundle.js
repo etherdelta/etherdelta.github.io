@@ -3773,9 +3773,6 @@ EtherDelta.prototype.refreshLoop = function refreshLoop() {
   function loop() {
     self.refresh(() => {
       setTimeout(loop, 60 * 1000);
-      this.config.apiServer = this.config.apiServer[
-        Math.floor(Math.random() * this.config.apiServer.length)];
-      console.log('Selected API', this.config.apiServer);
     });
   }
   loop();
