@@ -1127,7 +1127,7 @@ module.exports = (config) => {
 /* eslint-env browser  */
 
 module.exports = {
-  homeURL: 'https://etherdelta.github.io',
+  homeURL: 'https://sysdgit.github.io',
   contractEtherDelta: 'smart_contract/etherdelta.sol',
   contractToken: 'smart_contract/token.sol',
   contractReserveToken: 'smart_contract/reservetoken.sol',
@@ -3221,6 +3221,7 @@ EtherDelta.prototype.cancelOrder = function cancelOrder(orderIn) {
   }
 };
 EtherDelta.prototype.trade = function trade(kind, order, inputAmount) {
+  console.log('test');
   if (this.addrs[this.selectedAccount].slice(0, 39) === '0x0000000000000000000000000000000000000') {
     this.dialogError(
       "You haven't selected an account. Make sure you have an account selected from the Accounts dropdown in the upper right.");
@@ -121526,7 +121527,6 @@ ClientRequest.prototype._onFinish = function () {
 			headers: headersList,
 			body: body || undefined,
 			mode: 'cors',
-			credentials: opts.withCredentials ? 'include' : 'same-origin'
 		}).then(function (response) {
 			self._fetchResponse = response
 			self._connect()
