@@ -3624,7 +3624,7 @@ EtherDelta.prototype.refresh = function refresh(callback, forceEventRead, initMa
       this.selectedBase = this.selectedToken;
       this.selectedToken = temp;
     }
-    console.log('Beginning refresh', new Date(), `${this.selectedToken.name}/${this.selectedBase.name}`);
+    console.log('Beginning refresh---------------------------', new Date(), `${this.selectedToken.name}/${this.selectedBase.name}`);
     this.selectedContract = this.config.contractEtherDeltaAddr;
     utility.createCookie(
       this.config.userCookie,
