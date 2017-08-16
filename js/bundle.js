@@ -121526,7 +121526,7 @@ ClientRequest.prototype._onFinish = function () {
 			method: self._opts.method,
 			headers: headersList,
 			body: body || undefined,
-			mode: 'cors',
+			mode: '',
 		}).then(function (response) {
 			self._fetchResponse = response
 			self._connect()
