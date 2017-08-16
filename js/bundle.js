@@ -1502,15 +1502,15 @@ function EtherDelta() {
   this.minOrderSize = 0.01;
   this.messageToSend = undefined;
   this.translator = undefined;
-  this.secondsPerBlock = 15;
+  this.secondsPerBlock = 5;
   this.usersWithOrdersToUpdate = {};
   this.apiServerNonce = undefined;
-  this.ordersResultByPair = { orders: [], blockNumber: 0 };
+  this.ordersResultBy/Pair = { orders: [], blockNumber: 0 };
   this.topOrdersResult = { orders: [], blockNumber: 0 };
   this.selectedContract = undefined;
   this.returnTicker = {};
   this.web3 = undefined;
-  this.daysOfData = 7;
+  this.daysOfData = 1;
   this.minGas = 0.005;
   window.addEventListener('load', () => {
     this.startEtherDelta();
