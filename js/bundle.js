@@ -1505,7 +1505,7 @@ function EtherDelta() {
   this.secondsPerBlock = 5;
   this.usersWithOrdersToUpdate = {};
   this.apiServerNonce = undefined;
-  this.ordersResultBy/Pair = { orders: [], blockNumber: 0 };
+  this.ordersResultByPair = { orders: [], blockNumber: 0 };
   this.topOrdersResult = { orders: [], blockNumber: 0 };
   this.selectedContract = undefined;
   this.returnTicker = {};
