@@ -102042,7 +102042,7 @@ function EtherDelta() {
   self.refreshLoop = function refreshLoop() {
     function loop() {
       self.refresh(() => {
-        setTimeout(loop, 10 * 1000);
+        setTimeout(loop, 60 * 1000);
       });
     }
     loop();
