@@ -7,9 +7,9 @@
     </tr>
     <% trades.forEach(function(trade){ %>
       <tr>
-        <td><span class="<%= trade.amount>0 ? 'buy' : 'sell' %>"><%= trade.price.toNumber().toFixed(9) %><i class="fa fa-arrow-<%= trade.amount>0 ? 'up' : 'down' %>" aria-hidden="true"></i></span></td>
-        <td><%= bundle.utility.weiToEth(Math.abs(trade.amount), bundle.EtherDelta.getDivisor(selectedToken)) %></td>
-        <td><%= bundle.utility.weiToEth(Math.abs(trade.amount)*trade.price * bundle.EtherDelta.getDivisor(selectedBase)/bundle.EtherDelta.getDivisor(selectedToken), bundle.EtherDelta.getDivisor(selectedBase)) %><a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+        <td><span class="<%= trade.side %>"><%= trade.price.toFixed(9) %><i class="fa fa-arrow-<%= trade.side === 'buy' ? 'up' : 'down' %>" aria-hidden="true"></i></span></td>
+        <td><%= trade.amount.toFixed(3) %></td>
+        <td><%= trade.amountBase.toFixed(3) %><a href="<%= trade.txLink %>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
       </tr>
     <% }); %>
     <tr>

@@ -38,7 +38,6 @@
             <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/black.css')"><i class="fa fa-square" aria-hidden="true"></i></a></li>
             <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/white.css')"><i class="fa fa-square-o" aria-hidden="true"></i></a></li>
             <li class="dropdown" id="tokensDropdown"></li>
-            <li class="dropdown" id="basesDropdown"></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="chat-button"><a href="javascript:;" class="js-gitter-toggle-chat-button">Chat</a></li>
@@ -66,9 +65,27 @@
             </div>
             <div class="row-box height4">
               <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="deposit"></div>
-                <div role="tabpanel" class="tab-pane" id="withdraw"></div>
-                <div role="tabpanel" class="tab-pane" id="transfer"></div>
+                <div role="tabpanel" class="tab-pane active" id="deposit">
+                  <div id="depositHeader"></div>
+                  <div id="depositBalanceToken"></div>
+                  <div id="depositFormToken"></div>
+                  <div id="depositBalanceBase"></div>
+                  <div id="depositFormBase"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="withdraw">
+                  <div id="withdrawHeader"></div>
+                  <div id="withdrawBalanceToken"></div>
+                  <div id="withdrawFormToken"></div>
+                  <div id="withdrawBalanceBase"></div>
+                  <div id="withdrawFormBase"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="transfer">
+                  <div id="transferHeader"></div>
+                  <div id="transferBalanceToken"></div>
+                  <div id="transferFormToken"></div>
+                  <div id="transferBalanceBase"></div>
+                  <div id="transferFormBase"></div>
+                </div>
               </div>
             </div>
             <div class="row-header trn">volume</div>
@@ -97,7 +114,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-5 no-float">
+        <div class="col-md-4 no-float">
           <div class="row-container">
             <div class="row-header trn">price_chart</div>
             <div class="row-box nav-header">
@@ -114,20 +131,22 @@
             </div>
             <div class="row-header trn">my_transactions</div>
             <div class="row-box nav-header">
-              <ul class="nav nav-tabs two columns" role="tablist">
+              <ul class="nav nav-tabs three columns" role="tablist">
                 <li role="presentation" class="active"><a href="#myTrades" aria-controls="myTrades" role="tab" data-toggle="tab" class="trn">trades</a></li>
                 <li role="presentation"><a href="#myOrders" aria-controls="myOrders" role="tab" data-toggle="tab" class="trn">orders</a></li>
+                <li role="presentation"><a href="#myFunds" aria-controls="myFunds" role="tab" data-toggle="tab" class="trn">funds</a></li>
               </ul>
             </div>
             <div class="row-box">
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="myTrades"></div>
                 <div role="tabpanel" class="tab-pane" id="myOrders"></div>
+                <div role="tabpanel" class="tab-pane" id="myFunds"></div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-2 no-float">
+        <div class="col-md-3 no-float">
           <div class="row-container">
             <div class="row-header">
               <span class="trn">trades</span>
@@ -372,7 +391,7 @@
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/js/alertify.min.js" type="text/javascript"></script>
     <script src="/js/ejs_production.js" type="text/javascript"></script>
-    <script src="/js/bundle.js" type="text/javascript"></script>
+    <script src="/js/main.js" type="text/javascript"></script>
     <script src="script.js" type="text/javascript"></script>
 
     <script>

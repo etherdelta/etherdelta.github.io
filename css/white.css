@@ -283,3 +283,15 @@ pre code {
 .warning {
   color: #f00;
 }
+
+.table-balances {
+  margin: 0 !important;
+}
+
+.table-balances td {
+  width: 33%;
+}
+
+.four {
+  width: calc(100%/4);
+}

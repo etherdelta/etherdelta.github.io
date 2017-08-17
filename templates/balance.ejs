@@ -1,0 +1,9 @@
+<% if (addr && addr.slice(0,39)!='0x0000000000000000000000000000000000000') { %>
+  <table class="table table-borderless table-balances">
+    <tr>
+      <td><a href="javascript:;" onclick="main.EtherDelta.displayTokenGuide('<%= balance.token.name %>')"><%= balance.token.name %></a></td>
+      <td><%= main.utility.weiToEth(balance.balanceOutside, main.EtherDelta.getDivisor(balance.token)) %></td>
+      <td><%= main.utility.weiToEth(balance.balance, main.EtherDelta.getDivisor(balance.token)) %></td>
+    </tr>
+  </table>
+<% } %>

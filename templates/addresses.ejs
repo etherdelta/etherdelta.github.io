@@ -1,5 +1,5 @@
 <% if (addresses[selectedAccount].addr && addresses[selectedAccount].addr.slice(0,39)!='0x0000000000000000000000000000000000000') { %>
-  <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> <%= addresses[selectedAccount].addr.substring(0,12) %>... <span class="badge"><%= bundle.utility.weiToEth(addresses[selectedAccount].balance) %> ETH</span>
+  <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> <%= addresses[selectedAccount].addr.substring(0,12) %>... <span class="badge"><%= main.utility.weiToEth(addresses[selectedAccount].balance) %> ETH</span>
     <% if (addresses[selectedAccount].kind === 'MetaMask') { %>
       <span class="label <%= connection === 'RPC' ? 'label-success' : 'label-warning' %>">MetaMask</span>
     <% } else if (addresses[selectedAccount].pk) { %>
@@ -13,7 +13,7 @@
 <ul class="dropdown-menu">
   <% addresses.forEach(function(address, i, array) { %>
     <% if (address.addr && address.addr.slice(0,39)!='0x0000000000000000000000000000000000000') { %>
-      <li><a href="javascript:;" onclick="bundle.EtherDelta.selectAccount(<%= i%>);"><%= address.addr %> <span class="badge"><%= bundle.utility.weiToEth(address.balance) %> ETH</span>
+      <li><a href="javascript:;" onclick="main.EtherDelta.selectAccount(<%= i%>);"><%= address.addr %> <span class="badge"><%= main.utility.weiToEth(address.balance) %> ETH</span>
         <% if (address.kind === 'MetaMask') { %>
           <span class="label <%= connection === 'RPC' ? 'label-success' : 'label-warning' %>">MetaMask</span>
         <% } else if (address.pk) { %>
@@ -27,14 +27,13 @@
   <% if (addresses.filter(function(address) {return address.addr.slice(0,39) != '0x0000000000000000000000000000000000000'}).length>0) { %>
     <li role="separator" class="divider"></li>
   <% } %>
-  <li><a href="javascript:;" onclick="bundle.EtherDelta.createAccount()"><span class="trn">new_account</span></a></li>
+  <li><a href="javascript:;" onclick="main.EtherDelta.createAccount()"><span class="trn">new_account</span></a></li>
   <li><a href="javascript:;" data-toggle="modal" data-target="#accountModal"><span class="trn">import_account</span></a></li>
   <% if (addresses[selectedAccount].addr && addresses[selectedAccount].addr.slice(0,39)!='0x0000000000000000000000000000000000000') { %>
     <li><a href="<%= addressLink %>" target="_blank"><span class="trn">etherscan_address</span></a></li>
-    <li><a href="javascript:;" onclick="bundle.EtherDelta.showPrivateKey()"><span class="trn">export_private_key</span></a></li>
-    <li><a href="javascript:;" onclick="bundle.EtherDelta.deleteAccount()"><span class="trn">forget_account</span></a></li>
+    <li><a href="javascript:;" onclick="main.EtherDelta.showPrivateKey()"><span class="trn">export_private_key</span></a></li>
+    <li><a href="javascript:;" onclick="main.EtherDelta.deleteAccount()"><span class="trn">forget_account</span></a></li>
   <% } %>
   <li role="separator" class="divider"></li>
-  <li><a href="javascript:;" onclick="bundle.EtherDelta.resetCaches();"><span class="trn">reset_cache</span></a></li>
   <li><a href="javascript:;" data-toggle="modal" data-target="#gasPriceModal"><span class="trn">gas_price</span></a></li>
 </ul>
