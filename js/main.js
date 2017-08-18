@@ -99104,9 +99104,7 @@ module.exports = (config) => {
       const web3 = new Web3();
       const data = contract[functionName].getData.apply(null, args);
       let url =
-        `https://${
-        config.ethTestnet ? config.ethTestnet : 'api'
-        }.etherscan.io/api?module=proxy&action=eth_Call&to=${
+        `https://api.etherscan.io/api?module=proxy&action=eth_Call&to=${
         address
         }&data=${
         data}`;
