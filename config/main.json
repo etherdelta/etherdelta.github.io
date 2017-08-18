@@ -141,7 +141,8 @@
     { "addr": "0xfb12e3cca983b9f59d90912fd17f8d745a8b2953", "name": "LUCK", "decimals": 0 },
     { "addr": "0x0b1724cc9fda0186911ef6a75949e9c0d3f0f2f3", "name": "RIYA", "decimals": 8 },
     { "addr": "0xe41d2489571d322189246dafa5ebde1f4699f498", "name": "ZRX", "decimals": 18 },
-    { "addr": "0xb63b606ac810a52cca15e44bb630fd42d8d1d83d", "name": "MCO", "decimals": 8 }
+    { "addr": "0xb63b606ac810a52cca15e44bb630fd42d8d1d83d", "name": "MCO", "decimals": 8 },
+    { "addr": "0x02b9806a64cb05f02aa8dcc1c178b88159a61304", "name": "DEL", "decimals": 18 }
   ],
   "defaultPair": { "token": "PLU", "base": "ETH" },
   "pairs": [
@@ -252,6 +253,7 @@
     { "token": "LUCK", "base": "ETH" },
     { "token": "RIYA", "base": "ETH" },
     { "token": "ZRX", "base": "ETH" },
-    { "token": "MCO", "base": "ETH" }
+    { "token": "MCO", "base": "ETH" },
+    { "token": "DEL", "base": "ETH" }
   ]
 }
