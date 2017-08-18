@@ -80781,6 +80781,7 @@ define(function (require) {
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
 },{"./lib/Promise":260,"./lib/TimeoutError":262,"./lib/apply":263,"./lib/decorators/array":264,"./lib/decorators/flow":265,"./lib/decorators/fold":266,"./lib/decorators/inspect":267,"./lib/decorators/iterate":268,"./lib/decorators/progress":269,"./lib/decorators/timed":270,"./lib/decorators/unhandledRejection":271,"./lib/decorators/with":272}],278:[function(require,module,exports){
+(function (process){
 const Web3 = require('web3');
 const BigNumber = require('bignumber.js');
 const async = require('async');
@@ -81138,87 +81139,83 @@ function TradeUtil() {
   };
 
   self.processTrade = function processTrade(event, callback) {
-    if (event.event === 'Trade') {
-      self.getTokenInfo(event.args.tokenGet, (errTokenGet, tokenGet) => {
-        self.getTokenInfo(event.args.tokenGive, (errTokenGive, tokenGive) => {
-          if (!errTokenGet && !errTokenGive && tokenGet && tokenGive && tokenGet !== 'error' && tokenGive !== 'error') {
-            try {
-              const amountGet = event.args.amountGet
-                .div(new BigNumber(10).pow(new BigNumber(tokenGet.decimals)));
-              const amountGive = event.args.amountGive
-                .div(new BigNumber(10).pow(new BigNumber(tokenGive.decimals)));
-              const trade = {
-                txHash: event.transactionHash,
-                tokenGetAddr: tokenGet.addr,
-                tokenGetDecimals: tokenGet.decimals,
-                tokenGetName: tokenGet.name,
-                tokenGetPrice: tokenGet.price,
-                tokenGiveAddr: tokenGive.addr,
-                tokenGiveDecimals: tokenGive.decimals,
-                tokenGiveName: tokenGive.name,
-                tokenGivePrice: tokenGive.price,
-                amountGet,
-                amountGive,
-                get: event.args.get,
-                give: event.args.give,
-                date: new Date(parseInt(event.timeStamp, 16) * 1000),
-                contract: event.address,
-              };
-              if ((trade.tokenGetName === 'ETH' || trade.tokenGiveName === 'ETH')
-               && trade.amountGive.gt(0) && trade.amountGet.gt(0)
-              ) {
-                // buy
-                if (trade.tokenGetName === 'ETH') {
-                  Object.assign(trade, {
-                    side: 'buy',
-                    tokenAddr: trade.tokenGiveAddr,
-                    tokenDecimals: trade.tokenGiveDecimals,
-                    tokenName: trade.tokenGiveName,
-                    tokenPrice: trade.tokenGivePrice,
-                    price: trade.amountGet.div(trade.amountGive).toNumber(),
-                    amount: trade.amountGive.toNumber(),
-                    amountBase: trade.amountGet.toNumber(),
-                    buyer: trade.give,
-                    seller: trade.get,
-                  });
-                // sell
-                } else if (trade.tokenGiveName === 'ETH') {
-                  Object.assign(trade, {
-                    side: 'sell',
-                    tokenAddr: trade.tokenGetAddr,
-                    tokenDecimals: trade.tokenGetDecimals,
-                    tokenName: trade.tokenGetName,
-                    tokenPrice: trade.tokenGetPrice,
-                    price: trade.amountGive.div(trade.amountGet).toNumber(),
-                    amount: trade.amountGet.toNumber(),
-                    amountBase: trade.amountGive.toNumber(),
-                    buyer: trade.get,
-                    seller: trade.give,
-                  });
-                }
-                const ethPrice = self.snapshots.ETH[trade.date.toISOString().slice(0, 10)];
+    self.getTokenInfo(event.args.tokenGet, (errTokenGet, tokenGet) => {
+      self.getTokenInfo(event.args.tokenGive, (errTokenGive, tokenGive) => {
+        if (!errTokenGet && !errTokenGive && tokenGet && tokenGive && tokenGet !== 'error' && tokenGive !== 'error') {
+          try {
+            const amountGet = event.args.amountGet
+              .div(new BigNumber(10).pow(new BigNumber(tokenGet.decimals)));
+            const amountGive = event.args.amountGive
+              .div(new BigNumber(10).pow(new BigNumber(tokenGive.decimals)));
+            const trade = {
+              txHash: event.transactionHash,
+              tokenGetAddr: tokenGet.addr,
+              tokenGetDecimals: tokenGet.decimals,
+              tokenGetName: tokenGet.name,
+              tokenGetPrice: tokenGet.price,
+              tokenGiveAddr: tokenGive.addr,
+              tokenGiveDecimals: tokenGive.decimals,
+              tokenGiveName: tokenGive.name,
+              tokenGivePrice: tokenGive.price,
+              amountGet,
+              amountGive,
+              get: event.args.get,
+              give: event.args.give,
+              date: new Date(parseInt(event.timeStamp, 16) * 1000),
+              contract: event.address,
+            };
+            if ((trade.tokenGetName === 'ETH' || trade.tokenGiveName === 'ETH')
+             && trade.amountGive.gt(0) && trade.amountGet.gt(0)
+            ) {
+              // buy
+              if (trade.tokenGetName === 'ETH') {
                 Object.assign(trade, {
-                  amountUSD: trade.amountBase * ethPrice,
+                  side: 'buy',
+                  tokenAddr: trade.tokenGiveAddr,
+                  tokenDecimals: trade.tokenGiveDecimals,
+                  tokenName: trade.tokenGiveName,
+                  tokenPrice: trade.tokenGivePrice,
+                  price: trade.amountGet.div(trade.amountGive).toNumber(),
+                  amount: trade.amountGive.toNumber(),
+                  amountBase: trade.amountGet.toNumber(),
+                  buyer: trade.give,
+                  seller: trade.get,
                 });
-                if (!self.data.trades[trade.txHash]) {
-                  self.data.trades[trade.txHash] = trade;
-                }
-                callback();
-              } else {
-                callback();
+              // sell
+              } else if (trade.tokenGiveName === 'ETH') {
+                Object.assign(trade, {
+                  side: 'sell',
+                  tokenAddr: trade.tokenGetAddr,
+                  tokenDecimals: trade.tokenGetDecimals,
+                  tokenName: trade.tokenGetName,
+                  tokenPrice: trade.tokenGetPrice,
+                  price: trade.amountGive.div(trade.amountGet).toNumber(),
+                  amount: trade.amountGet.toNumber(),
+                  amountBase: trade.amountGive.toNumber(),
+                  buyer: trade.get,
+                  seller: trade.give,
+                });
               }
-            } catch (err) {
-              console.log(err);
-              callback();
+              const ethPrice = self.snapshots.ETH[trade.date.toISOString().slice(0, 10)];
+              Object.assign(trade, {
+                amountUSD: trade.amountBase * ethPrice,
+              });
+              if (!self.data.trades[trade.txHash]) {
+                self.data.trades[trade.txHash] = trade;
+              }
+              process.nextTick(() => { callback(); });
+            } else {
+              process.nextTick(() => { callback(); });
             }
-          } else {
-            callback();
+          } catch (err) {
+            console.log(err);
+            process.nextTick(() => { callback(); });
           }
-        });
+        } else {
+          process.nextTick(() => { callback(); });
+        }
       });
-    } else {
-      callback();
-    }
+    });
   };
 
   self.downloadEvents = function downloadEvents(
@@ -81254,7 +81251,7 @@ function TradeUtil() {
           });
         },
         (errEvents, eventsUnmerged) => {
-          const events = [].concat.apply([], eventsUnmerged); // eslint-disable-line
+          const events = [].concat.apply([], eventsUnmerged).filter(x => x.event === 'Trade'); // eslint-disable-line
           i = 0;
           async.eachSeries(
             events,
@@ -81295,7 +81292,8 @@ function TradeUtil() {
 
 module.exports = TradeUtil;
 
-},{"async":49,"bignumber.js":54,"fs":280,"requestretry":162,"web3":210,"web3/lib/utils/sha3.js":229,"web3/lib/web3/event.js":237}],279:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":403,"async":49,"bignumber.js":54,"fs":280,"requestretry":162,"web3":210,"web3/lib/utils/sha3.js":229,"web3/lib/web3/event.js":237}],279:[function(require,module,exports){
 /* eslint-env browser */
 /* global $, EJS, google */
 
