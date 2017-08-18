@@ -1,0 +1,26 @@
+<table class="table table-condensed">
+  <tr>
+    <th>Transaction hash</th>
+    <th>Date</th>
+    <th>Pair</th>
+    <th>Price</th>
+    <th>Side</th>
+    <th>Amount</th>
+    <th>Amount (ETH)</th>
+    <th>Buyer</th>
+    <th>Seller</th>
+  </tr>
+  <% trades.forEach((trade) => { %>
+    <tr>
+      <td><a href="https://etherscan.io/tx/<%= trade.txHash %>" target="_blank"><%= trade.txHash.slice(0, 10) %></a></td>
+      <td><%= trade.date.toISOString() %></td>
+      <td><a href="https://etherscan.io/token/<%= trade.tokenAddr %>"><%= trade.tokenName %></a>/ETH</td>
+      <td><%= trade.price.toFixed(5) %></td>
+      <td><%= trade.side === 'buy' ? 'Buy' : 'Sell' %></td>
+      <td><%= trade.amount.toFixed(3) %></td>
+      <td><%= trade.amountBase.toFixed(3) %></td>
+      <td><a href="https://etherscan.io/address/<%= trade.buyer %>" target="_blank"><%= trade.buyer.slice(0, 10) %></a></td>
+      <td><a href="https://etherscan.io/address/<%= trade.seller %>" target="_blank"><%= trade.seller.slice(0, 10) %></a></td>
+    </tr>
+  <% }); %>
+</table>
