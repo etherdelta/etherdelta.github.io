@@ -1,7 +1,7 @@
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="font-size: 135%; color: #036;"><%= selectedBase.name %> <span class="caret"></span></a>
 <ul class="dropdown-menu">
   <% tokens.forEach(function(token, i, array) { %>
-    <li><a href="javascript:;" onclick="bundle.EtherDelta.selectBase('<%= token.addr %>');"><%= token.name %></a></li>
+    <li><a href="javascript:;" onclick="main.EtherDelta.selectBase('<%= token.addr %>');"><%= token.name %></a></li>
   <% }); %>
   <li role="separator" class="divider"></li>
   <li><a href="javascript:;" data-toggle="modal" data-target="#otherBaseModal"><span class="trn">other</span></a></li>

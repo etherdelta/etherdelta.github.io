@@ -1,6 +1,6 @@
 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-info-circle"></i> <span class="trn">tokens</span> <span class="caret"></span></a>
 <ul class="dropdown-menu">
   <% tokens.forEach(function(token) { %>
-    <li><a href="javascript:;" onclick="bundle.EtherDelta.displayTokenGuide('<%= token.name%>');"><%= token.name %></a></li>
+    <li><a href="javascript:;" onclick="main.EtherDelta.displayTokenGuide('<%= token.name%>');"><%= token.name %></a></li>
   <% }); %>
 </ul>

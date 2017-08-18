@@ -1,0 +1,15 @@
+<% if (addr && addr.slice(0,39)!='0x0000000000000000000000000000000000000') { %>
+  <table class="table table-borderless table-balances">
+    <tr>
+      <td>
+        <input type="text" class="form-control input-xs trn" id="transferAmount<%= token.addr %>" placeholder="amount" />
+      </td>
+      <td>
+        <input type="text" class="form-control input-xs trn" id="transferTo<%= token.addr %>" placeholder="address" value="<%= addr %>" />
+      </td>
+      <td>
+        <button type="button" class="btn btn-primary btn-xs trn" style="width: 100%;" id="transferSubmit<%= token.addr %>" onclick="transferClick('<%= token.addr %>')">transfer</button>
+      </td>
+    </tr>
+  </table>
+<% } %>

@@ -5,7 +5,7 @@
     <% pairOrder.orders.forEach(function(order){ %>
       <tr>
         <td><span class="<%= order.volume>0 ? 'buy' : 'sell' %>"><%= order.price.toFixed(5) %></span></td>
-        <td><%= bundle.API.utility.weiToEth(Math.abs(order.volume, bundle.API.getDivisor(pairOrder.token.addr))) %></td>
+        <td><%= main.API.utility.weiToEth(Math.abs(order.volume, main.API.getDivisor(pairOrder.token.addr))) %></td>
       </tr>
     <% }) %>
     </table>

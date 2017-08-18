@@ -5,7 +5,6 @@
       <th class="trn">type</th>
       <th><%= selectedToken.name %></th>
       <th><%= selectedBase.name %></th>
-      <th><%= selectedToken.name %>/<%= selectedBase.name %></th>
     </tr>
     <% pendingTransactions.forEach(function(pendingTransaction){ %>
       <tr>
@@ -13,16 +12,14 @@
         <td><span class="trn">pending</span></td>
         <td></td>
         <td></td>
-        <td></td>
       </tr>
     <% }) %>
-    <% trades.forEach(function(trade){ %>
+    <% funds.forEach(function(fund){ %>
       <tr>
-        <td><a href="<%= trade.txLink %>" target="_blank"><%= trade.txHash.slice(0, 10) %></a></td>
-        <td><% if(selectedAddr.toLowerCase()==trade.buyer.toLowerCase()) { %><span class="trn">buy</span><% } else { %><span class="trn">sell</span><% } %></span></td>
-        <td><%= trade.amount.toFixed(3) %></td>
-        <td><%= trade.amountBase.toFixed(3) %></td>
-        <td><%= trade.price.toFixed(9) %></td>
+        <td><%= fund.blockNumber %><a href="<%= fund.txLink %>" target="_blank"><%= fund.txHash.slice(0, 10) %></a></td>
+        <td><span class="trn"><%= fund.kind === 'Deposit' ? 'deposit' : 'withdraw' %></span></td>
+        <td><% if (fund.tokenAddr.toLowerCase()==selectedToken.addr.toLowerCase()) {%><%= fund.amount.toFixed(3) %><% } %></td>
+        <td><% if (fund.tokenAddr.toLowerCase()==selectedBase.addr.toLowerCase()) {%><%= fund.amount.toFixed(3) %><% } %></td>
       </tr>
     <% }); %>
     <tr>

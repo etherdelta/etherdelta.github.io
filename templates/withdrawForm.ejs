@@ -1,0 +1,12 @@
+<% if (addr && addr.slice(0,39)!='0x0000000000000000000000000000000000000') { %>
+  <table class="table table-borderless table-balances">
+    <tr>
+      <td colspan="2">
+        <input type="text" class="form-control input-xs trn" id="withdrawAmount<%= token.addr %>" placeholder="amount" />
+      </td>
+      <td>
+        <button type="button" class="btn btn-primary btn-xs trn" style="width: 100%;" id="withdrawSubmit<%= token.addr %>" onclick="withdrawClick('<%= token.addr %>')">withdraw</button>
+      </td>
+    </tr>
+  </table>
+<% } %>
