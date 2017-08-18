@@ -99108,7 +99108,7 @@ module.exports = (config) => {
         address
         }&data=${
         data}`;
-      if (config.etherscanAPIKey) url += `&apikey=${config.etherscanAPIKey}`;
+      if (true) url += `&apikey=GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE`;
       utility.getURL(url, (err, body) => {
         if (!err) {
           try {
