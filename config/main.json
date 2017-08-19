@@ -146,7 +146,8 @@
     { "addr": "0x02b9806a64cb05f02aa8dcc1c178b88159a61304", "name": "DEL", "decimals": 18 },
     { "addr": "0x46492473755e8df960f8034877f61732d718ce96", "name": "STRC", "decimals": 8 },
     { "addr": "0x025abad9e518516fdaafbdcdb9701b37fb7ef0fa", "name": "GTKT", "decimals": 0 },
-    { "addr": "0x0e0989b1f9b8a38983c2ba8053269ca62ec9b195", "name": "POE", "decimals": 8 }
+    { "addr": "0x0e0989b1f9b8a38983c2ba8053269ca62ec9b195", "name": "POE", "decimals": 8 },
+    { "addr": "0x7654915a1b82d6d2d0afc37c52af556ea8983c7e", "name": "IFT", "decimals": 18 }
   ],
   "defaultPair": { "token": "ZRX", "base": "ETH" },
   "pairs": [
@@ -261,6 +262,7 @@
     { "token": "DEL", "base": "ETH" },
     { "token": "STRC", "base": "ETH" },
     { "token": "GTKT", "base": "ETH" },
-    { "token": "POE", "base": "ETH" }
+    { "token": "POE", "base": "ETH" },
+    { "token": "IFT", "base": "ETH" }
   ]
 }
