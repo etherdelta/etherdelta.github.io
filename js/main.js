@@ -101535,7 +101535,6 @@ function EtherDelta() {
           ],
           (errAvailableVolume, resultAvailableVolume) => {
             const availableVolume = resultAvailableVolume;
-            // const intendedAmount = amount;
             if (amount.gt(availableBalance.divToInt(1.0031))) {
               // balance adjusted for fees (0.0001 to avoid rounding error)
               amount = availableBalance.divToInt(1.0031);
@@ -101604,11 +101603,7 @@ function EtherDelta() {
                         eventValue: inputAmount,
                       });
                     });
-                } else if (
-                // if the actual amount you will get is less than
-                // 10% of what you wanted, assume the order already traded
-                // amount.lt(intendedAmount.divToInt(new BigNumber(10))) ||
-                self.utility.weiToEth(availableVolume,
+                } else if (self.utility.weiToEth(availableVolume,
                 self.getDivisor(self.selectedToken)) < 0.000001
                 ) {
                   self.dialogError(

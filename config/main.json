@@ -99,7 +99,7 @@
     { "addr": "0xb8c77482e45f1f44de1745f52c74426c631bdd52", "name": "BNB", "decimals": 18 },
     { "addr": "0x814964b1bceaf24e26296d031eadf134a2ca4105", "name": "NEWB", "decimals": 0 },
     { "addr": "0xb24754be79281553dc1adc160ddf5cd9b74361a4", "name": "XRL", "decimals": 9 },
-    { "addr": "0x386467f1f3ddbe832448650418311a479eecfc57", "name": "MBRS", "decimals": 0 },
+    { "addr": "0x386467f1f3ddbe832448650418311a479eecfc57", "name": "EMB", "decimals": 0 },
     { "addr": "0xf433089366899d83a9f26a773d59ec7ecf30355e", "name": "MTL", "decimals": 8 },
     { "addr": "0xc63e7b1dece63a77ed7e4aeef5efb3b05c81438d", "name": "FUCK", "decimals": 4 },
     { "addr": "0x5c6183d10a00cd747a6dbb5f658ad514383e9419", "name": "NXX", "decimals": 8 },
@@ -146,7 +146,10 @@
     { "addr": "0x02b9806a64cb05f02aa8dcc1c178b88159a61304", "name": "DEL", "decimals": 18 },
     { "addr": "0x46492473755e8df960f8034877f61732d718ce96", "name": "STRC", "decimals": 8 },
     { "addr": "0x025abad9e518516fdaafbdcdb9701b37fb7ef0fa", "name": "GTKT", "decimals": 0 },
-    { "addr": "0x0e0989b1f9b8a38983c2ba8053269ca62ec9b195", "name": "POE", "decimals": 8 }
+    { "addr": "0x0e0989b1f9b8a38983c2ba8053269ca62ec9b195", "name": "POE", "decimals": 8 },
+    { "addr": "0x38968746147bbaeb882f356ad9a57594bb158235", "name": "BENJA", "decimals": 8 },
+    { "addr": "0x814cafd4782d2e728170fda68257983f03321c58", "name": "IDEA", "decimals": 0 },
+    { "addr": "0x84119cb33e8f590d75c2d6ea4e6b0741a7494eda", "name": "WTT", "decimals": 0 }
   ],
   "defaultPair": { "token": "ZRX", "base": "ETH" },
   "pairs": [
@@ -214,7 +217,7 @@
     { "token": "BNB", "base": "ETH" },
     { "token": "NEWB", "base": "ETH" },
     { "token": "XRL", "base": "ETH" },
-    { "token": "MBRS", "base": "ETH" },
+    { "token": "EMB", "base": "ETH" },
     { "token": "MTL", "base": "ETH" },
     { "token": "FUCK", "base": "ETH" },
     { "token": "NXX", "base": "ETH" },
@@ -261,6 +264,9 @@
     { "token": "DEL", "base": "ETH" },
     { "token": "STRC", "base": "ETH" },
     { "token": "GTKT", "base": "ETH" },
-    { "token": "POE", "base": "ETH" }
+    { "token": "POE", "base": "ETH" },
+    { "token": "BENJA", "base": "ETH" },
+    { "token": "IDEA", "base": "ETH" },
+    { "token": "WTT", "base": "ETH" }
   ]
 }
