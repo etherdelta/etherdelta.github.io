@@ -101568,7 +101568,41 @@ function EtherDelta() {
                 self.addrs[self.selectedAccount],
               ],
               (errTestTrade, resultTestTrade) => {
-                if (resultTestTrade && amount > 0) {
+                const reportedAvailableVolume = new BigNumber(order.availableVolume);
+                // if current available volume is less than half of the reported available volume
+                if (availableVolume < reportedAvailableVolume.divToInt(4)) {
+                  self.dialogError(
+                    "You cannot trade this order because it already traded. Someone else already traded this order and the order book hasn't updated yet.");
+                  ga('send', {
+                    hitType: 'event',
+                    eventCategory: 'Error',
+                    eventAction: 'Trade - failed',
+                    eventLabel: `${self.selectedToken.name}/${self.selectedBase.name}`,
+                    eventValue: inputAmount,
+                  });
+                // if there is no available balance
+                } else if (availableBalance.lte(new BigNumber(0))) {
+                  self.dialogError(
+                    "You cannot trade this order because you don't have enough funds. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
+                  ga('send', {
+                    hitType: 'event',
+                    eventCategory: 'Error',
+                    eventAction: 'Trade - failed',
+                    eventLabel: `${self.selectedToken.name}/${self.selectedBase.name}`,
+                    eventValue: inputAmount,
+                  });
+                // if the attemted trade fails for some other reason
+                } else if (!resultTestTrade || amount.lte(new BigNumber(0))) {
+                  self.dialogError(
+                    "You cannot trade this order because it already traded. Someone else already traded this order and the order book hasn't updated yet.");
+                  ga('send', {
+                    hitType: 'event',
+                    eventCategory: 'Error',
+                    eventAction: 'Trade - failed',
+                    eventLabel: `${self.selectedToken.name}/${self.selectedBase.name}`,
+                    eventValue: inputAmount,
+                  });
+                } else {
                   self.utility.send(
                     self.web3,
                     self.contractEtherDelta,
@@ -101603,28 +101637,6 @@ function EtherDelta() {
                         eventValue: inputAmount,
                       });
                     });
-                } else if (self.utility.weiToEth(availableVolume,
-                self.getDivisor(self.selectedToken)) < 0.000001
-                ) {
-                  self.dialogError(
-                    "You cannot trade this order because it already traded. Someone else already traded this order and the order book hasn't updated yet.");
-                  ga('send', {
-                    hitType: 'event',
-                    eventCategory: 'Error',
-                    eventAction: 'Trade - failed',
-                    eventLabel: `${self.selectedToken.name}/${self.selectedBase.name}`,
-                    eventValue: inputAmount,
-                  });
-                } else {
-                  self.dialogError(
-                    "You cannot trade this order because you don't have enough funds. Please DEPOSIT first using the Deposit form in the upper left. Enter the amount you want to deposit and press the 'Deposit' button.");
-                  ga('send', {
-                    hitType: 'event',
-                    eventCategory: 'Error',
-                    eventAction: 'Trade - failed',
-                    eventLabel: `${self.selectedToken.name}/${self.selectedBase.name}`,
-                    eventValue: inputAmount,
-                  });
                 }
               });
           });
