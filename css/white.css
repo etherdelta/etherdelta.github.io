@@ -295,3 +295,10 @@ pre code {
 .four {
   width: calc(100%/4);
 }
+
+#orderBookScroll td {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

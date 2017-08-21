@@ -309,3 +309,10 @@ pre code {
 #chartDepth {
   overflow: hidden;
 }
+
+#orderBookScroll td {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
