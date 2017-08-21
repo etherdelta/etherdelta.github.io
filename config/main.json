@@ -152,6 +152,7 @@
     { "addr": "0x84119cb33e8f590d75c2d6ea4e6b0741a7494eda", "name": "WTT", "decimals": 0 },
     { "addr": "0x5ddab66da218fb05dfeda07f1afc4ea0738ee234", "name": "RARE", "decimals": 8 },
     { "addr": "0xd7631787b4dcc87b1254cfd1e5ce48e96823dee8", "name": "SCL", "decimals": 8 }
+    { "addr": "0x422866a8f0b032c5cf1dfbdef31a20f4509562b0", "name": "ADST", "decimals": 0 }
   ],
   "defaultPair": { "token": "ZRX", "base": "ETH" },
   "pairs": [
@@ -272,5 +273,6 @@
     { "token": "WTT", "base": "ETH" },
     { "token": "RARE", "base": "ETH" },
     { "token": "SCL", "base": "ETH" }
+    { "token": "ADST", "base": "ETH" }
   ]
 }
