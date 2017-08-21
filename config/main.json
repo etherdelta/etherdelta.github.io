@@ -149,7 +149,9 @@
     { "addr": "0x0e0989b1f9b8a38983c2ba8053269ca62ec9b195", "name": "POE", "decimals": 8 },
     { "addr": "0x38968746147bbaeb882f356ad9a57594bb158235", "name": "BENJA", "decimals": 8 },
     { "addr": "0x814cafd4782d2e728170fda68257983f03321c58", "name": "IDEA", "decimals": 0 },
-    { "addr": "0x84119cb33e8f590d75c2d6ea4e6b0741a7494eda", "name": "WTT", "decimals": 0 }
+    { "addr": "0x84119cb33e8f590d75c2d6ea4e6b0741a7494eda", "name": "WTT", "decimals": 0 },
+    { "addr": "0x5ddab66da218fb05dfeda07f1afc4ea0738ee234", "name": "RARE", "decimals": 8 },
+    { "addr": "0xd7631787b4dcc87b1254cfd1e5ce48e96823dee8", "name": "SCL", "decimals": 8 }
   ],
   "defaultPair": { "token": "ZRX", "base": "ETH" },
   "pairs": [
@@ -267,6 +269,8 @@
     { "token": "POE", "base": "ETH" },
     { "token": "BENJA", "base": "ETH" },
     { "token": "IDEA", "base": "ETH" },
-    { "token": "WTT", "base": "ETH" }
+    { "token": "WTT", "base": "ETH" },
+    { "token": "RARE", "base": "ETH" },
+    { "token": "SCL", "base": "ETH" }
   ]
 }
