@@ -20,8 +20,8 @@
       <tr>
         <td><a href="<%= trade.txLink %>" target="_blank"><%= trade.txHash.slice(0, 10) %></a></td>
         <td><% if(selectedAddr.toLowerCase()==trade.buyer.toLowerCase()) { %><span class="trn">buy</span><% } else { %><span class="trn">sell</span><% } %></span></td>
-        <td><%= trade.amount.toFixed(3) %></td>
-        <td><%= trade.amountBase.toFixed(3) %></td>
+        <td><span data-toggle="tooltip" data-placement="top" title="<%= trade.amount.toFixed(9) %>"><%= trade.amount.toFixed(3) %></span></td>
+        <td><span data-toggle="tooltip" data-placement="top" title="<%= trade.amountBase.toFixed(9) %>"><%= trade.amountBase.toFixed(3) %></span></td>
         <td><%= trade.price.toFixed(9) %></td>
       </tr>
     <% }); %>

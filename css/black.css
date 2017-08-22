@@ -320,3 +320,7 @@ pre code {
 .big-icon {
   font-size: 150%;
 }
+
+.tooltip-inner {
+  white-space:pre-wrap;
+}

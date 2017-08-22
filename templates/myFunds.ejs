@@ -18,8 +18,12 @@
       <tr>
         <td><%= fund.blockNumber %><a href="<%= fund.txLink %>" target="_blank"><%= fund.txHash.slice(0, 10) %></a></td>
         <td><span class="trn"><%= fund.kind === 'Deposit' ? 'deposit' : 'withdraw' %></span></td>
-        <td><% if (fund.tokenAddr.toLowerCase()==selectedToken.addr.toLowerCase()) {%><%= fund.amount.toFixed(3) %><% } %></td>
-        <td><% if (fund.tokenAddr.toLowerCase()==selectedBase.addr.toLowerCase()) {%><%= fund.amount.toFixed(3) %><% } %></td>
+        <td><% if (fund.tokenAddr.toLowerCase()==selectedToken.addr.toLowerCase()) {%>
+          <span data-toggle="tooltip" data-placement="top" title="<%= fund.amount.toFixed(9) %>"><%= fund.amount.toFixed(3) %></span>
+        <% } %></td>
+        <td><% if (fund.tokenAddr.toLowerCase()==selectedBase.addr.toLowerCase()) {%>
+          <span data-toggle="tooltip" data-placement="top" title="<%= fund.amount.toFixed(9) %>"><%= fund.amount.toFixed(3) %></span>
+        <% } %></td>
       </tr>
     <% }); %>
     <tr>

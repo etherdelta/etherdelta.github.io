@@ -9,7 +9,11 @@
     <% sellOrders.forEach(function(order){ %>
     <tr>
       <td class="trn"><span class="sell"><%= order.price.toFixed(9) %></span></td>
-      <td class="trn"><%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %> / <%= main.utility.weiToEth(Math.abs(order.amount), main.EtherDelta.getDivisor(selectedToken)) %></td>
+      <td class="trn">
+        <span data-toggle="tooltip" data-placement="top" title="<%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken), 9) %>"><%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %></span>
+        /
+        <span data-toggle="tooltip" data-placement="top" title="<%= main.utility.weiToEth(Math.abs(order.amount), main.EtherDelta.getDivisor(selectedToken), 9) %>"><%= main.utility.weiToEth(Math.abs(order.amount), main.EtherDelta.getDivisor(selectedToken)) %></span>
+      </td>
       <td><% if (order.expires > blockNumber){ %><%= (order.expires - blockNumber) %> <%= order.expires - blockNumber==1 ? translator.get('block') : translator.get('blocks') %><% } else { %><span class="trn">expired</span><% } %></td>
       <td><button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="main.EtherDelta.cancelOrder('<%= encodeURIComponent(JSON.stringify(order)) %>');"><span class="trn">cancel</span></button></td>
     </tr>
@@ -17,7 +21,11 @@
     <% buyOrders.forEach(function(order){ %>
     <tr>
       <td class="trn"><span class="buy"><%= order.price.toFixed(9) %></span></td>
-      <td class="trn"><%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %> / <%= main.utility.weiToEth(Math.abs(order.amount), main.EtherDelta.getDivisor(selectedToken)) %></td>
+      <td class="trn">
+        <span data-toggle="tooltip" data-placement="top" title="<%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken), 9) %>"><%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %></span>
+        /
+        <span data-toggle="tooltip" data-placement="top" title="<%= main.utility.weiToEth(Math.abs(order.amount), main.EtherDelta.getDivisor(selectedToken), 9) %>"><%= main.utility.weiToEth(Math.abs(order.amount), main.EtherDelta.getDivisor(selectedToken)) %></span>
+      </td>
       <td><% if (order.expires > blockNumber){ %><%= (order.expires - blockNumber) %> <%= order.expires - blockNumber==1 ? translator.get('block') : translator.get('blocks') %><% } else { %><span class="trn">expired</span><% } %></td>
       <td><button type="button" class="btn btn-primary btn-xs" style="width:50px;" onclick="main.EtherDelta.cancelOrder('<%= encodeURIComponent(JSON.stringify(order)) %>');"><span class="trn">cancel</span></button></td>
     </tr>

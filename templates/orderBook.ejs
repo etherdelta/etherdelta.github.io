@@ -3,9 +3,17 @@
     <% sellOrders.forEach(function(order){ %>
       <% if (order.expires > blockNumber) { %>
         <tr class="clickable-row" data-toggle="modal" data-target="#buyCrossModal" data-order='<%= JSON.stringify(order) %>' data-desc='<% if (order.expires > blockNumber){ %><%= translator.get("expires_in")%> <%= (order.expires - blockNumber) %> <%= order.expires - blockNumber==1 ? translator.get("block") : translator.get("blocks") %><% } else { %><%= translator.get("expired") %><% } %><br /><%= translator.get("sell_order")%>: <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %> <%= selectedToken.name %> @ <%= order.price.toNumber().toFixed(9) %> <%= selectedToken.name+'/'+selectedBase.name %>' data-token='<%= selectedToken.name %>' data-price='<%= order.price.toNumber() %>' data-base='<%= selectedBase.name %>' data-amount='<%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %>'>
-          <td><span class="sell" style="<%= selectedAddr.toLowerCase()==order.user.toLowerCase() ? 'background: #9ff; color: #000;' : '' %>"><%= order.price.toNumber().toFixed(9) %></span></td>
-          <td><%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %></td>
-          <td><%= main.utility.weiToEth(Math.abs(order.availableVolumeBase), main.EtherDelta.getDivisor(selectedBase)) %></td>
+          <td><span class="sell" style="<%= selectedAddr.toLowerCase()==order.user.toLowerCase() ? 'background: #9ff; color: #000;' : '' %>" data-toggle="tooltip" data-placement="top" title="Click here to BUY <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken), 9) %> <%= selectedToken.name %>"><%= order.price.toNumber().toFixed(9) %></span></td>
+          <td>
+            <span data-toggle="tooltip" data-placement="top" title="Click here to BUY <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken), 9) %> <%= selectedToken.name %>">
+              <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %>
+            </span>
+          </td>
+          <td>
+            <span data-toggle="tooltip" data-placement="top" title="Click here to BUY <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken), 9) %> <%= selectedToken.name %>">
+              <%= main.utility.weiToEth(Math.abs(order.availableVolumeBase), main.EtherDelta.getDivisor(selectedBase)) %>
+            </span>
+          </td>
         </tr>
       <% } %>
     <% }); %>
@@ -17,9 +25,17 @@
     <% buyOrders.forEach(function(order){ %>
       <% if (order.expires > blockNumber) { %>
         <tr class="clickable-row" data-toggle="modal" data-target="#sellCrossModal" data-order='<%= JSON.stringify(order) %>' data-desc='<% if (order.expires > blockNumber){ %><%= translator.get("expires_in")%> <%= (order.expires - blockNumber) %> <%= order.expires - blockNumber==1 ? translator.get("block") : translator.get("blocks") %><% } else { %><%= translator.get("expired") %><% } %><br /><%= translator.get("buy_order")%>: <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %> <%= selectedToken.name %> @ <%= order.price.toNumber().toFixed(9) %> <%= selectedToken.name+'/'+selectedBase.name %>' data-token='<%= selectedToken.name %>' data-price='<%= order.price.toNumber() %>' data-base='<%= selectedBase.name %>' data-amount='<%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %>'>
-          <td><span class="buy" style="<%= selectedAddr.toLowerCase()==order.user.toLowerCase() ? 'background: #9ff; color: #000;' : '' %>"><%= order.price.toNumber().toFixed(9) %></span></td>
-          <td><%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %></td>
-          <td><%= main.utility.weiToEth(Math.abs(order.availableVolumeBase), main.EtherDelta.getDivisor(selectedBase)) %></td>
+          <td><span class="buy" style="<%= selectedAddr.toLowerCase()==order.user.toLowerCase() ? 'background: #9ff; color: #000;' : '' %>" data-toggle="tooltip" data-placement="top" title="Click here to SELL <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken), 9) %> <%= selectedToken.name %>"><%= order.price.toNumber().toFixed(9) %></span></td>
+          <td>
+            <span data-toggle="tooltip" data-placement="top" title="Click here to SELL <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken), 9) %> <%= selectedToken.name %>">
+              <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken)) %>
+            </span>
+          </td>
+          <td>
+            <span data-toggle="tooltip" data-placement="top" title="Click here to SELL <%= main.utility.weiToEth(Math.abs(order.availableVolume), main.EtherDelta.getDivisor(selectedToken), 9) %> <%= selectedToken.name %>">
+              <%= main.utility.weiToEth(Math.abs(order.availableVolumeBase), main.EtherDelta.getDivisor(selectedBase)) %>
+            </span>
+          </td>
         </tr>
       <% } %>
     <% }); %>
