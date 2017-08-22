@@ -297,8 +297,12 @@ pre code {
 }
 
 #orderBookScroll td {
-  max-width: 100px;
+  max-width: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.big-icon {
+  font-size: 150%;
 }

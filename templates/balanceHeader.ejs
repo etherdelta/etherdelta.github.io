@@ -1,7 +1,7 @@
 <% if (addr && addr.slice(0,39)!='0x0000000000000000000000000000000000000') { %>
   <table class="table table-borderless table-balances">
     <tr class="table-header">
-      <td class="trn">token</td><td class="trn">balance_in_your_wallet</td><td class="trn">balance_etherdelta</td>
+      <td class="trn">token</td><td class="trn" data-toggle="tooltip" data-placement="bottom" title="balance_wallet_tooltip">balance_in_your_wallet</td><td class="trn" data-toggle="tooltip" data-placement="bottom" title="balance_etherdelta_tooltip">balance_etherdelta</td>
     </tr>
   </table>
 <% } else { %>

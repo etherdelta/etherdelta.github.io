@@ -3,11 +3,11 @@
   "contractToken": "smart_contract/token.sol",
   "contractReserveToken": "smart_contract/reservetoken.sol",
   "contractEtherDeltaAddrs": [
-    { "addr": "0x8d12a197cb00d4747a1fe03395095ce2a5cc6819", "info": "Deployed 02/09/2017" },
-    { "addr": "0x373c55c277b866a69dc047cad488154ab9759466", "info": "Deployed 10/24/2016 -- please withdraw" },
-    { "addr": "0x4aea7cf559f67cedcad07e12ae6bc00f07e8cf65", "info": "Deployed 08/30/2016 -- please withdraw" },
-    { "addr": "0x2136bbba2edca21afdddee838fff19ea70d10f03", "info": "Deployed 08/03/2016 -- please withdraw" },
-    { "addr": "0xc6b330df38d6ef288c953f1f2835723531073ce2", "info": "Deployed 07/08/2016 -- please withdraw" }
+    { "addr": "0x8d12a197cb00d4747a1fe03395095ce2a5cc6819", "info": "Deployed 02/09/2017 -- THE CURRENT SMART CONTRACT" },
+    { "addr": "0x373c55c277b866a69dc047cad488154ab9759466", "info": "Deployed 10/24/2016 -- OLD, DO NOT USE" },
+    { "addr": "0x4aea7cf559f67cedcad07e12ae6bc00f07e8cf65", "info": "Deployed 08/30/2016 -- OLD, DO NOT USE" },
+    { "addr": "0x2136bbba2edca21afdddee838fff19ea70d10f03", "info": "Deployed 08/03/2016 -- OLD, DO NOT USE" },
+    { "addr": "0xc6b330df38d6ef288c953f1f2835723531073ce2", "info": "Deployed 07/08/2016 -- OLD, DO NOT USE" }
   ],
   "ethTestnet": false,
   "ethProvider": "http://localhost:8545",
@@ -152,7 +152,10 @@
     { "addr": "0x84119cb33e8f590d75c2d6ea4e6b0741a7494eda", "name": "WTT", "decimals": 0 },
     { "addr": "0x5ddab66da218fb05dfeda07f1afc4ea0738ee234", "name": "RARE", "decimals": 8 },
     { "addr": "0xd7631787b4dcc87b1254cfd1e5ce48e96823dee8", "name": "SCL", "decimals": 8 },
-    { "addr": "0xa7f976c360ebbed4465c2855684d1aae5271efa9", "name": "TFL", "decimals": 8 }
+    { "addr": "0xa7f976c360ebbed4465c2855684d1aae5271efa9", "name": "TFL", "decimals": 8 },
+    { "addr": "0x7654915a1b82d6d2d0afc37c52af556ea8983c7e", "name": "IFT", "decimals": 18 },
+    { "addr": "0x94298f1e0ab2dfad6eeffb1426846a3c29d98090", "name": "MyB", "decimals": 8 },
+    { "addr": "0x4355fc160f74328f9b383df2ec589bb3dfd82ba0", "name": "OPT", "decimals": 18 }
   ],
   "defaultPair": { "token": "ZRX", "base": "ETH" },
   "pairs": [
@@ -273,6 +276,9 @@
     { "token": "WTT", "base": "ETH" },
     { "token": "RARE", "base": "ETH" },
     { "token": "SCL", "base": "ETH" },
-    { "token": "TFL", "base": "ETH" }
+    { "token": "TFL", "base": "ETH" },
+    { "token": "IFT", "base": "ETH" },
+    { "token": "MyB", "base": "ETH" },
+    { "token": "OPT", "base": "ETH" }
   ]
 }
