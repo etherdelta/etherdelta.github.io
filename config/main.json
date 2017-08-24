@@ -160,7 +160,9 @@
     { "addr": "0x17fd666fa0784885fa1afec8ac624d9b7e72b752", "name": "FLIK", "decimals": 14 },
     { "addr": "0x7288c72af505e3a6ff2712699e2a695465d353b3", "name": "MTP", "decimals": 18 },
     { "addr": "0x422866a8f0b032c5cf1dfbdef31a20f4509562b0", "name": "ADST", "decimals": 0 },
-    { "addr": "0x66497a283e0a007ba3974e837784c6ae323447de", "name": "PT", "decimals": 0 }
+    { "addr": "0x66497a283e0a007ba3974e837784c6ae323447de", "name": "PT", "decimals": 0 },
+    { "addr": "0x07d9e49ea402194bf48a8276dafb16e4ed633317", "name": "DALC", "decimals": 8 },
+    { "addr": "0xcc4ef9eeaf656ac1a2ab886743e98e97e090ed38", "name": "DDF", "decimals": 18 }
   ],
   "defaultPair": { "token": "ZRX", "base": "ETH" },
   "pairs": [
@@ -288,6 +290,8 @@
     { "token": "FLIK", "base": "ETH" },
     { "token": "MTP", "base": "ETH" },
     { "token": "ADST", "base": "ETH" },
-    { "token": "PT", "base": "ETH" }
+    { "token": "PT", "base": "ETH" },
+    { "token": "DALC", "base": "ETH" },
+    { "token": "DDF", "base": "ETH" }
   ]
 }
