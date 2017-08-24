@@ -162,7 +162,8 @@
     { "addr": "0x422866a8f0b032c5cf1dfbdef31a20f4509562b0", "name": "ADST", "decimals": 0 },
     { "addr": "0x66497a283e0a007ba3974e837784c6ae323447de", "name": "PT", "decimals": 0 },
     { "addr": "0x07d9e49ea402194bf48a8276dafb16e4ed633317", "name": "DALC", "decimals": 8 },
-    { "addr": "0xcc4ef9eeaf656ac1a2ab886743e98e97e090ed38", "name": "DDF", "decimals": 18 }
+    { "addr": "0xcc4ef9eeaf656ac1a2ab886743e98e97e090ed38", "name": "DDF", "decimals": 18 },
+    { "addr": "0xef68e7c694f40c8202821edf525de3782458639f", "name": "LRC", "decimals": 18 }
   ],
   "defaultPair": { "token": "ZRX", "base": "ETH" },
   "pairs": [
@@ -292,6 +293,7 @@
     { "token": "ADST", "base": "ETH" },
     { "token": "PT", "base": "ETH" },
     { "token": "DALC", "base": "ETH" },
-    { "token": "DDF", "base": "ETH" }
+    { "token": "DDF", "base": "ETH" },
+    { "token": "LRC", "base": "ETH" }
   ]
 }
