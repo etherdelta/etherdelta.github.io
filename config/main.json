@@ -168,7 +168,10 @@
     { "addr": "0x8effd494eb698cc399af6231fccd39e08fd20b15", "name": "PIX", "decimals": 0 },
     { "addr": "0xaa26b73bfdc80b5c7d2cfbfc30930038fb7fa657", "name": "TOV", "decimals": 0 },
     { "addr": "0x08f5a9235b08173b7569f83645d2c7fb55e8ccd8", "name": "TNT", "decimals": 8 },
-    { "addr": "0x96a65609a7b84e8842732deb08f56c3e21ac6f8a", "name": "CTR", "decimals": 18 }
+    { "addr": "0x96a65609a7b84e8842732deb08f56c3e21ac6f8a", "name": "CTR", "decimals": 18 },
+    { "addr": "0xe6923e9b56db1eed1c9f430ea761da7565e260fe", "name": "FC", "decimals": 2 },
+    { "addr": "0xd850942ef8811f2a866692a623011bde52a462c1", "name": "VEN", "decimals": 18 }
+
   ],
   "defaultPair": { "token": "CAT", "base": "ETH" },
   "pairs": [
@@ -304,6 +307,8 @@
     { "token": "PIX", "base": "ETH" },
     { "token": "TOV", "base": "ETH" },
     { "token": "TNT", "base": "ETH" },
-    { "token": "CTR", "base": "ETH" }
+    { "token": "CTR", "base": "ETH" },
+    { "token": "FC", "base": "ETH" },
+    { "token": "VEN", "base": "ETH" }
   ]
 }
