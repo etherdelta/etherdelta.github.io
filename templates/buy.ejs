@@ -1,4 +1,8 @@
 <form class="form-horizontal">
+  <input type="hidden" id="buyTokenAddr" value="<%= selectedToken.addr %>" />
+  <input type="hidden" id="buyBaseAddr" value="<%= selectedBase.addr %>" />
+  <input type="hidden" id="buyBid" value="<%= bid %>" />
+  <input type="hidden" id="buyAsk" value="<%= ask %>" />
   <div class="form-group">
     <label class="col-sm-4 control-label"><%= selectedToken.name %></label>
     <div class="col-sm-8">

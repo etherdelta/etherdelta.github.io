@@ -12,7 +12,9 @@ function buyChange() { // eslint-disable-line no-unused-vars
   const amount = Number($('#buyAmount').val());
   const price = Number($('#buyPrice').val());
   const total = (amount * price).toFixed(3);
-  const isInCross = main.EtherDelta.isInCross(price, 'buy');
+  const bid = Number($('#buyBid').val());
+  const ask = Number($('#buyAsk').val());
+  const isInCross = main.EtherDelta.isInCross(price, 'buy', bid, ask);
   if (isInCross) {
     $('#buyInCross').html(`Your order is in cross with the best sell order in the order book (price = ${isInCross}).`);
   } else {
@@ -24,7 +26,9 @@ function sellChange() { // eslint-disable-line no-unused-vars
   const amount = Number($('#sellAmount').val());
   const price = Number($('#sellPrice').val());
   const total = (amount * price).toFixed(3);
-  const isInCross = main.EtherDelta.isInCross(price, 'sell');
+  const bid = Number($('#sellBid').val());
+  const ask = Number($('#sellAsk').val());
+  const isInCross = main.EtherDelta.isInCross(price, 'sell', bid, ask);
   if (isInCross) {
     $('#sellInCross').html(`Your order is in cross with the best buy order in the order book (price = ${isInCross}).`);
   } else {
@@ -36,22 +40,24 @@ $(() => {
   $('body').on('click', '#buySubmit', (e) => {
     e.preventDefault();
     main.EtherDelta.order(
+      $('#buyTokenAddr').val(),
+      $('#buyBaseAddr').val(),
       'buy',
       $('#buyAmount').val(),
       $('#buyPrice').val(),
-      $('#buyExpires').val(),
-      false);
+      $('#buyExpires').val());
   });
 });
 $(() => {
   $('body').on('click', '#sellSubmit', (e) => {
     e.preventDefault();
     main.EtherDelta.order(
+      $('#sellTokenAddr').val(),
+      $('#sellBaseAddr').val(),
       'sell',
       $('#sellAmount').val(),
       $('#sellPrice').val(),
-      $('#sellExpires').val(),
-      false);
+      $('#sellExpires').val());
   });
 });
 $('#buyCrossModal').on('show.bs.modal', (e) => {
