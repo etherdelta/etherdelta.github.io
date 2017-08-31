@@ -179,7 +179,8 @@
     { "addr": "0x0f5d2fb29fb7d3cfee444a200298f468908cc942", "name": "MANA", "decimals": 18 },
     { "addr": "0xc0e4f45b828aa4aa628e897e5da38d9dc72c2257", "name": "KC", "decimals": 8 },
     { "addr": "0x4e260e3ca268e40133c84b142de73108a7c1ec99", "name": "YC", "decimals": 0 },
-    { "addr": "0xaf4dce16da2877f8c9e00544c93b62ac40631f16", "name": "MTH", "decimals": 5 }
+    { "addr": "0xaf4dce16da2877f8c9e00544c93b62ac40631f16", "name": "MTH", "decimals": 5 },
+    { "addr": "0x9214ec02cb71cba0ada6896b8da260736a67ab10", "name": "REAL", "decimals": 18 }
   ],
   "defaultPair": { "token": "CAT", "base": "ETH" },
   "pairs": [
@@ -325,6 +326,7 @@
     { "token": "UET", "base": "ETH" },
     { "token": "KC", "base": "ETH" },
     { "token": "YC", "base": "ETH" },
-    { "token": "MTH", "base": "ETH" }
+    { "token": "MTH", "base": "ETH" },
+    { "token": "REAL", "base": "ETH" }
   ]
 }
