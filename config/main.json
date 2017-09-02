@@ -21,6 +21,7 @@
   "gasOrder": 250000,
   "minOrderSize": 0.001,
   "apiServer": ["https://cache1.etherdelta.com", "https://cache2.etherdelta.com", "https://cache3.etherdelta.com", "https://cache4.etherdelta.com"],
+  "NOapiServer": ["https://demo.etherdelta.com"],
   "LOCALapiServer": ["http://localhost:8001"],
   "userCookie": "EtherDelta",
   "eventsCacheCookie": "EtherDelta_eventsCache",
