@@ -184,9 +184,12 @@
     { "addr": "0xaf4dce16da2877f8c9e00544c93b62ac40631f16", "name": "MTH", "decimals": 5 },
     { "addr": "0x9214ec02cb71cba0ada6896b8da260736a67ab10", "name": "REAL", "decimals": 18 },
     { "addr": "0xe5a7c12972f3bbfe70ed29521c8949b8af6a0970", "name": "BLX", "decimals": 18 },
-    { "addr": "0x5cf4e9dfd975c52aa523fb5945a12235624923dc", "name": "MPRM", "decimals": 0 }
+    { "addr": "0x5cf4e9dfd975c52aa523fb5945a12235624923dc", "name": "MPRM", "decimals": 0 },
+    { "addr": "0x887834d3b8d450b6bab109c252df3da286d73ce4", "name": "ATT", "decimals": 18 },
+    { "addr": "0xf4134146af2d511dd5ea8cdb1c4ac88c57d60404", "name": "SNC", "decimals": 18 },
+    { "addr": "0x138a8752093f4f9a79aaedf48d4b9248fab93c9c", "name": "MCI", "decimals": 18 }
   ],
-  "defaultPair": { "token": "CAT", "base": "ETH" },
+  "defaultPair": { "token": "PPT", "base": "ETH" },
   "pairs": [
     { "token": "PLU", "base": "ETH" },
     { "token": "1ST", "base": "ETH" },
@@ -334,6 +337,9 @@
     { "token": "MTH", "base": "ETH" },
     { "token": "REAL", "base": "ETH" },
     { "token": "BLX", "base": "ETH" },
-    { "token": "MPRM", "base": "ETH" }
+    { "token": "MPRM", "base": "ETH" },
+    { "token": "ATT", "base": "ETH" },
+    { "token": "SNC", "base": "ETH" },
+    { "token": "MCI", "base": "ETH" }
   ]
 }
