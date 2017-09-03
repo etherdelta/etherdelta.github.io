@@ -9,5 +9,6 @@
     { "addr": "0xc1e6c6c681b286fb503b36a9dd6c1dbff85e73cf", "name": "JET", "decimals": 18 },
     { "addr": "0x96a65609a7b84e8842732deb08f56c3e21ac6f8a", "name": "CTR", "decimals": 18 },
     { "addr": "0x27f706edde3ad952ef647dd67e24e38cd0803dd6", "name": "UET", "decimals": 18 },
+    { "addr": "0x29d26160b9b4432bd2a95c34c0f7691d2655ed77", "name": "HVN", "decimals": 8 },
   ],
 };
