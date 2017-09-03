@@ -189,7 +189,7 @@
     { "addr": "0x138a8752093f4f9a79aaedf48d4b9248fab93c9c", "name": "MCI", "decimals": 18 },
     { "addr": "0xb7cb1c96db6b22b0d3d9536e0108d062bd488f74", "name": "WTC", "decimals": 18 },
     { "addr": "0x29d26160b9b4432bd2a95c34c0f7691d2655ed77", "name": "HVN", "decimals": 8 },
-    { "addr": "0x5ca9a71b1d01849c0a95490cc00559717fcf0d1d", "name": "AE", "decimals": 18 },
+    { "addr": "0x5ca9a71b1d01849c0a95490cc00559717fcf0d1d", "name": "AE", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" },
   "pairs": [
