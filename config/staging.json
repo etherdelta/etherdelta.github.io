@@ -8,5 +8,6 @@
     { "addr": "0xee22430595ae400a30ffba37883363fbf293e24e", "name": "TME", "decimals": 18 },
     { "addr": "0xc1e6c6c681b286fb503b36a9dd6c1dbff85e73cf", "name": "JET", "decimals": 18 },
     { "addr": "0x96a65609a7b84e8842732deb08f56c3e21ac6f8a", "name": "CTR", "decimals": 18 },
+    { "addr": "0x27f706edde3ad952ef647dd67e24e38cd0803dd6", "name": "UET", "decimals": 18 },
   ],
 };
