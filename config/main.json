@@ -188,7 +188,8 @@
     { "addr": "0xf4134146af2d511dd5ea8cdb1c4ac88c57d60404", "name": "SNC", "decimals": 18 },
     { "addr": "0x138a8752093f4f9a79aaedf48d4b9248fab93c9c", "name": "MCI", "decimals": 18 },
     { "addr": "0xb7cb1c96db6b22b0d3d9536e0108d062bd488f74", "name": "WTC", "decimals": 18 },
-    { "addr": "0x5ca9a71b1d01849c0a95490cc00559717fcf0d1d", "name": "AE", "decimals": 18 }
+    { "addr": "0x5ca9a71b1d01849c0a95490cc00559717fcf0d1d", "name": "AE", "decimals": 18 },
+    { "addr": "0x07ba910f747b472ba4840c184f6b6e92b0e7495e", "name": "CCT", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" },
   "pairs": [
@@ -342,6 +343,7 @@
     { "token": "SNC", "base": "ETH" },
     { "token": "MCI", "base": "ETH" },
     { "token": "WTC", "base": "ETH" },
-    { "token": "AE", "base": "ETH" }
+    { "token": "AE", "base": "ETH" },
+    { "token": "CCT", "base": "ETH" }
   ]
 }
