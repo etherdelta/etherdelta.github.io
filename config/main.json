@@ -194,7 +194,8 @@
     { "addr": "0x9cb9eb4bb7800bdbb017be2a4ffbeccb67454ea9", "name": "BOPT", "decimals": 8 },
     { "addr": "0x0d88ed6e74bbfd96b831231638b66c05571e824f", "name": "AVT", "decimals": 18 },
     { "addr": "0x190e569be071f40c704e15825f285481cb74b6cc", "name": "FAM", "decimals": 12 },
-    { "addr": "0x190fb342aa6a15eb82903323ae78066ff8616746", "name": "UMC", "decimals": 6 }
+    { "addr": "0x190fb342aa6a15eb82903323ae78066ff8616746", "name": "UMC", "decimals": 6 },
+    { "addr": "0x59adcf176ed2f6788a41b8ea4c4904518e62b6a4", "name": "SAI", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" },
   "pairs": [
@@ -355,6 +356,7 @@
     { "token": "BOPT", "base": "ETH" },
     { "token": "AVT", "base": "ETH" },
     { "token": "FAM", "base": "ETH" },
-    { "token": "UMC", "base": "ETH" }
+    { "token": "UMC", "base": "ETH" },
+    { "token": "SAI", "base": "ETH" }
   ]
 }
