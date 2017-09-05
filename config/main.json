@@ -194,7 +194,8 @@
     { "addr": "0x190e569be071f40c704e15825f285481cb74b6cc", "name": "FAM", "decimals": 12 },
     { "addr": "0x190fb342aa6a15eb82903323ae78066ff8616746", "name": "UMC", "decimals": 6 },
     { "addr": "0x59adcf176ed2f6788a41b8ea4c4904518e62b6a4", "name": "SAI", "decimals": 18 },
-    { "addr": "0x1b9743f556d65e757c4c650b4555baf354cb8bd3", "name": "ETBS", "decimals": 12 }
+    { "addr": "0x1b9743f556d65e757c4c650b4555baf354cb8bd3", "name": "ETBS", "decimals": 12 },
+    { "addr": "0xd3c00772b24d997a812249ca637a921e81357701", "name": "WILD", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" },
   "pairs": [
@@ -355,6 +356,7 @@
     { "token": "FAM", "base": "ETH" },
     { "token": "UMC", "base": "ETH" },
     { "token": "SAI", "base": "ETH" },
-    { "token": "ETBS", "base": "ETH" }
+    { "token": "ETBS", "base": "ETH" },
+    { "token": "WILD", "base": "ETH" }
   ]
 }
