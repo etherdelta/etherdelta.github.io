@@ -200,7 +200,10 @@
     { "addr": "0xf99f901124cbbe180984a247ba94cfba0c764b2e", "name": "SQRL", "decimals": 6 },
     { "addr": "0xb29678a4805a7d787dc9589e179d27f7575bb9f7", "name": "AUA", "decimals": 5 },
     { "addr": "0x5afda18caba69fe3af5e6d56e42e1c9f92c40d77", "name": "MCD", "decimals": 18 },
-    { "addr": "0xf0f8b0b8dbb1124261fc8d778e2287e3fd2cf4f5", "name": "BQ", "decimals": 3 }
+    { "addr": "0xf0f8b0b8dbb1124261fc8d778e2287e3fd2cf4f5", "name": "BQ", "decimals": 3 },
+    { "addr": "0xa54ddc7b3cce7fc8b1e3fa0256d0db80d2c10970", "name": "NDC", "decimals": 18 },
+    { "addr": "0xc596bd09d652827b0106292d3e378d5938df4b12", "name": "TPT", "decimals": 18 },
+    { "addr": "0x07e3c70653548b04f0a75970c1f81b4cbbfb606f", "name": "DLT", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" },
   "pairs": [
@@ -367,6 +370,9 @@
     { "token": "SQRL", "base": "ETH" },
     { "token": "AUA", "base": "ETH" },
     { "token": "MCD", "base": "ETH" },
-    { "token": "BQ", "base": "ETH" }
+    { "token": "BQ", "base": "ETH" },
+    { "token": "NDC", "base": "ETH" },
+    { "token": "TPT", "base": "ETH" },
+    { "token": "DLT", "base": "ETH" }
   ]
 }
