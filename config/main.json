@@ -189,7 +189,7 @@
     { "addr": "0x336f646f87d9f6bc6ed42dd46e8b3fd9dbd15c22", "name": "CCT", "decimals": 18 },
     { "addr": "0x7e3581ddf5b89c9094b62ad021a03d9555e21bb9", "name": "STAR", "decimals": 18 },
     { "addr": "0xc8c6a31a4a806d3710a7b38b7b296d2fabccdba8", "name": "ELIX", "decimals": 18 },
-    { "addr": "0x9cb9eb4bb7800bdbb017be2a4ffbeccb67454ea9", "name": "BOPT", "decimals": 8 },
+    { "addr": "0x9cb9eb4bb7800bdbb017be2a4ffbeccb67454ea9", "name": "BOPTOLD", "decimals": 8 },
     { "addr": "0x0d88ed6e74bbfd96b831231638b66c05571e824f", "name": "AVT", "decimals": 18 },
     { "addr": "0x190e569be071f40c704e15825f285481cb74b6cc", "name": "FAM", "decimals": 12 },
     { "addr": "0x190fb342aa6a15eb82903323ae78066ff8616746", "name": "UMC", "decimals": 6 },
@@ -203,7 +203,8 @@
     { "addr": "0xf0f8b0b8dbb1124261fc8d778e2287e3fd2cf4f5", "name": "BQ", "decimals": 3 },
     { "addr": "0xa54ddc7b3cce7fc8b1e3fa0256d0db80d2c10970", "name": "NDC", "decimals": 18 },
     { "addr": "0xc596bd09d652827b0106292d3e378d5938df4b12", "name": "TPT", "decimals": 18 },
-    { "addr": "0x07e3c70653548b04f0a75970c1f81b4cbbfb606f", "name": "DLT", "decimals": 18 }
+    { "addr": "0x07e3c70653548b04f0a75970c1f81b4cbbfb606f", "name": "DLT", "decimals": 18 },
+    { "addr": "0x7f1e2c7d6a69bf34824d72c53b4550e895c0d8c2", "name": "BOP", "decimals": 8 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" },
   "pairs": [
@@ -373,6 +374,7 @@
     { "token": "BQ", "base": "ETH" },
     { "token": "NDC", "base": "ETH" },
     { "token": "TPT", "base": "ETH" },
-    { "token": "DLT", "base": "ETH" }
+    { "token": "DLT", "base": "ETH" },
+    { "token": "BOP", "base": "ETH" }
   ]
 }
