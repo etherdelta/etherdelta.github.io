@@ -208,7 +208,8 @@
     { "addr": "0x51db5ad35c671a87207d88fc11d593ac0c8415bd", "name": "MDA", "decimals": 18 },
     { "addr": "0xe3fedaecd47aa8eab6b23227b0ee56f092c967a9", "name": "PST", "decimals": 18 },
     { "addr": "0xa6e7172662379f1f4c72108655869abdbb7f7672", "name": "JADE", "decimals": 5 },
-    { "addr": "0xfec0cf7fe078a500abf15f1284958f22049c2c7e", "name": "ART", "decimals": 18 }
+    { "addr": "0xfec0cf7fe078a500abf15f1284958f22049c2c7e", "name": "ART", "decimals": 18 },
+    { "addr": "0x0bb217e40f8a5cb79adf04e1aab60e5abd0dfc1e", "name": "SWFTC", "decimals": 8 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" },
   "pairs": [
@@ -383,6 +384,7 @@
     { "token": "MDA", "base": "ETH" },
     { "token": "PST", "base": "ETH" },
     { "token": "JADE", "base": "ETH" },
-    { "token": "ART", "base": "ETH" }
+    { "token": "ART", "base": "ETH" },
+    { "token": "SWFTC", "base": "ETH" }
   ]
 }
