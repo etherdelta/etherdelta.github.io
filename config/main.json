@@ -209,9 +209,11 @@
     { "addr": "0xe3fedaecd47aa8eab6b23227b0ee56f092c967a9", "name": "PST", "decimals": 18 },
     { "addr": "0xa6e7172662379f1f4c72108655869abdbb7f7672", "name": "JADE", "decimals": 5 },
     { "addr": "0xfec0cf7fe078a500abf15f1284958f22049c2c7e", "name": "ART", "decimals": 18 },
-    { "addr": "0x0bb217e40f8a5cb79adf04e1aab60e5abd0dfc1e", "name": "SWFTC", "decimals": 8 }
+    { "addr": "0x0bb217e40f8a5cb79adf04e1aab60e5abd0dfc1e", "name": "SWFTC", "decimals": 8 },
+    { "addr": "0x089a6d83282fb8988a656189f1e7a73fa6c1cac2", "name": "PGL", "decimals": 18 },
+    { "addr": "0xc997d07b0bc607b6d1bcb6fb9d4a5579c466c3e5", "name": "FLIP", "decimals": 0 }
   ],
-  "defaultPair": { "token": "PPT", "base": "ETH" },
+  "defaultPair": { "token": "MTH", "base": "ETH" },
   "pairs": [
     { "token": "PLU", "base": "ETH" },
     { "token": "1ST", "base": "ETH" },
@@ -385,6 +387,8 @@
     { "token": "PST", "base": "ETH" },
     { "token": "JADE", "base": "ETH" },
     { "token": "ART", "base": "ETH" },
-    { "token": "SWFTC", "base": "ETH" }
+    { "token": "SWFTC", "base": "ETH" },
+    { "token": "PGL", "base": "ETH" },
+    { "token": "FLIP", "base": "ETH" }
   ]
 }

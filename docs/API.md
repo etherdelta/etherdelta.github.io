@@ -4,12 +4,9 @@ EtherDelta's API allows you to query orders, trades, deposits, and withdrawals. 
 
 ## Servers
 
-EtherDelta API has multiple interchangeable endpoints you can choose from randomly.
+EtherDelta one API endpoint:
 
- * `api1.etherdelta.com`
- * `api2.etherdelta.com`
- * `api3.etherdelta.com`
- * `api4.etherdelta.com`
+ * `api.etherdelta.com`
 
 ## Endpoints
 

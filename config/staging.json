@@ -10,5 +10,6 @@
     { "addr": "0x96a65609a7b84e8842732deb08f56c3e21ac6f8a", "name": "CTR", "decimals": 18 },
     { "addr": "0x27f706edde3ad952ef647dd67e24e38cd0803dd6", "name": "UET", "decimals": 18 },
     { "addr": "0x29d26160b9b4432bd2a95c34c0f7691d2655ed77", "name": "HVN", "decimals": 8 },
+    { "addr": "0xac3da587eac229c9896d919abc235ca4fd7f72c1", "name": "TGT", "decimals": 1 }
   ],
 };
