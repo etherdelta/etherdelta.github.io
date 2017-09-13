@@ -217,7 +217,8 @@
     { "addr": "0x4d11061ec8f401edc2395b5f439a05eee6ccfa50", "name": "BOTA", "decimals": 18 },
     { "addr": "0xac3da587eac229c9896d919abc235ca4fd7f72c1", "name": "TGT", "decimals": 1 },
     { "addr": "0x437cf0bf53634e3dfa5e3eaff3104004d50fb532", "name": "BTN", "decimals": 4 },
-    { "addr": "0xf230b790e05390fc8295f4d3f60332c93bed42e2", "name": "TRX", "decimals": 6 }
+    { "addr": "0xf230b790e05390fc8295f4d3f60332c93bed42e2", "name": "TRX", "decimals": 6 },
+    { "addr": "0xbacc0a58ecd510597cac918344137c7fb49eb9ad", "name": "CLS", "decimals": 0 }
   ],
   "defaultPair": { "token": "MTH", "base": "ETH" },
   "pairs": [
@@ -402,6 +403,7 @@
     { "token": "BOTA", "base": "ETH" },
     { "token": "TGT", "base": "ETH" },
     { "token": "BTN", "base": "ETH" },
-    { "token": "TRX", "base": "ETH" }
+    { "token": "TRX", "base": "ETH" },
+    { "token": "CLS", "base": "ETH" }
   ]
 }
