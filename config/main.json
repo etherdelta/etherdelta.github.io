@@ -21,7 +21,6 @@
   "gasOrder": 250000,
   "minOrderSize": 0.001,
   "apiServer": ["https://cache.etherdelta.com"],
-  "LOCALapiServer": ["http://localhost:8001"],
   "userCookie": "EtherDelta",
   "eventsCacheCookie": "EtherDelta_eventsCache",
   "ordersCacheCookie": "EtherDelta_ordersCache",
@@ -217,7 +216,12 @@
     { "addr": "0x4d11061ec8f401edc2395b5f439a05eee6ccfa50", "name": "BOTA", "decimals": 18 },
     { "addr": "0xac3da587eac229c9896d919abc235ca4fd7f72c1", "name": "TGT", "decimals": 1 },
     { "addr": "0x437cf0bf53634e3dfa5e3eaff3104004d50fb532", "name": "BTN", "decimals": 4 },
-    { "addr": "0xf230b790e05390fc8295f4d3f60332c93bed42e2", "name": "TRX", "decimals": 6 }
+    { "addr": "0xf230b790e05390fc8295f4d3f60332c93bed42e2", "name": "TRX", "decimals": 6 },
+    { "addr": "0x8727c112c712c4a03371ac87a74dd6ab104af768", "name": "JET", "decimals": 18 },
+    { "addr": "0x78b7fada55a64dd895d8c8c35779dd8b67fa8a05", "name": "ATL", "decimals": 18 },
+    { "addr": "0xb2f7eb1f2c37645be61d73953035360e768d81e6", "name": "COB", "decimals": 18 },
+    { "addr": "0x226bb599a12c826476e3a771454697ea52e9e220", "name": "PRO", "decimals": 8 },
+    { "addr": "0x51ee82641ac238bde34b9859f98f5f311d6e4954", "name": "IQT", "decimals": 8 }
   ],
   "defaultPair": { "token": "MTH", "base": "ETH" },
   "pairs": [
@@ -402,6 +406,11 @@
     { "token": "BOTA", "base": "ETH" },
     { "token": "TGT", "base": "ETH" },
     { "token": "BTN", "base": "ETH" },
-    { "token": "TRX", "base": "ETH" }
+    { "token": "TRX", "base": "ETH" },
+    { "token": "JET", "base": "ETH" },
+    { "token": "ATL", "base": "ETH" },
+    { "token": "COB", "base": "ETH" },
+    { "token": "PRO", "base": "ETH" },
+    { "token": "IQT", "base": "ETH" }
   ]
 }
