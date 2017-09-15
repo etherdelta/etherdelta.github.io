@@ -223,7 +223,14 @@
     { "addr": "0x226bb599a12c826476e3a771454697ea52e9e220", "name": "PRO", "decimals": 8 },
     { "addr": "0x51ee82641ac238bde34b9859f98f5f311d6e4954", "name": "IQT", "decimals": 8 },
     { "addr": "0x0371a82e4a9d0a4312f3ee2ac9c6958512891372", "name": "STU", "decimals": 18 },
-    { "addr": "0x2f4baef93489b09b5e4b923795361a65a26f55e5", "name": "XHY", "decimals": 8 }
+    { "addr": "0x2f4baef93489b09b5e4b923795361a65a26f55e5", "name": "XHY", "decimals": 8 },
+    { "addr": "0xe256bb0b2a3457e54db3a41cf5a8b826aca222a8", "name": "ARX", "decimals": 18 },
+    { "addr": "0xe1479d294807379320dca9a9e9002ac644539099", "name": "KING", "decimals": 18 },
+    { "addr": "0xb72627650f1149ea5e54834b2f468e5d430e67bf", "name": "BITS", "decimals": 8 },
+    { "addr": "0x7d5edcd23daa3fb94317d32ae253ee1af08ba14d", "name": "EBET", "decimals": 2 },
+    { "addr": "0x94d6b4fb35fb08cb34aa716ab40049ec88002079", "name": "CNX", "decimals": 8 },
+    { "addr": "0xdd6c68bb32462e01705011a4e2ad1a60740f217f", "name": "HBT", "decimals": 15 },
+    { "addr": "0xdd974d5c2e2928dea5f71b9825b8b646686bd200", "name": "KNC", "decimals": 18 }
   ],
   "defaultPair": { "token": "MTH", "base": "ETH" },
   "pairs": [
@@ -414,6 +421,13 @@
     { "token": "PRO", "base": "ETH" },
     { "token": "IQT", "base": "ETH" },
     { "token": "STU", "base": "ETH" },
-    { "token": "XHY", "base": "ETH" }
+    { "token": "XHY", "base": "ETH" },
+    { "token": "ARX", "base": "ETH" },
+    { "token": "KING", "base": "ETH" },
+    { "token": "BITS", "base": "ETH" },
+    { "token": "EBET", "base": "ETH" },
+    { "token": "CNX", "base": "ETH" },
+    { "token": "HBT", "base": "ETH" },
+    { "token": "KNC", "base": "ETH" }
   ]
 }
