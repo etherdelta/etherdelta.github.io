@@ -371,6 +371,7 @@
     { "token": "REX", "base": "ETH" },
     { "token": "BTE", "base": "ETH" },
     { "token": "ROC", "base": "ETH" },
+    { "token": "MANA", "base": "ETH" },
     { "token": "KC", "base": "ETH" },
     { "token": "YC", "base": "ETH" },
     { "token": "MTH", "base": "ETH" },
