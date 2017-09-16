@@ -230,7 +230,9 @@
     { "addr": "0x7d5edcd23daa3fb94317d32ae253ee1af08ba14d", "name": "EBET", "decimals": 2 },
     { "addr": "0x94d6b4fb35fb08cb34aa716ab40049ec88002079", "name": "CNX", "decimals": 8 },
     { "addr": "0xdd6c68bb32462e01705011a4e2ad1a60740f217f", "name": "HBT", "decimals": 15 },
-    { "addr": "0xdd974d5c2e2928dea5f71b9825b8b646686bd200", "name": "KNC", "decimals": 18 }
+    { "addr": "0xdd974d5c2e2928dea5f71b9825b8b646686bd200", "name": "KNC", "decimals": 18 },
+    { "addr": "0x7268f9c2bc9c9e65b4a16888cb5672531ce8e945", "name": "DAY", "decimals": 18 },
+    { "addr": "0xee609fe292128cad03b786dbb9bc2634ccdbe7fc", "name": "POS", "decimals": 18 }
   ],
   "defaultPair": { "token": "MTH", "base": "ETH" },
   "pairs": [
@@ -429,6 +431,8 @@
     { "token": "EBET", "base": "ETH" },
     { "token": "CNX", "base": "ETH" },
     { "token": "HBT", "base": "ETH" },
-    { "token": "KNC", "base": "ETH" }
+    { "token": "KNC", "base": "ETH" },
+    { "token": "DAY", "base": "ETH" },
+    { "token": "POS", "base": "ETH" }
   ]
 }
