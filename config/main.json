@@ -10,6 +10,7 @@
     { "addr": "0xc6b330df38d6ef288c953f1f2835723531073ce2", "info": "Deployed 07/08/2016 -- OLD, DO NOT USE" }
   ],
   "ethTestnet": false,
+  "ethChainId": 1,
   "ethProvider": "http://localhost:8545",
   "ethGasPrice": 4000000000,
   "ethAddr": "0x0000000000000000000000000000000000000000",
@@ -25,6 +26,7 @@
   "eventsCacheCookie": "EtherDelta_eventsCache",
   "ordersCacheCookie": "EtherDelta_ordersCache",
   "etherscanAPIKey": "GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE",
+  "ledgerPath": "m/44'/60'/0'/0",
   "tokens": [
     { "addr": "0x0000000000000000000000000000000000000000", "name": "ETH", "decimals": 18 },
     { "addr": "0xd8912c10681d8b21fd3742244f44658dba12264e", "name": "PLU", "decimals": 18 },
@@ -231,7 +233,7 @@
     { "addr": "0x94d6b4fb35fb08cb34aa716ab40049ec88002079", "name": "CNX", "decimals": 8 },
     { "addr": "0xdd6c68bb32462e01705011a4e2ad1a60740f217f", "name": "HBT", "decimals": 15 },
     { "addr": "0xdd974d5c2e2928dea5f71b9825b8b646686bd200", "name": "KNC", "decimals": 18 },
-    { "addr": "0x7268f9c2bc9c9e65b4a16888cb5672531ce8e945", "name": "DAY", "decimals": 18 },
+    { "addr": "0x7268f9c2bc9c9e65b4a16888cb5672531ce8e945", "name": "YESTERDAY", "decimals": 18 },
     { "addr": "0xee609fe292128cad03b786dbb9bc2634ccdbe7fc", "name": "POS", "decimals": 18 }
   ],
   "defaultPair": { "token": "MTH", "base": "ETH" },
@@ -432,7 +434,7 @@
     { "token": "CNX", "base": "ETH" },
     { "token": "HBT", "base": "ETH" },
     { "token": "KNC", "base": "ETH" },
-    { "token": "DAY", "base": "ETH" },
+    { "token": "YESTERDAY", "base": "ETH" },
     { "token": "POS", "base": "ETH" }
   ]
 }
