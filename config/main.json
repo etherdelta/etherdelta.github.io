@@ -239,7 +239,8 @@
     { "addr": "0x68db10ecc599d9f5e657acdafdbf6449d658bb2d", "name": "GGS", "decimals": 18 },
     { "addr": "0x4a42d2c580f83dce404acad18dab26db11a1750e", "name": "RLX", "decimals": 18 },
     { "addr": "0xf9c9da0c81fffd491458881410903561d1e40fd0", "name": "ARENA", "decimals": 18 },
-    { "addr": "0x2daee1aa61d60a252dc80564499a69802853583a", "name": "ATS", "decimals": 4 }
+    { "addr": "0x2daee1aa61d60a252dc80564499a69802853583a", "name": "ATS", "decimals": 4 },
+    { "addr": "0xba2184520a1cc49a6159c57e61e1844e085615b6", "name": "HGT", "decimals": 8 }
   ],
   "defaultPair": { "token": "MTH", "base": "ETH" },
   "pairs": [
@@ -445,6 +446,7 @@
     { "token": "GGS", "base": "ETH" },
     { "token": "RLX", "base": "ETH" },
     { "token": "ARENA", "base": "ETH" },
-    { "token": "ATS", "base": "ETH" }
+    { "token": "ATS", "base": "ETH" },
+    { "token": "HGT", "base": "ETH" }
   ]
 }
