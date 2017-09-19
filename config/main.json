@@ -250,7 +250,8 @@
     { "addr": "0xe814aee960a85208c3db542c53e7d4a6c8d5f60f", "name": "DAY", "decimals": 18 },
     { "addr": "0x2469f31a34fcaac0debf73806ce39b2388874b13", "name": "PPT2", "decimals": 18 },
     { "addr": "0x268b7976e94e84a48bf8b2b57ba34b59ed836a74", "name": "XAI", "decimals": 8 },
-    { "addr": "0x77faed976e187f26b49e78be8418ab074a341f26", "name": "IWT", "decimals": 18 }
+    { "addr": "0x77faed976e187f26b49e78be8418ab074a341f26", "name": "IWT", "decimals": 18 },
+    { "addr": "0x27dce1ec4d3f72c3e457cc50354f1f975ddef488", "name": "AIRT", "decimals": 8 }
   ],
   "defaultPair": { "token": "MTH", "base": "ETH" },
   "pairs": [
@@ -467,6 +468,7 @@
     { "token": "DAY", "base": "ETH" },
     { "token": "PPT2", "base": "ETH" },
     { "token": "XAI", "base": "ETH" },
-    { "token": "IWT", "base": "ETH" }
+    { "token": "IWT", "base": "ETH" },
+    { "token": "AIRT", "base": "ETH" }
   ]
 }
