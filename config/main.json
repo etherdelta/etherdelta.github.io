@@ -69,7 +69,7 @@
     { "addr": "0xff3519eeeea3e76f1f699ccce5e23ee0bdda41ac", "name": "BCAP", "decimals": 0 },
     { "addr": "0x0d8775f648430679a709e98d2b0cb6250d2887ef", "name": "BAT", "decimals": 18 },
     { "addr": "0xa645264c5603e96c3b0b078cdab68733794b0a71", "name": "MYST", "decimals": 8 },
-    { "addr": "0x82665764ea0b58157e1e5e9bab32f68c76ec0cdf", "name": "VSM", "decimals": 0 },
+    { "addr": "0x82665764ea0b58157e1e5e9bab32f68c76ec0cdf", "name": "VSMOLD", "decimals": 0 },
     { "addr": "0x12fef5e57bf45873cd9b62e9dbd7bfb99e32d73e", "name": "CFI", "decimals": 18 },
     { "addr": "0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374", "name": "VERI", "decimals": 18 },
     { "addr": "0x40395044ac3c0c57051906da938b54bd6557f212", "name": "MGO", "decimals": 8 },
@@ -239,7 +239,17 @@
     { "addr": "0x68db10ecc599d9f5e657acdafdbf6449d658bb2d", "name": "GGS", "decimals": 18 },
     { "addr": "0x4a42d2c580f83dce404acad18dab26db11a1750e", "name": "RLX", "decimals": 18 },
     { "addr": "0xf9c9da0c81fffd491458881410903561d1e40fd0", "name": "ARENA", "decimals": 18 },
-    { "addr": "0x2daee1aa61d60a252dc80564499a69802853583a", "name": "ATS", "decimals": 4 }
+    { "addr": "0x2daee1aa61d60a252dc80564499a69802853583a", "name": "ATS", "decimals": 4 },
+    { "addr": "0x46eec301d2d00087145d1588282c182bd1890e5c", "name": "RSPR", "decimals": 16 },
+    { "addr": "0x5e4abe6419650ca839ce5bb7db422b881a6064bb", "name": "WIC", "decimals": 18 },
+    { "addr": "0x83eea00d838f92dec4d1475697b9f4d3537b56e3", "name": "VOISE", "decimals": 8 },
+    { "addr": "0xba2184520a1cc49a6159c57e61e1844e085615b6", "name": "HGT", "decimals": 8 },
+    { "addr": "0x12480e24eb5bec1a9d4369cab6a80cad3c0a377a", "name": "SUB", "decimals": 2 },
+    { "addr": "0x30aee7f259d6d1564ebef457847c672b30f13cbc", "name": "DOM", "decimals": 0 },
+    { "addr": "0xa8006c4ca56f24d6836727d106349320db7fef82", "name": "INXT", "decimals": 8 },
+    { "addr": "0xe814aee960a85208c3db542c53e7d4a6c8d5f60f", "name": "DAY", "decimals": 18 },
+    { "addr": "0x2469f31a34fcaac0debf73806ce39b2388874b13", "name": "PPT2", "decimals": 18 },
+    { "addr": "0x268b7976e94e84a48bf8b2b57ba34b59ed836a74", "name": "XAI", "decimals": 8 }
   ],
   "defaultPair": { "token": "MTH", "base": "ETH" },
   "pairs": [
@@ -275,7 +285,7 @@
     { "token": "BCAP", "base": "ETH" },
     { "token": "BAT", "base": "ETH" },
     { "token": "MYST", "base": "ETH" },
-    { "token": "VSM", "base": "ETH" },
+    { "token": "VSMOLD", "base": "ETH" },
     { "token": "CFI", "base": "ETH" },
     { "token": "VERI", "base": "ETH" },
     { "token": "MGO", "base": "ETH" },
@@ -445,6 +455,16 @@
     { "token": "GGS", "base": "ETH" },
     { "token": "RLX", "base": "ETH" },
     { "token": "ARENA", "base": "ETH" },
-    { "token": "ATS", "base": "ETH" }
+    { "token": "ATS", "base": "ETH" },
+    { "token": "RSPS", "base": "ETH" },
+    { "token": "WIC", "base": "ETH" },
+    { "token": "VOISE", "base": "ETH" },
+    { "token": "HGT", "base": "ETH" },
+    { "token": "SUB", "base": "ETH" },
+    { "token": "DOM", "base": "ETH" },
+    { "token": "INXT", "base": "ETH" },
+    { "token": "DAY", "base": "ETH" },
+    { "token": "PPT2", "base": "ETH" },
+    { "token": "XAI", "base": "ETH" }
   ]
 }
