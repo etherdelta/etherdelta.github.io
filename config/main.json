@@ -252,7 +252,10 @@
     { "addr": "0x268b7976e94e84a48bf8b2b57ba34b59ed836a74", "name": "XAI", "decimals": 8 },
     { "addr": "0x77faed976e187f26b49e78be8418ab074a341f26", "name": "IWT", "decimals": 18 },
     { "addr": "0x27dce1ec4d3f72c3e457cc50354f1f975ddef488", "name": "AIRT", "decimals": 8 },
-    { "addr": "0xdf6ef343350780bf8c3410bf062e0c015b1dd671", "name": "BMC", "decimals": 8 }
+    { "addr": "0xdf6ef343350780bf8c3410bf062e0c015b1dd671", "name": "BMC", "decimals": 8 },
+    { "addr": "0xe8ff5c9c75deb346acac493c463c8950be03dfba", "name": "VIBE", "decimals": 18 },
+    { "addr": "0x43ee79e379e7b78d871100ed696e803e7893b644", "name": "UGT", "decimals": 18 },
+    { "addr": "0x514910771af9ca656af840dff83e8264ecf986ca", "name": "LINK", "decimals": 18 }
   ],
   "defaultPair": { "token": "MTH", "base": "ETH" },
   "pairs": [
@@ -471,6 +474,9 @@
     { "token": "XAI", "base": "ETH" },
     { "token": "IWT", "base": "ETH" },
     { "token": "AIRT", "base": "ETH" },
-    { "token": "BMC", "base": "ETH" }
+    { "token": "BMC", "base": "ETH" },
+    { "token": "VIBE", "base": "ETH" },
+    { "token": "UGT", "base": "ETH" },
+    { "token": "LINK", "base": "ETH" }
   ]
 }
