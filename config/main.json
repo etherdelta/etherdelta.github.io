@@ -257,9 +257,14 @@
     { "addr": "0x514910771af9ca656af840dff83e8264ecf986ca", "name": "LINK", "decimals": 18 },
     { "addr": "0x9b11efcaaa1890f6ee52c6bb7cf8153ac5d74139", "name": "ATM", "decimals": 8 },
     { "addr": "0xdcb9ff81013c31ff686154b4502ef6bfaa102d2d", "name": "GOOC", "decimals": 8 },
-    { "addr": "0x13ea82d5e1a811f55bda9c86fdd6195a6bd23aed", "name": "TFT", "decimals": 8 }
+    { "addr": "0x13ea82d5e1a811f55bda9c86fdd6195a6bd23aed", "name": "TFT", "decimals": 8 },
+    { "addr": "0xbfd4a3c26996dfc9e85a951eb615aac3b84c758b", "name": "ALPC", "decimals": 0 },
+    { "addr": "0xe8ff5c9c75deb346acac493c463c8950be03dfba", "name": "VIBE", "decimals": 18 },
+    { "addr": "0xb4efd85c19999d84251304bda99e90b92300bd93", "name": "RPL", "decimals": 18 },
+    { "addr": "0xeeac3f8da16bb0485a4a11c5128b0518dac81448", "name": "TEU", "decimals": 18 },
+    { "addr": "0x73b534fb6f07381a29a60b01eed5ae57d4ee24d7", "name": "SDRN", "decimals": 18 }
   ],
-  "defaultPair": { "token": "MTH", "base": "ETH" },
+  "defaultPair": { "token": "LINK", "base": "ETH" },
   "pairs": [
     { "token": "PLU", "base": "ETH" },
     { "token": "1ST", "base": "ETH" },
@@ -481,6 +486,11 @@
     { "token": "LINK", "base": "ETH" },
     { "token": "ATM", "base": "ETH" },
     { "token": "GOOC", "base": "ETH" },
-    { "token": "TFT", "base": "ETH" }
+    { "token": "TFT", "base": "ETH" },
+    { "token": "ALPC", "base": "ETH" },
+    { "token": "VIBE", "base": "ETH" },
+    { "token": "RPL", "base": "ETH" },
+    { "token": "TEU", "base": "ETH" },
+    { "token": "SDRN", "base": "ETH" }
   ]
 }
