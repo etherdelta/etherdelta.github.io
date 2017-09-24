@@ -262,7 +262,8 @@
     { "addr": "0xe8ff5c9c75deb346acac493c463c8950be03dfba", "name": "VIBE", "decimals": 18 },
     { "addr": "0xb4efd85c19999d84251304bda99e90b92300bd93", "name": "RPL", "decimals": 18 },
     { "addr": "0xeeac3f8da16bb0485a4a11c5128b0518dac81448", "name": "TEU", "decimals": 18 },
-    { "addr": "0x73b534fb6f07381a29a60b01eed5ae57d4ee24d7", "name": "SDRN", "decimals": 18 }
+    { "addr": "0x73b534fb6f07381a29a60b01eed5ae57d4ee24d7", "name": "SDRN", "decimals": 18 },
+    { "addr": "0xd4c435F5B09F855C3317c8524Cb1F586E42795fa", "name": "CND", "decimals": 18 }
   ],
   "defaultPair": { "token": "LINK", "base": "ETH" },
   "pairs": [
@@ -491,6 +492,7 @@
     { "token": "VIBE", "base": "ETH" },
     { "token": "RPL", "base": "ETH" },
     { "token": "TEU", "base": "ETH" },
-    { "token": "SDRN", "base": "ETH" }
+    { "token": "SDRN", "base": "ETH" },
+    { "token": "CND", "base": "ETH" }
   ]
 }
