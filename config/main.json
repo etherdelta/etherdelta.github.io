@@ -267,9 +267,13 @@
     { "addr": "0x1eab19e6623e8cbcafc252e275f5b51c27656faf", "name": "SPNK", "decimals": 8 },
     { "addr": "0x6467882316dc6e206feef05fba6deaa69277f155", "name": "FAP", "decimals": 18 },
     { "addr": "0x540449e4d172cd9491c76320440cd74933d5691a", "name": "DBET", "decimals": 18 },
-    { "addr": "0xf333b2ace992ac2bbd8798bf57bc65a06184afba", "name": "SND", "decimals": 0 }
+    { "addr": "0xf333b2ace992ac2bbd8798bf57bc65a06184afba", "name": "SND", "decimals": 0 },
+    { "addr": "0xab95e915c123fded5bdfb6325e35ef5515f1ea69", "name": "XNN", "decimals": 18 },
+    { "addr": "0x23cb17d7d079518dbff4febb6efcc0de58d8c984", "name": "TRV", "decimals": 16 },
+    { "addr": "0x65292eeadf1426cd2df1c4793a3d7519f253913b", "name": "COSS", "decimals": 18 },
+    { "addr": "0x27dce1ec4d3f72c3e457cc50354f1f975ddef488", "name": "AIR", "decimals": 8 }
   ],
-  "defaultPair": { "token": "LINK", "base": "ETH" },
+  "defaultPair": { "token": "KNC", "base": "ETH" },
   "pairs": [
     { "token": "PLU", "base": "ETH" },
     { "token": "1ST", "base": "ETH" },
@@ -501,6 +505,10 @@
     { "token": "SPNK", "base": "ETH" },
     { "token": "FAP", "base": "ETH" },
     { "token": "DBET", "base": "ETH" },
-    { "token": "SND", "base": "ETH" }
+    { "token": "SND", "base": "ETH" },
+    { "token": "XNN", "base": "ETH" },
+    { "token": "TRV", "base": "ETH" },
+    { "token": "COSS", "base": "ETH" },
+    { "token": "AIR", "base": "ETH" }
   ]
 }
