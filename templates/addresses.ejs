@@ -33,11 +33,11 @@
   <% } %>
   <li><a href="javascript:;" onclick="main.EtherDelta.createAccount()"><span class="trn">new_account</span></a></li>
   <li><a href="javascript:;" data-toggle="modal" data-target="#accountModal"><span class="trn">import_account</span></a></li>
+  <li><a href="javascript:;" data-toggle="modal" data-target="#ledgerModal"><span class="trn">ledger</span></a></li>
   <% if (addresses[selectedAccount].addr && addresses[selectedAccount].addr.slice(0,39)!='0x0000000000000000000000000000000000000') { %>
     <li><a href="<%= addressLink %>" target="_blank"><span class="trn">etherscan_address</span></a></li>
     <li><a href="javascript:;" onclick="main.EtherDelta.showPrivateKey()"><span class="trn">export_private_key</span></a></li>
     <li><a href="javascript:;" onclick="main.EtherDelta.deleteAccount()"><span class="trn">forget_account</span></a></li>
   <% } %>
-  <li role="separator" class="divider"></li>
   <li><a href="javascript:;" data-toggle="modal" data-target="#gasPriceModal"><span class="trn">gas_price</span></a></li>
 </ul>

@@ -12,5 +12,6 @@
     { "addr": "0x29d26160b9b4432bd2a95c34c0f7691d2655ed77", "name": "HVN", "decimals": 8 },
     { "addr": "0xac3da587eac229c9896d919abc235ca4fd7f72c1", "name": "TGT", "decimals": 1 },
     { "addr": "0x0bb217e40f8a5cb79adf04e1aab60e5abd0dfc1e", "name": "SWFTC", "decimals": 8 },
+    { "addr": "0xe8ff5c9c75deb346acac493c463c8950be03dfba", "name": "VIBE", "decimals": 18 },
   ],
 };

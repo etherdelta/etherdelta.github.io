@@ -138,10 +138,12 @@
               </ul>
             </div>
             <div class="row-box">
-              <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="myTrades"></div>
-                <div role="tabpanel" class="tab-pane" id="myOrders"></div>
-                <div role="tabpanel" class="tab-pane" id="myFunds"></div>
+                <div class="row-box height2 scroll">
+                  <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="myTrades"></div>
+                  <div role="tabpanel" class="tab-pane" id="myOrders"></div>
+                  <div role="tabpanel" class="tab-pane" id="myFunds"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -151,7 +153,15 @@
             <div class="row-header">
               <span class="trn">trades</span>
             </div>
-            <div id="trades"></div>
+            <div class="row-box height7 scroll">
+              <div id="trades"></div>
+            </div>
+            <div class="row-header">
+              <span class="trn">updates</span>
+            </div>
+            <div class="row-box height6 scroll">
+              <a class="twitter-timeline" href="https://twitter.com/etherdelta" data-chrome="noheader nofooter transparent">Tweets by etherdelta</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
         </div>
       </div>
     </div>
@@ -377,8 +387,34 @@
     <div class="modal fade" id="screencastModal" tabindex="-1" role="dialog">
       <div class="modal-dialog large" role="document">
         <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title trn">gas_price</h4>
+          </div>
           <div class="modal-body">
             <div id="screencastBody"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ledger Nano S -->
+    <div class="modal fade" id="ledgerModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-med" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="ad">
+              <a href="https://www.ledgerwallet.com/r/be21?path=/products/ledger-nano-s" target="_blank"><img src="/images/ledger.png" alt="EtherDelta supports Ledger Nano S" /></a>
+            </div>
+            <h3>Instructions</h3>
+            <ol>
+              <li>Plug in your Ledger Nano S.</li>
+              <li>On the Ledger Nano S, open the Ethereum app.</li>
+              <li>On the Ledger Nano S, go to "Settings" and turn on "Browser" and "Contract" modes.</li>
+              <li>Refresh EtherDelta.</li>
+              <li>Your Ledger Nano S address will appear in the account dropdown automatically, with a green "Ledger" box next to it.</li>
+              <li>When you deposit, withdraw, place an order, or trade, approve the transaction using your Ledger Nano S.</li>
+            </ol>
           </div>
         </div>
       </div>
