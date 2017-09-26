@@ -270,7 +270,9 @@
     { "addr": "0xab95e915c123fded5bdfb6325e35ef5515f1ea69", "name": "XNN", "decimals": 18 },
     { "addr": "0x23cb17d7d079518dbff4febb6efcc0de58d8c984", "name": "TRV", "decimals": 16 },
     { "addr": "0x65292eeadf1426cd2df1c4793a3d7519f253913b", "name": "COSS", "decimals": 18 },
-    { "addr": "0x27dce1ec4d3f72c3e457cc50354f1f975ddef488", "name": "AIR", "decimals": 8 }
+    { "addr": "0x27dce1ec4d3f72c3e457cc50354f1f975ddef488", "name": "AIR", "decimals": 8 },
+    { "addr": "0x10b123fddde003243199aad03522065dc05827a0", "name": "SYN", "decimals": 18 },
+    { "addr": "0x728781e75735dc0962df3a51d7ef47e798a7107e", "name": "WOLK", "decimals": 18 }
   ],
   "defaultPair": { "token": "KNC", "base": "ETH" },
   "pairs": [
@@ -507,6 +509,8 @@
     { "token": "XNN", "base": "ETH" },
     { "token": "TRV", "base": "ETH" },
     { "token": "COSS", "base": "ETH" },
-    { "token": "AIR", "base": "ETH" }
+    { "token": "AIR", "base": "ETH" },
+    { "token": "SYN", "base": "ETH" },
+    { "token": "WOLK", "base": "ETH" }
   ]
 }
