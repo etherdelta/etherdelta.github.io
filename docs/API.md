@@ -146,10 +146,10 @@ This allows you to post an order.
 
 Body parameters: `message`, which should be JSON with the following parameters:
 
- * `amountGet`: the amount you want to give (in wei or the base unit of the token)
- * `amountGive`: the token you want to give (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
- * `tokenGet`: the amount you want to get (in wei or the base unit of the token)
- * `tokenGive`: the token you want to get (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
+ * `amountGive`: the amount you want to give (in wei or the base unit of the token)
+ * `tokenGive`: the token you want to give (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
+ * `amountGet`: the amount you want to get (in wei or the base unit of the token)
+ * `tokenGet`: the token you want to get (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
  * `contractAddr`: the EtherDelta smart contract address
  * `expires`: the block number when the order should expire
  * `nonce`: a random number
