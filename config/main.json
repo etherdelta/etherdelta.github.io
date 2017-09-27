@@ -274,7 +274,8 @@
     { "addr": "0x10b123fddde003243199aad03522065dc05827a0", "name": "SYN", "decimals": 18 },
     { "addr": "0x728781e75735dc0962df3a51d7ef47e798a7107e", "name": "WOLK", "decimals": 18 },
     { "addr": "0xcb97e65f07da24d46bcdd078ebebd7c6e6e3d750", "name": "BTM", "decimals": 8 },
-    { "addr": "0x6d5cac36c1ae39f41d52393b7a425d0a610ad9f2", "name": "LLT", "decimals": 8 }
+    { "addr": "0x6d5cac36c1ae39f41d52393b7a425d0a610ad9f2", "name": "LLT", "decimals": 8 },
+    { "addr": "0x4156d3342d5c385a87d264f90653733592000581", "name": "SALT", "decimals": 8 }
   ],
   "defaultPair": { "token": "KNC", "base": "ETH" },
   "pairs": [
@@ -515,6 +516,7 @@
     { "token": "SYN", "base": "ETH" },
     { "token": "WOLK", "base": "ETH" },
     { "token": "BTM", "base": "ETH" },
-    { "token": "LLT", "base": "ETH" }
+    { "token": "LLT", "base": "ETH" },
+    { "token": "SALT", "base": "ETH" }
   ]
 }
