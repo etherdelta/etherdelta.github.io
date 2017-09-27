@@ -273,6 +273,7 @@
     { "addr": "0x27dce1ec4d3f72c3e457cc50354f1f975ddef488", "name": "AIR", "decimals": 8 },
     { "addr": "0x10b123fddde003243199aad03522065dc05827a0", "name": "SYN", "decimals": 18 },
     { "addr": "0x728781e75735dc0962df3a51d7ef47e798a7107e", "name": "WOLK", "decimals": 18 }
+    { "addr": "0xb5A5F22694352C15B00323844aD545ABb2B11028", "name": "ICX", "decimals": 18 }
   ],
   "defaultPair": { "token": "KNC", "base": "ETH" },
   "pairs": [
@@ -512,5 +513,7 @@
     { "token": "AIR", "base": "ETH" },
     { "token": "SYN", "base": "ETH" },
     { "token": "WOLK", "base": "ETH" }
+    { "token": "ICX", "base": "ETH" }    
+
   ]
 }
