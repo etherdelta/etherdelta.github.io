@@ -157,7 +157,7 @@
     { "addr": "0x94298f1e0ab2dfad6eeffb1426846a3c29d98090", "name": "MyB", "decimals": 8 },
     { "addr": "0x4355fc160f74328f9b383df2ec589bb3dfd82ba0", "name": "OPT", "decimals": 18 },
     { "addr": "0x17fd666fa0784885fa1afec8ac624d9b7e72b752", "name": "FLIK", "decimals": 14 },
-    { "addr": "0xdab5dfa0966c3435da991b39d205c3ba1c64fe31", "name": "MTP", "decimals": 18 },
+    { "addr": "0xdab5dfa0966c3435da991b39d205c3ba1c64fe31", "name": "MTP", "decimals": 1 },
     { "addr": "0x422866a8f0b032c5cf1dfbdef31a20f4509562b0", "name": "ADST", "decimals": 0 },
     { "addr": "0x66497a283e0a007ba3974e837784c6ae323447de", "name": "PT", "decimals": 0 },
     { "addr": "0x07d9e49ea402194bf48a8276dafb16e4ed633317", "name": "DALC", "decimals": 8 },
