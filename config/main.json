@@ -157,7 +157,7 @@
     { "addr": "0x94298f1e0ab2dfad6eeffb1426846a3c29d98090", "name": "MyB", "decimals": 8 },
     { "addr": "0x4355fc160f74328f9b383df2ec589bb3dfd82ba0", "name": "OPT", "decimals": 18 },
     { "addr": "0x17fd666fa0784885fa1afec8ac624d9b7e72b752", "name": "FLIK", "decimals": 14 },
-    { "addr": "0x7288c72af505e3a6ff2712699e2a695465d353b3", "name": "MTP", "decimals": 18 },
+    { "addr": "0xdab5dfa0966c3435da991b39d205c3ba1c64fe31", "name": "MTP", "decimals": 18 },
     { "addr": "0x422866a8f0b032c5cf1dfbdef31a20f4509562b0", "name": "ADST", "decimals": 0 },
     { "addr": "0x66497a283e0a007ba3974e837784c6ae323447de", "name": "PT", "decimals": 0 },
     { "addr": "0x07d9e49ea402194bf48a8276dafb16e4ed633317", "name": "DALC", "decimals": 8 },
@@ -275,7 +275,14 @@
     { "addr": "0x728781e75735dc0962df3a51d7ef47e798a7107e", "name": "WOLK", "decimals": 18 },
     { "addr": "0xcb97e65f07da24d46bcdd078ebebd7c6e6e3d750", "name": "BTM", "decimals": 8 },
     { "addr": "0x6d5cac36c1ae39f41d52393b7a425d0a610ad9f2", "name": "LLT", "decimals": 8 },
-    { "addr": "0x4156d3342d5c385a87d264f90653733592000581", "name": "SALT", "decimals": 8 }
+    { "addr": "0x4156d3342d5c385a87d264f90653733592000581", "name": "SALT", "decimals": 8 },
+    { "addr": "0xce61f5e6d1fe5a86e246f68aff956f7757282ef0", "name": "1LIFE", "decimals": 18 },
+    { "addr": "0x52514e3acaeb06cab050a69b025083082ebe5b54", "name": "CTC", "decimals": 4 },
+    { "addr": "0xef2e9966eb61bb494e5375d5df8d67b7db8a780d", "name": "SHIT", "decimals": 0 },
+    { "addr": "0x29d75277ac7f0335b2165d0895e8725cbf658d73", "name": "CSNO", "decimals": 8 },
+    { "addr": "0x0aef06dcccc531e581f0440059e6ffcc206039ee", "name": "ITT", "decimals": 8 },
+    { "addr": "0xb561fef0d624c0826ff869946f6076b7c4f2ba42", "name": "SER", "decimals": 7 },
+    { "addr": "0xc0eb85285d83217cd7c891702bcbc0fc401e2d9d", "name": "HVN", "decimals": 8 }
   ],
   "defaultPair": { "token": "KNC", "base": "ETH" },
   "pairs": [
@@ -517,6 +524,13 @@
     { "token": "WOLK", "base": "ETH" },
     { "token": "BTM", "base": "ETH" },
     { "token": "LLT", "base": "ETH" },
-    { "token": "SALT", "base": "ETH" }
+    { "token": "SALT", "base": "ETH" },
+    { "token": "1LIFE", "base": "ETH" },
+    { "token": "CTC", "base": "ETH" },
+    { "token": "SHIT", "base": "ETH" },
+    { "token": "CSNO", "base": "ETH" },
+    { "token": "ITT", "base": "ETH" },
+    { "token": "SER", "base": "ETH" },
+    { "token": "HVN", "base": "ETH" }
   ]
 }
