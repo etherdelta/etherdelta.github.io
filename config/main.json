@@ -282,7 +282,11 @@
     { "addr": "0x29d75277ac7f0335b2165d0895e8725cbf658d73", "name": "CSNO", "decimals": 8 },
     { "addr": "0x0aef06dcccc531e581f0440059e6ffcc206039ee", "name": "ITT", "decimals": 8 },
     { "addr": "0xb561fef0d624c0826ff869946f6076b7c4f2ba42", "name": "SER", "decimals": 7 },
-    { "addr": "0xc0eb85285d83217cd7c891702bcbc0fc401e2d9d", "name": "HVN", "decimals": 8 }
+    { "addr": "0xc0eb85285d83217cd7c891702bcbc0fc401e2d9d", "name": "HVN", "decimals": 8 },
+    { "addr": "0x779b7b713c86e3e6774f5040d9ccc2d43ad375f8", "name": "POOL", "decimals": 8 },
+    { "addr": "0x28a40acf39b1d3c932f42dd8068ad00a5ad6448f", "name": "LDM", "decimals": 18 },
+    { "addr": "0xc3951d77737733174152532e8b0f27e2c4e9f0dc", "name": "CLD", "decimals": 6 },
+    { "addr": "0x6678e467fa5ccfbdc264d12f4b8b28fe4661606b", "name": "DCNT", "decimals": 1 }
   ],
   "defaultPair": { "token": "KNC", "base": "ETH" },
   "pairs": [
@@ -531,6 +535,10 @@
     { "token": "CSNO", "base": "ETH" },
     { "token": "ITT", "base": "ETH" },
     { "token": "SER", "base": "ETH" },
-    { "token": "HVN", "base": "ETH" }
+    { "token": "HVN", "base": "ETH" },
+    { "token": "POOL", "base": "ETH" },
+    { "token": "LDM", "base": "ETH" },
+    { "token": "CLD", "base": "ETH" },
+    { "token": "DCNT", "base": "ETH" }
   ]
 }
