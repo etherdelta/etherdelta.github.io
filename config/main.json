@@ -297,7 +297,16 @@
     { "addr": "0x0b76544f6c413a555f309bf76260d1e02377c02a", "name": "INT", "decimals": 6 },
     { "addr": "0x2fd41f516fac94ed08e156f489f56ca3a80b04d0", "name": "EBTC", "decimals": 8 },
     { "addr": "0x0abefb7611cb3a01ea3fad85f33c3c934f8e2cf4", "name": "FRD", "decimals": 18 },
-    { "addr": "0xea610b1153477720748dc13ed378003941d84fab", "name": "ALIS", "decimals": 18 }
+    { "addr": "0xea610b1153477720748dc13ed378003941d84fab", "name": "ALIS", "decimals": 18 },
+    { "addr": "0xf3db5fa2c66b7af3eb0c0b782510816cbe4813b8", "name": "EVX", "decimals": 4 },
+    { "addr": "0x0766e79a6fd74469733e8330b3b461c0320ff059", "name": "EXN", "decimals": 18 },
+    { "addr": "0x8d5a69dc82a47594881256f2eef81770274fa30f", "name": "NTC", "decimals": 18 },
+    { "addr": "0xe755f2fa95e47c5588c3037dd38e1268fa5fcecd", "name": "HOWL", "decimals": 18 },
+    { "addr": "0x1bb9e8ea817d56eccc212ce63f7da95298f98719", "name": "SHT", "decimals": 2 },
+    { "addr": "0x865d176351f287fe1b0010805b110d08699c200a", "name": "BCO", "decimals": 8 },
+    { "addr": "0x881ef48211982d01e2cb7092c915e647cd40d85c", "name": "OTN", "decimals": 18 },
+    { "addr": "0x48f775efbe4f5ece6e0df2f7b5932df56823b990", "name": "R", "decimals": 0 },
+    { "addr": "0xa51153d9cf9d3cf6d58697b68eccc158d1e40388", "name": "PME", "decimals": 18 }
   ],
   "defaultPair": { "token": "SALT", "base": "ETH" },
   "pairs": [
@@ -561,6 +570,15 @@
     { "token": "INT", "base": "ETH" },
     { "token": "EBTC", "base": "ETH" },
     { "token": "FRD", "base": "ETH" },
-    { "token": "ALIS", "base": "ETH" }
+    { "token": "ALIS", "base": "ETH" },
+    { "token": "EVX", "base": "ETH" },
+    { "token": "EXN", "base": "ETH" },
+    { "token": "NTC", "base": "ETH" },
+    { "token": "HOWL", "base": "ETH" },
+    { "token": "SHT", "base": "ETH" },
+    { "token": "BCO", "base": "ETH" },
+    { "token": "OTN", "base": "ETH" },
+    { "token": "R", "base": "ETH" },
+    { "token": "PME", "base": "ETH" }
   ]
 }
