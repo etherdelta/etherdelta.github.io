@@ -306,9 +306,16 @@
     { "addr": "0x865d176351f287fe1b0010805b110d08699c200a", "name": "BCO", "decimals": 8 },
     { "addr": "0x881ef48211982d01e2cb7092c915e647cd40d85c", "name": "OTN", "decimals": 18 },
     { "addr": "0x48f775efbe4f5ece6e0df2f7b5932df56823b990", "name": "R", "decimals": 0 },
-    { "addr": "0xa51153d9cf9d3cf6d58697b68eccc158d1e40388", "name": "PME", "decimals": 18 }
+    { "addr": "0xa51153d9cf9d3cf6d58697b68eccc158d1e40388", "name": "PME", "decimals": 18 },
+    { "addr": "0xb23be73573bc7e03db6e5dfc62405368716d28a8", "name": "ONEK", "decimals": 18 },
+    { "addr": "0x6781a0f84c7e9e846dcb84a9a5bd49333067b104", "name": "ZAP", "decimals": 18 },
+    { "addr": "0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c", "name": "ENJ", "decimals": 18 },
+    { "addr": "0xd65960facb8e4a2dfcb2c2212cb2e44a02e2a57e", "name": "SOAR", "decimals": 6 },
+    { "addr": "0xafe60511341a37488de25bef351952562e31fcc1", "name": "TBT", "decimals": 8 },
+    { "addr": "0x1db186898bccde66fa64a50e4d81078951a30dbe", "name": "LLA", "decimals": 18 },
+    { "addr": "0xb0d926c1bc3d78064f3e1075d5bd9a24f35ae6c5", "name": "ARXAI", "decimals": 18 }
   ],
-  "defaultPair": { "token": "SALT", "base": "ETH" },
+  "defaultPair": { "token": "SUB", "base": "ETH" },
   "pairs": [
     { "token": "PLU", "base": "ETH" },
     { "token": "1ST", "base": "ETH" },
@@ -579,6 +586,13 @@
     { "token": "BCO", "base": "ETH" },
     { "token": "OTN", "base": "ETH" },
     { "token": "R", "base": "ETH" },
-    { "token": "PME", "base": "ETH" }
+    { "token": "PME", "base": "ETH" },
+    { "token": "ONEK", "base": "ETH" },
+    { "token": "ZAP", "base": "ETH" },
+    { "token": "ENJ", "base": "ETH" },
+    { "token": "SOAR", "base": "ETH" },
+    { "token": "TBT", "base": "ETH" },
+    { "token": "LLA", "base": "ETH" },
+    { "token": "ARXAI", "base": "ETH" }
   ]
 }
