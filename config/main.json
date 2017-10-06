@@ -277,7 +277,6 @@
     { "addr": "0x6d5cac36c1ae39f41d52393b7a425d0a610ad9f2", "name": "LLT", "decimals": 8 },
     { "addr": "0x4156d3342d5c385a87d264f90653733592000581", "name": "SALT", "decimals": 8 },
     { "addr": "0xce61f5e6d1fe5a86e246f68aff956f7757282ef0", "name": "1LIFE", "decimals": 18 },
-    { "addr": "0x52514e3acaeb06cab050a69b025083082ebe5b54", "name": "CTC", "decimals": 4 },
     { "addr": "0xef2e9966eb61bb494e5375d5df8d67b7db8a780d", "name": "SHIT", "decimals": 0 },
     { "addr": "0x29d75277ac7f0335b2165d0895e8725cbf658d73", "name": "CSNO", "decimals": 8 },
     { "addr": "0x0aef06dcccc531e581f0440059e6ffcc206039ee", "name": "ITT", "decimals": 8 },
@@ -313,7 +312,8 @@
     { "addr": "0xd65960facb8e4a2dfcb2c2212cb2e44a02e2a57e", "name": "SOAR", "decimals": 6 },
     { "addr": "0xafe60511341a37488de25bef351952562e31fcc1", "name": "TBT", "decimals": 8 },
     { "addr": "0x1db186898bccde66fa64a50e4d81078951a30dbe", "name": "LLA", "decimals": 18 },
-    { "addr": "0xb0d926c1bc3d78064f3e1075d5bd9a24f35ae6c5", "name": "ARXAI", "decimals": 18 }
+    { "addr": "0xb0d926c1bc3d78064f3e1075d5bd9a24f35ae6c5", "name": "ARXAI", "decimals": 18 },
+    { "addr": "0xF1d9139C6512452Db91F25635457B844d7e22B8b", "name": "CTC", "decimals": 4 }
   ],
   "defaultPair": { "token": "SUB", "base": "ETH" },
   "pairs": [
