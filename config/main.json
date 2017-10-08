@@ -277,7 +277,8 @@
     { "addr": "0x6d5cac36c1ae39f41d52393b7a425d0a610ad9f2", "name": "LLT", "decimals": 8 },
     { "addr": "0x4156d3342d5c385a87d264f90653733592000581", "name": "SALT", "decimals": 8 },
     { "addr": "0xce61f5e6d1fe5a86e246f68aff956f7757282ef0", "name": "1LIFE", "decimals": 18 },
-    { "addr": "0x52514e3acaeb06cab050a69b025083082ebe5b54", "name": "CTC", "decimals": 4 },
+    { "addr": "0x52514e3acaeb06cab050a69b025083082ebe5b54", "name": "CTCOLD", "decimals": 4 },
+    { "addr": "0xf1d9139c6512452db91f25635457b844d7e22b8b", "name": "CTC", "decimals": 4 },
     { "addr": "0xef2e9966eb61bb494e5375d5df8d67b7db8a780d", "name": "SHIT", "decimals": 0 },
     { "addr": "0x29d75277ac7f0335b2165d0895e8725cbf658d73", "name": "CSNO", "decimals": 8 },
     { "addr": "0x0aef06dcccc531e581f0440059e6ffcc206039ee", "name": "ITT", "decimals": 8 },
@@ -320,7 +321,14 @@
     { "addr": "0x2c974b2d0ba1716e644c1fc59982a89ddd2ff724", "name": "VIB", "decimals": 18 },
     { "addr": "0x473319898464ca640af692a0534175981ab78aa1", "name": "PKT", "decimals": 4 },
     { "addr": "0x3a26746ddb79b1b8e4450e3f4ffe3285a307387e", "name": "ETHB", "decimals": 8 },
-    { "addr": "0x6fff3806bbac52a20e0d79bc538d527f6a22c96b", "name": "CDX", "decimals": 18 }
+    { "addr": "0x6fff3806bbac52a20e0d79bc538d527f6a22c96b", "name": "CDX", "decimals": 18 },
+    { "addr": "0xb62d18dea74045e822352ce4b3ee77319dc5ff2f", "name": "EVC", "decimals": 18 },
+    { "addr": "0x7d49eaac4c70abc1a659122f08c0806ae44703ef", "name": "DET", "decimals": 18 },
+    { "addr": "0x70c4eea814bee9b74cafeca0200991bb0d8a4320", "name": "QVT", "decimals": 0 },
+    { "addr": "0x614ea929892ea43d3ea2c5e3311b01cc589bad6c", "name": "ENO", "decimals": 18 },
+    { "addr": "0x64c86899bc02dd9af823b131e5acd4369f72bd39", "name": "RENT", "decimals": 18 },
+    { "addr": "0xf94e44d8ea46ccd8451d7e15264c6c4a78d3e10f", "name": "KSS", "decimals": 18 },
+    { "addr": "0x32c785e4e8477b277fea2ca2301727084d79d933", "name": "NUGD", "decimals": 0 }
   ],
   "defaultPair": { "token": "LINK", "base": "ETH" },
   "pairs": [
@@ -607,6 +615,13 @@
     { "token": "VIB", "base": "ETH" },
     { "token": "PKT", "base": "ETH" },
     { "token": "ETHB", "base": "ETH" },
-    { "token": "CDX", "base": "ETH" }
+    { "token": "CDX", "base": "ETH" },
+    { "token": "EVC", "base": "ETH" },
+    { "token": "DET", "base": "ETH" },
+    { "token": "QVT", "base": "ETH" },
+    { "token": "ENO", "base": "ETH" },
+    { "token": "RENT", "base": "ETH" },
+    { "token": "KSS", "base": "ETH" },
+    { "token": "NUGD", "base": "ETH" }
   ]
 }
