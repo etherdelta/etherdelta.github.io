@@ -320,7 +320,8 @@
     { "addr": "0x2c974b2d0ba1716e644c1fc59982a89ddd2ff724", "name": "VIB", "decimals": 18 },
     { "addr": "0x473319898464ca640af692a0534175981ab78aa1", "name": "PKT", "decimals": 4 },
     { "addr": "0x3a26746ddb79b1b8e4450e3f4ffe3285a307387e", "name": "ETHB", "decimals": 8 },
-    { "addr": "0x6fff3806bbac52a20e0d79bc538d527f6a22c96b", "name": "CDX", "decimals": 18 }
+    { "addr": "0x6fff3806bbac52a20e0d79bc538d527f6a22c96b", "name": "CDX", "decimals": 18 },
+    { "addr": "0x3bf050019c7ffe990c8a4667b40f246aee352e7a", "name": "EXMR", "decimals": 12 }
   ],
   "defaultPair": { "token": "LINK", "base": "ETH" },
   "pairs": [
@@ -607,6 +608,7 @@
     { "token": "VIB", "base": "ETH" },
     { "token": "PKT", "base": "ETH" },
     { "token": "ETHB", "base": "ETH" },
-    { "token": "CDX", "base": "ETH" }
+    { "token": "CDX", "base": "ETH" },
+    { "token": "EXMR", "base": "ETH" }
   ]
 }
