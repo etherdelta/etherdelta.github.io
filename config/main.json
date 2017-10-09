@@ -337,7 +337,8 @@
     { "addr": "0x01a28adc0edd796b570ec4da734e1aa809f6f1fc", "name": "EDASH", "decimals": 18 },
     { "addr": "0x43161bd5597b12afb83b4ecfec8f4f0f9e452f30", "name": "EXMR", "decimals": 18 },
     { "addr": "0x0c6c9beeeb5de377210930f09a7ac9a99ff5e981", "name": "EZEC", "decimals": 18 },
-    { "addr": "0xb915ff79170d606935bceaf000d77ca4ed92d993", "name": "ENEO", "decimals": 18 }
+    { "addr": "0xb915ff79170d606935bceaf000d77ca4ed92d993", "name": "ENEO", "decimals": 18 },
+    { "addr": "0x12826eACF16678A6Ab9772fB0751bca32F1F0F53", "name": "LATP", "decimals": 6 }
   ],
-  "defaultPair": { "token": "LINK", "base": "ETH" }
+  "defaultPair": { "token": “LATP”, "base": "ETH" }
 }
