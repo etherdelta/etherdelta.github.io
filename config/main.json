@@ -337,7 +337,15 @@
     { "addr": "0x01a28adc0edd796b570ec4da734e1aa809f6f1fc", "name": "EDASH", "decimals": 18 },
     { "addr": "0x43161bd5597b12afb83b4ecfec8f4f0f9e452f30", "name": "EXMR", "decimals": 18 },
     { "addr": "0x0c6c9beeeb5de377210930f09a7ac9a99ff5e981", "name": "EZEC", "decimals": 18 },
-    { "addr": "0xb915ff79170d606935bceaf000d77ca4ed92d993", "name": "ENEO", "decimals": 18 }
+    { "addr": "0xb915ff79170d606935bceaf000d77ca4ed92d993", "name": "ENEO", "decimals": 18 },
+    { "addr": "0x7e9d62e1ff4e34096f91ee0153222ab81f7184f0", "name": "ELTC2", "decimals": 8 },
+    { "addr": "0x1f103fd7c4fa908c25387da70ed287b632bd22a2", "name": "ELTC3", "decimals": 18 },
+    { "addr": "0xb518d165398d9057ea8b73096edda5c7754bcd62", "name": "EXRP2", "decimals": 18 },
+    { "addr": "0xf923ba61b43161a83afe2cab7d77ea1e41f27918", "name": "PAL", "decimals": 18 },
+    { "addr": "0xe26517a9967299453d3f1b48aa005e6127e67210", "name": "NIMFA", "decimals": 18 },
+    { "addr": "0x09debe702678140c1be278213109719fab98d0d8", "name": "MOL", "decimals": 18 },
+    { "addr": "0xb17df9a3b09583a9bdcf757d6367171476d4d8a3", "name": "MVC", "decimals": 18 },
+    { "addr": "0x90528aeb3a2b736b780fd1b6c478bb7e1d643170", "name": "XPA", "decimals": 18 }
   ],
   "defaultPair": { "token": "LINK", "base": "ETH" }
 }
