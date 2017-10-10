@@ -290,7 +290,7 @@
     { "addr": "0x6678e467fa5ccfbdc264d12f4b8b28fe4661606b", "name": "DCNT", "decimals": 1 },
     { "addr": "0x82d193f8ee41d12aaa0a85cb006606d67f773e9c", "name": "SMT", "decimals": 1 },
     { "addr": "0x4b35e0ab998ebe8414871c13cf778f9d0bbdf609", "name": "SWP", "decimals": 18 },
-    { "addr": "0xbd36ad3e10d3c057a2a7379124823f9e73d36a33", "name": "EDOGE", "decimals": 18 },
+    { "addr": "0x8a7b7b9b2f7d0c63f66171721339705a6188a7d5", "name": "EDOGE", "decimals": 18 },
     { "addr": "0xeb2da9fac54284cea731d1f10bb34eecb3c00c14", "name": "POW", "decimals": 18 },
     { "addr": "0xf028adee51533b1b47beaa890feb54a457f51e89", "name": "BMT", "decimals": 18 },
     { "addr": "0xeb9c0138d8ac10dd659640a4cc3d135c58b17b1b", "name": "DTC", "decimals": 2 },
@@ -330,7 +330,7 @@
     { "addr": "0xf94e44d8ea46ccd8451d7e15264c6c4a78d3e10f", "name": "KSS", "decimals": 18 },
     { "addr": "0x32c785e4e8477b277fea2ca2301727084d79d933", "name": "NUGD", "decimals": 0 },
     { "addr": "0x84c2c31c04339c9938adfe3f8013315c8906f071", "name": "EBCSH", "decimals": 18 },
-    { "addr": "0x44f12955189e3f01be5daf1dd9002ee4d774f42b", "name": "AST", "decimals": 18 },
+    { "addr": "0x44f12955189e3f01be5daf1dd9002ee4d774f42b", "name": "AFST", "decimals": 18 },
     { "addr": "0x6f1a769952c60b2d03f46419adeda91d87866dab", "name": "ELTC", "decimals": 18 },
     { "addr": "0x415116bad878730f5db008ff381a73222128ad39", "name": "EBCH", "decimals": 18 },
     { "addr": "0x2f1b8c9d0a21b747d8ca370f93cb09d3daf222ef", "name": "EXRP", "decimals": 18 },
@@ -354,7 +354,9 @@
     { "addr": "0xc42209accc14029c1012fb5680d95fbd6036e2a0", "name": "PPP", "decimals": 18 },
     { "addr": "0xae4191a7eb25713ac90483ea75828ae8038f94dc", "name": "EZEC2", "decimals": 18 },
     { "addr": "0xb2bfeb70b903f1baac7f2ba2c62934c7e5b974c4", "name": "BKB", "decimals": 8 },
-    { "addr": "0xe66cc41dd03a170623dc087a69ad8d72e64cb838", "name": "BTH2", "decimals": 18 }
+    { "addr": "0xe66cc41dd03a170623dc087a69ad8d72e64cb838", "name": "BTH2", "decimals": 18 },
+    { "addr": "0xafc39788c51f0c1ff7b55317f3e70299e521fff6", "name": "EBCH2", "decimals": 8 },
+    { "addr": "0x27054b13b1b798b345b591a4d22e6562d47ea75a", "name": "AST", "decimals": 4 }
   ],
   "defaultPair": { "token": "AVT", "base": "ETH" }
 }
