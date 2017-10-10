@@ -345,7 +345,8 @@
     { "addr": "0xe26517a9967299453d3f1b48aa005e6127e67210", "name": "NIMFA", "decimals": 18 },
     { "addr": "0x09debe702678140c1be278213109719fab98d0d8", "name": "MOL", "decimals": 18 },
     { "addr": "0xb17df9a3b09583a9bdcf757d6367171476d4d8a3", "name": "MVC", "decimals": 18 },
-    { "addr": "0x90528aeb3a2b736b780fd1b6c478bb7e1d643170", "name": "XPA", "decimals": 18 }
+    { "addr": "0x90528aeb3a2b736b780fd1b6c478bb7e1d643170", "name": "XPA", "decimals": 18 },
+    { "addr": "0xc42209accc14029c1012fb5680d95fbd6036e2a0", "name": "PPP", "decimals": 18 }
   ],
   "defaultPair": { "token": "LINK", "base": "ETH" }
 }
