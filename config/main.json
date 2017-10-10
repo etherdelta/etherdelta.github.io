@@ -345,7 +345,16 @@
     { "addr": "0xe26517a9967299453d3f1b48aa005e6127e67210", "name": "NIMFA", "decimals": 18 },
     { "addr": "0x09debe702678140c1be278213109719fab98d0d8", "name": "MOL", "decimals": 18 },
     { "addr": "0xb17df9a3b09583a9bdcf757d6367171476d4d8a3", "name": "MVC", "decimals": 18 },
-    { "addr": "0x90528aeb3a2b736b780fd1b6c478bb7e1d643170", "name": "XPA", "decimals": 18 }
+    { "addr": "0x90528aeb3a2b736b780fd1b6c478bb7e1d643170", "name": "XPA", "decimals": 18 },
+    { "addr": "0x0a76aad21948ea1ef447d26dee91a54370e151e0", "name": "ELITE", "decimals": 18 },
+    { "addr": "0xa51d948ff15fbabac476af160cba6901ce47f4b0", "name": "LNT", "decimals": 18 },
+    { "addr": "0x014b50466590340d41307cc54dcee990c8d58aa8", "name": "ICOS", "decimals": 6 },
+    { "addr": "0xedf2d3e5fb70ead2e6d8fe96845a5e59d52d2044", "name": "NCH", "decimals": 12 },
+    { "addr": "0xfb41f7b63c8e84f4ba1ecd4d393fd9daa5d14d61", "name": "PLY", "decimals": 18 },
+    { "addr": "0xc42209accc14029c1012fb5680d95fbd6036e2a0", "name": "PPP", "decimals": 18 },
+    { "addr": "0xae4191a7eb25713ac90483ea75828ae8038f94dc", "name": "EZEC2", "decimals": 18 },
+    { "addr": "0xb2bfeb70b903f1baac7f2ba2c62934c7e5b974c4", "name": "BKB", "decimals": 8 },
+    { "addr": "0xe66cc41dd03a170623dc087a69ad8d72e64cb838", "name": "BTH2", "decimals": 18 }
   ],
-  "defaultPair": { "token": "LINK", "base": "ETH" }
+  "defaultPair": { "token": "AVT", "base": "ETH" }
 }
