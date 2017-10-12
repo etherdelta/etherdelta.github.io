@@ -356,7 +356,8 @@
     { "addr": "0xb2bfeb70b903f1baac7f2ba2c62934c7e5b974c4", "name": "BKB", "decimals": 8 },
     { "addr": "0xe66cc41dd03a170623dc087a69ad8d72e64cb838", "name": "BTH2", "decimals": 18 },
     { "addr": "0xafc39788c51f0c1ff7b55317f3e70299e521fff6", "name": "EBCH2", "decimals": 8 },
-    { "addr": "0x27054b13b1b798b345b591a4d22e6562d47ea75a", "name": "AST", "decimals": 4 }
+    { "addr": "0x27054b13b1b798b345b591a4d22e6562d47ea75a", "name": "AST", "decimals": 4 },
+    { "addr": "0xf0Ee6b27b759C9893Ce4f094b49ad28fd15A23e4", "name": "ENG", "decimals": 8 }
   ],
   "defaultPair": { "token": "AVT", "base": "ETH" }
 }
