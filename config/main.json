@@ -262,7 +262,6 @@
     { "addr": "0xb4efd85c19999d84251304bda99e90b92300bd93", "name": "RPL", "decimals": 18 },
     { "addr": "0xeeac3f8da16bb0485a4a11c5128b0518dac81448", "name": "TEU", "decimals": 18 },
     { "addr": "0x73b534fb6f07381a29a60b01eed5ae57d4ee24d7", "name": "SDRN", "decimals": 18 },
-    { "addr": "0xd4c435f5b09f855c3317c8524cb1f586e42795fa", "name": "CND", "decimals": 18 },
     { "addr": "0x1eab19e6623e8cbcafc252e275f5b51c27656faf", "name": "SPNK", "decimals": 8 },
     { "addr": "0x6467882316dc6e206feef05fba6deaa69277f155", "name": "FAP", "decimals": 18 },
     { "addr": "0x540449e4d172cd9491c76320440cd74933d5691a", "name": "DBET", "decimals": 18 },
@@ -356,7 +355,10 @@
     { "addr": "0xb2bfeb70b903f1baac7f2ba2c62934c7e5b974c4", "name": "BKB", "decimals": 8 },
     { "addr": "0xe66cc41dd03a170623dc087a69ad8d72e64cb838", "name": "BTH2", "decimals": 18 },
     { "addr": "0xafc39788c51f0c1ff7b55317f3e70299e521fff6", "name": "EBCH2", "decimals": 8 },
-    { "addr": "0x27054b13b1b798b345b591a4d22e6562d47ea75a", "name": "AST", "decimals": 4 }
+    { "addr": "0x27054b13b1b798b345b591a4d22e6562d47ea75a", "name": "AST", "decimals": 4 },
+    { "addr": "0x5d21ef5f25a985380b65c8e943a0082feda0db84", "name": "ECASH", "decimals": 18 },
+    { "addr": "0xf152fca41bd23ff250292af391236db35e0e99c3", "name": "EETH", "decimals": 8 },
+    { "addr": "0x37f014c64d186eaf879c0033846b51924ce42584", "name": "MDT", "decimals": 0 }
   ],
-  "defaultPair": { "token": "AVT", "base": "ETH" }
+  "defaultPair": { "token": "LINK", "base": "ETH" }
 }
