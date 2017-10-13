@@ -358,7 +358,9 @@
     { "addr": "0x27054b13b1b798b345b591a4d22e6562d47ea75a", "name": "AST", "decimals": 4 },
     { "addr": "0x5d21ef5f25a985380b65c8e943a0082feda0db84", "name": "ECASH", "decimals": 18 },
     { "addr": "0xf152fca41bd23ff250292af391236db35e0e99c3", "name": "EETH", "decimals": 8 },
-    { "addr": "0x37f014c64d186eaf879c0033846b51924ce42584", "name": "MDT", "decimals": 0 }
+    { "addr": "0x37f014c64d186eaf879c0033846b51924ce42584", "name": "MDT", "decimals": 0 },
+    { "addr": "0xfd784da5c740c617aafb80399fa81b86e1da99a5", "name": "ITS", "decimals": 8 },
+    { "addr": "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4", "name": "ENG", "decimals": 8 }
   ],
-  "defaultPair": { "token": "LINK", "base": "ETH" }
+  "defaultPair": { "token": "ENG", "base": "ETH" }
 }
