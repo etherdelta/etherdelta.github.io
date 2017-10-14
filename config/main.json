@@ -360,7 +360,18 @@
     { "addr": "0xf152fca41bd23ff250292af391236db35e0e99c3", "name": "EETH", "decimals": 8 },
     { "addr": "0x37f014c64d186eaf879c0033846b51924ce42584", "name": "MDT", "decimals": 0 },
     { "addr": "0xfd784da5c740c617aafb80399fa81b86e1da99a5", "name": "ITS", "decimals": 8 },
-    { "addr": "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4", "name": "ENG", "decimals": 8 }
+    { "addr": "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4", "name": "ENG", "decimals": 8 },
+    { "addr": "0x13f1b7fdfbe1fc66676d56483e21b1ecb40b58e2", "name": "ACC", "decimals": 18 },
+    { "addr": "0x6025f65f6b2f93d8ed1efedc752acfd4bdbcec3e", "name": "EGOLD", "decimals": 18 },
+    { "addr": "0x6044b34a29e96f542f96f103c996864d0a812238", "name": "GFLIP", "decimals": 18 },
+    { "addr": "0x90c88ccd74e57e016acae8ad1eaa12ecf4c06f33", "name": "IBTC", "decimals": 18 },
+    { "addr": "0x8f005c668c05ca75eccffd092e24feaf6fe26b27", "name": "EBTG", "decimals": 8 },
+    { "addr": "0x8f8221afbb33998d8584a2b05749ba73c37a938a", "name": "REQ", "decimals": 18 },
+    { "addr": "0x72adadb447784dd7ab1f472467750fc485e4cb2d", "name": "WRC", "decimals": 6 },
+    { "addr": "0x9b6443b0fb9c241a7fdac375595cea13e6b7807a", "name": "RCC", "decimals": 18 },
+    { "addr": "0xdee667186e7b81ecf7efc8713382d8d99a8b92b4", "name": "EBCG", "decimals": 18 },
+    { "addr": "0xa9aad2dc3a8315caeee5f458b1d8edc31d8467bd", "name": "BTCM", "decimals": 18 },
+    { "addr": "0x4ceda7906a5ed2179785cd3a40a69ee8bc99c466", "name": "AION", "decimals": 8 }
   ],
   "defaultPair": { "token": "ENG", "base": "ETH" }
 }
