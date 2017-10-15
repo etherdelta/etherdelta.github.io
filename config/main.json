@@ -371,7 +371,8 @@
     { "addr": "0x9b6443b0fb9c241a7fdac375595cea13e6b7807a", "name": "RCC", "decimals": 18 },
     { "addr": "0xdee667186e7b81ecf7efc8713382d8d99a8b92b4", "name": "EBCG", "decimals": 18 },
     { "addr": "0xa9aad2dc3a8315caeee5f458b1d8edc31d8467bd", "name": "BTCM", "decimals": 18 },
-    { "addr": "0x4ceda7906a5ed2179785cd3a40a69ee8bc99c466", "name": "AION", "decimals": 8 }
+    { "addr": "0x4ceda7906a5ed2179785cd3a40a69ee8bc99c466", "name": "AION", "decimals": 8 },
+    { "addr": "0xea38eaa3c86c8f9b751533ba2e562deb9acded40", "name": "FUEL", "decimals": 18 }
   ],
   "defaultPair": { "token": "ENG", "base": "ETH" }
 }
