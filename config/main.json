@@ -371,7 +371,15 @@
     { "addr": "0x9b6443b0fb9c241a7fdac375595cea13e6b7807a", "name": "RCC", "decimals": 18 },
     { "addr": "0xdee667186e7b81ecf7efc8713382d8d99a8b92b4", "name": "EBCG", "decimals": 18 },
     { "addr": "0xa9aad2dc3a8315caeee5f458b1d8edc31d8467bd", "name": "BTCM", "decimals": 18 },
-    { "addr": "0x4ceda7906a5ed2179785cd3a40a69ee8bc99c466", "name": "AION", "decimals": 8 }
+    { "addr": "0x4ceda7906a5ed2179785cd3a40a69ee8bc99c466", "name": "AION", "decimals": 8 },
+    { "addr": "0x179a2e413386db620d5b89a18550a3874385f726", "name": "FIT", "decimals": 5 },
+    { "addr": "0xe8da050c3140183d4f5f01e048ac136e2da5253f", "name": "STMG", "decimals": 18 },
+    { "addr": "0x87611ca3403a3878dfef0da2a786e209abfc1eff", "name": "EUSD", "decimals": 8 },
+    { "addr": "0x28c8d01ff633ea9cd8fc6a451d7457889e698de6", "name": "ETG", "decimals": 0 },
+    { "addr": "0x9541fd8b9b5fa97381783783cebf2f5fa793c262", "name": "KZN", "decimals": 8 },
+    { "addr": "0xa8f93faee440644f89059a2c88bdc9bf3be5e2ea", "name": "CASH", "decimals": 18 },
+    { "addr": "0xea38eaa3c86c8f9b751533ba2e562deb9acded40", "name": "FUEL", "decimals": 18 },
+    { "addr": "0xced4e93198734ddaff8492d525bd258d49eb388e", "name": "EDO", "decimals": 18 }
   ],
-  "defaultPair": { "token": "ENG", "base": "ETH" }
+  "defaultPair": { "token": "KICK", "base": "ETH" }
 }
