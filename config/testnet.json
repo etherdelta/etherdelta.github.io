@@ -23,7 +23,7 @@
   "gasOrder": 250000,
   "minOrderSize": 0.001,
   "apiServer": ["https://cache.etherdelta.com"],
-  "socketServer": "https://socket.etherdelta.com",
+  "socketServer": ["http://67.205.144.103:8002"],
   "userCookie": "EtherDelta",
   "eventsCacheCookie": "EtherDelta_eventsCache",
   "ordersCacheCookie": "EtherDelta_ordersCache",
