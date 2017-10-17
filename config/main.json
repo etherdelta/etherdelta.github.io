@@ -373,13 +373,26 @@
     { "addr": "0xa9aad2dc3a8315caeee5f458b1d8edc31d8467bd", "name": "BTCM", "decimals": 18 },
     { "addr": "0x4ceda7906a5ed2179785cd3a40a69ee8bc99c466", "name": "AION", "decimals": 8 },
     { "addr": "0x179a2e413386db620d5b89a18550a3874385f726", "name": "FIT", "decimals": 5 },
-    { "addr": "0xe8da050c3140183d4f5f01e048ac136e2da5253f", "name": "STMG", "decimals": 18 },
+    { "addr": "0xe8da050c3140183d4f5f01e048ac136e2da5253f", "name": "STM", "decimals": 18 },
     { "addr": "0x87611ca3403a3878dfef0da2a786e209abfc1eff", "name": "EUSD", "decimals": 8 },
     { "addr": "0x28c8d01ff633ea9cd8fc6a451d7457889e698de6", "name": "ETG", "decimals": 0 },
     { "addr": "0x9541fd8b9b5fa97381783783cebf2f5fa793c262", "name": "KZN", "decimals": 8 },
     { "addr": "0xa8f93faee440644f89059a2c88bdc9bf3be5e2ea", "name": "CASH", "decimals": 18 },
     { "addr": "0xea38eaa3c86c8f9b751533ba2e562deb9acded40", "name": "FUEL", "decimals": 18 },
-    { "addr": "0xced4e93198734ddaff8492d525bd258d49eb388e", "name": "EDO", "decimals": 18 }
+    { "addr": "0xced4e93198734ddaff8492d525bd258d49eb388e", "name": "EDO", "decimals": 18 },
+    { "addr": "0xd96b9fd7586d9ea24c950d24399be4fb65372fdd", "name": "BTCS", "decimals": 18 },
+    { "addr": "0xe701cd3329057aea9d54300ddd05e41b8d74727a", "name": "10MT", "decimals": 10 },
+    { "addr": "0x15f173b7aca7cd4a01d6f8360e65fb4491d270c1", "name": "EREAL", "decimals": 18 },
+    { "addr": "0x331a550a2c7f96384eb69127aa0ea9ad4b5da099", "name": "ATMT", "decimals": 18 },
+    { "addr": "0xae258d5322b59d64df9eb483e3b1733332c3b66c", "name": "ETHG", "decimals": 8 },
+    { "addr": "0xa89b5934863447f6e4fc53b315a93e873bda69a3", "name": "LUM", "decimals": 18 },
+    { "addr": "0xe463d10ec6b4ff6a3e5be41144956116ca30d4c3", "name": "7YPE", "decimals": 0 },
+    { "addr": "0x7d4b8cce0591c9044a22ee543533b72e976e36c3", "name": "CAG", "decimals": 18 },
+    { "addr": "0x4cd988afbad37289baaf53c13e98e2bd46aaea8c", "name": "KEY", "decimals": 18 },
+    { "addr": "0xb91318f35bdb262e9423bc7c7c2a3a93dd93c92c", "name": "NULS", "decimals": 18 },
+    { "addr": "0xf8fa1a588cd8cd51c3c4d6dc16d2717f6332e821", "name": "BXC", "decimals": 2 },
+    { "addr": "0x1c4481750daa5ff521a2a7490d9981ed46465dbd", "name": "BCPT", "decimals": 18 },
+    { "addr": "0x58ca3065c0f24c7c96aee8d6056b5b5decf9c2f8", "name": "GXC", "decimals": 10 }
   ],
   "defaultPair": { "token": "KICK", "base": "ETH" }
 }
