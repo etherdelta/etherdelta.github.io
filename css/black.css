@@ -92,10 +92,10 @@ a.navbar-brand {
   height: calc(50vh - 81px);
 }
 .row-box.height4 {
-  height: calc(40vh - 81px);
+  height: calc(40vh - 71px);
 }
 .row-box.height5 {
-  height: calc(60vh - 81px);
+  height: calc(60vh - 91px);
 }
 .row-box.height6 {
   height: calc(40vh - 81px);
@@ -210,8 +210,8 @@ a:hover {
 }
 
 .padding {
-  padding-top: 12px;
-  padding-bottom: 5px;
+  padding-top: 0px;
+  padding-bottom: 0px;
   padding-left: 12px;
   padding-right: 12px;
 }
