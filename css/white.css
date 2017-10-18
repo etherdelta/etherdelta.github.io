@@ -204,8 +204,8 @@ a:hover {
 }
 
 .padding {
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 12px;
+  padding-bottom: 5px;
   padding-left: 12px;
   padding-right: 12px;
 }
