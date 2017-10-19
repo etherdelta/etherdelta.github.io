@@ -393,7 +393,23 @@
     { "addr": "0xb91318f35bdb262e9423bc7c7c2a3a93dd93c92c", "name": "NULS", "decimals": 18 },
     { "addr": "0xf8fa1a588cd8cd51c3c4d6dc16d2717f6332e821", "name": "BXC", "decimals": 2 },
     { "addr": "0x1c4481750daa5ff521a2a7490d9981ed46465dbd", "name": "BCPT", "decimals": 18 },
-    { "addr": "0x58ca3065c0f24c7c96aee8d6056b5b5decf9c2f8", "name": "GXC", "decimals": 10 }
+    { "addr": "0x58ca3065c0f24c7c96aee8d6056b5b5decf9c2f8", "name": "GXC", "decimals": 10 },
+    { "addr": "0x9397554c07f687b7a20d13c73350cc283765d509", "name": "SHLD", "decimals": 18 },
+    { "addr": "0x539efe69bcdd21a83efd9122571a64cc25e0282b", "name": "BLUE", "decimals": 8 },
+    { "addr": "0x9af4f26941677c706cfecf6d3379ff01bb85d5ab", "name": "DRT", "decimals": 8 },
+    { "addr": "0xf084d5bc3e35e3d903260267ebd545c49c6013d0", "name": "FUD", "decimals": 8 },
+    { "addr": "0xfcb48fdcc479b38068c06ee94249b1516adf09cb", "name": "EURB", "decimals": 5 },
+    { "addr": "0x7a79abd3905ef37b8d243c4c28cee73a751eb076", "name": "CM", "decimals": 18 },
+    { "addr": "0xebc86d834756621444a8a26b4cf81b625fe310cd", "name": "ETHP", "decimals": 18 },
+    { "addr": "0xce59d29b09aae565feeef8e52f47c3cd5368c663", "name": "BULX", "decimals": 18 },
+    { "addr": "0x26607f9bf9d62a37b0c78e1d3719fcd1fa32bef9", "name": "GFL", "decimals": 18 },
+    { "addr": "0x8ed61279b30201203bc233ea972e10008c8b7c5f", "name": "GEN", "decimals": 18 },
+    { "addr": "0xdded69d8e28d38d640f6244ab5294f309fd40ce1", "name": "LMT", "decimals": 8 },
+    { "addr": "0x705ee96c1c160842c92c1aecfcffccc9c412e3d9", "name": "POLL", "decimals": 18 },
+    { "addr": "0xc78593c17482ea5de44fdd84896ffd903972878e", "name": "BB", "decimals": 9 },
+    { "addr": "0xc3972ac283b3a7a56125674631a5c254f7f373cf", "name": "HAT", "decimals": 12 },
+    { "addr": "0xf2e51e32d1f546423364a040ef1a6d2f05e31482", "name": "HUB", "decimals": 6 },
+    { "addr": "0xffe8196bc259e8dedc544d935786aa4709ec3e64", "name": "HDG", "decimals": 18 }
   ],
-  "defaultPair": { "token": "KICK", "base": "ETH" }
+  "defaultPair": { "token": "REQ", "base": "ETH" }
 }
