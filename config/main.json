@@ -403,7 +403,7 @@
     { "addr": "0xebc86d834756621444a8a26b4cf81b625fe310cd", "name": "ETHP", "decimals": 18 },
     { "addr": "0xce59d29b09aae565feeef8e52f47c3cd5368c663", "name": "BULX", "decimals": 18 },
     { "addr": "0x26607f9bf9d62a37b0c78e1d3719fcd1fa32bef9", "name": "GFL", "decimals": 18 },
-    { "addr": "0x8ed61279b30201203bc233ea972e10008c8b7c5f", "name": "GEN", "decimals": 18 },
+    { "addr": "0x9dfe4643c04078a46803edcc30a3291b76d4c20c", "name": "GEN", "decimals": 18 },
     { "addr": "0xdded69d8e28d38d640f6244ab5294f309fd40ce1", "name": "LMT", "decimals": 8 },
     { "addr": "0x705ee96c1c160842c92c1aecfcffccc9c412e3d9", "name": "POLL", "decimals": 18 },
     { "addr": "0xc78593c17482ea5de44fdd84896ffd903972878e", "name": "BB", "decimals": 9 },
