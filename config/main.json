@@ -397,7 +397,7 @@
     { "addr": "0x9397554c07f687b7a20d13c73350cc283765d509", "name": "SHLD", "decimals": 18 },
     { "addr": "0x539efe69bcdd21a83efd9122571a64cc25e0282b", "name": "BLUE", "decimals": 8 },
     { "addr": "0x9af4f26941677c706cfecf6d3379ff01bb85d5ab", "name": "DRT", "decimals": 8 },
-    { "addr": "0xf084d5bc3e35e3d903260267ebd545c49c6013d0", "name": "FUD", "decimals": 8 },
+    { "addr": "0x17e4cc902015958839e693f179f49c75696381ce", "name": "FUDD", "decimals": 8 },
     { "addr": "0xfcb48fdcc479b38068c06ee94249b1516adf09cb", "name": "EURB", "decimals": 5 },
     { "addr": "0x7a79abd3905ef37b8d243c4c28cee73a751eb076", "name": "CM", "decimals": 18 },
     { "addr": "0xebc86d834756621444a8a26b4cf81b625fe310cd", "name": "ETHP", "decimals": 18 },
