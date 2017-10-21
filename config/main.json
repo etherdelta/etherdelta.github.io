@@ -324,7 +324,6 @@
     { "addr": "0x6fff3806bbac52a20e0d79bc538d527f6a22c96b", "name": "CDX", "decimals": 18 },
     { "addr": "0xb62d18dea74045e822352ce4b3ee77319dc5ff2f", "name": "EVC", "decimals": 18 },
     { "addr": "0x7d49eaac4c70abc1a659122f08c0806ae44703ef", "name": "DET", "decimals": 18 },
-    { "addr": "0x70c4eea814bee9b74cafeca0200991bb0d8a4320", "name": "QVT", "decimals": 0 },
     { "addr": "0x614ea929892ea43d3ea2c5e3311b01cc589bad6c", "name": "ENO", "decimals": 18 },
     { "addr": "0x64c86899bc02dd9af823b131e5acd4369f72bd39", "name": "RENT", "decimals": 18 },
     { "addr": "0xf94e44d8ea46ccd8451d7e15264c6c4a78d3e10f", "name": "KSS", "decimals": 18 },
@@ -397,7 +396,7 @@
     { "addr": "0x9397554c07f687b7a20d13c73350cc283765d509", "name": "SHLD", "decimals": 18 },
     { "addr": "0x539efe69bcdd21a83efd9122571a64cc25e0282b", "name": "BLUE", "decimals": 8 },
     { "addr": "0x9af4f26941677c706cfecf6d3379ff01bb85d5ab", "name": "DRT", "decimals": 8 },
-    { "addr": "0x17e4cc902015958839e693f179f49c75696381ce", "name": "FUDD", "decimals": 8 },
+    { "addr": "0xde39e5e5a1b0eeb3afe717d6d011cae88d19451e", "name": "FUDD", "decimals": 8 },
     { "addr": "0xfcb48fdcc479b38068c06ee94249b1516adf09cb", "name": "EURB", "decimals": 5 },
     { "addr": "0x7a79abd3905ef37b8d243c4c28cee73a751eb076", "name": "CM", "decimals": 18 },
     { "addr": "0xebc86d834756621444a8a26b4cf81b625fe310cd", "name": "ETHP", "decimals": 18 },
@@ -409,7 +408,16 @@
     { "addr": "0xc78593c17482ea5de44fdd84896ffd903972878e", "name": "BB", "decimals": 9 },
     { "addr": "0xc3972ac283b3a7a56125674631a5c254f7f373cf", "name": "HAT", "decimals": 12 },
     { "addr": "0xf2e51e32d1f546423364a040ef1a6d2f05e31482", "name": "HUB", "decimals": 6 },
-    { "addr": "0xffe8196bc259e8dedc544d935786aa4709ec3e64", "name": "HDG", "decimals": 18 }
+    { "addr": "0xffe8196bc259e8dedc544d935786aa4709ec3e64", "name": "HDG", "decimals": 18 },
+    { "addr": "0x7728dfef5abd468669eb7f9b48a7f70a501ed29d", "name": "PRG", "decimals": 6 },
+    { "addr": "0x1183f92a5624d68e85ffb9170f16bf0443b4c242", "name": "QVT", "decimals": 18 },
+    { "addr": "0x859a9c0b44cb7066d956a958b0b82e54c9e44b4b", "name": "IETH", "decimals": 8 },
+    { "addr": "0x76e82406a5040b605c6d30caf4802e7eb3184bbc", "name": "EBCC", "decimals": 6 },
+    { "addr": "0x1040613788e99c1606bd133db0ed7f7dbdf0cc80", "name": "STH", "decimals": 0 },
+    { "addr": "0x63b992e6246d88f07fc35a056d2c365e6d441a3d", "name": "SCT", "decimals": 18 },
+    { "addr": "0xdbfb423e9bbf16294388e07696a5120e4ceba0c5", "name": "ETHD", "decimals": 18 },
+    { "addr": "0x91126cfa7db2983527b0b749cc8a61fdeffedc28", "name": "DONE", "decimals": 16 },
+    { "addr": "0xbc63acdfafa94bd4d8c2bb7a8552281f107242c0", "name": "MXX", "decimals": 18 }
   ],
   "defaultPair": { "token": "REQ", "base": "ETH" }
 }
