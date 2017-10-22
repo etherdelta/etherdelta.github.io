@@ -417,7 +417,20 @@
     { "addr": "0x63b992e6246d88f07fc35a056d2c365e6d441a3d", "name": "SCT", "decimals": 18 },
     { "addr": "0xdbfb423e9bbf16294388e07696a5120e4ceba0c5", "name": "ETHD", "decimals": 18 },
     { "addr": "0x91126cfa7db2983527b0b749cc8a61fdeffedc28", "name": "DONE", "decimals": 16 },
-    { "addr": "0xbc63acdfafa94bd4d8c2bb7a8552281f107242c0", "name": "MXX", "decimals": 18 }
+    { "addr": "0xbc63acdfafa94bd4d8c2bb7a8552281f107242c0", "name": "MXX", "decimals": 18 },
+    { "addr": "0x56e7f2cd7d5382506aab084a67d70e603cdb23f7", "name": "CODE", "decimals": 8 },
+    { "addr": "0x6d7a4c14c997333e304d5aef2aece73fd60ecc59", "name": "WND", "decimals": 18 },
+    { "addr": "0x6aac8cb9861e42bf8259f5abdc6ae3ae89909e11", "name": "BTCR", "decimals": 8 },
+    { "addr": "0x0879e0c9822b75f31f0b0ed2a30be9f484a57c2f", "name": "LTG", "decimals": 0 },
+    { "addr": "0x044dd17bbbcbf1cf65f543918561bf8cf8130e7b", "name": "EGR", "decimals": 3 },
+    { "addr": "0x957c30ab0426e0c93cd8241e2c60392d08c6ac8e", "name": "MOD", "decimals": 0 },
+    { "addr": "0x52a17ca01b9925752aefde41bf80d7b10514e136", "name": "PUMP", "decimals": 15 },
+    { "addr": "0xe81d72d14b1516e68ac3190a46c93302cc8ed60f", "name": "CL", "decimals": 18 },
+    { "addr": "0x8c01ada8e708993a891d57d1b3169479a20acb3a", "name": "VIT", "decimals": 18 },
+    { "addr": "0x2405cc17ba128bfa7117815e04a4da228013f5bc", "name": "BNN", "decimals": 8 },
+    { "addr": "0x983877018633c0940b183cd38d1b58bee34f7301", "name": "DEEP", "decimals": 8 },
+    { "addr": "0xcedbf324a1eb1affe53ab7b7ef0103e070e3853f", "name": "ETL", "decimals": 10 },
+    { "addr": "0x4fbc28e3b3c1c50ee05dcd66d9fc614a0cb99705", "name": "HHT", "decimals": 18 }
   ],
   "defaultPair": { "token": "REQ", "base": "ETH" }
 }
