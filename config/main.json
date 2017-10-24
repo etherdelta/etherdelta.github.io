@@ -447,7 +447,7 @@
     { "addr": "0xef25e54e1ae9bfd966b9b5cde6880e7a2323a957", "name": "SOCIAL", "decimals": 18 },
     { "addr": "0x5046e860ff274fb8c66106b0ffb8155849fb0787", "name": "JS", "decimals": 8 },
     { "addr": "0x5f6e7fb7fe92ea7822472bb0e8f1be60d6a4ea50", "name": "ARTE", "decimals": 18 },
-    { "addr": "0xe50365f5d679cb98a1dd62d6f6e58e59321bcddf", "name": "LAT", "decimals": 18 },
+    { "addr": "0xe50365f5d679cb98a1dd62d6f6e58e59321bcddf", "name": "LA", "decimals": 18 },
     { "addr": "0x0cf0ee63788a0849fe5297f3407f701e122cc023", "name": "DATA", "decimals": 18 },
     { "addr": "0xdb45faeca61c70e271bffeaf66162fa68a1c4def", "name": "EBIT", "decimals": 0 },
     { "addr": "0x8633e144f2d9b9b8bdd12ddb58e4bef1e163a0ce", "name": "YEL", "decimals": 18 },
