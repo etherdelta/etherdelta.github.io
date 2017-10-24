@@ -1,4 +1,4 @@
-Notice: this API is now deprecated. It will continue to run, but with less resources allocated to it. If you are building a new app, see the new socket API.
+** Notice: this API is now deprecated. It will continue to run, but with less resources allocated to it. If you are building a new app, see the [new socket API](API.md). **
 
 # EtherDelta API
 
@@ -8,8 +8,8 @@ EtherDelta's API allows you to query orders, trades, deposits, and withdrawals. 
 
 EtherDelta one API endpoint. It can be reached from either of these domains:
 
- * `api.etherdelta.com`
- * `cache.etherdelta.com`
+ * `https://api.etherdelta.com`
+ * `https://cache.etherdelta.com`
 
 ## Endpoints
 
