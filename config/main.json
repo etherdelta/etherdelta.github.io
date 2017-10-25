@@ -452,7 +452,16 @@
     { "addr": "0xdb45faeca61c70e271bffeaf66162fa68a1c4def", "name": "EBIT", "decimals": 0 },
     { "addr": "0x8633e144f2d9b9b8bdd12ddb58e4bef1e163a0ce", "name": "YEL", "decimals": 18 },
     { "addr": "0xae4f56f072c34c0a65b3ae3e4db797d831439d93", "name": "GIM", "decimals": 8 },
-    { "addr": "0xe2f45f1660dc99daf3bd06f637ab1e4debc15bde", "name": "SGG", "decimals": 6 }
+    { "addr": "0xe2f45f1660dc99daf3bd06f637ab1e4debc15bde", "name": "SGG", "decimals": 6 },
+    { "addr": "0xb3bd49e28f8f832b8d1e246106991e546c323502", "name": "GMT", "decimals": 18 },
+    { "addr": "0xf970b8e36e23f7fc3fd752eea86f8be8d83375a6", "name": "RCN", "decimals": 18 },
+    { "addr": "0xbf430e24ac0f33d4ad6fac9654b37943124c2786", "name": "BTG", "decimals": 8 },
+    { "addr": "0x6b9e8076a536459303db301ba4430913a7f14c5a", "name": "JDI", "decimals": 2 },
+    { "addr": "0x2edc6fcc641f0169d54abb842f96f701eae85e4e", "name": "ADU", "decimals": 18 },
+    { "addr": "0xba5f11b16b155792cf3b2e6880e8706859a8aeb6", "name": "ARN", "decimals": 8 },
+    { "addr": "0x9501bfc48897dceeadf73113ef635d2ff7ee4b97", "name": "EMT", "decimals": 18 },
+    { "addr": "0xa6e2f7f33f01fb399e72f3e044196eab7d348012", "name": "AMO", "decimals": 4 },
+    { "addr": "0x22c10728343e9d49ef25080f74a223878a3d4052", "name": "DRP2", "decimals": 8 }
   ],
   "defaultPair": { "token": "REQ", "base": "ETH" }
 }
