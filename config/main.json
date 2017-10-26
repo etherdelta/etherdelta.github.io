@@ -461,7 +461,12 @@
     { "addr": "0xba5f11b16b155792cf3b2e6880e8706859a8aeb6", "name": "ARN", "decimals": 8 },
     { "addr": "0x9501bfc48897dceeadf73113ef635d2ff7ee4b97", "name": "EMT", "decimals": 18 },
     { "addr": "0xa6e2f7f33f01fb399e72f3e044196eab7d348012", "name": "AMO", "decimals": 4 },
-    { "addr": "0x22c10728343e9d49ef25080f74a223878a3d4052", "name": "DRP2", "decimals": 8 }
+    { "addr": "0x22c10728343e9d49ef25080f74a223878a3d4052", "name": "DRP2", "decimals": 8 },
+    { "addr": "0xac3211a5025414af2866ff09c23fc18bc97e79b1", "name": "DOVU", "decimals": 18 },
+    { "addr": "0x662abcad0b7f345ab7ffb1b1fbb9df7894f18e66", "name": "CTX", "decimals": 18 },
+    { "addr": "0x8bf8bcf8aba5ecffffd431489fe79dad38023a9b", "name": "BUS", "decimals": 8 },
+    { "addr": "0xa8ba4095833a3f924d86cb3941099c1abb75ea13", "name": "SUB1X", "decimals": 18 },
+    { "addr": "0x638ac149ea8ef9a1286c41b977017aa7359e6cfa", "name": "ALTS", "decimals": 18 }
   ],
-  "defaultPair": { "token": "REQ", "base": "ETH" }
+  "defaultPair": { "token": "MOD", "base": "ETH" }
 }
