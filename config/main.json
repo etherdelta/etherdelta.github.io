@@ -483,7 +483,7 @@
     { "addr": "0x2233799ee2683d75dfefacbcd2a26c78d34b470d", "name": "NTWK", "decimals": 18 },
     { "addr": "0x9b8eb7a73a3c65fc3c892b494ab29cb061cf05ae", "name": "1BIT", "decimals": 0 },
     { "addr": "0x580d69737e11cf2fb306c8fc0161b86f7c9f03ba", "name": "NEBO", "decimals": 3 },
-    { "addr": "0x26d5bd2dfeda983ecd6c39899e69dae6431dffbb", "name": "ERC", "decimals": 18 },
+    { "addr": "0x26d5bd2dfeda983ecd6c39899e69dae6431dffbb", "name": "ERC20", "decimals": 18 },
     { "addr": "0xfb4752ad1b7153e1dbd2e6662651a11c7fc14083", "name": "MPESA", "decimals": 8 },
     { "addr": "0x27537ff4df3081cef9bee9b29cac764067b42611", "name": "SLIP", "decimals": 0 },
     { "addr": "0xba71b32e71a41339aa4ceaa79528535aefe488d8", "name": "ALIEF", "decimals": 0 }
