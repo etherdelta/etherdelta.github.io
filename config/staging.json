@@ -14,5 +14,6 @@
     { "addr": "0x0bb217e40f8a5cb79adf04e1aab60e5abd0dfc1e", "name": "SWFTC", "decimals": 8 },
     { "addr": "0xe8ff5c9c75deb346acac493c463c8950be03dfba", "name": "VIBE", "decimals": 18 },
     { "addr": "0xd4c435f5b09f855c3317c8524cb1f586e42795fa", "name": "CND", "decimals": 18 },
+    { "addr": "0x595832f8fc6bf59c85c527fec3740a1b7a361269", "name": "POWR", "decimals": 6 },
   ],
 };

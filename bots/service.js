@@ -79,6 +79,7 @@ function Service() {
   });
 
   self.updateOrders = (newOrders, token, user) => {
+    const minOrderSize = 0.001;
     const newOrdersTransformed = {
       buys: newOrders.buys
         .filter(x => x.tokenGet.toLowerCase() === token.addr.toLowerCase())
@@ -134,7 +135,7 @@ function Service() {
     if (!self.state.orders) self.state.orders = { buys: [], sells: [] };
     if (!self.state.myOrders) self.state.myOrders = { buys: [], sells: [] };
     newOrdersTransformed.buys.forEach((x) => {
-      if (x.deleted) {
+      if (x.deleted || x.ethAvailableVolumeBase <= minOrderSize) {
         self.state.orders.buys = self.state.orders.buys.filter(y => y.id !== x.id);
         if (x.user.toLowerCase() === user.addr.toLowerCase()) {
           self.state.myOrders.buys = self.state.myOrders.buys.filter(y => y.id !== x.id);
@@ -152,7 +153,7 @@ function Service() {
       }
     });
     newOrdersTransformed.sells.forEach((x) => {
-      if (x.deleted) {
+      if (x.deleted || x.ethAvailableVolumeBase <= minOrderSize) {
         self.state.orders.sells = self.state.orders.sells.filter(y => y.id !== x.id);
         if (x.user.toLowerCase() === user.addr.toLowerCase()) {
           self.state.myOrders.sells = self.state.myOrders.sells.filter(y => y.id !== x.id);
