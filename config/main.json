@@ -471,7 +471,6 @@
     { "addr": "0x181a63746d3adcf356cbc73ace22832ffbb1ee5a", "name": "ALCO", "decimals": 8 },
     { "addr": "0x8f0921f30555624143d427b340b1156914882c10", "name": "FYP", "decimals": 18 },
     { "addr": "0xfa2632a88bd0c11535a38f98a98db8251ccbaa9e", "name": "GTA", "decimals": 18 },
-    { "addr": "0x81f89694ac96fefd794cb2c8526d2bd8da74b1fb", "name": "ETN", "decimals": 18 },
     { "addr": "0x8e10f6bb9c973d61321c25a2b8d865825f4aa57b", "name": "0ED", "decimals": 18 },
     { "addr": "0x03df4c372a29376d2c8df33a1b5f001cd8d68b0e", "name": "BITCOINEREUM", "decimals": 8 },
     { "addr": "0xbb1b3e8ddded8165d58b0c192d19cd360682b170", "name": "CAS", "decimals": 2 },
