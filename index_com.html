@@ -97,8 +97,9 @@
             </div>
             <div class="row-header trn">my_transactions</div>
             <div class="row-box nav-header">
-              <ul class="nav nav-tabs three columns" role="tablist">
-                <li role="presentation" class="active"><a href="#myTrades" aria-controls="myTrades" role="tab" data-toggle="tab" class="trn">trades</a></li>
+              <ul class="nav nav-tabs four columns" role="tablist">
+                <li role="presentation" class="active"><a href="#important" aria-controls="info" role="tab" data-toggle="tab" class="trn">important</a></li>
+                <li role="presentation"><a href="#myTrades" aria-controls="myTrades" role="tab" data-toggle="tab" class="trn">trades</a></li>
                 <li role="presentation"><a href="#myOrders" aria-controls="myOrders" role="tab" data-toggle="tab" class="trn">orders</a></li>
                 <li role="presentation"><a href="#myFunds" aria-controls="myFunds" role="tab" data-toggle="tab" class="trn">funds</a></li>
               </ul>
@@ -106,7 +107,24 @@
             <div class="row-box">
                 <div class="row-box height2 scroll">
                   <div class="tab-content">
-                  <div role="tabpanel" class="tab-pane active" id="myTrades"></div>
+                  <div role="tabpanel" class="tab-pane active" id="important">
+                    <div style="margin: 12px;">
+                      <p style="color: #f00; font-weight: bold;">Disclaimer</p>
+                      <p>
+                        EtherDelta is a decentralized trading platform that lets
+                        you trade Ether and Ethereum-based tokens directly with other users.
+                        You are responsible for your own account, funds, and private keys.
+                        You are responsible for your own trading decisions, and the details
+                        and mechanics of the tokens you trade.
+                        EtherDelta is not responsible for your decisions, actions, or losses that result from
+                        using EtherDelta. EtherDelta makes no guarantee about the tokens that you trade on
+                        EtherDelta. EtherDelta does not hold your funds and does not offer refunds.
+                        While the information contained on EtherDelta is periodically updated, no guarantee is given
+                        that the information provided on EtherDelta is correct, complete, or up-to-date.
+                      </p>
+                    </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="myTrades"></div>
                   <div role="tabpanel" class="tab-pane" id="myOrders"></div>
                   <div role="tabpanel" class="tab-pane" id="myFunds"></div>
                 </div>
