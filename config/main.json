@@ -485,7 +485,8 @@
     { "addr": "0x26d5bd2dfeda983ecd6c39899e69dae6431dffbb", "name": "ERC20", "decimals": 18 },
     { "addr": "0xfb4752ad1b7153e1dbd2e6662651a11c7fc14083", "name": "MPESA", "decimals": 8 },
     { "addr": "0x27537ff4df3081cef9bee9b29cac764067b42611", "name": "SLIP", "decimals": 0 },
-    { "addr": "0xba71b32e71a41339aa4ceaa79528535aefe488d8", "name": "ALIEF", "decimals": 0 }
+    { "addr": "0xba71b32e71a41339aa4ceaa79528535aefe488d8", "name": "ALIEF", "decimals": 0 },
+    { "addr": "0x88a3e4f35d64aad41a6d4030ac9afe4356cb84fa", "name": "PRE", "decimals": 18 }
   ],
   "defaultPair": { "token": "MOD", "base": "ETH" }
 }
