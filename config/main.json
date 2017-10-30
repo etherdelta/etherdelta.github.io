@@ -296,7 +296,7 @@
     { "addr": "0xeb9c0138d8ac10dd659640a4cc3d135c58b17b1b", "name": "DTC", "decimals": 2 },
     { "addr": "0x4c5601164e2048a4154de91fa5e0b07e626cab7f", "name": "FNL", "decimals": 3 },
     { "addr": "0x0b76544f6c413a555f309bf76260d1e02377c02a", "name": "INT", "decimals": 6 },
-    { "addr": "0x2fd41f516fac94ed08e156f489f56ca3a80b04d0", "name": "EBTC", "decimals": 8 },
+    { "addr": "0x2fd41f516fac94ed08e156f489f56ca3a80b04d0", "name": "EBTCOLD", "decimals": 8 },
     { "addr": "0x0abefb7611cb3a01ea3fad85f33c3c934f8e2cf4", "name": "FRD", "decimals": 18 },
     { "addr": "0xea610b1153477720748dc13ed378003941d84fab", "name": "ALIS", "decimals": 18 },
     { "addr": "0xf3db5fa2c66b7af3eb0c0b782510816cbe4813b8", "name": "EVX", "decimals": 4 },
@@ -489,11 +489,14 @@
     { "addr": "0xc9b89f6b5301f554b9adc6d4a871c3279820de40", "name": "HAO", "decimals": 18 },
     { "addr": "0xd9a0658b7cc9ec0c57e8b20c0920d08f17e747be", "name": "SAT", "decimals": 10 },
     { "addr": "0x7a41e0517a5eca4fdbc7fbeba4d4c47b9ff6dc63", "name": "ZSC", "decimals": 18 },
-    { "addr": "0x999967e2ec8a74b7c8e9db19e039d920b31d39d0", "name": "TIES", "decimals": 18 },
+    { "addr": "0x999967e2ec8a74b7c8e9db19e039d920b31d39d0", "name": "TIE", "decimals": 18 },
     { "addr": "0x8bbf4dd0f11b3a535660fd7fcb7158daebd3a17e", "name": "EGAS", "decimals": 8 },
     { "addr": "0xb3203db25a01fa7950a860b42b899ad7da52ddd6", "name": "PLX", "decimals": 8 },
     { "addr": "0x4dc3643dbc642b72c158e7f3d2ff232df61cb6ce", "name": "AMB", "decimals": 18 },
-    { "addr": "0xe3fa177acecfb86721cf6f9f4206bd3bd672d7d5", "name": "CTT", "decimals": 18 }
+    { "addr": "0xe3fa177acecfb86721cf6f9f4206bd3bd672d7d5", "name": "CTT", "decimals": 18 },
+    { "addr": "0xeb7c20027172e5d143fb030d50f91cece2d1485d", "name": "EBTCNEW", "decimals": 8 },
+    { "addr": "0x9742fa8cb51d294c8267ddfead8582e16f18e421", "name": "10MTI", "decimals": 10 },
+    { "addr": "0x52a7cb918c11a16958be40cba7e31e32a499a465", "name": "FDX", "decimals": 18 }
   ],
   "defaultPair": { "token": "MOD", "base": "ETH" }
 }
