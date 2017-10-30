@@ -485,7 +485,15 @@
     { "addr": "0x26d5bd2dfeda983ecd6c39899e69dae6431dffbb", "name": "ERC20", "decimals": 18 },
     { "addr": "0xfb4752ad1b7153e1dbd2e6662651a11c7fc14083", "name": "MPESA", "decimals": 8 },
     { "addr": "0x27537ff4df3081cef9bee9b29cac764067b42611", "name": "SLIP", "decimals": 0 },
-    { "addr": "0xba71b32e71a41339aa4ceaa79528535aefe488d8", "name": "ALIEF", "decimals": 0 }
+    { "addr": "0xba71b32e71a41339aa4ceaa79528535aefe488d8", "name": "ALIEF", "decimals": 0 },
+    { "addr": "0xc9b89f6b5301f554b9adc6d4a871c3279820de40", "name": "HAO", "decimals": 18 },
+    { "addr": "0xd9a0658b7cc9ec0c57e8b20c0920d08f17e747be", "name": "SAT", "decimals": 10 },
+    { "addr": "0x7a41e0517a5eca4fdbc7fbeba4d4c47b9ff6dc63", "name": "ZSC", "decimals": 18 },
+    { "addr": "0x999967e2ec8a74b7c8e9db19e039d920b31d39d0", "name": "TIES", "decimals": 18 },
+    { "addr": "0x8bbf4dd0f11b3a535660fd7fcb7158daebd3a17e", "name": "EGAS", "decimals": 8 },
+    { "addr": "0xb3203db25a01fa7950a860b42b899ad7da52ddd6", "name": "PLX", "decimals": 8 },
+    { "addr": "0x4dc3643dbc642b72c158e7f3d2ff232df61cb6ce", "name": "AMB", "decimals": 18 },
+    { "addr": "0xe3fa177acecfb86721cf6f9f4206bd3bd672d7d5", "name": "CTT", "decimals": 18 }
   ],
   "defaultPair": { "token": "MOD", "base": "ETH" }
 }
