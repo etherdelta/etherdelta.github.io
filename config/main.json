@@ -496,7 +496,8 @@
     { "addr": "0xe3fa177acecfb86721cf6f9f4206bd3bd672d7d5", "name": "CTT", "decimals": 18 },
     { "addr": "0xeb7c20027172e5d143fb030d50f91cece2d1485d", "name": "EBTCNEW", "decimals": 8 },
     { "addr": "0x9742fa8cb51d294c8267ddfead8582e16f18e421", "name": "10MTI", "decimals": 10 },
-    { "addr": "0x52a7cb918c11a16958be40cba7e31e32a499a465", "name": "FDX", "decimals": 18 }
+    { "addr": "0x52a7cb918c11a16958be40cba7e31e32a499a465", "name": "FDX", "decimals": 18 },
+    { "addr": "0x12b19d3e2ccc14da04fae33e63652ce469b3f2fd", "name": "GRID", "decimals": 12 }
   ],
   "defaultPair": { "token": "MOD", "base": "ETH" }
 }
