@@ -494,10 +494,20 @@
     { "addr": "0xb3203db25a01fa7950a860b42b899ad7da52ddd6", "name": "PLX", "decimals": 8 },
     { "addr": "0x4dc3643dbc642b72c158e7f3d2ff232df61cb6ce", "name": "AMB", "decimals": 18 },
     { "addr": "0xe3fa177acecfb86721cf6f9f4206bd3bd672d7d5", "name": "CTT", "decimals": 18 },
-    { "addr": "0xeb7c20027172e5d143fb030d50f91cece2d1485d", "name": "EBTCNEW", "decimals": 8 },
+    { "addr": "0xeb7c20027172e5d143fb030d50f91cece2d1485d", "name": "EBTC", "decimals": 8 },
     { "addr": "0x9742fa8cb51d294c8267ddfead8582e16f18e421", "name": "10MTI", "decimals": 10 },
     { "addr": "0x52a7cb918c11a16958be40cba7e31e32a499a465", "name": "FDX", "decimals": 18 },
-    { "addr": "0x12b19d3e2ccc14da04fae33e63652ce469b3f2fd", "name": "GRID", "decimals": 12 }
+    { "addr": "0x12b19d3e2ccc14da04fae33e63652ce469b3f2fd", "name": "GRID", "decimals": 12 },
+    { "addr": "0x16b5a0de0520e1964a20ac8ef4034bd7d0920d8f", "name": "TIO", "decimals": 18 },
+    { "addr": "0xf6b55acbbc49f4524aa48d19281a9a77c54de10f", "name": "WLK", "decimals": 18 },
+    { "addr": "0x60200c0fefc1d0ade1e19a247b703cf3ccdc915a", "name": "TWIT", "decimals": 8 },
+    { "addr": "0xc99ddc30bb0cf76b07d90dcb6b267b8352697bef", "name": "TDT", "decimals": 18 },
+    { "addr": "0x2f5e044ad4adac34c8d8df738fac7743eda1409c", "name": "AGO", "decimals": 18 },
+    { "addr": "0xb444208cb0516c150178fcf9a52604bc04a1acea", "name": "GRMD", "decimals": 18 },
+    { "addr": "0x4d829f8c92a6691c56300d020c9e0db984cfe2ba", "name": "XCC", "decimals": 18 },
+    { "addr": "0x76195ffd0cfedf68625b3e5b64c7bd904eeb9d6c", "name": "WET", "decimals": 18 },
+    { "addr": "0x0425cbbc5ff784203fe8d82beefa2b02634351f5", "name": "FBR", "decimals": 18 },
+    { "addr": "0x01c67791309c71aa4ed373025a0c089696d7c9e4", "name": "CCB", "decimals": 18 }
   ],
-  "defaultPair": { "token": "MOD", "base": "ETH" }
+  "defaultPair": { "token": "DOVU", "base": "ETH" }
 }
