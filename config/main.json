@@ -507,7 +507,17 @@
     { "addr": "0x4d829f8c92a6691c56300d020c9e0db984cfe2ba", "name": "XCC", "decimals": 18 },
     { "addr": "0x76195ffd0cfedf68625b3e5b64c7bd904eeb9d6c", "name": "WET", "decimals": 18 },
     { "addr": "0x0425cbbc5ff784203fe8d82beefa2b02634351f5", "name": "FBR", "decimals": 18 },
-    { "addr": "0x01c67791309c71aa4ed373025a0c089696d7c9e4", "name": "CCB", "decimals": 18 }
+    { "addr": "0x01c67791309c71aa4ed373025a0c089696d7c9e4", "name": "CCB", "decimals": 18 },
+    { "addr": "0x944f1a04ab8d735acdbc46505c5b283f54289152", "name": "GBTS", "decimals": 18 },
+    { "addr": "0x4a536c1ce7ad7f6e8d2e59135e17aef5ef4dd4e6", "name": "GEC", "decimals": 3 },
+    { "addr": "0xf6cfe53d6febaeea051f400ff5fc14f0cbbdaca1", "name": "DGPT", "decimals": 18 },
+    { "addr": "0x3293cc907fde439b39aedaf1b982785adaff186b", "name": "TRIA", "decimals": 10 },
+    { "addr": "0x5d51fcced3114a8bb5e90cdd0f9d682bcbcc5393", "name": "B2BX", "decimals": 18 },
+    { "addr": "0x44197a4c44d6a059297caf6be4f7e172bd56caaf", "name": "ELTCOIN", "decimals": 8 },
+    { "addr": "0x5554e04e76533e1d14c52f05beef6c9d329e1e30", "name": "NIO", "decimals": 0 },
+    { "addr": "0x14fffb1e001615b7fb7c7857bdf440a610022e5b", "name": "SCX", "decimals": 0 },
+    { "addr": "0x275fd328c3986be83f8b60f79c73cf63fde98ca5", "name": "CSL", "decimals": 18 },
+    { "addr": "0x103c3a209da59d3e7c4a89307e66521e081cfdf0", "name": "GVT", "decimals": 18 }
   ],
-  "defaultPair": { "token": "DOVU", "base": "ETH" }
+  "defaultPair": { "token": "MOD", "base": "ETH" }
 }
