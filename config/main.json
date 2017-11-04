@@ -518,7 +518,7 @@
     { "addr": "0x14fffb1e001615b7fb7c7857bdf440a610022e5b", "name": "SCX", "decimals": 0 },
     { "addr": "0x275fd328c3986be83f8b60f79c73cf63fde98ca5", "name": "CSL", "decimals": 18 },
     { "addr": "0x103c3a209da59d3e7c4a89307e66521e081cfdf0", "name": "GVT", "decimals": 18 },
-    { "addr": "0xee1a479734fce4e6590027f5dca4af603755ac37", "name": "GAMING", "decimals": 4 }    
+    { "addr": "0x5a3F767F1E3c6855C746f1563a17AaFc8a361189", "name": "GAMING", "decimals": 4 }    
   ],
   "defaultPair": { "token": "MOD", "base": "ETH" }
 }
