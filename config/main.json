@@ -365,7 +365,7 @@
     { "addr": "0x6025f65f6b2f93d8ed1efedc752acfd4bdbcec3e", "name": "EGOLD", "decimals": 18 },
     { "addr": "0x6044b34a29e96f542f96f103c996864d0a812238", "name": "FLP", "decimals": 18 },
     { "addr": "0x90c88ccd74e57e016acae8ad1eaa12ecf4c06f33", "name": "IBTC", "decimals": 18 },
-    { "addr": "0x8f005c668c05ca75eccffd092e24feaf6fe26b27", "name": "EBTG", "decimals": 8 },
+    { "addr": "0xc51c938c4d513780c66c722a41c197d3a89fa9a8", "name": "EBTG", "decimals": 8 },
     { "addr": "0x8f8221afbb33998d8584a2b05749ba73c37a938a", "name": "REQ", "decimals": 18 },
     { "addr": "0x72adadb447784dd7ab1f472467750fc485e4cb2d", "name": "WRC", "decimals": 6 },
     { "addr": "0x9b6443b0fb9c241a7fdac375595cea13e6b7807a", "name": "RCC", "decimals": 18 },
@@ -517,7 +517,13 @@
     { "addr": "0x5554e04e76533e1d14c52f05beef6c9d329e1e30", "name": "NIO", "decimals": 0 },
     { "addr": "0x14fffb1e001615b7fb7c7857bdf440a610022e5b", "name": "SCX", "decimals": 0 },
     { "addr": "0x275fd328c3986be83f8b60f79c73cf63fde98ca5", "name": "CSL", "decimals": 18 },
-    { "addr": "0x103c3a209da59d3e7c4a89307e66521e081cfdf0", "name": "GVT", "decimals": 18 }
+    { "addr": "0x103c3a209da59d3e7c4a89307e66521e081cfdf0", "name": "GVT", "decimals": 18 },
+    { "addr": "0x44f588aeeb8c44471439d1270b3603c66a9262f1", "name": "SNIP", "decimals": 18 },
+    { "addr": "0x45321004790a4dae7ba19217a10574d55739efc7", "name": "DEEM", "decimals": 18 },
+    { "addr": "0x12a35383ca24ceb44cdcbbecbeb7baccb5f3754a", "name": "CS", "decimals": 6 },
+    { "addr": "0xe30e02f049957e2a5907589e06ba646fb2c321ba", "name": "DRPU", "decimals": 8 },
+    { "addr": "0x3e250a4f78410c29cfc39463a81f14a226690eb4", "name": "DRPS", "decimals": 8 },
+    { "addr": "0x24692791bc444c5cd0b81e3cbcaba4b04acd1f3b", "name": "UKG", "decimals": 18 }
   ],
   "defaultPair": { "token": "MOD", "base": "ETH" }
 }
