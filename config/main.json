@@ -272,7 +272,6 @@
     { "addr": "0x65292eeadf1426cd2df1c4793a3d7519f253913b", "name": "COSS", "decimals": 18 },
     { "addr": "0x27dce1ec4d3f72c3e457cc50354f1f975ddef488", "name": "AIR", "decimals": 8 },
     { "addr": "0x10b123fddde003243199aad03522065dc05827a0", "name": "SYN", "decimals": 18 },
-    { "addr": "0x728781e75735dc0962df3a51d7ef47e798a7107e", "name": "WOLK", "decimals": 18 },
     { "addr": "0xcb97e65f07da24d46bcdd078ebebd7c6e6e3d750", "name": "BTM", "decimals": 8 },
     { "addr": "0x6d5cac36c1ae39f41d52393b7a425d0a610ad9f2", "name": "LLT", "decimals": 8 },
     { "addr": "0x4156d3342d5c385a87d264f90653733592000581", "name": "SALT", "decimals": 8 },
@@ -523,7 +522,10 @@
     { "addr": "0x12a35383ca24ceb44cdcbbecbeb7baccb5f3754a", "name": "CS", "decimals": 6 },
     { "addr": "0xe30e02f049957e2a5907589e06ba646fb2c321ba", "name": "DRPU", "decimals": 8 },
     { "addr": "0x3e250a4f78410c29cfc39463a81f14a226690eb4", "name": "DRPS", "decimals": 8 },
-    { "addr": "0x24692791bc444c5cd0b81e3cbcaba4b04acd1f3b", "name": "UKG", "decimals": 18 }
+    { "addr": "0x24692791bc444c5cd0b81e3cbcaba4b04acd1f3b", "name": "UKG", "decimals": 18 },
+    { "addr": "0x595832f8fc6bf59c85c527fec3740a1b7a361269", "name": "POWR", "decimals": 6 },
+    { "addr": "0x9c1d13d5a8fd4a8ac89917d31d40db454d1ee60b", "name": "ELUNCH", "decimals": 18 },
+    { "addr": "0x180e5087935a94fd5bbab00fd2249c5be0473381", "name": "ZCG", "decimals": 8 }
   ],
-  "defaultPair": { "token": "MOD", "base": "ETH" }
+  "defaultPair": { "token": "VERI", "base": "ETH" }
 }
