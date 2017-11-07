@@ -526,6 +526,7 @@
     { "addr": "0x595832f8fc6bf59c85c527fec3740a1b7a361269", "name": "POWR", "decimals": 6 },
     { "addr": "0x9c1d13d5a8fd4a8ac89917d31d40db454d1ee60b", "name": "ELUNCH", "decimals": 18 },
     { "addr": "0x180e5087935a94fd5bbab00fd2249c5be0473381", "name": "ZCG", "decimals": 8 }
+    { "addr": "0x14839bf22810f09fb163af69bd21bd5476f445cd", "name": "CFD", "decimals": 18 }
   ],
   "defaultPair": { "token": "VERI", "base": "ETH" }
 }
