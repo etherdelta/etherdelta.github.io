@@ -2,167 +2,174 @@
 
 EtherDelta's API allows you to query orders, trades, deposits, and withdrawals. Since EtherDelta is a smart contract, it is also possible to get trades, deposits, and withdrawals from the Ethereum API (through an Ethereum node or Etherscan API). EtherDelta's orderbook is an off-chain mechanism (a list of cryptographically signed orders) that you can only access through this API. The API allows you to see existing orders or place a new one.
 
-## Servers
+## Server
 
-EtherDelta API has multiple interchangeable endpoints you can choose from randomly.
+EtherDelta has one API endpoint. It is a Websocket API.
 
- * `api1.etherdelta.com`
- * `api2.etherdelta.com`
- * `api3.etherdelta.com`
- * `api4.etherdelta.com`
+ * `https://socket.etherdelta.com`
 
 ## Endpoints
 
-### GET `https://api.etherdelta.com/returnTicker`
+### `getMarket { token (address), user (address) }`
 
-This returns every pair that has traded in the past 24 hours.
+Both arguments are optional. Emit this message and then wait for a `market` response, which will contain `{ returnTicker, orders, trades, myOrders, myTrades, myFunds }`.
 
-Example output:
+#### `returnTicker`
 
+Example:
 ```
 {
-  "ETH_VERI": {
-    "tokenAddr": "0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374",
-    "quoteVolume": 10562.366,
-    "baseVolume": 3622.171,
-    "last": 0.354592012,
-    "percentChange": 0.0762,
-    "bid": 0.37,
-    "ask": 0.36199
-  }
+  ETH_VERI:
+   { tokenAddr: '0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374',
+     quoteVolume: 1000.1,
+     baseVolume: 212.3,
+     last: 0.245,
+     percentChange: 0.0047,
+     bid: 0.243,
+     ask: 0.246 },
+  ...
 }
 ```
 
-### GET `https://api.etherdelta.com/trades/[TOKEN ADDRESS]/[PAGE]`
+#### `orders`, `myOrders`
 
-This returns the 1,000 most recent trades for a particular token. The page number starts at 0.
+If the `user` argument is present, `myOrders` will contain orders filtered by the user's address. Otherwise, it will be absent.
 
-Example output:
-
-```
-[
-  {
-    "txHash": "0x9c1dd8d21bef7ea8bda90c9fecd89cdc5d2e6db473b4e406afea28b4ce03f337",
-    "date": "2017-08-25T02:35:26.000Z",
-    "price": "0.36199",
-    "side": "buy",
-    "amount": "3",
-    "amountBase": "1.08597",
-    "buyer": "0x8492ee5ab447655e982f30be868dd8133ca8823e",
-    "seller": "0xd0e0fece8a16f36bc23e07f92f98b191624f331a"
-  }
-]
-```
-
-### GET `https://api.etherdelta.com/myTrades/[USER ADDRESS]/[TOKEN ADDRESS]/[PAGE]`
-
-This returns the 1,000 most recent trades associated with a given user for a particular token. The page number starts at 0.
-
-Example output: same structure as the `trades` endpoint.
-
-### GET `https://api.etherdelta.com/orders/[TOKEN ADDRESS]/[PAGE]`
-
-This returns the 1,000 best buy and sell orders for a particular token. The page number starts at 0.
-
-Example output:
-
+Example:
 ```
 {
-  "buys": [
-    {
-      "id": "2311a122e163dbaeb558d3d4a6f9d28b22ea6bbdba0b88d312e7c78a3837648f_buy",
-      "amount": "8000000000000000000",
-      "price": "0.291001",
-      "tokenGet": "0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374",
-      "amountGet": "8000000000000000000",
-      "tokenGive": "0x0000000000000000000000000000000000000000",
-      "amountGive": "2328008000000000000",
-      "expires": "4210573",
-      "nonce": "2406242974",
-      "v": 28,
-      "r": "0xc8e7b6bcca7a84911b8e6455d0957e8e2c0b513362a6a376d624295c50cdbb90",
-      "s": "0x0de9e45bf3e61cf00616ad97abf439a91cab7edf1f8ebac69e000d3c804a8c6f",
-      "user": "0xD0e0fECe8A16F36bC23E07f92f98B191624F331a",
-      "updated": "2017-08-25T02:37:08.779Z",
-      "availableVolume": "8000000000000000000",
-      "ethAvailableVolume": "8",
-      "availableVolumeBase": "2328008000000000000",
-      "ethAvailableVolumeBase": "2.328008",
-      "amountFilled": null
-    }
+  sells: [
+    { id: '1337b7fe3f96996904d1299fcf030501661158cb964ae6400cbda2ae107978fb_sell',
+      amount: '-2000000000000000000',
+      price: '0.9',
+      tokenGet: '0x0000000000000000000000000000000000000000',
+      amountGet: '1800000000000000000',
+      tokenGive: '0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374',
+      amountGive: '2000000000000000000',
+      expires: '5143967',
+      nonce: '893205913',
+      v: 28,
+      r: '0x4eb35ba40288a169e5f5dfe85a8582db762fde5d57b212afd0be6438ca186f40',
+      s: '0x6fc37f071c75c562074b536a354bc79ba3a066f918243fc29813e9a4426b5fa9',
+      user: '0xfb83cB20DFcf7643AbE43Ea23b77F04573eC9616',
+      updated: '2017-09-16T11:56:47.006Z',
+      availableVolume: '1999403702773222212.22222222222222222222',
+      ethAvailableVolume: '1.999403702773222',
+      availableVolumeBase: '1799463332495900000',
+      ethAvailableVolumeBase: '1.7994633324959',
+      amountFilled: '0' },
+    ...
   ],
-  "sells": [
-    {
-      "id": "2d87e80349cc3c17f7feeb0f58c37797a6babcccca084617ecdf3c9f6bda02c5_sell",
-      "amount": "-4000000000000000000",
-      "price": "0.384999",
-      "tokenGet": "0x0000000000000000000000000000000000000000",
-      "amountGet": "1539996000000000000",
-      "tokenGive": "0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374",
-      "amountGive": "4000000000000000000",
-      "expires": "4210563",
-      "nonce": "214456803",
-      "v": 28,
-      "r": "0xfd524461ba0e289e8f24e09baf0390f6f1d29705c65962fbb11140d70cb5a555",
-      "s": "0x53264a9c3f32168407393e5b7db33b47b705be327dab734c9cd99381913fa878",
-      "user": "0xD0e0fECe8A16F36bC23E07f92f98B191624F331a",
-      "updated": "2017-08-25T02:43:06.485Z",
-      "availableVolume": "4000000000000000000",
-      "ethAvailableVolume": "4",
-      "availableVolumeBase": "1539996000000000000",
-      "ethAvailableVolumeBase": "1.539996",
-      "amountFilled": null
-    }
+  buys: [
+    { id: '2c002b763a9aba6d51dbf7274676f7ce957a060bd340b6230aa707fd5ca358a8_buy',
+      amount: '10000000000000000000',
+      price: '0.06',
+      tokenGet: '0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374',
+      amountGet: '10000000000000000000',
+      tokenGive: '0x0000000000000000000000000000000000000000',
+      amountGive: '600000000000000000',
+      expires: '1003884633',
+      nonce: '1928222541',
+      v: 28,
+      r: '0x236d8b8f87163b6dc6712cb90ac85be8eb9fd80d6d671013d8414206d33da1d9',
+      s: '0x6813055d05f5300cd45a43ef5e592f78bdc9698e548f3bfb49fc355f327fc92b',
+      user: '0xd270fDc1b2a369f890E9858F09E3D0769B63b526',
+      updated: '2017-09-13T14:56:28.838Z',
+      availableVolume: '10000000000000000000',
+      ethAvailableVolume: '10',
+      availableVolumeBase: '600000000000000000',
+      ethAvailableVolumeBase: '0.6',
+      amountFilled: '0' },
+    ...
   ]
 }
 ```
 
-### GET `https://api.etherdelta.com/myOrders/[USER ADDRESS]/[TOKEN ADDRESS]/[PAGE]`
+#### `trades`, `myTrades`
 
-This returns the 1,000 best buy and sell orders associated with a given user for a particular token. The page number starts at 0.
+If the `user` argument is present, `myTrades` will contain trades filtered by the user's address. Otherwise, it will be absent.
 
-Example output: same structure as the `orders` endpoint.
-
-### GET `https://api.etherdelta.com/funds/[USER ADDRESS]/[TOKEN ADDRESS]/[PAGE]`
-
-This returns the 1,000 most recent deposits and withdrawals in either the given token address or ETH for a given user. The page number starts at 0.
-
-Example output:
-
+Example:
 ```
 [
-  {
-    "txHash": "0x23abe9a81116334bb62868826f0dc604cd0f9c05a604886c3a4735696f162882",
-    "date": "2017-08-25T02:26:59.000Z",
-    "tokenAddr": "0x0000000000000000000000000000000000000000",
-    "kind": "Deposit",
-    "user": "0x8492ee5ab447655e982f30be868dd8133ca8823e",
-    "amount": "15.1",
-    "balance": "15.171717267106331"
-  }
+  { txHash: '0x75f083bf7a47861dcbb86b30b359de761e57d648c48b5084af7ef3f5db887557',
+    date: '2017-10-23T01:16:53.000Z',
+    price: '0.219011',
+    side: 'sell',
+    amount: '70.2',
+    amountBase: '15.3745722',
+    buyer: '0xfe988cd30fa97f5422f5a4ae50eafa6271cd2417',
+    seller: '0x2056c8184da1fd5a7a1cf43b567c82a999962ef4',
+    tokenAddr: '0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374' },
+  ...
 ]
 ```
 
-### POST `https://api.etherdelta.com/message`
+#### `myFunds`
 
-This allows you to post an order.
+If the `user` argument is present, `myFunds` will contain deposits and withdrawals filtered by the user's address. Otherwise, it will be absent.
 
-Body parameters: `message`, which should be JSON with the following parameters:
+Example:
+```
+[
+  { txHash: '0x295f173773f31c852a9c3eef252f8600620147c6aabb312276f8b0d9800cbc7a',
+      date: '2017-10-17T17:36:41.000Z',
+      tokenAddr: '0x0000000000000000000000000000000000000000',
+      kind: 'Deposit',
+      user: '0xcdb1978195f0f6694d0fc4c5770660f12aad65c3',
+      amount: '0.001',
+      balance: '0.005688612160935313' },
+  ...
+]
+```
 
- * `amountGet`: the amount you want to give (in wei or the base unit of the token)
- * `amountGive`: the token you want to give (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
- * `tokenGet`: the amount you want to get (in wei or the base unit of the token)
- * `tokenGive`: the token you want to get (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
- * `contractAddr`: the EtherDelta smart contract address
- * `expires`: the block number when the order should expire
- * `nonce`: a random number
- * `user`: the address of the user placing the order
- * `v`, `r`, `s`: the signature of `sha256(contractAddr, tokenGet, amountGet, tokenGive, amountGive, expires, nonce)` after being signed by the `user`
+### `message (order)`
 
-#### Restrictions:
+This allows you to post an order. `order` should be a JSON object with the following properties:
 
- * All orders must involve a token and ETH.
- * Minimum size: 0.001 ETH
- * Maximum orders per side (buy, sell) per address per token: 5
+* `amountGive`: the amount you want to give (in wei or the base unit of the token)
+* `tokenGive`: the token you want to give (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
+* `amountGet`: the amount you want to get (in wei or the base unit of the token)
+* `tokenGet`: the token you want to get (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
+* `contractAddr`: the EtherDelta smart contract address
+* `expires`: the block number when the order should expire
+* `nonce`: a random number
+* `user`: the address of the user placing the order
+* `v`, `r`, `s`: the signature of `sha256(contractAddr, tokenGet, amountGet, tokenGive, amountGive, expires, nonce)` after being signed by the `user`
 
-Returns: `success` or `failure`
+## Events
+
+### `orders`
+
+This will emit new orders as they are placed. Its structure will mirror that of `market.orders`, except that some orders will have a `deleted` flag. Orders with the `deleted` flag are no longer valid (cancelled or traded).
+
+### `trades`
+
+This will emit new trades as they happen. Its structure will mirror that of `market.trades`.
+
+### `funds`
+
+This will emit new deposits and withdrawals as they happen. Its structure will mirror that of `market.myFunds`.
+
+## Ethereum API
+
+With the exception of the off-chain orderbook, EtherDelta is entirely defined and executed by a smart contract. This API is mainly meant as a convenience so you don't have to deal with Ethereum for asking basic read-only questions like "what traded recently." Depositing, withdrawing, and trading, should all be done directly with the smart contract. For an overview of the smart contract, see the [smart contract overview](SMART_CONTRACT.md).
+
+## Rate limit
+
+You are limited to 12 requests per minute per IP address. Please make contact if you will need more throughput.
+
+## Examples
+
+EtherDelta has provided [example trading bots](../bots) to illustrate working functionality:
+
+ * [Maker](../bots/maker.js) -- a bot that places orders on both sides of the market.
+ * [Taker](../bots/taker.js) -- a bot that trades against the best-available sell order.
+
+### Warning
+
+Please use these at your own risk. ALWAYS test with small amounts first.
+
+### Instructions
+
+Download the [bots directory](../bots), then run `npm install.` Enter your address and (optional) private key at the top of one of the example bots.

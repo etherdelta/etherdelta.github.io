@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="/images/favicon.ico" rel="icon" />
+
+    <title>Export</title>
+  </head>
+
+  <body>
+
+    <div id="export">
+
+    </div>
+
+    <script src="/js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script>
+    const readCookie = function readCookie(name) {
+      if (localStorage) {
+        return localStorage.getItem(name);
+      }
+      const nameEQ = `${name}=`;
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i += 1) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+          c = c.substring(1, c.length);
+        }
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    };
+
+    try {
+      const result = JSON.parse(readCookie('EtherDelta'));
+      const addrs = result.addrs;
+      const pks = result.pks;
+      let html = '';
+      for (let i = 0; i < addrs.length; i += 1) {
+        if (addrs[i] !== '0x0000000000000000000000000000000000000000') {
+          html += '<p>Address: ' + addrs[i] + ', private key: ' + (pks[i] || 'None') + '</p>';
+        }
+      }
+      $('#export').html(html);
+    } catch (err) {
+      console.log(err);
+    }
+    </script>
+  </body>
+</html>

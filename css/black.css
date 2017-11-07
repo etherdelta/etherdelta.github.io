@@ -35,7 +35,6 @@ a.navbar-brand {
   padding: 0;
   display:table;
   width: 100%;
-  height:100%;
   margin-top: -20px;
   box-sizing: border-box;
   font-size: 90%;
@@ -87,16 +86,22 @@ a.navbar-brand {
   height: calc(100vh - 89px);
 }
 .row-box.height2 {
-  height: calc(50vh - 100px);
+  height: calc(50vh - 98px);
 }
 .row-box.height3 {
   height: calc(50vh - 81px);
 }
 .row-box.height4 {
-  height: calc(40vh - 81px);
+  height: calc(40vh - 61px);
 }
 .row-box.height5 {
-  height: calc(60vh - 81px);
+  height: calc(60vh - 101px);
+}
+.row-box.height6 {
+  height: calc(40vh - 81px);
+}
+.row-box.height7 {
+  height: calc(60vh - 45px);
 }
 .row-box.table-header {
   height: 35px;
@@ -152,6 +157,9 @@ tr.clickable-row:hover {
 }
 .nav-tabs.three > li {
   width: calc(100%/3);
+}
+.nav-tabs.four > li {
+  width: calc(100%/4);
 }
 .nav-tabs.columns {
   border-bottom: 0;
@@ -298,8 +306,22 @@ pre code {
   width: 33%;
 }
 
-.four {
+.four-columns {
   width: calc(100%/4);
+}
+.three-columns {
+  width: calc(100%/3);
+}
+
+.overflow-hidden {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.padding-left {
+  padding-left: 10px !important;
 }
 
 #chartPrice {
@@ -310,17 +332,15 @@ pre code {
   overflow: hidden;
 }
 
-#orderBookScroll td {
-  max-width: 50px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .big-icon {
   font-size: 150%;
 }
 
 .tooltip-inner {
   white-space:pre-wrap;
+}
+
+.ad {
+  background: #fff;
+  text-align: center;
 }

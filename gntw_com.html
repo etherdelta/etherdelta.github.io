@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="/images/favicon.ico" rel="icon" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
+    <link href="/css/alertify.min.css" rel="stylesheet" />
+    <link href="/css/alertify-bootstrap.min.css" rel="stylesheet" />
+    <title>GNTW</title>
+    <style>
+      body {
+        border: 12px solid #ccc;
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+      .step {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="page-header">
+      <h1>GNT Wrapper</h1>
+    </div>
+    <p>This is a basic UI to help you convert back and forth between GNT and GNTW. <a href="https://metamask.io" target="_blank">MetaMask</a> is the suggested client.</p>
+    <p>GNTW is a wrapper token for GNT that supports the full <a href="https://github.com/ethereum/EIPs/issues/20" target="_blank">ERC-20 token standard</a>.</p>
+    <p>The GNTW smart contract allows you to convert back and forth between <a href="https://etherscan.io/token/Golem" target="_blank">GNT</a> (Golem Network Token) and <a href="https://etherscan.io/token/0x936f78b9852d12f5cb93177c1f84fb8513d06263" target="_blank">GNTW</a> (Golem Network Token Wrapped).</p>
+    <p>The main benefit of converting to GNTW is that, since it supports the full ERC-20 token standard, you can trade GNTW on decentralized exchanges like <a href="https://etherdelta.github.io/#GNTW-ETH" target="_blank">EtherDelta</a>.</p>
+    <p>Original source and discussion: <a href="https://np.reddit.com/r/ethereum/comments/5cs2n4/erc20compliant_wrapper_token_for_gnt_will_enable/" target="_blank">on reddit</a>.</p>
+
+    <h3>Pick an address</h3>
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span id="address"></span> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" id="addresses">
+      </ul>
+    </div>
+
+    <div id="balanceGNT"></div>
+    <div id="balanceGNTW"></div>
+
+    <h3>Convert GNT &#8212;&gt; GNTW</h3>
+
+    <p class="step">Step 1: Generate personal deposit address.</p>
+
+    <div id="depositAddress"></div>
+
+    <p class="step">Step 2: Send GNT to personal deposit address.</p>
+
+    <div id="sendGNT"></div>
+
+    <p class="step">Step 3: Process deposit.</p>
+
+    <div id="currentDeposit"></div>
+    <div id="processDeposit"></div>
+
+    <h3>Convert GNTW &#8212;&gt; GNT</h3>
+
+    <div id="withdraw"></div>
+
+    <script src="/js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/alertify.min.js" type="text/javascript"></script>
+    <script src="/js/web3.min.js" type="text/javascript"></script>
+    <script>
+      var account, WrapperAddr, WrapperABI, Wrapper, GNTAddr, GNTABI, GNT, depositAddress;
+
+      function selectAccount(newAccount) {
+        account = newAccount;
+        $('#address').html(account);
+        update(function(){});
+      }
+
+      function update(callback) {
+
+        GNT.balanceOf(account, function(err, balance){
+          var balanceGNT = web3.fromWei(balance, "ether");
+          $('#balanceGNT').html('<p>Balance (GNT): '+balanceGNT+'</p>');
+        });
+        Wrapper.balanceOf(account, function(err, balance){
+          var balanceGNTW = web3.fromWei(balance, "ether");
+          $('#balanceGNTW').html('<p>Balance (GNTW): '+balanceGNTW+'</p>');
+          if (balance>0) {
+            var html = '<p><input class="form-control" style="width: 150px; display: inline;" type="text" id="withdrawAmount"> <button class="btn btn-default" onclick="withdrawGNTW();">Withdraw GNTW</button></p>';
+            if ($('#withdraw').html()!=html) $('#withdraw').html(html);
+          } else {
+            $('#withdraw').html('<p>You don\'t have any GNTW to withdraw.</p>');
+          }
+        });
+        Wrapper.getPersonalDepositAddress(account, function(err, result) {
+          depositAddress = result;
+          if (depositAddress != '0x0000000000000000000000000000000000000000') {
+            $('#depositAddress').html('<p>Deposit address: <a href="https://etherscan.io/address/'+depositAddress+'" target="_blank">'+depositAddress+'</a></p>');
+            var html = '<p><input class="form-control" style="width: 150px; display: inline;" type="text" id="depositAmount"> <button class="btn btn-default" onclick="sendGNT();">Send GNT</button></p>';
+            if ($('#sendGNT').html()!=html) $('#sendGNT').html(html);
+            GNT.balanceOf(depositAddress, function(err, result) {
+              var currentDeposit = web3.fromWei(result, "ether");
+              $('#currentDeposit').html('<p>Current deposit (GNT): '+currentDeposit+'</p>');
+              if (currentDeposit>0) {
+                $('#processDeposit').html('<p><button class="btn btn-default" onclick="processDeposit();">Process deposit</button></p>');
+              } else {
+                $('#processDeposit').html('<p>Please deposit first.</p>');
+              }
+              callback();
+            });
+          } else {
+            $('#depositAddress').html('<p><button class="btn btn-default" onclick="generateDepositAddress();">Generate deposit address</button></p>');
+            $('#processDeposit').html('<p>Please generate a deposit address first.</p>');
+            $('#currentDeposit').html('');
+            $('#sendGNT').html('<p>Please generate a deposit address first.</p>');
+            callback();
+          }
+        })
+      }
+
+      function generateDepositAddress() {
+        Wrapper.createPersonalDepositAddress({from: account, value: 0, gas: 250000}, function(err, result){
+          txSent(result);
+        });
+      }
+
+      function processDeposit() {
+        Wrapper.processDeposit({from: account, value: 0, gas: 250000}, function(err, result){
+          txSent(result);
+        });
+      }
+
+      function sendGNT() {
+        var amount = web3.toWei($('#depositAmount').val(), "ether");
+        GNT.balanceOf(account, function(err, balance) {
+          if (amount>balance) amount = balance;
+          if (depositAddress && amount>0) {
+            GNT.transfer(depositAddress, amount, {from: account, value: 0, gas: 250000}, function(err, result){
+              txSent(result);
+            });
+          }
+        })
+      }
+
+      function withdrawGNTW() {
+        var amount = web3.toWei($('#withdrawAmount').val(), "ether");
+        Wrapper.balanceOf(account, function(err, balance){
+          if (amount>balance) amount = balance;
+          if (amount>0) {
+            Wrapper.transfer(Wrapper.address, amount, {from: account, value: 0, gas: 250000}, function(err, result){
+              txSent(result);
+            });
+          }
+        })
+      }
+
+      function txSent(hash) {
+        alert('You sent a transaction. Follow it here: <a href="https://etherscan.io/tx/'+hash+'" target="_blank">'+hash+'</a>');
+      }
+
+      function alert(message) {
+        alertify.alert('Alert', message, function(){});
+      }
+
+      function init() {
+        function contractAt(abi, address) {
+          var contract = self.web3.eth.contract(abi);
+          contract = contract.at(address);
+          return contract;
+        }
+
+        WrapperAddr = '0x936f78b9852d12f5cb93177c1f84fb8513d06263';
+        WrapperABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_amount","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"depositer","type":"address"}],"name":"getPersonalDepositAddress","outputs":[{"name":"depositAddress","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"standard","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"createPersonalDepositAddress","outputs":[{"name":"depositAddress","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"GNT","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"processDeposit","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"payable":false,"type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_amount","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_owner","type":"address"},{"indexed":true,"name":"_spender","type":"address"},{"indexed":false,"name":"_amount","type":"uint256"}],"name":"Approval","type":"event"}];
+        Wrapper = contractAt(WrapperABI, WrapperAddr);
+        GNTAddr = '0xa74476443119A942dE498590Fe1f2454d7D4aC0d';
+        GNTABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"golemFactory","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_master","type":"address"}],"name":"setMigrationMaster","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"migrate","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"finalize","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"refund","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"migrationMaster","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"tokenCreationCap","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_agent","type":"address"}],"name":"setMigrationAgent","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"migrationAgent","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"fundingEndBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalMigrated","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"tokenCreationMin","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"funding","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"tokenCreationRate","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"fundingStartBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"create","outputs":[],"payable":true,"type":"function"},{"inputs":[{"name":"_golemFactory","type":"address"},{"name":"_migrationMaster","type":"address"},{"name":"_fundingStartBlock","type":"uint256"},{"name":"_fundingEndBlock","type":"uint256"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Migrate","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Refund","type":"event"}];
+        GNT = contractAt(GNTABI, GNTAddr);
+
+        web3.eth.getAccounts(function(err, accounts){
+          account = accounts[0];
+          $('#address').html(account);
+          $('#addresses').html(accounts.map(function(account){return '<li><a href="javascript:;" onclick="selectAccount(\''+account+'\')">'+account+'</a></li>'}).join(''));
+        })
+
+        function updateLoop() {
+          update(function(){
+            setTimeout(function(){updateLoop()}, 10000);
+          });
+        }
+        updateLoop();
+
+      }
+
+      window.addEventListener('load', function() {
+
+        if (typeof web3 !== 'undefined') {
+          web3 = new Web3(web3.currentProvider);
+        } else {
+          console.log('No web3? You should consider trying MetaMask!')
+          web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+
+        init();
+
+      })
+    </script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-75000235-4', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script>
+      ((window.gitter = {}).chat = {}).options = {
+        room: 'etherdelta/etherdelta.github.io'
+      };
+    </script>
+    <script src="/js/sidecar.v1.js" async defer></script>
+  </body>
+</html>
