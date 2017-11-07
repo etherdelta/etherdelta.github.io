@@ -525,7 +525,8 @@
     { "addr": "0x24692791bc444c5cd0b81e3cbcaba4b04acd1f3b", "name": "UKG", "decimals": 18 },
     { "addr": "0x595832f8fc6bf59c85c527fec3740a1b7a361269", "name": "POWR", "decimals": 6 },
     { "addr": "0x9c1d13d5a8fd4a8ac89917d31d40db454d1ee60b", "name": "ELUNCH", "decimals": 18 },
-    { "addr": "0x180e5087935a94fd5bbab00fd2249c5be0473381", "name": "ZCG", "decimals": 8 }
+    { "addr": "0x180e5087935a94fd5bbab00fd2249c5be0473381", "name": "ZCG", "decimals": 8 },
+    { "addr": "0xD0a4b8946Cb52f0661273bfbC6fD0E0C75Fc6433", "name": "STORM", "decimals": 18 }    
   ],
   "defaultPair": { "token": "VERI", "base": "ETH" }
 }
