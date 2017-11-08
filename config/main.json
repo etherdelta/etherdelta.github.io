@@ -526,7 +526,11 @@
     { "addr": "0x595832f8fc6bf59c85c527fec3740a1b7a361269", "name": "POWR", "decimals": 6 },
     { "addr": "0x9c1d13d5a8fd4a8ac89917d31d40db454d1ee60b", "name": "ELUNCH", "decimals": 18 },
     { "addr": "0x180e5087935a94fd5bbab00fd2249c5be0473381", "name": "ZCG", "decimals": 8 },
-    { "addr": "0x14839bf22810f09fb163af69bd21bd5476f445cd", "name": "CFD", "decimals": 18 }
+    { "addr": "0x14839bf22810f09fb163af69bd21bd5476f445cd", "name": "CFD", "decimals": 18 },
+    { "addr": "0x255aa6df07540cb5d3d297f0d0d4d84cb52bc8e6", "name": "RDN", "decimals": 18 },
+    { "addr": "0xd3e2f9dfff5a6feeece5dbcee3b86cb375fd8c98", "name": "BCOIN", "decimals": 8 },
+    { "addr": "0xc029ba3dc12e1834571e821d94a07de0a01138ea", "name": "QBE", "decimals": 18 },
+    { "addr": "0x00a0cbe98e4d110b0fa82646152d77babf2951d0", "name": "EETHER", "decimals": 18 }
   ],
-  "defaultPair": { "token": "VERI", "base": "ETH" }
+  "defaultPair": { "token": "RCN", "base": "ETH" }
 }
