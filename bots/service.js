@@ -225,7 +225,7 @@ function Service() {
       console.log(`${order.price.toFixed(9)} ${order.ethAvailableVolume.toFixed(3)}`);
     });
     if (buys.length > 0 && sells.length > 0) {
-      console.log(`---- Spread (${(sells[0].price - buys[0].price).toFixed(9)}) ----`);
+      console.log(`---- Spread (${(sells[sells.length - 1].price - buys[0].price).toFixed(9)}) ----`);
     } else {
       console.log('--------');
     }
