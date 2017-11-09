@@ -104,7 +104,7 @@
     { "addr": "0xf433089366899d83a9f26a773d59ec7ecf30355e", "name": "MTL", "decimals": 8 },
     { "addr": "0xc63e7b1dece63a77ed7e4aeef5efb3b05c81438d", "name": "FUCKOLD", "decimals": 4 },
     { "addr": "0xab16e0d25c06cb376259cc18c1de4aca57605589", "name": "FUCK", "decimals": 4 },
-    { "addr": "0x5c6183d10a00cd747a6dbb5f658ad514383e9419", "name": "NXX", "decimals": 8 },
+    { "addr": "0x5c6183d10a00cd747a6dbb5f658ad514383e9419", "name": "NXXOLD", "decimals": 8 },
     { "addr": "0xd5b9a2737c9b2ff35ecb23b884eb039303bbbb61", "name": "BTH", "decimals": 18 },
     { "addr": "0xe3818504c1b32bf1557b16c238b2e01fd3149c17", "name": "PLR", "decimals": 18 },
     { "addr": "0x41e5560054824ea6b0732e656e3ad64e20e94e45", "name": "CVC", "decimals": 8 },
@@ -530,7 +530,16 @@
     { "addr": "0x255aa6df07540cb5d3d297f0d0d4d84cb52bc8e6", "name": "RDN", "decimals": 18 },
     { "addr": "0xd3e2f9dfff5a6feeece5dbcee3b86cb375fd8c98", "name": "BCOIN", "decimals": 8 },
     { "addr": "0xc029ba3dc12e1834571e821d94a07de0a01138ea", "name": "QBE", "decimals": 18 },
-    { "addr": "0x00a0cbe98e4d110b0fa82646152d77babf2951d0", "name": "EETHER", "decimals": 18 }
+    { "addr": "0x00a0cbe98e4d110b0fa82646152d77babf2951d0", "name": "EETHER", "decimals": 18 },
+    { "addr": "0x9c23a568a32e8434ec88bdf60891a1d95ffd36cc", "name": "CHUCK", "decimals": 4 },
+    { "addr": "0xd819e892f4df8659188e8bda839fdf2215a513bc", "name": "SPOON", "decimals": 18 },
+    { "addr": "0xd2308446536a0bad028ab8c090d62e1ea2a51f24", "name": "GNEISS", "decimals": 0 },
+    { "addr": "0x50ee674689d75c0f88e8f83cfe8c4b69e8fd590d", "name": "EPY", "decimals": 8 },
+    { "addr": "0x7627de4b93263a6a7570b8dafa64bae812e5c394", "name": "NXX", "decimals": 8 },
+    { "addr": "0x6f6deb5db0c4994a8283a01d6cfeeb27fc3bbe9c", "name": "SMART", "decimals": 0 },
+    { "addr": "0x8b1f49491477e0fb46a29fef53f1ea320d13c349", "name": "AMM", "decimals": 6 },
+    { "addr": "0x8866d52303e372c2a2936d8ea09afd87bcbd8cf2", "name": "TPL", "decimals": 10 },
+    { "addr": "0x1245ef80f4d9e02ed9425375e8f649b9221b31d8", "name": "ARCT", "decimals": 8 }
   ],
-  "defaultPair": { "token": "RCN", "base": "ETH" }
+  "defaultPair": { "token": "CFD", "base": "ETH" }
 }
