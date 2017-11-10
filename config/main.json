@@ -539,7 +539,8 @@
     { "addr": "0x6f6deb5db0c4994a8283a01d6cfeeb27fc3bbe9c", "name": "SMART", "decimals": 0 },
     { "addr": "0x8b1f49491477e0fb46a29fef53f1ea320d13c349", "name": "AMM", "decimals": 6 },
     { "addr": "0x8866d52303e372c2a2936d8ea09afd87bcbd8cf2", "name": "TPL", "decimals": 10 },
-    { "addr": "0x1245ef80f4d9e02ed9425375e8f649b9221b31d8", "name": "ARCT", "decimals": 8 }
+    { "addr": "0x1245ef80f4d9e02ed9425375e8f649b9221b31d8", "name": "ARCT", "decimals": 8 },
+    { "addr": "0x0EAba537B60536e575E9C544cdFe06cFD9F87AF3", "name": "PTX", "decimals": 4 }
   ],
   "defaultPair": { "token": "CFD", "base": "ETH" }
 }
