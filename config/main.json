@@ -362,7 +362,7 @@
     { "addr": "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4", "name": "ENG", "decimals": 8 },
     { "addr": "0x13f1b7fdfbe1fc66676d56483e21b1ecb40b58e2", "name": "ACC", "decimals": 18 },
     { "addr": "0x6025f65f6b2f93d8ed1efedc752acfd4bdbcec3e", "name": "EGOLD", "decimals": 18 },
-    { "addr": "0x6044b34a29e96f542f96f103c996864d0a812238", "name": "FLP", "decimals": 18 },
+    { "addr": "0x3a1bda28adb5b0a812a7cf10a1950c920f79bcd3", "name": "FLP", "decimals": 18 },
     { "addr": "0x90c88ccd74e57e016acae8ad1eaa12ecf4c06f33", "name": "IBTC", "decimals": 18 },
     { "addr": "0xc51c938c4d513780c66c722a41c197d3a89fa9a8", "name": "EBTG", "decimals": 8 },
     { "addr": "0x8f8221afbb33998d8584a2b05749ba73c37a938a", "name": "REQ", "decimals": 18 },
@@ -539,7 +539,19 @@
     { "addr": "0x6f6deb5db0c4994a8283a01d6cfeeb27fc3bbe9c", "name": "SMART", "decimals": 0 },
     { "addr": "0x8b1f49491477e0fb46a29fef53f1ea320d13c349", "name": "AMM", "decimals": 6 },
     { "addr": "0x8866d52303e372c2a2936d8ea09afd87bcbd8cf2", "name": "TPL", "decimals": 10 },
-    { "addr": "0x1245ef80f4d9e02ed9425375e8f649b9221b31d8", "name": "ARCT", "decimals": 8 }
+    { "addr": "0x1245ef80f4d9e02ed9425375e8f649b9221b31d8", "name": "ARCT", "decimals": 8 },
+    { "addr": "0xdd007278b667f6bef52fd0a4c23604aa1f96039a", "name": "RIPT", "decimals": 8 },
+    { "addr": "0xa5a283557653f36cf9aa0d5cc74b1e30422349f2", "name": "UETL", "decimals": 8 },
+    { "addr": "0x93e24ce396a9e7d7de4a5bc616cf5fcab0476626", "name": "ZIP", "decimals": 8 },
+    { "addr": "0x399a0e6fbeb3d74c85357439f4c8aed9678a5cbf", "name": "DCL", "decimals": 3 },
+    { "addr": "0x519475b31653e46d20cd09f9fdcf3b12bdacb4f5", "name": "VIU", "decimals": 18 },
+    { "addr": "0x86410db4d61c40a8e1df9f859069d5a15896195b", "name": "DJC", "decimals": 18 },
+    { "addr": "0x7c53f13699e1f6ef5c699e893a20948bdd2e4de9", "name": "DVD", "decimals": 18 },
+    { "addr": "0x554c20b7c486beee439277b4540a434566dc4c02", "name": "HST", "decimals": 18 },
+    { "addr": "0x420c42ce1370c0ec3ca87d9be64a7002e78e6709", "name": "STCN", "decimals": 0 },
+    { "addr": "0xa94c128a138504e1f81d727cc21bcb9ae6581015", "name": "FDM", "decimals": 18 },
+    { "addr": "0xe8c5e942b76099c0c6d78271bad3ca002fa7c531", "name": "HELP", "decimals": 0 },
+    { "addr": "0xf24d3dfffcaf9f9a5dda9c57eeeb1ac0bba49c86", "name": "XMAS", "decimals": 18 }
   ],
   "defaultPair": { "token": "CFD", "base": "ETH" }
 }
