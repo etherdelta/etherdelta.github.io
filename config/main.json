@@ -554,7 +554,7 @@
     { "addr": "0xf24d3dfffcaf9f9a5dda9c57eeeb1ac0bba49c86", "name": "XMAS", "decimals": 18 },
     { "addr": "0x7b1309c1522afd4e66c31e1e6d0ec1319e1eba5e", "name": "BLN", "decimals": 18 },
     { "addr": "0x7731ee8b0b0ab88977be7922849eb767bbe8da15", "name": "ABS", "decimals": 18 },
-    { "addr": "0x27d5a376ab5ba59398df98f0c2ee406a08b06d40", "name": "NVO", "decimals": 18 },
+    { "addr": "0xc6b014274d7406641711fb8889f93f4f11dec810", "name": "NAO", "decimals": 18 },
     { "addr": "0x28481cdc0e4fa79164491d47e8837edeb3993f20", "name": "TSS", "decimals": 18 },
     { "addr": "0x7d3e7d41da367b4fdce7cbe06502b13294deb758", "name": "SSS", "decimals": 8 },
     { "addr": "0x1500205f50bf3fd976466d0662905c9ff254fc9c", "name": "BBT", "decimals": 4 },
