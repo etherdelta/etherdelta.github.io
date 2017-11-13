@@ -558,7 +558,6 @@
     { "addr": "0x28481cdc0e4fa79164491d47e8837edeb3993f20", "name": "TSS", "decimals": 18 },
     { "addr": "0x7d3e7d41da367b4fdce7cbe06502b13294deb758", "name": "SSS", "decimals": 8 },
     { "addr": "0x1500205f50bf3fd976466d0662905c9ff254fc9c", "name": "BBT", "decimals": 4 },
-    { "addr": "0xc6b014274d7406641711fb8889f93f4f11dec810", "name": "NAO", "decimals": 18 },
     { "addr": "0x3485b9566097ad656c70d6ebbd1cd044e2e72d05", "name": "PNK", "decimals": 0 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
