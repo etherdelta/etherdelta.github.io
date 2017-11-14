@@ -1,0 +1,28 @@
+.background {
+  background-image: url("http://i.imgur.com/VBBEIxV.png");
+}
+
+.body {
+  text-align: center;
+}
+
+#logo {
+  width: 25%;
+}
+
+.header {
+  font-size: 50px;
+}
+.header2 {
+  color: red;
+}
+.email_form {
+  margin-top: 10%;
+  text-align: center;
+}
+
+#result {
+  margin-top: 18px;
+  font-size: 18px;
+  font-weight: bold;
+}
