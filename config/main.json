@@ -565,7 +565,6 @@
     { "addr": "0xea097a2b1db00627b2fa17460ad260c016016977", "name": "UFR", "decimals": 18 },
     { "addr": "0x6733d909e10ddedb8d6181b213de32a30ceac7ed", "name": "BTSE", "decimals": 18 },
     { "addr": "0x449574c69f3a658794829ed81639a7a9ece041e1", "name": "NEOG", "decimals": 0 },
-    { "addr": "0x6733d909e10ddedb8d6181b213de32a30ceac7ed", "name": "BTSE", "decimals": 18 },
     { "addr": "0xc0c2ee1ce1fed8f6e2764363a36db3dd4cf10022", "name": "FBL", "decimals": 2 },
     { "addr": "0xcbce61316759d807c474441952ce41985bbc5a40", "name": "MOAC", "decimals": 18 },
     { "addr": "0xea642206310400cda4c1c5b8e7945314aa96b8a7", "name": "MINT", "decimals": 18 },
