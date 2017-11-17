@@ -593,6 +593,7 @@
     { "addr": "0xc324a2f6b05880503444451b8b27e6f9e63287cb", "name": "XUC", "decimals": 18 },
     { "addr": "0x37256d58e298cacaa82aa0527d56521f1b19e1f5", "name": "EALP", "decimals": 18 },
     { "addr": "0xc98e0639c6d2ec037a615341c369666b110e80e5", "name": "EXMR", "decimals": 8 }
+    { "addr": "0x559201fa75902cdc4055e40f0c90e3d702049987", "name": "BTCP", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
