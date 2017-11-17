@@ -333,7 +333,6 @@
     { "addr": "0x415116bad878730f5db008ff381a73222128ad39", "name": "EBCH", "decimals": 18 },
     { "addr": "0x2f1b8c9d0a21b747d8ca370f93cb09d3daf222ef", "name": "EXRP", "decimals": 18 },
     { "addr": "0x01a28adc0edd796b570ec4da734e1aa809f6f1fc", "name": "EDASH", "decimals": 18 },
-    { "addr": "0x43161bd5597b12afb83b4ecfec8f4f0f9e452f30", "name": "EXMR", "decimals": 18 },
     { "addr": "0x0c6c9beeeb5de377210930f09a7ac9a99ff5e981", "name": "EZEC", "decimals": 18 },
     { "addr": "0xb915ff79170d606935bceaf000d77ca4ed92d993", "name": "ENEO", "decimals": 18 },
     { "addr": "0x7e9d62e1ff4e34096f91ee0153222ab81f7184f0", "name": "ELTC2", "decimals": 8 },
@@ -489,7 +488,8 @@
     { "addr": "0xd9a0658b7cc9ec0c57e8b20c0920d08f17e747be", "name": "SAT", "decimals": 10 },
     { "addr": "0x7a41e0517a5eca4fdbc7fbeba4d4c47b9ff6dc63", "name": "ZSC", "decimals": 18 },
     { "addr": "0x999967e2ec8a74b7c8e9db19e039d920b31d39d0", "name": "TIE", "decimals": 18 },
-    { "addr": "0x8bbf4dd0f11b3a535660fd7fcb7158daebd3a17e", "name": "EGAS", "decimals": 8 },
+    { "addr": "0x8bbf4dd0f11b3a535660fd7fcb7158daebd3a17e", "name": "EGASOLD", "decimals": 8 },
+    { "addr": "0xb53a96bcbdd9cf78dff20bab6c2be7baec8f00f8", "name": "EGAS", "decimals": 8 },
     { "addr": "0xb3203db25a01fa7950a860b42b899ad7da52ddd6", "name": "PLX", "decimals": 8 },
     { "addr": "0x4dc3643dbc642b72c158e7f3d2ff232df61cb6ce", "name": "AMB", "decimals": 18 },
     { "addr": "0xe3fa177acecfb86721cf6f9f4206bd3bd672d7d5", "name": "CTT", "decimals": 18 },
@@ -584,7 +584,15 @@
     { "addr": "0xd04963de435bd4d25b1cc8f05870f49edbfc8c18", "name": "SNI", "decimals": 18 },
     { "addr": "0x5e3346444010135322268a4630d2ed5f8d09446c", "name": "LOC", "decimals": 18 },
     { "addr": "0x3adfc4999f77d04c8341bac5f3a76f58dff5b37a", "name": "PRIX", "decimals": 8 },
-    { "addr": "0x0ffab58ea5a71cc3ca40217706c3c401407fa4a8", "name": "INDI", "decimals": 18 }
+    { "addr": "0x0ffab58ea5a71cc3ca40217706c3c401407fa4a8", "name": "INDI", "decimals": 18 },
+    { "addr": "0xa119f0f5fd06ebadff8883c0f3c40b2d22e7a44f", "name": "CRTM", "decimals": 8 },
+    { "addr": "0xe4c07f4637df3a0354f9b42a1b3178dc573b8926", "name": "CZT", "decimals": 0 },
+    { "addr": "0x1d10997e92011398a20612f9ee87e33449bc1fe4", "name": "1KT", "decimals": 18 },
+    { "addr": "0x2dbe0f03f1dddbdbc87557e86df3878ae25af855", "name": "RC", "decimals": 8 },
+    { "addr": "0x164f64ef2a44444743c5472fa68fb3784060d286", "name": "T8C", "decimals": 3 },
+    { "addr": "0xc324a2f6b05880503444451b8b27e6f9e63287cb", "name": "XUC", "decimals": 18 },
+    { "addr": "0x37256d58e298cacaa82aa0527d56521f1b19e1f5", "name": "EALP", "decimals": 18 },
+    { "addr": "0xc98e0639c6d2ec037a615341c369666b110e80e5", "name": "EXMR", "decimals": 8 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
