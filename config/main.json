@@ -605,7 +605,15 @@
     { "addr": "0x9e386da8cdfcf8b9e7490e3f2a4589c570cb2b2f", "name": "RPIL", "decimals": 8 },
     { "addr": "0x19aea60e2fd6ac54ecf2576292c8fc7046429c37", "name": "HUB", "decimals": 18 },
     { "addr": "0x82b0e50478eeafde392d45d1259ed1071b6fda81", "name": "DNA", "decimals": 18 },
-    { "addr": "0xa0aa85b54f8a7b09c845f13a09172b08925f3d54", "name": "SISA", "decimals": 18 }
+    { "addr": "0xa0aa85b54f8a7b09c845f13a09172b08925f3d54", "name": "SISA", "decimals": 18 },
+    { "addr": "0x569cbdcc684edcc589939cc8f6b96e6abd9eb0f3", "name": "IGN", "decimals": 6 },
+    { "addr": "0x2cfd4c10c075fa51649744245ec1d0aa3d567e23", "name": "IPY", "decimals": 8 },
+    { "addr": "0x1844b21593262668b7248d0f57a220caaba46ab9", "name": "PRL", "decimals": 18 },
+    { "addr": "0x149a23f3d1a1e61e1e3b7eddd27f32e01f9788c7", "name": "CARE", "decimals": 18 },
+    { "addr": "0x15ef5b9447710eab904e63e6233ff540400d603f", "name": "BTC2X", "decimals": 8 },
+    { "addr": "0x9e88613418cf03dca54d6a2cf6ad934a78c7a17a", "name": "SWM", "decimals": 18 },
+    { "addr": "0xd286603e0f5de621b510a36c78c7616c015656f2", "name": "BGIFT", "decimals": 18 },
+    { "addr": "0x90b1b771d0814d607da104b988efa39288219d62", "name": "MEDI", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
