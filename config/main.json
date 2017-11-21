@@ -511,7 +511,7 @@
     { "addr": "0x4a536c1ce7ad7f6e8d2e59135e17aef5ef4dd4e6", "name": "GEC", "decimals": 3 },
     { "addr": "0xf6cfe53d6febaeea051f400ff5fc14f0cbbdaca1", "name": "DGPT", "decimals": 18 },
     { "addr": "0x3293cc907fde439b39aedaf1b982785adaff186b", "name": "TRIA", "decimals": 10 },
-    { "addr": "0x5d51fcced3114a8bb5e90cdd0f9d682bcbcc5393", "name": "B2BX", "decimals": 18 },
+    { "addr": "0x5d51fcced3114a8bb5e90cdd0f9d682bcbcc5393", "name": "B2B", "decimals": 18 },
     { "addr": "0x44197a4c44d6a059297caf6be4f7e172bd56caaf", "name": "ELTCOIN", "decimals": 8 },
     { "addr": "0x5554e04e76533e1d14c52f05beef6c9d329e1e30", "name": "NIO", "decimals": 0 },
     { "addr": "0x14fffb1e001615b7fb7c7857bdf440a610022e5b", "name": "SCX", "decimals": 0 },
@@ -593,7 +593,7 @@
     { "addr": "0xc324a2f6b05880503444451b8b27e6f9e63287cb", "name": "XUC", "decimals": 18 },
     { "addr": "0x37256d58e298cacaa82aa0527d56521f1b19e1f5", "name": "EALP", "decimals": 18 },
     { "addr": "0xc98e0639c6d2ec037a615341c369666b110e80e5", "name": "EXMR", "decimals": 8 },
-    { "addr": "0x6e58b4c41cab75dc0239938bf5455ab8823ee4de", "name": "B2X", "decimals": 8 },
+    { "addr": "0x6e58b4c41cab75dc0239938bf5455ab8823ee4de", "name": "B2XOLD", "decimals": 8 },
     { "addr": "0x9b68bfae21df5a510931a262cecf63f41338f264", "name": "DBET", "decimals": 18 },
     { "addr": "0x9c3a2334d8d7a8b9013c0e572a5bbdfc2fc69063", "name": "LCC", "decimals": 18 },
     { "addr": "0x189c05c3c191015c694032e1b09c190d5db3fb50", "name": "READ", "decimals": 8 },
@@ -613,7 +613,13 @@
     { "addr": "0x15ef5b9447710eab904e63e6233ff540400d603f", "name": "BTC2X", "decimals": 8 },
     { "addr": "0x9e88613418cf03dca54d6a2cf6ad934a78c7a17a", "name": "SWM", "decimals": 18 },
     { "addr": "0xd286603e0f5de621b510a36c78c7616c015656f2", "name": "BGIFT", "decimals": 18 },
-    { "addr": "0x90b1b771d0814d607da104b988efa39288219d62", "name": "MEDI", "decimals": 18 }
+    { "addr": "0x90b1b771d0814d607da104b988efa39288219d62", "name": "MEDI", "decimals": 18 },
+    { "addr": "0xedcd82784027001d7af57a34501c65a25f97fee4", "name": "DATL", "decimals": 18 },
+    { "addr": "0x7ea4c29d3d37f9b259be610b67b3125c4d095d02", "name": "CANADA", "decimals": 18 },
+    { "addr": "0xbec8f6d667594fb181c9d68e5c80c910888be93d", "name": "STAKE", "decimals": 8 },
+    { "addr": "0xbec8f6d667594fb181c9d68e5c80c910888be93d", "name": "STAKE", "decimals": 8 },
+    { "addr": "0x9c9891f7795eb127ba4783b671573275ff3a83a9", "name": "B2X", "decimals": 8 },
+    { "addr": "0xfad572db566e5234ac9fc3d570c4edc0050eaa92", "name": "BTHE", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
