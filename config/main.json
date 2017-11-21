@@ -617,7 +617,6 @@
     { "addr": "0xedcd82784027001d7af57a34501c65a25f97fee4", "name": "DATL", "decimals": 18 },
     { "addr": "0x7ea4c29d3d37f9b259be610b67b3125c4d095d02", "name": "CANADA", "decimals": 18 },
     { "addr": "0xbec8f6d667594fb181c9d68e5c80c910888be93d", "name": "STAKE", "decimals": 8 },
-    { "addr": "0xbec8f6d667594fb181c9d68e5c80c910888be93d", "name": "STAKE", "decimals": 8 },
     { "addr": "0x9c9891f7795eb127ba4783b671573275ff3a83a9", "name": "B2X", "decimals": 8 },
     { "addr": "0xfad572db566e5234ac9fc3d570c4edc0050eaa92", "name": "BTHE", "decimals": 18 }
   ],
