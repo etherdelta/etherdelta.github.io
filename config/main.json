@@ -622,7 +622,6 @@
     { "addr": "0x11f8dd7699147566cf193596083d45c8f592c4ba", "name": "ETHC", "decimals": 0 },
     { "addr": "0xe25f0974fea47682f6a7386e4217da70512ec997", "name": "BRC", "decimals": 18 },
     { "addr": "0xbc9395973bd35a3b4bd924f050d2778c07506ecb", "name": "GREED", "decimals": 18 },
-    { "addr": "0xbc9395973bd35a3b4bd924f050d2778c07506ecb", "name": "GREED", "decimals": 18 },
     { "addr": "0xd317ff47dc7e1423e5e050870a66332833e5fd88", "name": "PNK", "decimals": 0 },
     { "addr": "0xcc34366e3842ca1bd36c1f324d15257960fcc801", "name": "BON", "decimals": 18 },
     { "addr": "0x71f1bc89f38b241f3ebf0d5a013fa2850c63a1d4", "name": "ZDR", "decimals": 8 },
