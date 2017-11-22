@@ -622,7 +622,7 @@
     { "addr": "0x11f8dd7699147566cf193596083d45c8f592c4ba", "name": "ETHC", "decimals": 0 },
     { "addr": "0xe25f0974fea47682f6a7386e4217da70512ec997", "name": "BRC", "decimals": 18 },
     { "addr": "0xbc9395973bd35a3b4bd924f050d2778c07506ecb", "name": "GREED", "decimals": 18 },
-    { "addr": "0xd317ff47dc7e1423e5e050870a66332833e5fd88", "name": "PNK", "decimals": 0 },
+    { "addr": "0xd317ff47dc7e1423e5e050870a66332833e5fd88", "name": "PNY", "decimals": 0 },
     { "addr": "0xcc34366e3842ca1bd36c1f324d15257960fcc801", "name": "BON", "decimals": 18 },
     { "addr": "0x71f1bc89f38b241f3ebf0d5a013fa2850c63a1d4", "name": "ZDR", "decimals": 8 },
     { "addr": "0x1daaf3d62582639c6a7eabb467e2db9b56fafbbd", "name": "USD_S", "decimals": 18 },
@@ -634,7 +634,8 @@
     { "addr": "0xa9666166d3c7fd15e874801f99e9ad5bfb70c5cf", "name": "GBP_S", "decimals": 18 },
     { "addr": "0xdfe2bd1d3dcbb97804acf3ee85230e832c4a7b5d", "name": "GBP_R", "decimals": 18 },
     { "addr": "0x5f54c1512d036a0dd92744ee0a55ed183dde0484", "name": "JPY_S", "decimals": 18 },
-    { "addr": "0x22a3d74c363379189b6cc059d8fbd888e98df5ec", "name": "JPY_R", "decimals": 18 }
+    { "addr": "0x22a3d74c363379189b6cc059d8fbd888e98df5ec", "name": "JPY_R", "decimals": 18 },
+    { "addr": "0x55648de19836338549130b1af587f16bea46f66b", "name": "PBL", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
