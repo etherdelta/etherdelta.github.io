@@ -635,7 +635,13 @@
     { "addr": "0xdfe2bd1d3dcbb97804acf3ee85230e832c4a7b5d", "name": "GBP_R", "decimals": 18 },
     { "addr": "0x5f54c1512d036a0dd92744ee0a55ed183dde0484", "name": "JPY_S", "decimals": 18 },
     { "addr": "0x22a3d74c363379189b6cc059d8fbd888e98df5ec", "name": "JPY_R", "decimals": 18 },
-    { "addr": "0x55648de19836338549130b1af587f16bea46f66b", "name": "PBL", "decimals": 18 }
+    { "addr": "0x55648de19836338549130b1af587f16bea46f66b", "name": "PBL", "decimals": 18 },
+    { "addr": "0xd7aa94f17d60be06414973a45ffa77efd6443f0f", "name": "BTCQ", "decimals": 8 },
+    { "addr": "0x222728c202e7164dfbd127181d46409338c4328e", "name": "MIND", "decimals": 18 },
+    { "addr": "0x1d9e20e581a5468644fe74ccb6a46278ef377f9e", "name": "CDRT", "decimals": 8 },
+    { "addr": "0x4b4e611823702285fd526d7a8a3b0aa99ab2dbcd", "name": "HDLT", "decimals": 18 },
+    { "addr": "0x42d6622dece394b54999fbd73d108123806f6a18", "name": "SPANK", "decimals": 18 },
+    { "addr": "0x7b69b78cc7fee48202c208609ae6d1f78ce42e13", "name": "GOAL", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
