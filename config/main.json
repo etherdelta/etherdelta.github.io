@@ -34,7 +34,6 @@
     { "addr": "0xaf30d2a7e90d7dc361c8c4585e9bb7d2f6f15bc7", "name": "1ST", "decimals": 18 },
     { "addr": "0x936f78b9852d12f5cb93177c1f84fb8513d06263", "name": "GNTW", "decimals": 18 },
     { "addr": "0x01afc37f4f85babc47c0e2d0eababc7fb49793c8", "name": "GNTM", "decimals": 18 },
-    { "addr": "0xa74476443119a942de498590fe1f2454d7d4ac0d", "name": "GNT", "decimals": 18 },
     { "addr": "0x5c543e7ae0a1104f78406c340e9c64fd9fce5170", "name": "VSL", "decimals": 18 },
     { "addr": "0xac709fcb44a43c35f0da4e3163b117a17f3770f5", "name": "ARC", "decimals": 18 },
     { "addr": "0x14f37b574242d366558db61f3335289a5035c506", "name": "HKG", "decimals": 3 },
@@ -641,7 +640,18 @@
     { "addr": "0x1d9e20e581a5468644fe74ccb6a46278ef377f9e", "name": "CDRT", "decimals": 8 },
     { "addr": "0x4b4e611823702285fd526d7a8a3b0aa99ab2dbcd", "name": "HDLT", "decimals": 18 },
     { "addr": "0x42d6622dece394b54999fbd73d108123806f6a18", "name": "SPANK", "decimals": 18 },
-    { "addr": "0x7b69b78cc7fee48202c208609ae6d1f78ce42e13", "name": "GOAL", "decimals": 18 }
+    { "addr": "0x7b69b78cc7fee48202c208609ae6d1f78ce42e13", "name": "GOAL", "decimals": 18 },
+    { "addr": "0x494bbaf0124285e6ecb4dfd9eac76e18a9bf470f", "name": "ETHX", "decimals": 18 },
+    { "addr": "0x44830e5fbe354af3c1c8d405170c08d3bc8a2cd9", "name": "CENT", "decimals": 8 },
+    { "addr": "0xfeed1a53bd53ffe453d265fc6e70dd85f8e993b6", "name": "H2O", "decimals": 18 },
+    { "addr": "0xa823e6722006afe99e91c30ff5295052fe6b8e32", "name": "NEU", "decimals": 18 },
+    { "addr": "0xf04a8ac553fcedb5ba99a64799155826c136b0be", "name": "FLIXX", "decimals": 18 },
+    { "addr": "0x39013f961c378f02c2b82a6e1d31e9812786fd9d", "name": "SMS", "decimals": 3 },
+    { "addr": "0xffb99f90bcd96fe743796fd8eefaaa6617753e79", "name": "MMC2", "decimals": 0 },
+    { "addr": "0x1175a66a5c3343bbf06aa818bb482ddec30858e0", "name": "CIX", "decimals": 18 },
+    { "addr": "0x111111f7e9b1fe072ade438f77e1ce861c7ee4e3", "name": "CAT2", "decimals": 18 },
+    { "addr": "0x4bf3e4d2378a1256cbe1cd1c2a8bc9857b811282", "name": "DTB", "decimals": 0 },
+    { "addr": "0x5121e348e897daef1eef23959ab290e5557cf274", "name": "AI", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
