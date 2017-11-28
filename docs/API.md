@@ -161,15 +161,4 @@ You are limited to 12 requests per minute per IP address. Please make contact if
 
 ## Examples
 
-EtherDelta has provided [example trading bots](../bots) to illustrate working functionality:
-
- * [Maker](../bots/maker.js) -- a bot that places orders on both sides of the market.
- * [Taker](../bots/taker.js) -- a bot that trades against the best-available sell order.
-
-### Warning
-
-Please use these at your own risk. ALWAYS test with small amounts first.
-
-### Instructions
-
-Download the [bots directory](../bots), then run `npm install.` Enter your address and (optional) private key at the top of one of the example bots.
+EtherDelta has provided [example trading bots](https://github.com/etherdelta/bots) to illustrate working functionality.
