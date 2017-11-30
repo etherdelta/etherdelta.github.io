@@ -642,7 +642,7 @@
     { "addr": "0x42d6622dece394b54999fbd73d108123806f6a18", "name": "SPANK", "decimals": 18 },
     { "addr": "0x7b69b78cc7fee48202c208609ae6d1f78ce42e13", "name": "GOAL", "decimals": 18 },
     { "addr": "0x494bbaf0124285e6ecb4dfd9eac76e18a9bf470f", "name": "ETHX", "decimals": 18 },
-    { "addr": "0x44830e5fbe354af3c1c8d405170c08d3bc8a2cd9", "name": "CENT", "decimals": 8 },
+    { "addr": "0x44830e5fbe354af3c1c8d405170c08d3bc8a2cd9", "name": "ETHCEN", "decimals": 8 },
     { "addr": "0xfeed1a53bd53ffe453d265fc6e70dd85f8e993b6", "name": "H2O", "decimals": 18 },
     { "addr": "0xa823e6722006afe99e91c30ff5295052fe6b8e32", "name": "NEU", "decimals": 18 },
     { "addr": "0xf04a8ac553fcedb5ba99a64799155826c136b0be", "name": "FLIXX", "decimals": 18 },
@@ -663,7 +663,19 @@
     { "addr": "0x0f9b1d1d39118480cf8b9575419ea4e5189c88dd", "name": "WET", "decimals": 0 },
     { "addr": "0x18edc1b644839eed61c69e624e96bbd469a2ef52", "name": "ELC", "decimals": 18 },
     { "addr": "0x9901ed1e649c4a77c7fff3dfd446ffe3464da747", "name": "ENT", "decimals": 18 },
-    { "addr": "0x10c0337c42843e0b8ce743d7d5ff39b711f3ad82", "name": "WND", "decimals": 18 }
+    { "addr": "0x10c0337c42843e0b8ce743d7d5ff39b711f3ad82", "name": "WND", "decimals": 18 },
+    { "addr": "0xee9704a1d61aa2c1401e2303ac7e1f81c29ed860", "name": "CLASH", "decimals": 0 },
+    { "addr": "0x30cc0e266cf33b8eac6a99cbd98e39b890cfd69b", "name": "CLASSY", "decimals": 16 },
+    { "addr": "0x13f11c9905a08ca76e3e853be63d4f0944326c72", "name": "DIVI", "decimals": 18 },
+    { "addr": "0x9d5b592b687c887a5a34df5f9207adb2c2db3aec", "name": "ETBT", "decimals": 18 },
+    { "addr": "0xb4b1d2c217ec0776584ce08d3dd98f90ededa44b", "name": "CO2", "decimals": 18 },
+    { "addr": "0x0f513ffb4926ff82d7f60a05069047aca295c413", "name": "XSC", "decimals": 18 },
+    { "addr": "0xbf4a29269bf3a5c351c2af3a9c9ed81b07129ce4", "name": "KEN", "decimals": 18 },
+    { "addr": "0xc499ea948a1ad5d8eaf12abd2f67975c4dbe21aa", "name": "ANGL", "decimals": 18 },
+    { "addr": "0x80e7a4d750ade616da896c49049b7ede9e04c191", "name": "ASTR", "decimals": 4 },
+    { "addr": "0x5882d49d3511e09096cbbab7e19fbfb82f65f28d", "name": "BIONT", "decimals": 18 },
+    { "addr": "0x0bb217e40f8a5cb79adf04e1aab60e5abd0dfc1e", "name": "SWFTC", "decimals": 8 },
+    { "addr": "0x679badc551626e01b23ceecefbc9b877ea18fc46", "name": "CCO", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
