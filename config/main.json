@@ -675,7 +675,8 @@
     { "addr": "0x80e7a4d750ade616da896c49049b7ede9e04c191", "name": "ASTR", "decimals": 4 },
     { "addr": "0x5882d49d3511e09096cbbab7e19fbfb82f65f28d", "name": "BIONT", "decimals": 18 },
     { "addr": "0x0bb217e40f8a5cb79adf04e1aab60e5abd0dfc1e", "name": "SWFTC", "decimals": 8 },
-    { "addr": "0x679badc551626e01b23ceecefbc9b877ea18fc46", "name": "CCO", "decimals": 18 }
+    { "addr": "0x679badc551626e01b23ceecefbc9b877ea18fc46", "name": "CCO", "decimals": 18 },
+    { "addr": "0x0af44e2784637218dd1d32a322d44e603a8f0c6a", "name": "MTX", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
