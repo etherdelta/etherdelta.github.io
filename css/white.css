@@ -89,7 +89,7 @@ a.navbar-brand {
   height: calc(40vh - 61px);
 }
 .row-box.height5 {
-  height: calc(60vh - 101px);
+  height: calc(60vh - 135px);
 }
 .row-box.height6 {
   height: calc(40vh - 81px);
@@ -337,4 +337,39 @@ pre code {
 .ad {
   background: #fff;
   text-align: center;
+}
+
+.ttip {
+  position: relative;
+  display: inline-block;
+}
+
+.ttip .text {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.ttip .text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.ttip:hover .text {
+  visibility: visible;
 }
