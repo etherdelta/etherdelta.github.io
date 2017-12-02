@@ -693,7 +693,9 @@
     { "addr": "0x21692a811335301907ecd6343743791802ba7cfd", "name": "ADU", "decimals": 18 },
     { "addr": "0xb4bfa6b45e25ad12bb033ec8a5eff523b83cc9af", "name": "UAHPAY", "decimals": 18 },
     { "addr": "0x2604fa406be957e542beb89e6754fcde6815e83f", "name": "PKT", "decimals": 18 },
-    { "addr": "0x2fa32a39fc1c399e0cc7b2935868f5165de7ce97", "name": "PFR", "decimals": 8 }
+    { "addr": "0x2fa32a39fc1c399e0cc7b2935868f5165de7ce97", "name": "PFR", "decimals": 8 },
+    { "addr": "0x419c4db4b9e25d6db2ad9691ccb832c8d9fda05e", "name": "DRGN", "decimals": 18 },
+    { "addr": "0xe42ba5558b00d2e6109cc60412d5d4c9473fe998", "name": "IMC", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
