@@ -491,7 +491,6 @@
     { "addr": "0x999967e2ec8a74b7c8e9db19e039d920b31d39d0", "name": "TIE", "decimals": 18 },
     { "addr": "0x8bbf4dd0f11b3a535660fd7fcb7158daebd3a17e", "name": "EGASOLD", "decimals": 8 },
     { "addr": "0xb53a96bcbdd9cf78dff20bab6c2be7baec8f00f8", "name": "EGAS", "decimals": 8 },
-    { "addr": "0xb3203db25a01fa7950a860b42b899ad7da52ddd6", "name": "PLX", "decimals": 8 },
     { "addr": "0x4dc3643dbc642b72c158e7f3d2ff232df61cb6ce", "name": "AMB", "decimals": 18 },
     { "addr": "0xe3fa177acecfb86721cf6f9f4206bd3bd672d7d5", "name": "CTT", "decimals": 18 },
     { "addr": "0xeb7c20027172e5d143fb030d50f91cece2d1485d", "name": "EBTC", "decimals": 8 },
