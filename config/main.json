@@ -694,7 +694,12 @@
     { "addr": "0x2604fa406be957e542beb89e6754fcde6815e83f", "name": "PKT", "decimals": 18 },
     { "addr": "0x2fa32a39fc1c399e0cc7b2935868f5165de7ce97", "name": "PFR", "decimals": 8 },
     { "addr": "0x419c4db4b9e25d6db2ad9691ccb832c8d9fda05e", "name": "DRGN", "decimals": 18 },
-    { "addr": "0xe42ba5558b00d2e6109cc60412d5d4c9473fe998", "name": "IMC", "decimals": 18 }
+    { "addr": "0xe42ba5558b00d2e6109cc60412d5d4c9473fe998", "name": "IMC", "decimals": 18 },
+    { "addr": "0x342ba159f988f24f0b033f3cc5232377ee500543", "name": "RAC", "decimals": 18 },
+    { "addr": "0x06147110022b768ba8f99a8f385df11a151a9cc8", "name": "ACE", "decimals": 0 },
+    { "addr": "0x0f4ca92660efad97a9a70cb0fe969c755439772c", "name": "LEV", "decimals": 9 },
+    { "addr": "0x83cee9e086a77e492ee0bb93c2b0437ad6fdeccc", "name": "MNTP", "decimals": 18 },
+    { "addr": "0x05c7065d644096a4e4c3fe24af86e36de021074b", "name": "LCT", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
