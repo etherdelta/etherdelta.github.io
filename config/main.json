@@ -392,6 +392,7 @@
     { "addr": "0x1c4481750daa5ff521a2a7490d9981ed46465dbd", "name": "BCPT", "decimals": 18 },
     { "addr": "0x58ca3065c0f24c7c96aee8d6056b5b5decf9c2f8", "name": "GXC", "decimals": 10 },
     { "addr": "0x9397554c07f687b7a20d13c73350cc283765d509", "name": "SHLD", "decimals": 18 },
+    { "addr": "0x79869786f5053606ed2c1dFF8dB0E5d993a78eDa", "name": "BLU", "decimals": 18 },
     { "addr": "0x539efe69bcdd21a83efd9122571a64cc25e0282b", "name": "BLUE", "decimals": 8 },
     { "addr": "0x9af4f26941677c706cfecf6d3379ff01bb85d5ab", "name": "DRT", "decimals": 8 },
     { "addr": "0xde39e5e5a1b0eeb3afe717d6d011cae88d19451e", "name": "FUDD", "decimals": 8 },
