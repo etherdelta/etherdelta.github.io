@@ -40,7 +40,6 @@
             <li class="dropdown" id="tokensDropdown"></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="chat-button"><a href="javascript:;" class="js-gitter-toggle-chat-button">Chat</a></li>
             <li class="dropdown" id="helpDropdown"></li>
             <li class="dropdown" id="tokenGuidesDropdown"></li>
             <li class="dropdown" id="connection"></li>
@@ -109,17 +108,18 @@
                   <div class="tab-content">
                   <div role="tabpanel" class="tab-pane active" id="important">
                     <div style="margin: 12px;">
-                      <p style="color: #f00; font-weight: bold;">Notices</p>
+                      <p style="color: #f00; font-weight: bold;">URL & Status</p>
                       <p style="font-size: 12px;">
-                        The only official URL for EtherDelta is https://etherdelta.com. Bookmark it once and use the bookmark.
+                        The URL of this project is <a href="https://forkdelta.github.io">forkdelta.github.io</a>. Bookmark it once and use the bookmark.
                       </p>
                       <p style="font-size: 12px;">
-                        Do not send your tokens directly to the smart contract, or they will be lost and unrecoverable. Use the Deposit form (upper left) to send the proper deposit transaction.
+                        This interface is a fork of <a href="https://etherdelta.com">EtherDelta</a>. It interacts with the original API and contract.
                       </p>
+                      <p style="color: #f00; font-weight: bold;">How to Start Trading</p>
                       <p style="font-size: 12px;">
-                        The only official representatives in the chat room are ETHERDELTAZACK_TWITTER, ETHERDELTAREP1_TWITTER, ETHERDELTAREP2_TWITTER, ETHERDELTAREP3_TWITTER, ETHERDELTAREP4_TWITTER, and ETHERDELTAUX_TWITTER.
+                        <strong>Use the Deposit form (upper left) to put your funds (ETH and tokens) on the exchange.</strong> Do not send your tokens directly to the smart contract, or they will be lost and unrecoverable. ForkDelta cannot help you with funds incorrectly deposited to EtherDelta contract.
                       </p>
-                      <p style="color: #f00; font-weight: bold;">Disclaimer</p>
+                      <p style="color: #f00; font-weight: bold;">EtherDelta Disclaimer</p>
                       <p style="font-size: 12px;">
                         EtherDelta is a decentralized trading platform that lets
                         you trade Ether and Ethereum-based tokens directly with other users.
@@ -148,14 +148,8 @@
             <div class="row-header">
               <span class="trn">trades</span>
             </div>
-            <div class="row-box height7 scroll">
+            <div class="row-box height13 scroll">
               <div id="trades"></div>
-            </div>
-            <div class="row-header">
-              <span class="trn">updates</span>
-            </div>
-            <div class="row-box height6 scroll">
-              <a class="twitter-timeline" href="https://twitter.com/etherdelta" data-chrome="noheader nofooter transparent">Tweets by etherdelta</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
         </div>
       </div>
@@ -184,15 +178,8 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-75000235-4', 'auto');
+      ga('create', 'UA-112001937-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script>
-      ((window.gitter = {}).chat = {}).options = {
-        room: 'etherdelta/etherdelta.github.io',
-        activationElement: false
-      };
-    </script>
-    <script src="/js/sidecar.v1.js" async defer></script>
   </body>
 </html>
