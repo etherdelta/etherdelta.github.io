@@ -712,7 +712,18 @@
     { "addr": "0xf85feea2fdd81d51177f6b8f35f0e6734ce45f5f", "name": "CMT", "decimals": 18 },
     { "addr": "0xfdbc1adc26f0f8f8606a5d63b7d3a3cd21c22b23", "name": "1WO", "decimals": 8 },
     { "addr": "0x27f610bf36eca0939093343ac28b1534a721dbb4", "name": "WAND", "decimals": 18 },
-    { "addr": "0xe0c21b3f45fea3e5fdc811021fb1f8842caccad2", "name": "BITC", "decimals": 0 }
+    { "addr": "0xe0c21b3f45fea3e5fdc811021fb1f8842caccad2", "name": "BITC", "decimals": 0 },
+    { "addr": "0x3833dda0aeb6947b98ce454d89366cba8cc55528", "name": "SPHTX", "decimals": 18 },
+    { "addr": "0xc27a2f05fa577a83ba0fdb4c38443c0718356501", "name": "TAU", "decimals": 18 },
+    { "addr": "0xd0a4b8946cb52f0661273bfbc6fd0e0c75fc6433", "name": "STORM", "decimals": 18 },
+    { "addr": "0x5d65d971895edc438f465c17db6992698a52318d", "name": "NAS", "decimals": 18 },
+    { "addr": "0x107c4504cd79c5d2696ea0030a8dd4e92601b82e", "name": "BLT", "decimals": 18 },
+    { "addr": "0x81c9151de0c8bafcd325a57e3db5a5df1cebf79c", "name": "DAT", "decimals": 18 },
+    { "addr": "0x12b306fa98f4cbb8d4457fdff3a0a0a56f07ccdf", "name": "SXDT", "decimals": 18 },
+    { "addr": "0x70a72833d6bf7f508c8224ce59ea1ef3d0ea3a38", "name": "UTK", "decimals": 18 },
+    { "addr": "0x8a854288a5976036a725879164ca3e91d30c6a1b", "name": "GET", "decimals": 18 },
+    { "addr": "0xd2d6158683aee4cc838067727209a0aaf4359de3", "name": "BNTY", "decimals": 18 },
+    { "addr": "0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0", "name": "CAN", "decimals": 6 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
