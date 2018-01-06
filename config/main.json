@@ -720,6 +720,7 @@
     { "addr": "0x107c4504cd79c5d2696ea0030a8dd4e92601b82e", "name": "BLT", "decimals": 18 },
     { "addr": "0x81c9151de0c8bafcd325a57e3db5a5df1cebf79c", "name": "DAT", "decimals": 18 },
     { "addr": "0x12b306fa98f4cbb8d4457fdff3a0a0a56f07ccdf", "name": "SXDT", "decimals": 18 },
+    { "addr": "0x2c82c73d5b34aa015989462b2948cd616a37641f", "name": "SXUT", "decimals": 18 },
     { "addr": "0x70a72833d6bf7f508c8224ce59ea1ef3d0ea3a38", "name": "UTK", "decimals": 18 },
     { "addr": "0x8a854288a5976036a725879164ca3e91d30c6a1b", "name": "GET", "decimals": 18 },
     { "addr": "0xd2d6158683aee4cc838067727209a0aaf4359de3", "name": "BNTY", "decimals": 18 },
