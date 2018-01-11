@@ -725,7 +725,8 @@
     { "addr": "0x8a854288a5976036a725879164ca3e91d30c6a1b", "name": "GET", "decimals": 18 },
     { "addr": "0xd2d6158683aee4cc838067727209a0aaf4359de3", "name": "BNTY", "decimals": 18 },
     { "addr": "0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0", "name": "CAN", "decimals": 6 },
-    { "addr": "0x1961b3331969ed52770751fc718ef530838b6dee", "name": "BDG", "decimals": 18 }
+    { "addr": "0x1961b3331969ed52770751fc718ef530838b6dee", "name": "BDG", "decimals": 18 },
+    { "addr": "0x1063ce524265d5a3a624f4914acd573dd89ce988", "name": "AIX", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
