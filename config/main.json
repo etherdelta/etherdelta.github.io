@@ -43,7 +43,8 @@
     { "addr": "0xe94327d07fc17907b4db788e5adf2ed424addff6", "name": "REP", "decimals": 18 },
     { "addr": "0xaec2e87e0a235266d9c5adc9deb4b2e29b54d009", "name": "SNGLS", "decimals": 0 },
     { "addr": "0x4df812f6064def1e5e029f1ca858777cc98d2d81", "name": "XAUR", "decimals": 8 },
-    { "addr": "0xc66ea802717bfb9833400264dd12c2bceaa34a6d", "name": "MKR", "decimals": 18 },
+    { "addr": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2", "name": "MKR", "decimals": 18 },
+    { "addr": "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359", "name": "DAI", "decimals": 18 },
     { "addr": "0xe0b7927c4af23765cb51314a0e0521a9645f0e2a", "name": "DGD", "decimals": 9 },
     { "addr": "0xce3d9c3f3d302436d12f18eca97a3b00e97be7cd", "name": "EPOSY", "decimals": 18 },
     { "addr": "0x289fe11c6f46e28f9f1cfc72119aee92c1da50d0", "name": "EPOSN", "decimals": 18 },
@@ -728,7 +729,8 @@
     { "addr": "0x1961b3331969ed52770751fc718ef530838b6dee", "name": "BDG", "decimals": 18 },
     { "addr": "0x1063ce524265d5a3a624f4914acd573dd89ce988", "name": "AIX", "decimals": 18 },
     { "addr": "0xb5a5f22694352c15b00323844ad545abb2b11028", "name": "ICX", "decimals": 18 },
-    { "addr": "0x8eb24319393716668d768dcec29356ae9cffe285", "name": "AGI", "decimals": 8 }
+    { "addr": "0x8eb24319393716668d768dcec29356ae9cffe285", "name": "AGI", "decimals": 8 },
+    { "addr": "0xc66ea802717bfb9833400264dd12c2bceaa34a6d", "name": "MKROLD", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
