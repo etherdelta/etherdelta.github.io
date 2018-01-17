@@ -288,14 +288,6 @@ pre code {
   outline-offset: -5px;
 }
 
-.crowdsale-button {
-  background: #f4b042;
-  vertical-align: middle;
-  outline: 5px #fff solid;
-  outline-offset: -5px;
-  font-weight: bold;
-}
-
 .warning {
   color: #f00;
 }
