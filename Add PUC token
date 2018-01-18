@@ -1,0 +1,48 @@
+Hi
+
+Please Add PUC token.
+
+ERC20-TOKEN:(PUC)
+
+
+Website priject: http://price-s.info
+
+Explorer: https://etherscan.io/token/0xef6b4ce8c9bc83744fbcde2657b32ec18790458a
+
+Email: puc@price-s.info
+
+Reddit: https://www.reddit.com/tb/7mll2m
+
+Bitcointalk: https://bitcointalk.org/index.php?topic=2657718
+
+Twitter: https://twitter.com/pourcoin
+
+Github: https://github.com/pourcoin/pourcoin-PUC/projects
+
+http://www.abbreviations.com/term/1968786
+
+WhitePaper: http://price-s.info/wp-content/uploads/2017/12/pourcoinPUC.pdf
+
+
+Thanks
+
+
+
+
+
+PUC.ejs
+<blockquote>
+  <p>Pourcoin Project creates a secure and user-friendly marketplace for both buyers and sellers.</p>
+  <footer><a href="http://price-s.info" target="_blank">http://price-s.info</a></footer>
+</blockquote>
+
+
+
+
+main.json
+"addr": "0xef6b4ce8c9bc83744fbcde2657b32ec18790458a", "name": "PUC", "decimals": 0 },
+
+
+
+staging.json
+{ "addr": "0xef6b4ce8c9bc83744fbcde2657b32ec18790458a", "name": "PUC", "decimals": 0 },
