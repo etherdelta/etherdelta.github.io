@@ -733,7 +733,8 @@
     { "addr": "0xc66ea802717bfb9833400264dd12c2bceaa34a6d", "name": "MKROLD", "decimals": 18 },
     { "addr": "0x9720b467a710382a232a32f540bdced7d662a10b", "name": "VZT", "decimals": 18 },
     { "addr": "0x85e076361cc813a908ff672f9bad1541474402b2", "name": "TEL", "decimals": 2 },
-    { "addr": "0x4cc19356f2d37338b9802aa8e8fc58b0373296e7", "name": "SELFKEY", "decimals": 18 }
+    { "addr": "0x4cc19356f2d37338b9802aa8e8fc58b0373296e7", "name": "SELFKEY", "decimals": 18 },
+    { "addr": "0x9b7593aae6b48d02668808c2dfbfc4bef35ef957", "name": "DVN", "decimals": 18 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
