@@ -738,5 +738,5 @@
     { "addr": "0xcdcfc0f66c522fd086a1b725ea3c0eeb9f9e8814", "name": "AURA", "decimals": 18 },
     { "addr": "0xdA6cb58A0D0C01610a29c5A65c303e13e885887C", "name": "cV", "decimals": 18 }
   ],
-  "defaultPair": { "token": "PPT", "base": "ETH" }
+  "defaultPair": { "token": "DAI", "base": "ETH" }
 }
