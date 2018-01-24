@@ -736,7 +736,11 @@
     { "addr": "0x9e6b2b11542f2bc52f3029077ace37e8fd838d7f", "name": "HKN", "decimals": 8 },
     { "addr": "0xcc13fc627effd6e35d2d2706ea3c4d7396c610ea", "name": "IDXM", "decimals": 8 },
     { "addr": "0xcdcfc0f66c522fd086a1b725ea3c0eeb9f9e8814", "name": "AURA", "decimals": 18 },
-    { "addr": "0xdA6cb58A0D0C01610a29c5A65c303e13e885887C", "name": "cV", "decimals": 18 }
+    { "addr": "0xdA6cb58A0D0C01610a29c5A65c303e13e885887C", "name": "cV", "decimals": 18 },
+    { "addr": "0x5f53f7a8075614b699baad0bc2c899f4bad8fbbf", "name": "REBL", "decimals": 18 },
+    { "addr": "0x358D12436080a01A16f711014610F8a4c2C2d233", "name": "PXS", "decimals": 18 },
+    { "addr": "0xc7579bb99af590ec71c316e1ac4436c535039594", "name": "BAR", "decimals": 18 },
+    { "addr": "0xb8d8a92cafaf6c055bce8e53405d90be96d1a677", "name": "REDV", "decimals": 8 }
   ],
   "defaultPair": { "token": "DAI", "base": "ETH" }
 }
