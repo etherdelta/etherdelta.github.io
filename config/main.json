@@ -363,7 +363,7 @@
     { "addr": "0x13f1b7fdfbe1fc66676d56483e21b1ecb40b58e2", "name": "ACC", "decimals": 18 },
     { "addr": "0x6025f65f6b2f93d8ed1efedc752acfd4bdbcec3e", "name": "EGOLD", "decimals": 18 },
     { "addr": "0x3a1bda28adb5b0a812a7cf10a1950c920f79bcd3", "name": "FLP", "decimals": 18 },
-    { "addr": "0x90c88ccd74e57e016acae8ad1eaa12ecf4c06f33", "name": "IBTC", "decimals": 18 },
+    { "addr": "0x90c88ccd74e57e016acae8ad1eaa12ecf4c06f33", "name": "IBTCOLD", "decimals": 18 },
     { "addr": "0xc51c938c4d513780c66c722a41c197d3a89fa9a8", "name": "EBTG", "decimals": 8 },
     { "addr": "0x8f8221afbb33998d8584a2b05749ba73c37a938a", "name": "REQ", "decimals": 18 },
     { "addr": "0x72adadb447784dd7ab1f472467750fc485e4cb2d", "name": "WRC", "decimals": 6 },
@@ -741,7 +741,8 @@
     { "addr": "0x5f53f7a8075614b699baad0bc2c899f4bad8fbbf", "name": "REBL", "decimals": 18 },
     { "addr": "0x358D12436080a01A16f711014610F8a4c2C2d233", "name": "PXS", "decimals": 18 },
     { "addr": "0xc7579bb99af590ec71c316e1ac4436c535039594", "name": "BAR", "decimals": 18 },
-    { "addr": "0xb8d8a92cafaf6c055bce8e53405d90be96d1a677", "name": "REDV", "decimals": 8 }
+    { "addr": "0xb8d8a92cafaf6c055bce8e53405d90be96d1a677", "name": "REDV", "decimals": 8 },
+    { "addr": "0x0784dbabb6c6834bddfb7cfee116ba049e5dafab", "name": "IBTC", "decimals": 18 }
   ],
   "defaultPair": { "token": "DAI", "base": "ETH" }
 }
