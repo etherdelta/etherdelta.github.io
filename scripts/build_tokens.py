@@ -46,7 +46,6 @@ def inject_tokens(config_filename, tokens):
     suffix = []
     suffix_started = False
     for line in config_iterator:
-        print(line, line == '  ],\n')
         if line == '  ],\n':
             suffix_started = True
         if suffix_started:
@@ -67,12 +66,22 @@ def main(tokenbase_path):
     tokens_dir = path.join(tokenbase_path, "tokens")
     token_file_filter = lambda fname: fname.startswith("0x") and fname.endswith(".yaml")
 
+    symbols = set("ETH")
     tokens = [ETH_TOKEN, ]
     for defn_fname in filter(token_file_filter, listdir(tokens_dir)):
         with open(path.join(tokens_dir, defn_fname)) as f:
             defn = yaml.safe_load(f)
 
         listing_entry = make_listing_entry(defn)
+        if listing_entry["name"] in symbols:
+            find_symbol = lambda t: t["name"] == listing_entry["name"]
+            previous_assignment = next(filter(find_symbol, tokens), None)
+            print("ERROR: Duplicate token symbol", listing_entry["name"],
+                    "({})".format(listing_entry["addr"]),
+                    "previously assigned to", previous_assignment["addr"])
+            exit(2)
+
+        symbols.add(listing_entry["name"])
         tokens.append(listing_entry)
 
         guide = make_description_html(defn)
