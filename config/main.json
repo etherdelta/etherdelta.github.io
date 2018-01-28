@@ -576,6 +576,7 @@
     { "addr": "0xc029ba3dc12e1834571e821d94a07de0a01138ea", "name": "QBE", "decimals": 18 },
     { "addr": "0xc0c2ee1ce1fed8f6e2764363a36db3dd4cf10022", "name": "FBL", "decimals": 2 },
     { "addr": "0xc0eb85285d83217cd7c891702bcbc0fc401e2d9d", "name": "HVN", "decimals": 8 },
+    { "addr": "0xc14830e53aa344e8c14603a91229a0b925b0b262", "name": "PXBRL", "decimals": 8 },
     { "addr": "0xc27a2f05fa577a83ba0fdb4c38443c0718356501", "name": "TAU", "decimals": 18 },
     { "addr": "0xc324a2f6b05880503444451b8b27e6f9e63287cb", "name": "XUC", "decimals": 18 },
     { "addr": "0xc3951d77737733174152532e8b0f27e2c4e9f0dc", "name": "CLD", "decimals": 6 },
