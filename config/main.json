@@ -698,6 +698,7 @@
     { "addr": "0xe469c4473af82217b30cf17b10bcdb6c8c796e75", "name": "EXRN", "decimals": 0 },
     { "addr": "0xe4c07f4637df3a0354f9b42a1b3178dc573b8926", "name": "CZT", "decimals": 0 },
     { "addr": "0xe50365f5d679cb98a1dd62d6f6e58e59321bcddf", "name": "LA", "decimals": 18 },
+    { "addr": "0xe531642e9bb5d027e9c20e03284287b97919a9a5", "name": "FAITH", "decimals": 8 },
     { "addr": "0xe58aff48f738b4a719d1790587cdc91a3560d7e1", "name": "TMP", "decimals": 7 },
     { "addr": "0xe5a219d4db92a701e79b6e548803c8ce55138686", "name": "EUR_R", "decimals": 18 },
     { "addr": "0xe5a7c12972f3bbfe70ed29521c8949b8af6a0970", "name": "BLX", "decimals": 18 },
