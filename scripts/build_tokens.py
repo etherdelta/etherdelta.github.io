@@ -69,7 +69,8 @@ def main(tokenbase_path):
     symbols = set("ETH")
     tokens = [ETH_TOKEN, ]
     for defn_fname in filter(token_file_filter, listdir(tokens_dir)):
-        with open(path.join(tokens_dir, defn_fname)) as f:
+        with open(path.join(tokens_dir, defn_fname), encoding="utf8") as f:
+            print(defn_fname)
             defn = yaml.safe_load(f)
 
         listing_entry = make_listing_entry(defn)
@@ -86,7 +87,7 @@ def main(tokenbase_path):
 
         guide = make_description_html(defn)
         if guide:
-            with open("tokenGuides/{}.ejs".format(listing_entry["name"]), "w") as f:
+            with open("tokenGuides/{}.ejs".format(listing_entry["name"]), "w", encoding="utf8") as f:
                 f.write(guide)
 
     new_config = inject_tokens("config/main.json", tokens)
