@@ -1,12 +1,12 @@
-# EtherDelta API
+# ForkDelta API
 
-EtherDelta's API allows you to query orders, trades, deposits, and withdrawals. Since EtherDelta is a smart contract, it is also possible to get trades, deposits, and withdrawals from the Ethereum API (through an Ethereum node or Etherscan API). EtherDelta's orderbook is an off-chain mechanism (a list of cryptographically signed orders) that you can only access through this API. The API allows you to see existing orders or place a new one.
+ForkDelta's API allows you to query orders, trades, deposits, and withdrawals. Since ForkDelta is a smart contract, it is also possible to get trades, deposits, and withdrawals from the Ethereum API (through an Ethereum node or Etherscan API). ForkDelta's orderbook is an off-chain mechanism (a list of cryptographically signed orders) that you can only access through this API. The API allows you to see existing orders or place a new one.
 
 ## Server
 
-EtherDelta has one API endpoint. It is a Websocket API.
+ForkDelta has one API endpoint. It is a Websocket API.
 
- * `https://socket.etherdelta.com`
+ * `https://api.ForkDelta.com`
 
 ## Endpoints
 
@@ -131,7 +131,7 @@ This allows you to post an order. `order` should be a JSON object with the follo
 * `tokenGive`: the token you want to give (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
 * `amountGet`: the amount you want to get (in wei or the base unit of the token)
 * `tokenGet`: the token you want to get (use the zero address, `0x0000000000000000000000000000000000000000` for ETH)
-* `contractAddr`: the EtherDelta smart contract address
+* `contractAddr`: the ForkDelta smart contract address
 * `expires`: the block number when the order should expire
 * `nonce`: a random number
 * `user`: the address of the user placing the order
@@ -153,7 +153,7 @@ This will emit new deposits and withdrawals as they happen. Its structure will m
 
 ## Ethereum API
 
-With the exception of the off-chain orderbook, EtherDelta is entirely defined and executed by a smart contract. This API is mainly meant as a convenience so you don't have to deal with Ethereum for asking basic read-only questions like "what traded recently." Depositing, withdrawing, and trading, should all be done directly with the smart contract. For an overview of the smart contract, see the [smart contract overview](SMART_CONTRACT.md).
+With the exception of the off-chain orderbook, ForkDelta is entirely defined and executed by a smart contract. This API is mainly meant as a convenience so you don't have to deal with Ethereum for asking basic read-only questions like "what traded recently." Depositing, withdrawing, and trading, should all be done directly with the smart contract. For an overview of the smart contract, see the [smart contract overview](SMART_CONTRACT.md).
 
 ## Rate limit
 
@@ -161,4 +161,4 @@ You are limited to 12 requests per minute per IP address. Please make contact if
 
 ## Examples
 
-EtherDelta has provided [example trading bots](https://github.com/etherdelta/bots) to illustrate working functionality.
+EtherDelta has provided [example trading bots](https://github.com/EtherDelta/bots) to illustrate working functionality.
