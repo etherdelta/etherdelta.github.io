@@ -678,7 +678,7 @@
     { "addr": "0x08f8117155aa9414b67113a47ad269d47974e9dc", "name": "DHG", "decimals": 18 },
     { "addr": "0xb4c55b5a1faf5323e59842171c2492773a3783dd", "name": "BCDC", "decimals": 18 },
     { "addr": "0x31b5e97294e1afd6fff6ffe4cba89a344555f753", "name": "ALLY", "decimals": 18 },
-    { "addr": "0xa25d01d15fc0e3cdede1bebee4124394aae0db33", "name": "FLLW", "decimals": 18 },
+    { "addr": "0x0200412995f1baFef0D3F97C4E28Ac2515EC1eCE", "name": "FLLW", "decimals": 18 },
     { "addr": "0xbdc5bac39dbe132b1e030e898ae3830017d7d969", "name": "SNOV", "decimals": 18 },
     { "addr": "0x8ce9411df545d6b51a9bc52a89e0f6d1b54a06dd", "name": "ABS", "decimals": 0 },
     { "addr": "0x0af44e2784637218dd1d32a322d44e603a8f0c6a", "name": "MTX", "decimals": 18 },
