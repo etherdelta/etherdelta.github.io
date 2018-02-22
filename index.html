@@ -20,6 +20,7 @@
     
     <title>ForkDelta | Decentralized Ethereum Token Exchange</title>
     <meta name="description" content="ForkDelta is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange. Start trading cryptocurrency today." />
+    <meta name="twitter:widgets:autoload" content="off">
   </head>
 
   <body>
@@ -42,8 +43,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/black.css')"><i class="fa fa-square" aria-hidden="true"></i></a></li>
-            <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/white.css')"><i class="fa fa-square-o" aria-hidden="true"></i></a></li>
+            <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/black.css'); embedTwitter('dark')"><i class="fa fa-square" aria-hidden="true"></i></a></li>
+            <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/white.css'); embedTwitter('light')"><i class="fa fa-square-o" aria-hidden="true"></i></a></li>
             <li class="dropdown" id="tokensDropdown"></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -157,8 +158,12 @@
             <div class="row-header">
               <span class="trn">trades</span>
             </div>
-            <div class="row-box height13 scroll">
+            <div class="row-box height7 scroll">
               <div id="trades"></div>
+            </div>
+            <div class="row-box height6 scroll">
+              <div id="updates">
+              </div>
             </div>
         </div>
       </div>
@@ -189,6 +194,43 @@
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
       ga('create', 'UA-112001937-1', 'auto');
       ga('send', 'pageview');
+    </script>
+
+    <script>window.twttr = (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return t;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+
+      t._e = [];
+      t.ready = function(f) {
+        t._e.push(f);
+      };
+
+      return t;
+      }(document, "script", "twitter-wjs"));
+    </script>
+
+    <script>
+      function embedTwitter(theme) {
+        $('.twitter-timeline').remove();
+        twttr.widgets.createTimeline(
+          {
+            sourceType: 'profile',
+            screenName: 'ForkDelta'
+          },
+          document.getElementById('updates'),
+          {
+            theme: theme
+          }
+        )
+      }
+      twttr.ready(function () {
+        embedTwitter('dark')
+      })
     </script>
   </body>
 </html>
