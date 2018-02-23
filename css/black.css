@@ -13,7 +13,7 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
   font-family: 'Open Sans', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   background: #1E2B34;
   color: #ced2d5;
 }
@@ -460,7 +460,7 @@ pre code {
 #bs-example-navbar-collapse-1 .navbar-nav a {
   font-weight: bold;
   color: #15232c !important;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .navbar-nav > li > .dropdown-menu a {
@@ -497,7 +497,7 @@ pre code {
 }
 
 .form-horizontal .control-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   color: hsla(0,0%,100%,.8);
 }
