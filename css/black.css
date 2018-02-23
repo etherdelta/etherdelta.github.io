@@ -101,6 +101,7 @@ a.navbar-brand {
   background: #2f3d45;
   font-size: 16px;
   font-weight: bold;
+  text-transform: capitalize;
   color: #fff;
   border-bottom: 2px solid #18252E;
 }
@@ -134,12 +135,12 @@ a.navbar-brand {
 }
 .row-box.table-header {
   height: 35px;
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid #15232c;
   padding-top: 5px;
 }
 tr.table-header {
   height: 25px;
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid #666666;
   vertical-align:bottom;
 }
 
@@ -179,7 +180,7 @@ tr.clickable-row:hover {
 
 .row-box.nav-header {
   height: 35px;
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid #15232c;
 }
 
 .nav-tabs > li > a {
@@ -389,7 +390,7 @@ pre code {
 }
 
 #chartPrice [fill="#cccccc"] {
-  fill: #4da53c;
+  fill: #cccccc;
 }
 
 #chartPrice [fill="#ff0000"] {
