@@ -505,7 +505,7 @@ fieldset[disabled] .form-control {
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
-  color: #3d3d3d;
+  color: #fff;
   background-color: #1E2B34;
   opacity: 0.6;
 }
