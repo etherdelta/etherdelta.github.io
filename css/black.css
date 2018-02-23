@@ -687,6 +687,10 @@ fieldset[disabled] .form-control {
   color: #fff;
 }
 
+.ReactModal__Overlay.ReactModal__Overlay--after-open {
+    background-color: rgba(0,0,0,0.75) !important;
+}
+
 /* Small Devices, Tablets */
 @media only screen and (max-width : 768px) {
 	#balance {
