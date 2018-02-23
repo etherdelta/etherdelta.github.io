@@ -1,10 +1,5 @@
 @import 'https://fonts.googleapis.com/css?family=Open+Sans:400,700';
 
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 html,
 body {
   margin: 0;
@@ -17,6 +12,17 @@ body {
   font-size: 13px;
   background: #1E2B34;
   color: #ced2d5;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (min-resolution: 2dppx) {
+	body {
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-font-smoothing: subpixel-antialiased;
+	}
 }
 
 button:focus {
@@ -686,7 +692,7 @@ fieldset[disabled] .form-control {
 	#balance {
 		height: 330px;
 	}
-	
+
 	.row-box.height4 {
 		height: 400px;
 	}
