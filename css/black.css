@@ -612,6 +612,10 @@ fieldset[disabled] .form-control {
   background-color: #1B2831;
 }
 
+#trades {
+  overflow-x: hidden /* prevents the header from getting clipped at the top on FF on narrow windows. See https://github.com/forkdelta/forkdelta.github.io/issues/102 */
+}
+
 .fa.fa-spinner:before {
   content: "\f1ce";
   color: rgba(255, 255, 255, 0.7);
