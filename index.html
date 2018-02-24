@@ -20,6 +20,7 @@
     
     <title>ForkDelta | Decentralized Ethereum Token Exchange</title>
     <meta name="description" content="ForkDelta is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange. Start trading cryptocurrency today." />
+    <meta name="twitter:widgets:autoload" content="off">
   </head>
 
   <body>
@@ -114,6 +115,10 @@
                   <div class="tab-content">
                   <div role="tabpanel" class="tab-pane active" id="important">
                     <div style="margin: 12px;">
+                      <p>
+                        <a href="https://discord.gg/mMnRq7m" target="_blank"><img alt="Chat on Discord" src="https://img.shields.io/badge/chat-on%20discord-7289da.svg" /></a>
+                        <a href="https://www.reddit.com/r/ForkDelta" target="_blank"><img alt="Join us on Reddit" src="https://img.shields.io/badge/reddit-ForkDelta-red.svg" /></a>
+                      </p>
                       <p style="color: #f00; font-weight: bold;">URL & Status</p>
                       <p style="font-size: 12px;">
                         The URL of this project is <a href="https://forkdelta.github.io">forkdelta.github.io</a>. Bookmark it once and use the bookmark.
@@ -155,8 +160,12 @@
             <div class="row-header">
               <span class="trn">trades</span>
             </div>
-            <div class="row-box height13 scroll">
+            <div class="row-box height7 scroll">
               <div id="trades"></div>
+            </div>
+            <div class="row-box height2 scroll">
+              <div id="updates">
+              </div>
             </div>
         </div>
       </div>
@@ -187,6 +196,44 @@
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
       ga('create', 'UA-112001937-1', 'auto');
       ga('send', 'pageview');
+    </script>
+
+    <script>window.twttr = (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return t;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+
+      t._e = [];
+      t.ready = function(f) {
+        t._e.push(f);
+      };
+
+      return t;
+      }(document, "script", "twitter-wjs"));
+    </script>
+
+    <script>
+      function embedTwitter(theme) {
+        $('.twitter-timeline').remove();
+        twttr.widgets.createTimeline(
+          {
+            sourceType: 'profile',
+            screenName: 'ForkDelta'
+          },
+          document.getElementById('updates'),
+          {
+            theme: theme,
+            chrome: 'transparent'
+          }
+        )
+      }
+      twttr.ready(function () {
+        embedTwitter('dark')
+      })
     </script>
   </body>
 </html>
