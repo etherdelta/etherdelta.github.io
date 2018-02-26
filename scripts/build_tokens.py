@@ -68,7 +68,7 @@ def main(tokenbase_path):
 
     symbols = set("ETH")
     tokens = [ETH_TOKEN, ]
-    for defn_fname in filter(token_file_filter, listdir(tokens_dir)):
+    for defn_fname in sorted(map(lambda s: s.lower(), filter(token_file_filter, listdir(tokens_dir)))):
         with open(path.join(tokens_dir, defn_fname), encoding="utf8") as f:
             print(defn_fname)
             defn = yaml.safe_load(f)
