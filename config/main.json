@@ -713,7 +713,8 @@
     { "addr": "0xfdbc1adc26f0f8f8606a5d63b7d3a3cd21c22b23", "name": "1WO", "decimals": 8 },
     { "addr": "0x27f610bf36eca0939093343ac28b1534a721dbb4", "name": "WAND", "decimals": 18 },
     { "addr": "0xe0c21b3f45fea3e5fdc811021fb1f8842caccad2", "name": "BITC", "decimals": 0 },
-    { "addr": "0xce53a179047ebed80261689367c093c90a94cc08", "name": "EDT", "decimals": 8 }
+    { "addr": "0xce53a179047ebed80261689367c093c90a94cc08", "name": "EDT", "decimals": 8 },
+    { "addr": "0x2af989200e9cd8d3404b5b40f5e2f896302d9aa5", "name": "ECO", "decimals": 8 }
   ],
   "defaultPair": { "token": "PPT", "base": "ETH" }
 }
