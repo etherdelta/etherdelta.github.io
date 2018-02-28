@@ -338,6 +338,12 @@ pre code {
   background: #fff;
   text-align: center;
 }
+/**/
+.ad .ledger-img{
+  width: 600px;
+  margin-left: -16px;
+}
+
 
 .ttip {
   position: relative;
