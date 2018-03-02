@@ -5,3 +5,4 @@ storage_*
 report*
 .project
 .pydevproject
+.vscode

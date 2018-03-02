@@ -697,6 +697,8 @@ fieldset[disabled] .form-control {
 
 .ReactModal__Overlay.ReactModal__Overlay--after-open {
     background-color: rgba(0,0,0,0.75) !important;
+    /* z-index must be higher than navbar or you get issue #118 */
+    z-index: 1100
 }
 
 /* Small Devices, Tablets */
