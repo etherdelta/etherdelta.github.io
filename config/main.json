@@ -243,7 +243,6 @@
     { "addr": "0x3635e381c67252405c1c0e550973155832d5e490", "name": "JBC", "decimals": 18 },
     { "addr": "0x37256d58e298cacaa82aa0527d56521f1b19e1f5", "name": "EALP", "decimals": 18 },
     { "addr": "0x37f014c64d186eaf879c0033846b51924ce42584", "name": "MDT", "decimals": 0 },
-    { "addr": "0x382a71ecb288da8701428406a36ffa5d8f072d55", "name": "XUL", "decimals": 0 },
     { "addr": "0x3833dda0aeb6947b98ce454d89366cba8cc55528", "name": "SPHTX", "decimals": 18 },
     { "addr": "0x3839d8ba312751aa0248fed6a8bacb84308e20ed", "name": "Bez", "decimals": 18 },
     { "addr": "0x386467f1f3ddbe832448650418311a479eecfc57", "name": "MBRS", "decimals": 0 },
