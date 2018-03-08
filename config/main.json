@@ -51,6 +51,7 @@
     { "addr": "0x45e42d659d9f9466cd5df622506033145a9b89bc", "name": "NXC", "decimals": 3 },
     { "addr": "0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6", "name": "DCN", "decimals": 0 },
     { "addr": "0xb9e7f8568e08d5659f5d29c4997173d84cdf2607", "name": "SWT", "decimals": 18 },
+    { "addr": "0x9a794Dc1939F1d78fa48613b89B8f9d0A20dA00E", "name": "ABX", "decimals": 18 },
     { "addr": "0xb802b24e0637c2b87d2e8b7784c055bbe921011a", "name": "EMV", "decimals": 2 },
     { "addr": "0x6531f133e6deebe7f2dce5a0441aa7ef330b4e53", "name": "TIME", "decimals": 8 },
     { "addr": "0xbeb9ef514a379b997e0798fdcc901ee474b6d9a1", "name": "MLN", "decimals": 18 },
