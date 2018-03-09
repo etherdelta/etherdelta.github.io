@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cat new_tokens.csv | while IFS=, read -r col1 col2
+do
+	./add "$col1" "$col2" 
+done
