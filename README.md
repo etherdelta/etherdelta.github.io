@@ -1,2 +1,2 @@
 coinEstate....
-A free decentralized marketplace community where every Tokens are tradable!
+Decentralized marketplace community where every Tokens are tradable!
