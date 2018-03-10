@@ -3,7 +3,7 @@ html,body {
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Calibri', sans-serif;
   background: #fff;
 }
 
@@ -36,8 +36,8 @@ html,body {
 }
 
 .sell {
-  color: #f00;
+  color: #84F766;
 }
 .buy {
-  color: #0f0;
+  color: #37f984;
 }
