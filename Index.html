@@ -1,197 +1,487 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>About RYXEX</title>
-    <meta name="description" content="About RYXEX">
-    <link rel="icon" href="img/favicon.png" sizes="32x32" type="image/png">
-    <!-- custom.css -->
-    <link rel="stylesheet" href="css/custom.css">
-    <!-- bootstrap.min.css -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-	<!-- font-awesome -->
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="/images/favicon.png" rel="icon" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
+    <link href="/css/alertify.min.css" rel="stylesheet" />
+    <link href="/css/alertify-bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/black.css" rel="stylesheet" id="stylesheet" />
+    <link href="/css/small.css" rel="stylesheet" media="only screen and (max-device-width: 480px)" />
+
+    <meta property="og:url" content="https://somidax.github.io" />
+    <meta property="og:title" content="RYXEX | Decentralized Ethereum Token Exchange />
+    <meta property="og:description" content="RYXEX is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange. Start trading cryptocurrency today." />
+    <meta property="og:image" content="https://RYXEX.github.io/images/logo.png" />
     
-    <!-- AOS -->
-    <link rel="stylesheet" href="css/aos.css">
-</head>
+    <title>RYXEX</title>
+    <meta name="description" content="RYXEX is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange. Start trading cryptocurrency today." />
+    <meta name="twitter:widgets:autoload" content="off">
+  </head>
 
-<body>
-    <!-- banner -->
-    <div class="jumbotron jumbotron-fluid" id="banner" style="background-image: url(img/banner-bk.jpg);">
-        <div class="container text-center text-md-left">
-            <header>
-                <div class="row justify-content-between">
-                    <div class="col-5">
-                        <img src="img/logo.png" alt="logo">
-                    </div>
-                    <div class="col-5 align-self-center text-right">
-                        <a href="#" class="text-white lead">Learn How to Trade</a>
-                    </div>
-                </div>
-            </header>
-            <h1 data-aos="fade" data-aos-easing="linear" data-aos-duration="1000" data-aos-once="true" class="display-3 text-white font-weight-bold my-5">
-            	The Decentralised Exchange<br>
-            	Your Money That You Control, Always.
-            </h1>
-            <p data-aos="fade" data-aos-easing="linear" data-aos-duration="1000" data-aos-once="true" class="lead text-white my-4">
-                Welcome to the first UK based decetralised cryptocurrency trading exchange.
-                <br> Based on the Ethereum blockchain enabling trading between Ethereum and ERC20 tokens. 
-            </p>
-            <a href=" https://somidax.github.io/coinEstate/" data-aos="fade" data-aos-easing="linear" data-aos-duration="1000" data-aos-once="true" class="btn my-4 text-white font-weight-bold atlas-cta cta-green">Start Trading</a>
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only" id="toggleNavigation" class="trn">toggle_navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img src="/images/title.png" alt="Engineered p2p Exchange" />
+          </a>
         </div>
-    </div>
-    <!-- three-blcok -->
-    <div class="container my-5 py-2">
-        <h2 class="text-center font-weight-bold my-5">No Hassles, Just Simplicity.</h2>
-        <div class="row">
-            <div data-aos="fade-up" data-aos-delay="0" data-aos-duration="1000" data-aos-once="true" class="col-md-4 text-center">
-                <img src="img/smart-protect-1.jpg" alt="Anti-spam" class="mx-auto">
-                <h4>No Registrations</h4>
-                <p>No need to register, you don't want to give us your personal details and we don't want them either.</p>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="dropdown" id="tokensDropdown"></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://goo.gl/forms/i0PqhS7d8lYf8WQy1"><i class="fa fa-file-text"></i> Token Listing</a></li>
+            <li><a href="/about/"><i class="fa fa-info-circle"></i> About RYXEX</a></li>
+            <li style="display: none;" class="dropdown" id="helpDropdown"></li>
+            <li class="dropdown" id="tokenGuidesDropdown"></li>
+            <li class="dropdown" id="connection"></li>
+            <li class="dropdown" id="languages"></li>
+            <li class="dropdown" id="accounts"></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 no-float">
+          <div class="row-container">
+            <div class="row-header trn">balance</div>
+            <div id="balance"></div>
+            <div class="row-header trn">volume</div>
+            <div id="volume"></div>
+          </div>
+        </div>
+        <div class="col-md-2 no-float">
+          <div class="row-container">
+            <div class="row-header trn">order_book</div>
+            <div id="orders"></div>
+            <div class="row-header trn">new_order</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs two columns" role="tablist">
+                <li role="presentation" class="active"><a href="#buy" aria-controls="buy" role="tab" data-toggle="tab" class="trn">buy</a></li>
+                <li role="presentation"><a href="#sell" aria-controls="sell" role="tab" data-toggle="tab" class="trn">sell</a></li>
+              </ul>
             </div>
-            <div data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000" data-aos-once="true" class="col-md-4 text-center">
-                <img src="img/smart-protect-2.jpg" alt="Phishing Detect" class="mx-auto">
-                <h4>No Logins</h4>
-                <p>No need to login with an username or anything, meaning an anonymous trade book and less idle time waiting to trade.  </p>
+            <div class="row-box height4 padding">
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="buy"></div>
+                <div role="tabpanel" class="tab-pane" id="sell"></div>
+              </div>
             </div>
-            <div data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000" data-aos-once="true" class="col-md-4 text-center">
-                <img src="img/smart-protect-3.jpg" alt="Smart Scan" class="mx-auto">
-                <h4>Blockchain Intergrated</h4>
-                <p>All trades recorded on the Ethereum blockchain meaning no trades will be lost or forgotten.</p>
+          </div>
+        </div>
+        <div class="col-md-4 no-float">
+          <div class="row-container">
+            <div class="row-header trn">price_chart</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs two columns" role="tablist">
+                <li role="presentation" class="active"><a href="#chartPrice" aria-controls="chartPrice" role="tab" data-toggle="tab" class="trn">price</a></li>
+                <li role="presentation"><a href="#chartDepth" aria-controls="chartDepth" role="tab" data-toggle="tab" class="trn">depth</a></li>
+              </ul>
+            </div>
+            <div class="row-box height2">
+              <div class="tab-content" style="height: 100%;">
+                <div role="tabpanel" class="tab-pane active" id="chartPrice" style="height: 100%; width: 100%; background: #000;"></div>
+                <div role="tabpanel" class="tab-pane" id="chartDepth" style="height: 100%; width: 100%; background: #000;"></div>
+              </div>
+            </div>
+            <div class="row-header trn">my_transactions</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs four columns" role="tablist">
+                <li role="presentation" class="active"><a href="#Trollbox" aria-controls="Trollbox" role="tab" data-toggle="tab" class="trn">Trollbox</a></li>
+                <li role="presentation"><a href="#myTrades" aria-controls="myTrades" role="tab" data-toggle="tab" class="trn">trades</a></li>
+                <li role="presentation"><a href="#myOrders" aria-controls="myOrders" role="tab" data-toggle="tab" class="trn">orders</a></li>
+                <li role="presentation"><a href="#myFunds" aria-controls="myFunds" role="tab" data-toggle="tab" class="trn">funds</a></li>
+              </ul>
+            </div>
+            <div class="row-box">
+                <div class="row-box height2">
+                  <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="Trollbox">
+<script src="https://www.shoutbox.com/chat/chat.js.php"></script>
+<script> var chat = new Chat(10381);</script>
+<style >
+@import url(//fonts.googleapis.com/css?family=Abel);
+#emailAdmin, #passwordAdmin, #loginAdminBtn, #forgottenEmail, #sendMyPasswordBtn {
+    border: 1px solid #333;
+    padding: 2px;
+    margin: 0px;
+    width: calc(100% - 30px);
+}
+.configPanel label {
+	margin-left:5px;
+	margin-top:20px;
+}
+#forgottenBtn {
+	cursor:pointer;
+	transition-duration:0.5s;
+}
+#forgottenBtn:hover  {
+	color:blue;
+	transition-duration:0.5s;
+}
+.changeUsernameBtn {
+	float:right;
+	border:1px solid #666;
+	font-size:0.8em;
+	padding:2px;
+	cursor:pointer;
+  color:#2e2e2e;
+}
+#changePassword1, #changePassword2 {
+    border: 1px solid #333;
+    padding: 2px;
+    width: calc(50% - 15px);
+    margin: 5px;	
+}
+#saveBtn {
+	float:right;
+	cursor:pointer;
+	border: 1px solid #333;
+	margin-right:15px;
+}
+.changeUsernameBtn:hover {
+	color:#fb9f27;
+}
+ #loginAdminBtn, #sendMyPasswordBtn {
+	 cursor:pointer;
+ }
+  #loginAdminBtn:hover, #sendMyPasswordBtn:hover {
+	  background-color: #888;
+  }
+.adShoutBox {
+	font-size:0em;
+	float:left;
+}
+.adminCog {
+	display: none;
+  z-index: 3;
+    position: absolute;
+    right: 0px;
+    top: 0px;	
+}
+.adminCog i {
+	cursor:pointer;
+}
+.error {
+    text-align: center;
+    color: red;
+	font-weight:bold;
+    clear: both;
+}
+.shoutBoxContainer {
+	position: relative;
+  	width:100%;
+	height: calc(40vh - 25px);
+	border:0px solid  #2e2e2e;
+	padding:0px;
+	font-size:12px;
+	font-family: 'Abel', sans-serif;
+	border-radius:3px;
+  background-color: #2e2e2e;
+	
+}
+.adminShoutBoxInput {
+	background-color: #fb9f27;
+}
+.shoutBoxHeader {
+	display: none;
+  border:0px solid #2e2e2e;
+	padding:0px;
+	background-color:#2e2e2e;
+	cursor:pointer;
+	z-index:1;
+	position:absolute;
+	left:5px;
+	right:5px;
+	box-shadow: 0px 0px 0px 0px #2e2e2e;
+  -webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;	
+}
+.shoutServerText {
+	border:0px solid #fff;
+	border-radius:5px;
+	padding:4px;
+	margin-bottom:3px;
+	margin-top:3px;	
+	margin-right:5px;
+	background-color:rgba(255, 255, 255, 0.0);
+  color: #45ff8f;
+}
+.shoutText {
+	font-size:1em;
+	border:0px solid #2e2e2e;
+	border-radius:3px;
+	padding:4px;
+	margin-bottom:3px;
+	margin-top:3px;	
+	margin-right:5px;
+	background-color:rgba(255, 255, 255, 0.0);
+  
+}
+
+
+.shoutboxBanBtn {
+	font-size:0.8em;
+	float:right;
+	float:right;
+	cursor:pointer;
+	display:none;
+	background-color:grey;
+	border:1px solid #000;
+	margin:1px;
+	padding:1px;
+	
+}
+.shoutboxDelBtn {
+	font-size:0.8em;
+	float:right;
+	float:right;
+	cursor:pointer;
+	display:none;
+	border:1px solid #000;
+	margin:1px;
+	padding:1px;
+}
+
+.shoutDate {
+	font-size:0.9em;
+}
+.shoutBoxAvatar {
+	width:0px;
+	height:0px;
+	margin-right: 0px;
+	border-radius: 0px;
+}
+#shoutBoxUserList {
+	overflow:hidden;
+	max-height:100%;
+	overflow-y:scroll;
+	display:none;
+}
+.shoutBoxUserItem {
+	border-bottom:1px solid #bbb;
+}
+.shoutBoxUserItem:hover {
+	background-color:#ddd;
+}
+.shoutText {
+	font-size:1em;
+  color: #fff;
+	border:1px solid #2e2e2e;
+	border-radius:2px;
+	padding:1px;
+	margin-bottom:1px;
+	margin-top:1px;	
+	margin-right:1px;
+	background-color:#2e2e2e;
+}
+.shoutText:hover {
+	background-color:#2e2e2e;
+}
+#shoutBoxHeaderText {
+	display:inline-block;
+	
+}
+.shoutChat {
+  position:absolute;
+	left:15px;
+	right:15px;
+	top:5px;
+	bottom:37px;
+  	overflow-y : scroll;
+	overflow-x : hidden;
+
+
+}
+						       
+.shoutSound {
+	sound: off
+						       
+}
+						       
+.shoutInputRed {
+	background-color:#fb9f27;
+
+}
+
+.shoutInput {
+	position: absolute;
+	bottom: 00px;
+	left:5px;
+	right:5px;
+	border-top:1px solid #CCC;
+	padding-top: 4px;
+	padding-bottom: 5px;
+	
+}
+:focus {outline:none;border:0px solid grey}
+
+.shoutInput input {
+width: calc(100% - 0px);
+    color: black;
+    border-radius: 3px;
+    border: 1px solid #2e2e2e;
+	box-sizing: border-box;
+    padding-left: 0px;
+    /* padding-left: 10px; */
+    /* padding-right: 10px; */
+}
+.shoutUserText {
+	font-weight: bold;
+	font-size:0.8em;
+}
+
+::-webkit-scrollbar
+{
+  width: 1px;  /* for vertical scrollbars */
+}
+
+::-webkit-scrollbar-track
+{
+  background: rgba(0, 0, 0, 0.0);
+  border-radius:1px;
+}
+
+::-webkit-scrollbar-thumb
+{
+  background: rgba(0, 0, 0, 0.0);
+  border-radius:1px;
+}
+
+.privateChat {
+	width:250px;
+	height:250px;
+	background-color:red;
+	position: absolute;
+	bottom: 0px;
+	right: 0px;	
+}
+
+.configPanel {
+    padding-top: 30px;
+    z-index: 1;
+	display:none;
+	position:absolute;
+	top:0px;
+	left:0px;
+	bottom:0px;
+	right:0px;
+	background-color: #fff;
+
+}
+
+
+</style>                                     
+                                                       </div>
+                  <div role="tabpanel" class="tab-pane" id="myTrades"></div>
+                  <div role="tabpanel" class="tab-pane" id="myOrders"></div>
+                  <div role="tabpanel" class="tab-pane" id="myFunds"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 no-float">
+          <div class="row-container">
+            <div class="row-header">
+              <span class="trn">trades</span>
+            </div>
+            <div class="row-box height7 scroll">
+              <div id="trades"></div>
+            </div>
+            <div class="row-box height2 scroll">
+              <div id="updates">
+              </div>
             </div>
         </div>
-    </div>
-    <!-- feature (skew background) -->
-    <div class="jumbotron jumbotron-fluid feature" id="feature-first">
-        <div class="container my-5">
-            <div class="row justify-content-between text-center text-md-left">
-                <div data-aos="fade-right" data-aos-duration="1000" data-aos-once="true" class="col-md-6">
-                    <h2 class="font-weight-bold">Trade any token</h2>
-                    <p class="my-4">Because it is dectralised exchange, you can trade any token on the Ethereum Blockchain.
-                        <br> Regardless of whether it is officially listed or not. You control what you want to trade.</p>
-                    <a href="https://etherscan.io/address/0x8d12a197cb00d4747a1fe03395095ce2a5cc6819" class="btn my-4 font-weight-bold atlas-cta cta-blue">See The Smart Contract</a>
-                </div>
-                <div data-aos="fade-left" data-aos-duration="1000" data-aos-once="true" class="col-md-6 align-self-center">
-                    <img src="img/feature-1.png" alt="Take a look inside" class="mx-auto d-block">
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- feature (green background) -->
-    <div class="jumbotron jumbotron-fluid feature" id="feature-last">
-        <div class="container">
-            <div class="row justify-content-between text-center text-md-left">
-                <div data-aos="fade-left" data-aos-duration="1000" data-aos-once="true" class="col-md-6 flex-md-last">
-                    <h2 class="font-weight-bold">Safe and reliable</h2>
-                    <p class="my-4">
-                        Using Metamask or Ledger etc you will remain safe using RYXEX as the orders are all blockchain integrated and bound by the smart contract that only you control.
-                    </p>
-                    <a href="https://www.cryptocompare.com/wallets/guides/how-to-use-metamask/" class="btn my-4 font-weight-bold atlas-cta cta-blue">Learn More</a>
-                </div>
-                <div data-aos="fade-right" data-aos-duration="1000" data-aos-once="true" class="col-md-6 align-self-center flex-md-first">
-                    <img src="img/feature-2.png" alt="Safe and reliable" class="mx-auto d-block">
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <!-- price table -->
-    <div class="container my-5 py-2" id="price-table">
-        <h2 class="text-center font-weight-bold d-block mb-3">Check our fees</h2>
-        <div class="row">
-            <div data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000" data-aos-once="true" class="col-md-4 text-center py-4 mt-5">
-                <h4 class="my-4">DEPOSITS</h4>
-                <p class="font-weight-bold"> <span class="display-2 font-weight-bold">0.00%</span></p>
-                <ul class="list-unstyled">
-                </ul>
-            </div>
-            <div data-aos="fade-up" data-aos-duration="1000" data-aos-once="true" class="col-md-4 text-center py-4 mt-5 rounded" id="price-table__premium">
-                <h4 class="my-4">MAKER</h4>
-                <p class="font-weight-bold"><span class="display-2 font-weight-bold">0.00%</span></p>
-                <ul class="list-unstyled">
-                </ul>
-            </div>
-            <div data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000" data-aos-once="true" class="col-md-4 text-center py-4 mt-5">
-                <h4 class="my-4">TAKER</h4>
-                <p class="font-weight-bold"><span class="display-2 font-weight-bold">0.00%</span></p>
-                <ul class="list-unstyled">
-                </ul>
-            </div>
-        </div>
-	    <br>
-                    <p class="text-center my-4"> There are no fees for deposits and trading with RYXEX for the forseeable future, our fees come from official listings and advertising only.</p>
-    </div>
-    <!-- contact -->
-    <div class="jumbotron jumbotron-fluid" id="contact" style="background-image: url(img/contact-bk.jpg);">
-        <div class="container my-5">
-            <div class="row justify-content-between">
-                <div class="col-md-6 text-white">
-                    <h2 class="font-weight-bold">Contact Us</h2>
-                    <p class="my-4">
-                        Feel free to get in contact with us about listings, advertising or careers. 
-			  <br> Or even if it is just that you need a little help to start trading!
-                    </p>
-                    <ul class="list-unstyled">
-                        <li>Email : RYXEX@mail.com</li>
-                        <li>Address : RYXEX, Kemp House, 152-160 City Road, London, EC1V 2NX, UK</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <form>
-                    	<div class="row">
-	                        <div class="form-group col-md-6">
-	                            <label for="name">Your Name</label>
-	                            <input type="name" class="form-control" id="name">
-	                        </div>
-	                        <div class="form-group col-md-6">
-	                            <label for="Email">Your Email</label>
-	                            <input type="email" class="form-control" id="Email">
-	                        </div>
-	                    </div>
-	                    <div class="form-group">
-	                        <label for="message">Message</label>
-	                        <textarea class="form-control" id="message" rows="3"></textarea>
-	                    </div>
-                        <button type="submit" class="btn font-weight-bold atlas-cta atlas-cta-wide cta-white my-3">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="buyTrade"></div>
+    <div id="sellTrade"></div>
+    <div id="importAccount"></div>
+    <div id="otherToken"></div>
+    <div id="gasPrice"></div>
+    <div id="tokenGuide"></div>
+    <div id="screencast"></div>
+    <div id="ledger"></div>
 
-	<!-- copyright -->
-	<div class="jumbotron jumbotron-fluid" id="copyright">
-        <div class="container">
-            <div class="row justify-content-between">
-            	<div class="col-md-6 text-white align-self-center text-center text-md-left my-2">
-                    Copyright © 2018 RYXEX.
-                </div>
-                <div class="col-md-6 align-self-center text-center text-md-right my-2" id="social-media">
-                    <a href="https://www.facebook.com/ryxexchange/" class="d-inline-block text-center ml-2">
-                    	<i class="fa fa-facebook" aria-hidden="true"></i>
-                    </a>
-                    <a href="https://twitter.com/ryxex_exchange" class="d-inline-block text-center ml-2">
-                    	<i class="fa fa-twitter" aria-hidden="true"></i>
-                    </a>
-                    <a href="https://medium.com/@ryxexchange" class="d-inline-block text-center ml-2">
-                    	<i class="fa fa-medium" aria-hidden="true"></i>
-                    </a>
-                    <a href="https://www.reddit.com/r/RYXEX/" class="d-inline-block text-center ml-2">
-                    	<i class="fa fa-reddit" aria-hidden="true"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- AOS -->
-    <script src="js/aos.js"></script>
+    <script src="/js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="/js/jquery.translate.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/alertify.min.js" type="text/javascript"></script>
+    <script src="/js/ejs_production.js" type="text/javascript"></script>
+    <script src="/js/chrome-u2f-api.js" type="text/javascript"></script>
+    <script src="/js/ledger.min.js" type="text/javascript"></script>
+    <script src="/js/main.js" type="text/javascript"></script>
+
     <script>
-      AOS.init({
-      });
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-112001937-1', 'auto');
+      ga('send', 'pageview');
     </script>
-</body>
 
+    <script>window.twttr = (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return t;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+
+      t._e = [];
+      t.ready = function(f) {
+        t._e.push(f);
+      };
+
+      return t;
+      }(document, "script", "twitter-wjs"));
+    </script>
+
+    <script>
+      function embedTwitter(theme) {
+        $('.twitter-timeline').remove();
+        twttr.widgets.createTimeline(
+          {
+            sourceType: 'profile',
+            screenName: 'RYXEX_EXCHANGE'
+          },
+          document.getElementById('updates'),
+          {
+            theme: theme,
+            chrome: 'transparent'
+          }
+        )
+      }
+      twttr.ready(function () {
+        embedTwitter('dark')
+      })
+    </script>
+  </body>
 </html>
