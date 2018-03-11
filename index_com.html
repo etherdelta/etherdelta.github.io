@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="/images/favicon.ico" rel="icon" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
+    <link href="/css/alertify.min.css" rel="stylesheet" />
+    <link href="/css/alertify-bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/black.css" rel="stylesheet" id="stylesheet" />
+    <link href="/css/small.css" rel="stylesheet" media="only screen and (max-device-width: 480px)" />
+    <title>EtherDelta</title>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only" id="toggleNavigation" class="trn">toggle_navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">
+            <img src="/images/title.png" />
+          </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/black.css')"><i class="fa fa-square" aria-hidden="true"></i></a></li>
+            <li><a href="javascript:;" onclick="document.getElementById('stylesheet').setAttribute('href', '/css/white.css')"><i class="fa fa-square-o" aria-hidden="true"></i></a></li>
+            <li class="dropdown" id="tokensDropdown"></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="chat-button"><a href="javascript:;" class="js-gitter-toggle-chat-button">Chat</a></li>
+            <li class="dropdown" id="helpDropdown"></li>
+            <li class="dropdown" id="tokenGuidesDropdown"></li>
+            <li class="dropdown" id="connection"></li>
+            <li class="dropdown" id="languages"></li>
+            <li class="dropdown" id="accounts"></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 no-float">
+          <div class="row-container">
+            <div class="row-header trn">balance</div>
+            <div id="balance"></div>
+            <div class="row-header trn">volume</div>
+            <div id="volume"></div>
+          </div>
+        </div>
+        <div class="col-md-2 no-float">
+          <div class="row-container">
+            <div class="row-header trn">order_book</div>
+            <div id="orders"></div>
+            <div class="row-header trn">new_order</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs two columns" role="tablist">
+                <li role="presentation" class="active"><a href="#buy" aria-controls="buy" role="tab" data-toggle="tab" class="trn">buy</a></li>
+                <li role="presentation"><a href="#sell" aria-controls="sell" role="tab" data-toggle="tab" class="trn">sell</a></li>
+              </ul>
+            </div>
+            <div class="row-box height3 padding">
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="buy"></div>
+                <div role="tabpanel" class="tab-pane" id="sell"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 no-float">
+          <div class="row-container">
+            <div class="row-header trn">price_chart</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs two columns" role="tablist">
+                <li role="presentation" class="active"><a href="#chartPrice" aria-controls="chartPrice" role="tab" data-toggle="tab" class="trn">price</a></li>
+                <li role="presentation"><a href="#chartDepth" aria-controls="chartDepth" role="tab" data-toggle="tab" class="trn">depth</a></li>
+              </ul>
+            </div>
+            <div class="row-box height2">
+              <div class="tab-content" style="height: 100%;">
+                <div role="tabpanel" class="tab-pane active" id="chartPrice" style="height: 100%; width: 100%; background: #000;"></div>
+                <div role="tabpanel" class="tab-pane" id="chartDepth" style="height: 100%; width: 100%; background: #000;"></div>
+              </div>
+            </div>
+            <div class="row-header trn">my_transactions</div>
+            <div class="row-box nav-header">
+              <ul class="nav nav-tabs four columns" role="tablist">
+                <li role="presentation" class="active"><a href="#important" aria-controls="info" role="tab" data-toggle="tab" class="trn">important</a></li>
+                <li role="presentation"><a href="#myTrades" aria-controls="myTrades" role="tab" data-toggle="tab" class="trn">trades</a></li>
+                <li role="presentation"><a href="#myOrders" aria-controls="myOrders" role="tab" data-toggle="tab" class="trn">orders</a></li>
+                <li role="presentation"><a href="#myFunds" aria-controls="myFunds" role="tab" data-toggle="tab" class="trn">funds</a></li>
+              </ul>
+            </div>
+            <div class="row-box">
+                <div class="row-box height2 scroll">
+                  <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="important">
+                    <div style="margin: 12px;">
+                      <p style="color: #f00; font-weight: bold;">Notices</p>
+                      <p style="font-size: 12px;">
+                        The only official URL for EtherDelta is https://etherdelta.com. Bookmark it once and use the bookmark.
+                      </p>
+                      <p style="font-size: 12px;">
+                        Do not send your tokens directly to the smart contract, or they will be lost and unrecoverable. Use the Deposit form (upper left) to send the proper deposit transaction.
+                      </p>
+                      <p style="font-size: 12px;">
+                        The only official representatives in the chat room are ETHERDELTAZACK_TWITTER, ETHERDELTAREP1_TWITTER, ETHERDELTAREP2_TWITTER, ETHERDELTAREP3_TWITTER, ETHERDELTAREP4_TWITTER, and ETHERDELTAUX_TWITTER.
+                      </p>
+                      <p style="color: #f00; font-weight: bold;">Disclaimer</p>
+                      <p style="font-size: 12px;">
+                        EtherDelta is a decentralized trading platform that lets
+                        you trade Ether and Ethereum-based tokens directly with other users.
+                        You are responsible for your own account, funds, and private keys.
+                        You are responsible for your own trading decisions, and the details
+                        and mechanics of the tokens you trade.
+                        EtherDelta is not responsible for your decisions, actions, or losses that result from
+                        using EtherDelta. EtherDelta makes no guarantee about the tokens that you trade using
+                        EtherDelta. EtherDelta does not hold your funds and does not offer refunds.
+                        While the information contained on EtherDelta is periodically updated, no guarantee is given
+                        that the information provided on EtherDelta is correct, complete, or up-to-date.
+                        By using EtherDelta, you acknowledge this and agree to these terms.
+                      </p>
+                    </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="myTrades"></div>
+                  <div role="tabpanel" class="tab-pane" id="myOrders"></div>
+                  <div role="tabpanel" class="tab-pane" id="myFunds"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 no-float">
+          <div class="row-container">
+            <div class="row-header">
+              <span class="trn">trades</span>
+            </div>
+            <div class="row-box height7 scroll">
+              <div id="trades"></div>
+            </div>
+            <div class="row-header">
+              <span class="trn">updates</span>
+            </div>
+            <div class="row-box height6 scroll">
+              <a class="twitter-timeline" href="https://twitter.com/etherdelta" data-chrome="noheader nofooter transparent">Tweets by etherdelta</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="buyTrade"></div>
+    <div id="sellTrade"></div>
+    <div id="importAccount"></div>
+    <div id="otherToken"></div>
+    <div id="gasPrice"></div>
+    <div id="tokenGuide"></div>
+    <div id="screencast"></div>
+    <div id="ledger"></div>
+
+    <script src="/js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="/js/jquery.translate.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/js/alertify.min.js" type="text/javascript"></script>
+    <script src="/js/ejs_production.js" type="text/javascript"></script>
+    <script src="/js/chrome-u2f-api.js" type="text/javascript"></script>
+    <script src="/js/ledger.min.js" type="text/javascript"></script>
+    <script src="/js/main.js" type="text/javascript"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-75000235-4', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script>
+      ((window.gitter = {}).chat = {}).options = {
+        room: 'etherdelta/etherdelta.github.io',
+        activationElement: false
+      };
+    </script>
+    <script src="/js/sidecar.v1.js" async defer></script>
+  </body>
+</html>
