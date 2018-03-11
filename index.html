@@ -1,487 +1,452 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="/images/favicon.png" rel="icon" />
-    <link href="/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
-    <link href="/css/alertify.min.css" rel="stylesheet" />
-    <link href="/css/alertify-bootstrap.min.css" rel="stylesheet" />
-    <link href="/css/black.css" rel="stylesheet" id="stylesheet" />
-    <link href="/css/small.css" rel="stylesheet" media="only screen and (max-device-width: 480px)" />
+html>
+	<head>
+		
+		<title>CoinEstate Trading Hub | Start Trading Now!</title>
+		<meta name="description" content="Learn about coinEstate today! ForkDelta is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange." />
+		
+		<meta property="og:url" content="https://somidax.github.io" />
+	    <meta property="og:title" content="About ForkDelta | Roadmaps, FAQs, and more!" />
+	    <meta property="og:description" content="Learn about ForkDelta today! ForkDelta is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange." />
+	    <meta property="og:image" content="https://forkdelta.github.io/images/logo.png" />
 
-    <meta property="og:url" content="https://somidax.github.io" />
-    <meta property="og:title" content="RYXEX | Decentralized Ethereum Token Exchange />
-    <meta property="og:description" content="RYXEX is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange. Start trading cryptocurrency today." />
-    <meta property="og:image" content="https://RYXEX.github.io/images/logo.png" />
-    
-    <title>RYXEX</title>
-    <meta name="description" content="RYXEX is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange. Start trading cryptocurrency today." />
-    <meta name="twitter:widgets:autoload" content="off">
-  </head>
+		<link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+				integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+				crossorigin="anonymous"></script>
 
-  <body>
+		<script>
+			
+			$(document).ready(function($) {
+				//if page loaded with a hash, smooth scroll to it
+				if (window.location.hash !== '') {
+					scroll_to_hash(window.location.hash);
+				}
+				//bind accordion
+				$('#faqs').find('.accordion-toggle').click(function(){
+					//Expand or collapse this panel
+					$(this).next().slideToggle('fast');
+					//Hide the other panels
+					$(".accordion-content").not($(this).next()).slideUp('fast');
+				});
+				// Add smooth scrolling to nav links
+				$("a.hash").on('click', function(event) {
+					event.preventDefault();
+					scroll_to_hash(this.hash);
+					window.location.hash = this.hash;
+				});
+			});
+			function scroll_to_hash(hash) {
+				if (hash === '#roadmap') {
+					var offsettop = 0;
+				} else {
+					var offsettop = $('a[name="' + hash + '"]').offset().top;
+				}
+				$('html, body').animate({
+					scrollTop: offsettop,
+				}, 1000);
+			}
+		</script>
 
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only" id="toggleNavigation" class="trn">toggle_navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">
-            <img src="/images/title.png" alt="Engineered p2p Exchange" />
-          </a>
-        </div>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				background: #f7f7f7;
+				font-family: Segoe UI;
+				padding: 70px 0;
+			}
+			h1 {
+			  text-align: center;
+			  font-size: 3rem;
+			  font-weight: 200;
+			  margin-bottom: 20px;
+			}
+			h2 {
+				text-align: center;
+				font-size: 2rem;
+				font-weight: 200;
+			}
+			a {
+				text-decoration: none;
+			}
+			
+			img {
+				width: 100%;
+			}
+			.header {
+			    position: fixed;
+			    top: 0;
+			    left: 0;
+			    width: 100%;
+			    text-align: center;
+			    /* position: relative; */
+			    z-index: 9;
+			    background: #FFF;
+			    box-shadow: 0px 1px 22px 4px rgba(0, 0, 0, 0.07);
+			}
+			.header a {
+			    padding: 20px 30px;
+			    display: inline-block;
+			    text-decoration: none;
+			    color: #394b59;
+			}
+			.header a:hover {
+				color: #fe5f2c;
+			}
+			.content {
+				width: 1000px;
+				margin: 0 auto;
+				border:1px solid #E0E0E0;
+				padding:12px;
+				color:#212121;
+				background:#FFF;
+				font-size:15px;
+				line-height:1.45em;
+				box-shadow: 0px 1px 22px 4px rgba(0, 0, 0, 0.07);
+			}
+			/* accordion css */
+			#faqs {
+				width: 1000px;
+				box-shadow: 0px 1px 22px 4px rgba(0, 0, 0, 0.07);
+				margin: 0 auto;
+			}
+			.accordion-toggle,
+			.accordion-content {
+				width: 100%;
+				margin: 0 auto;
+			}
+			.accordion-toggle {
+				cursor: pointer;
+				background:#394b59;
+				padding:12px;
+				cursor:pointer;
+				border-right:1px solid #2d3d4a;
+				border-left:1px solid #2d3d4a;
+				border-bottom:1px solid #2d3d4a;
+				min-height:20px;
+				transition:.25s;
+				font-size:18px;
+				font-weight: normal;
+				line-height: 1.3em;
+				color:#ffffff;
+			}
+			.accordion-content {
+				display: none;
+				border-left:1px solid #E0E0E0;
+				border-right:1px solid #E0E0E0;
+				border-bottom:1px solid #E0E0E0;
+				padding:12px;
+				color:#212121;
+				background:#FFF;
+				font-size:15px;
+				line-height:1.45em;
+			}
+			.accordion-content.open { display: block; }
+			/* timeline css */
+			.timeline .demo-card-wrapper {
+			  position: relative;
+			  margin: auto;
+			}
+			.timeline .demo-card-wrapper::after {
+			  z-index: 1;
+			  content: "";
+			  position: absolute;
+			  top: 0;
+			  bottom: 0;
+			  left: 50%;
+			  border-left: 1px solid rgba(191, 191, 191, 0.4);
+			}
+			.timeline .demo-card {
+			  position: relative;
+			  display: block;
+			  margin: 10px auto;
+			  z-index: 2;
+			  max-width: 1000px;
+			  box-shadow: 0px 1px 22px 4px rgba(0, 0, 0, 0.07);
+			}
+			.timeline .demo-card .head {
+			  position: relative;
+			  display: flex;
+			  align-items: center;
+			  color: #fff;
+			  font-weight: 400;
+			}
+			.timeline .demo-card .head .number-box {
+			  display: inline;
+			  float: left;
+			  margin: 15px;
+			  padding: 10px;
+			  font-size: 35px;
+			  line-height: 35px;
+			  font-weight: 600;
+			  background: rgba(0, 0, 0, 0.17);
+			}
+			.timeline .demo-card .head h2 {
+			  font-size: 24px;
+			  font-weight: inherit;
+			  letter-spacing: 2px;
+			  margin: 0;
+			  padding-bottom: 6px;
+			  line-height: 26px;
+			  text-align: left;
+			}
+			.timeline .demo-card .head h2 span {
+			  display: block;
+			  font-size: 18px;
+			  text-transform: uppercase;
+			  margin: 0;
+			}
+			@media (min-width: 480px) {
+			  .timeline .demo-card .head h2 span {
+			    font-size: 0.8rem;
+			  }
+			}
+			.timeline .demo-card {
+				background: #394b59;
+			}
+			.timeline .demo-card.green {
+				background: #77DD77;
+			}
+		</style>
+	</head>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="dropdown" id="tokensDropdown"></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="https://goo.gl/forms/i0PqhS7d8lYf8WQy1"><i class="fa fa-file-text"></i> Token Listing</a></li>
-            <li><a href="/about/"><i class="fa fa-info-circle"></i> About RYXEX</a></li>
-            <li style="display: none;" class="dropdown" id="helpDropdown"></li>
-            <li class="dropdown" id="tokenGuidesDropdown"></li>
-            <li class="dropdown" id="connection"></li>
-            <li class="dropdown" id="languages"></li>
-            <li class="dropdown" id="accounts"></li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
+	<body>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3 no-float">
-          <div class="row-container">
-            <div class="row-header trn">balance</div>
-            <div id="balance"></div>
-            <div class="row-header trn">volume</div>
-            <div id="volume"></div>
-          </div>
-        </div>
-        <div class="col-md-2 no-float">
-          <div class="row-container">
-            <div class="row-header trn">order_book</div>
-            <div id="orders"></div>
-            <div class="row-header trn">new_order</div>
-            <div class="row-box nav-header">
-              <ul class="nav nav-tabs two columns" role="tablist">
-                <li role="presentation" class="active"><a href="#buy" aria-controls="buy" role="tab" data-toggle="tab" class="trn">buy</a></li>
-                <li role="presentation"><a href="#sell" aria-controls="sell" role="tab" data-toggle="tab" class="trn">sell</a></li>
-              </ul>
-            </div>
-            <div class="row-box height4 padding">
-              <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="buy"></div>
-                <div role="tabpanel" class="tab-pane" id="sell"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 no-float">
-          <div class="row-container">
-            <div class="row-header trn">price_chart</div>
-            <div class="row-box nav-header">
-              <ul class="nav nav-tabs two columns" role="tablist">
-                <li role="presentation" class="active"><a href="#chartPrice" aria-controls="chartPrice" role="tab" data-toggle="tab" class="trn">price</a></li>
-                <li role="presentation"><a href="#chartDepth" aria-controls="chartDepth" role="tab" data-toggle="tab" class="trn">depth</a></li>
-              </ul>
-            </div>
-            <div class="row-box height2">
-              <div class="tab-content" style="height: 100%;">
-                <div role="tabpanel" class="tab-pane active" id="chartPrice" style="height: 100%; width: 100%; background: #000;"></div>
-                <div role="tabpanel" class="tab-pane" id="chartDepth" style="height: 100%; width: 100%; background: #000;"></div>
-              </div>
-            </div>
-            <div class="row-header trn">my_transactions</div>
-            <div class="row-box nav-header">
-              <ul class="nav nav-tabs four columns" role="tablist">
-                <li role="presentation" class="active"><a href="#Trollbox" aria-controls="Trollbox" role="tab" data-toggle="tab" class="trn">Trollbox</a></li>
-                <li role="presentation"><a href="#myTrades" aria-controls="myTrades" role="tab" data-toggle="tab" class="trn">trades</a></li>
-                <li role="presentation"><a href="#myOrders" aria-controls="myOrders" role="tab" data-toggle="tab" class="trn">orders</a></li>
-                <li role="presentation"><a href="#myFunds" aria-controls="myFunds" role="tab" data-toggle="tab" class="trn">funds</a></li>
-              </ul>
-            </div>
-            <div class="row-box">
-                <div class="row-box height2">
-                  <div class="tab-content">
-                  <div role="tabpanel" class="tab-pane active" id="Trollbox">
-<script src="https://www.shoutbox.com/chat/chat.js.php"></script>
-<script> var chat = new Chat(10381);</script>
-<style >
-@import url(//fonts.googleapis.com/css?family=Abel);
-#emailAdmin, #passwordAdmin, #loginAdminBtn, #forgottenEmail, #sendMyPasswordBtn {
-    border: 1px solid #333;
-    padding: 2px;
-    margin: 0px;
-    width: calc(100% - 30px);
-}
-.configPanel label {
-	margin-left:5px;
-	margin-top:20px;
-}
-#forgottenBtn {
-	cursor:pointer;
-	transition-duration:0.5s;
-}
-#forgottenBtn:hover  {
-	color:blue;
-	transition-duration:0.5s;
-}
-.changeUsernameBtn {
-	float:right;
-	border:1px solid #666;
-	font-size:0.8em;
-	padding:2px;
-	cursor:pointer;
-  color:#2e2e2e;
-}
-#changePassword1, #changePassword2 {
-    border: 1px solid #333;
-    padding: 2px;
-    width: calc(50% - 15px);
-    margin: 5px;	
-}
-#saveBtn {
-	float:right;
-	cursor:pointer;
-	border: 1px solid #333;
-	margin-right:15px;
-}
-.changeUsernameBtn:hover {
-	color:#fb9f27;
-}
- #loginAdminBtn, #sendMyPasswordBtn {
-	 cursor:pointer;
- }
-  #loginAdminBtn:hover, #sendMyPasswordBtn:hover {
-	  background-color: #888;
-  }
-.adShoutBox {
-	font-size:0em;
-	float:left;
-}
-.adminCog {
-	display: none;
-  z-index: 3;
-    position: absolute;
-    right: 0px;
-    top: 0px;	
-}
-.adminCog i {
-	cursor:pointer;
-}
-.error {
-    text-align: center;
-    color: red;
-	font-weight:bold;
-    clear: both;
-}
-.shoutBoxContainer {
-	position: relative;
-  	width:100%;
-	height: calc(40vh - 25px);
-	border:0px solid  #2e2e2e;
-	padding:0px;
-	font-size:12px;
-	font-family: 'Abel', sans-serif;
-	border-radius:3px;
-  background-color: #2e2e2e;
-	
-}
-.adminShoutBoxInput {
-	background-color: #fb9f27;
-}
-.shoutBoxHeader {
-	display: none;
-  border:0px solid #2e2e2e;
-	padding:0px;
-	background-color:#2e2e2e;
-	cursor:pointer;
-	z-index:1;
-	position:absolute;
-	left:5px;
-	right:5px;
-	box-shadow: 0px 0px 0px 0px #2e2e2e;
-  -webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;	
-}
-.shoutServerText {
-	border:0px solid #fff;
-	border-radius:5px;
-	padding:4px;
-	margin-bottom:3px;
-	margin-top:3px;	
-	margin-right:5px;
-	background-color:rgba(255, 255, 255, 0.0);
-  color: #45ff8f;
-}
-.shoutText {
-	font-size:1em;
-	border:0px solid #2e2e2e;
-	border-radius:3px;
-	padding:4px;
-	margin-bottom:3px;
-	margin-top:3px;	
-	margin-right:5px;
-	background-color:rgba(255, 255, 255, 0.0);
-  
-}
+		<div class="header">
+			<a href="https://forkdelta.github.io">Trade</a>
+			<a class="hash" href="#roadmap">Roadmap</a>
+			<a class="hash" href="#donate">Donate</a>
+			<a class="hash" href="#faqs">FAQs</a>
+		</div>
 
+		<a name="#roadmap"></a>
+		<h1>ForkDelta Roadmap</h1>
 
-.shoutboxBanBtn {
-	font-size:0.8em;
-	float:right;
-	float:right;
-	cursor:pointer;
-	display:none;
-	background-color:grey;
-	border:1px solid #000;
-	margin:1px;
-	padding:1px;
-	
-}
-.shoutboxDelBtn {
-	font-size:0.8em;
-	float:right;
-	float:right;
-	cursor:pointer;
-	display:none;
-	border:1px solid #000;
-	margin:1px;
-	padding:1px;
-}
+		<section class=timeline>
+			<div class="demo-card-wrapper">
+				<div class="demo-card green">
+					<div class="head">
+						<div class="number-box">
+							<span><i class="fa fa-check"></i></span>
+						</div>
+						<h2><span class="small">January 5th 2018</span> Fork EtherDelta</h2>
+					</div>
+				</div>
 
-.shoutDate {
-	font-size:0.9em;
-}
-.shoutBoxAvatar {
-	width:0px;
-	height:0px;
-	margin-right: 0px;
-	border-radius: 0px;
-}
-#shoutBoxUserList {
-	overflow:hidden;
-	max-height:100%;
-	overflow-y:scroll;
-	display:none;
-}
-.shoutBoxUserItem {
-	border-bottom:1px solid #bbb;
-}
-.shoutBoxUserItem:hover {
-	background-color:#ddd;
-}
-.shoutText {
-	font-size:1em;
-  color: #fff;
-	border:1px solid #2e2e2e;
-	border-radius:2px;
-	padding:1px;
-	margin-bottom:1px;
-	margin-top:1px;	
-	margin-right:1px;
-	background-color:#2e2e2e;
-}
-.shoutText:hover {
-	background-color:#2e2e2e;
-}
-#shoutBoxHeaderText {
-	display:inline-block;
-	
-}
-.shoutChat {
-  position:absolute;
-	left:15px;
-	right:15px;
-	top:5px;
-	bottom:37px;
-  	overflow-y : scroll;
-	overflow-x : hidden;
+				<div class="demo-card green">
+					<div class="head">
+						<div class="number-box">
+							<span><i class="fa fa-check"></i></span>
+						</div>
+						<h2><span class="small">January 24th 2018</span> Simplify Token Submission Process</h2>
+					</div>
+				</div>
 
+				<div class="demo-card green">
+					<div class="head">
+						<div class="number-box">
+							<span><i class="fa fa-check"></i></span>
+						</div>
+						<h2><span class="small">February 15th 2018</span> Launch New Order Processing Back End</h2>
+					</div>
+				</div>
 
-}
-						       
-.shoutSound {
-	sound: off
-						       
-}
-						       
-.shoutInputRed {
-	background-color:#fb9f27;
+				<div class="demo-card">
+					<div class="head">
+						<div class="number-box">
+							<span>Q1<br />2018</span>
+						</div>
+						<h2>Launch New Public API</h2>
+					</div>
+				</div>
 
-}
+				<div class="demo-card">
+					<div class="head">
+						<div class="number-box">
+							<span>Q1<br />2018</span>
+						</div>
+						<h2>Launch New Front End UI</h2>
+					</div>
+				</div>
 
-.shoutInput {
-	position: absolute;
-	bottom: 00px;
-	left:5px;
-	right:5px;
-	border-top:1px solid #CCC;
-	padding-top: 4px;
-	padding-bottom: 5px;
-	
-}
-:focus {outline:none;border:0px solid grey}
+				<div class="demo-card">
+					<div class="head">
+						<div class="number-box">
+							<span>Q2<br />2018</span>
+						</div>
+						<h2><span class="small">Q2 or Q3 2018</span> New Smart Contract (possibly 0x)</h2>
+					</div>
+				</div>
+		    
+			</div>
+		</section>
 
-.shoutInput input {
-width: calc(100% - 0px);
-    color: black;
-    border-radius: 3px;
-    border: 1px solid #2e2e2e;
-	box-sizing: border-box;
-    padding-left: 0px;
-    /* padding-left: 10px; */
-    /* padding-right: 10px; */
-}
-.shoutUserText {
-	font-weight: bold;
-	font-size:0.8em;
-}
+		<h2>Possible Future Changes</h2>
 
-::-webkit-scrollbar
-{
-  width: 1px;  /* for vertical scrollbars */
-}
+		<section class=timeline>
+			<div class="demo-card-wrapper">
+				<div class="demo-card">
+					<div class="head">
+						<div class="number-box">
+							<span><i class="fa fa-question"></i></span>
+						</div>
+						<h2><span class="small">TBD</span> Tokenized Method of Platform Ownership</h2>
+					</div>
+				</div>
 
-::-webkit-scrollbar-track
-{
-  background: rgba(0, 0, 0, 0.0);
-  border-radius:1px;
-}
+				<div class="demo-card">
+					<div class="head">
+						<div class="number-box">
+							<span><i class="fa fa-question"></i></span>
+						</div>
+						<h2><span class="small">TBD</span> Decentralized Order Book</h2>
+					</div>
+				</div>
 
-::-webkit-scrollbar-thumb
-{
-  background: rgba(0, 0, 0, 0.0);
-  border-radius:1px;
-}
+				<div class="demo-card">
+					<div class="head">
+						<div class="number-box">
+							<span><i class="fa fa-question"></i></span>
+						</div>
+						<h2><span class="small">TBD</span> Decentralized Hosting</h2>
+					</div>
+				</div>
+		    
+			</div>
+		</section>
 
-.privateChat {
-	width:250px;
-	height:250px;
-	background-color:red;
-	position: absolute;
-	bottom: 0px;
-	right: 0px;	
-}
+		<a name="#donate"></a>
+		<h1 style="margin-top: 120px;">Donate</h1>
+		<div class="content">
+			ForkDelta currently interfaces with EtherDelta's original smart contract which allows ForkDelta users to trade utilizing EtherDelta's volume. However, this means that the trading fees still go to EtherDelta and ForkDelta development costs come entirely out of our pockets. If you are interested in the ForkDelta project and would like to contribute to its future, please consider donating to the Ethereum address below.<br />
+			<h2><a href="https://etherscan.io/address/0x3a2aEdc3B54A99e429ae36637681d4560cE5C05b">0x3a2aEdc3B54A99e429ae36637681d4560cE5C05b</a></h2>
+			As this is a project by the community, for the community, transactions to and from the donations address will be public and can be viewed on the blockchain. We will also keep a public ledger of how the donations are distributed. That way, donors can see exactly how their donations are helping!
+		</div>
 
-.configPanel {
-    padding-top: 30px;
-    z-index: 1;
-	display:none;
-	position:absolute;
-	top:0px;
-	left:0px;
-	bottom:0px;
-	right:0px;
-	background-color: #fff;
+		<a name="#faqs"></a>
+		<h1 style="margin-top: 120px;">Frequently Asked Questions</h1>
 
-}
+		<div id="faqs">
 
+			<h4 class="accordion-toggle">What is ForkDelta?</h4>
+			<div class="accordion-content open">
+				ForkDelta is a decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange. ForkDelta currently acts as an open source, updated interface for EtherDelta's smart contract with an active and public development team.
+				<br /><br />
+				The official URL is <a href="https://forkdelta.github.io/">https://forkdelta.github.io/</a>
+			</div>
 
-</style>                                     
-                                                       </div>
-                  <div role="tabpanel" class="tab-pane" id="myTrades"></div>
-                  <div role="tabpanel" class="tab-pane" id="myOrders"></div>
-                  <div role="tabpanel" class="tab-pane" id="myFunds"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 no-float">
-          <div class="row-container">
-            <div class="row-header">
-              <span class="trn">trades</span>
-            </div>
-            <div class="row-box height7 scroll">
-              <div id="trades"></div>
-            </div>
-            <div class="row-box height2 scroll">
-              <div id="updates">
-              </div>
-            </div>
-        </div>
-      </div>
-    </div>
+			<h4 class="accordion-toggle">What is a decentralized exchange?</h4>
+			<div class="accordion-content">
+				A decentralized exchange is an exchange that doesn't rely on a centralized party to store user's funds and facilitate trades.
+				In ForkDelta's case, funds are stored in a smart contract hosted on the Ethereum network.
+				Trades also occur directly between users using the same smart contract.
+			</div>
 
-    <div id="buyTrade"></div>
-    <div id="sellTrade"></div>
-    <div id="importAccount"></div>
-    <div id="otherToken"></div>
-    <div id="gasPrice"></div>
-    <div id="tokenGuide"></div>
-    <div id="screencast"></div>
-    <div id="ledger"></div>
+			<h4 class="accordion-toggle">How is ForkDelta different from EtherDelta?</h4>
+			<div class="accordion-content">
+				ForkDelta started as a fork of EtherDelta when EtherDelta was sold to new owners who introduced questionable development decisions.
+				Considerable development time has been put towards a new token listing system, order book, API, and front-end UI all of which are at different stages of development and can be tracked on <a href="https://github.com/forkdelta/">GitHub</a>.
+				<br /><br />
+				ForkDelta prides itself on being an open, fair community with developers who are easily accessed and an open source codebase.<br />
+				At ForkDelta, we believe in direct and open streams of communication with the community.<br />
+				We pride ourselves on our availability in our <a href="https://discord.gg/MPvAfMa">Discord channel</a> and through comments on GitHub pull requests and issues.<br />
+				We welcome any feedback, criticism, ideas, and help that the community would like to give.<br />
+				ForkDelta does not and will not ever charge fees for token listings.<br />
+				ForkDelta also lists the most tokens of any exchange with new tokens added every day.<br />
+			</div>
 
-    <script src="/js/jquery-1.11.1.min.js" type="text/javascript"></script>
-    <script src="/js/jquery.translate.js" type="text/javascript"></script>
-    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="/js/alertify.min.js" type="text/javascript"></script>
-    <script src="/js/ejs_production.js" type="text/javascript"></script>
-    <script src="/js/chrome-u2f-api.js" type="text/javascript"></script>
-    <script src="/js/ledger.min.js" type="text/javascript"></script>
-    <script src="/js/main.js" type="text/javascript"></script>
+			<h4 class="accordion-toggle">How do I create an account?</h4>
+			<div class="accordion-content">
+				If you have an Ethereum wallet, you already have an account!
+				Simply link your Ethereum wallet using either MetaMask, Ledger, or importing your account directly using the dropdown in the top right of the trading view. 
+			</div>
 
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-112001937-1', 'auto');
-      ga('send', 'pageview');
-    </script>
+			<h4 class="accordion-toggle">How do I deposit funds?</h4>
+			<div class="accordion-content">
+				After you've selected an account, depositing funds is easy! In the Deposit/Withdraw/Transfer window in the top left, select Deposit, then select the amount of either Ethereum or tokens you would like to deposit. You will then be asked to sign or accept the transaction. Once the transaction has been sent, your funds are deposited securely into the smart contract on the Ethereum network. Then, you'll be able to trade on ForkDelta with those funds!<br />
+				For an example using MetaMask, watch the gif below.<br />
+				<img src="https://forkdelta.github.io/images/deposit.gif" />
+			</div>
 
-    <script>window.twttr = (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0],
-        t = window.twttr || {};
-      if (d.getElementById(id)) return t;
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://platform.twitter.com/widgets.js";
-      fjs.parentNode.insertBefore(js, fjs);
+			<h4 class="accordion-toggle">How do I withdraw funds?</h4>
+			<div class="accordion-content">
+				The withdrawal process is very similar to the deposit process. In the Deposit/Withdraw/Transfer window in the top left, select Withdraw, then select the amount of either Ethereum or tokens you would like to withdraw into the connected Ethereum account. You will then be asked to sign or accept the transaction. Once the transaction has been sent, your funds are withdrawn securely into your Ethereum account.<br />
+				For an example using MetaMask, watch the gif below.<br />
+				<img src="https://forkdelta.github.io/images/withdraw.gif" />
+			</div>
 
-      t._e = [];
-      t.ready = function(f) {
-        t._e.push(f);
-      };
+			<h4 class="accordion-toggle">How long does it take to withdraw or deposit funds?</h4>
+			<div class="accordion-content">
+				As ForkDelta depends on a smart contract hosted on the Ethereum network, the speed of transactions depends entirely on the speed of the Ethereum network. If you would like deposits, withdrawals, trades, or orders to be processed faster, you can increase the gas price for your transactions. Under normal loads, with a normal gas price, deposits and withdrawals shouldn't take longer than 5 minutes. However, when the Ethereum network is clogged, transactions could be delayed.<br />
+				<br />
+				For informatino on the current state of the Ethereum network, please go to <a href="https://ethgasstation.info/">EthGasStation</a>.
+			</div>
 
-      return t;
-      }(document, "script", "twitter-wjs"));
-    </script>
+			<h4 class="accordion-toggle">How do I select a token?</h4>
+			<div class="accordion-content">
+				In ForkDelta, you can trade any ERC20 token that is available on the Ethereum network. We do our best to list as many tokens as possible. The listed tokens can be found in a dropdown near the upper left section of ForkDelta. If you navigate to ForkDelta's home page, the drop down should default to DAI.<br />
+				<br />
+				However, there is another way to select which token to trade that works even if we haven't listed the token yet!<br />
+				Take a look at this URL: https://forkdelta.github.io/#!/trade/DAI-ETH<br />
+				If you would like to trade a token that is not listed on ForkDelta, simply replace DAI with that tokens contract address.<br />
+				Like so: https://forkdelta.github.io/#!/trade/0x12b306fa98f4cbb8d4457fdff3a0a0a56f07ccdf-ETH
+			</div>
 
-    <script>
-      function embedTwitter(theme) {
-        $('.twitter-timeline').remove();
-        twttr.widgets.createTimeline(
-          {
-            sourceType: 'profile',
-            screenName: 'RYXEX_EXCHANGE'
-          },
-          document.getElementById('updates'),
-          {
-            theme: theme,
-            chrome: 'transparent'
-          }
-        )
-      }
-      twttr.ready(function () {
-        embedTwitter('dark')
-      })
-    </script>
-  </body>
+			<h4 class="accordion-toggle">How do I place an order?</h4>
+			<div class="accordion-content">
+				After funds have been placed in the smart contract, you are ready to place or take an order. If you would like to create a buy or sell order instead of taking an order that already exists, first, find the New Order section. Then, select either buy or sell and enter in the token amount you would like to buy or sell, the price, the expiration time, and hit Buy/Sell. You will then be prompted to sign the transaction, so that it can be sent to the order book. Once a taker for your order has been found, ForkDelta will use that signed order to execute a trade using the smart contract on the Ethereum network.
+			</div>
+
+			<h4 class="accordion-toggle">Where are the market orders?</h4>
+			<div class="accordion-content">
+				ForkDelta does not currently have market orders, but it is something that we are working on. For updates on our progress on market orders, please take a look at <a href="https://github.com/forkdelta/nextgen-ui/issues/13">this GitHub issue</a>.<br />
+				We recommend specifying and taking existing orders to replicate a similar functionality to a market order.
+			</div>
+
+			<h4 class="accordion-toggle">How do I take an order?</h4>
+			<div class="accordion-content">
+				To take an existing order, simply click on the order you would like to take in the Order Book. You will be prompted with a window asking you to specify the amount you would like to take. After you hit the accompanying Buy or Sell button, you will then be prompted to sign the transaction, so that your trade can be sent to the smart contract. ForkDelta will give you a transaction ID and a link. You can track your trade status by either clicking the link, or copying the transaction ID and searching it on EtherScan.<br />
+				Trades don't always show up immediately on EtherScan and the speed of the transaction depends on the Ethereum network's congestion and your set gas price.
+			</div>
+
+			<h4 class="accordion-toggle">How do I cancel an order?</h4>
+			<div class="accordion-content">
+				To cancel an order, take a look at the My Transactions section and click the Orders tab. Your active orders will be listed there with a link to cancel them. You will be asked to sign a transaction in order to cancel the order.<br />
+				For an example using Metamask, watch the gif below:<br />
+				<img src="https://forkdelta.github.io/images/cancel.gif" />
+			</div>
+
+			<h4 class="accordion-toggle">What fees are associated?</h4>
+			<div class="accordion-content">
+				There are two trading fees while using the ForkDelta platform. The first is the small Ethereum fee for signing transactions to the Ethereum network. The second is a 0.3% fee on execution of orders. 
+			</div>
+
+			<h4 class="accordion-toggle">Where are the trading fees going?</h4>
+			<div class="accordion-content">
+				The fee for signing transactions on the Ethereum network goes directly to the miners on the network.<br />
+				As we are currently using EtherDelta's smart contract, the 0.3% fee is going to the EtherDelta team as specified in their smart contract. We hope to change this in the future, but would like to make sure we keep the necessary volume on this exchange.<br /><br />
+				If you are interested in supporting the ForkDelta project, please consider donating.
+			</div>
+
+			<h4 class="accordion-toggle">How do I get my token listed on ForkDelta?</h4>
+			<div class="accordion-content">
+				Any member of the ForkDelta community can request a token to be listed on ForkDelta by filing <a href="https://github.com/forkdelta/tokenbase/issues/new">an issue</a>.
+				<br /><br />
+				More information on the token listing process is available <a href="https://www.reddit.com/r/ForkDelta/comments/7tntnz/how_to_get_an_erc20_token_listed_on_forkdelta/">here</a>.
+			</div>
+
+			<h4 class="accordion-toggle">How do I change the default gas price?</h4>
+			<div class="accordion-content">
+				To change the default gas price, simply click the drop down in the top right of ForkDelta (where you previously set up your account), and click "Gas Price" at the bottom of that menu. Then, you can set your gas price using the Gwei denomination.
+			</div>
+
+			<h4 class="accordion-toggle">How do I use a Ledger directly with ForkDelta?</h4>
+			<div class="accordion-content">
+				First, you need to make sure that browser support and contract support are enabled on your Ledger. To do so, navigate to the Ethereum app on your Ledger, go into settings, and enable both browser support and contract support. Then, make sure your Ledger is connected to your computer and navigate to ForkDelta. Your Ledger address will appear in the account dropdown automatically, with a green "Ledger" box next to it. When you deposit, withdraw, place an order, or trade, you will have to approve the transaction on your Ledger.
+			</div>
+
+		</div>
+		
+	</body>
 </html>
