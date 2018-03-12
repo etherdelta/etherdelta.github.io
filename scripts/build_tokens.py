@@ -66,7 +66,7 @@ def main(tokenbase_path):
     tokens_dir = path.join(tokenbase_path, "tokens")
     token_file_filter = lambda fname: fname.startswith("0x") and fname.endswith(".yaml")
 
-    symbols = set("ETH")
+    symbols = set("eth")
     tokens = [ETH_TOKEN, ]
     for defn_fname in sorted(map(lambda s: s.lower(), filter(token_file_filter, listdir(tokens_dir)))):
         with open(path.join(tokens_dir, defn_fname), encoding="utf8") as f:
@@ -75,14 +75,14 @@ def main(tokenbase_path):
 
         listing_entry = make_listing_entry(defn)
         if listing_entry["name"] in symbols:
-            find_symbol = lambda t: t["name"] == listing_entry["name"]
+            find_symbol = lambda t: t["name"] == listing_entry["name"].lower()
             previous_assignment = next(filter(find_symbol, tokens), None)
             print("ERROR: Duplicate token symbol", listing_entry["name"],
                     "({})".format(listing_entry["addr"]),
                     "previously assigned to", previous_assignment["addr"])
             exit(2)
 
-        symbols.add(listing_entry["name"])
+        symbols.add(listing_entry["name"].lower())
         tokens.append(listing_entry)
 
         guide = make_description_html(defn)
