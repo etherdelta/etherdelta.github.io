@@ -4,12 +4,12 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
     http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd/sitemap.xsd">
  <url>
-  <loc>https://somidax.github.io/</loc>
+  <loc>https://coinestate.somidax.net/</loc>
  </url>
  <url>
-  <loc>https://somidax.github.io/about/</loc>
+  <loc>https://coinestate.somidax.net/about/</loc>
  </url>
  <url>
-  <loc>https://somidax.github.io/#!/trade/SMDX-ETH</loc>
+  <loc>https://coinestate.somidax.net/#!/trade/SMDX-ETH</loc>
  </url>
  </urlset>
