@@ -17,6 +17,6 @@ The Roadmap is maintained at https://tradewallet.somidax.net
 
 
 # Contribute
-We welcome contributions from the community. You can contribute by improving the code, documentation, or donating or by collaborating.coinEstate currently interfaces with EtherDelta's original smart contract which allows its users to trade utilizing EtherDelta's volume. However, this means that the trading fees still go to EtherDelta and coinEstate development costs come entirely from SOMIDAX DIGITAL LAB FOUNDATION. If you are interested in the coinEstate project and would like to contribute to its future, please consider sending an email to coinestate@somidax.net
+We welcome contributions from the community. You can contribute by improving the code, documentation, or donating or by collaborating. coinEstate currently interfaces with EtherDelta's original smart contract which allows its users to trade utilizing EtherDelta's volume. However, this means that the trading fees still go to EtherDelta and coinEstate development costs come entirely from SOMIDAX DIGITAL LAB FOUNDATION. If you are interested in the coinEstate project and would like to contribute to its future, please consider sending an email to coinestate@somidax.net
 
 As this is a project by the community, for the community, transactions to and from the donations address will be public and can be viewed on the blockchain. We will also keep a public ledger of how the donations are distributed. That way, donors can see exactly how their donations are helping!
