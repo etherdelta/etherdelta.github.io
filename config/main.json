@@ -913,41 +913,6 @@
     { "addr": "0xfeed1a53bd53ffe453d265fc6e70dd85f8e993b6", "name": "H2O", "decimals": 18 },
     { "addr": "0xff18dbc487b4c2e3222d115952babfda8ba52f5f", "name": "LIFE", "decimals": 18 },
     { "addr": "0xff3519eeeea3e76f1f699ccce5e23ee0bdda41ac", "name": "BCAP", "decimals": 0 },
-    { "addr": "0xffc63b9146967a1ba33066fb057ee3722221acf0", "name": "A", "decimals": 18 },
-    { "addr": "0xffe8196bc259e8dedc544d935786aa4709ec3e64", "name": "HDG", "decimals": 18 }
-  ],
-  "defaultPair": { "token": "DAI", "base": "ETH" }
-}
-{
-  "contractEtherDelta": "smart_contract/etherdelta.sol",
-  "contractToken": "smart_contract/token.sol",
-  "contractReserveToken": "smart_contract/reservetoken.sol",
-  "contractEtherDeltaAddrs": [
-    { "addr": "0x8d12a197cb00d4747a1fe03395095ce2a5cc6819", "info": "Deployed 02/09/2017 -- THE CURRENT SMART CONTRACT" },
-  ],
-  "ethTestnet": false,
-  "ethChainId": 1,
-  "ethProvider": "http://localhost:8545",
-  "ethGasPrice": 4000000000,
-  "ethAddr": "0x0000000000000000000000000000000000000000",
-  "ethAddrPrivateKey": "",
-  "gasApprove": 250000,
-  "gasDeposit": 250000,
-  "gasWithdraw": 250000,
-  "gasTrade": 250000,
-  "gasOrder": 250000,
-  "minOrderSize": 0.001,
-  "socketServer": ["https://somidax.github.io/coinEstate/."],
-  "userCookie": "coinEstate",
-  "eventsCacheCookie": "coinEstate_eventsCache",
-  "ordersCacheCookie": "coinEstate_ordersCache",
-  "etherscanAPIKey": "J61KH6J4RNH89TNID6N1B2QMPMX2VYD574",
-  "ledgerPath": "m/44'/60'/0'/0",
-  "bases": [
-    { "addr": "0x0000000000000000000000000000000000000000", "name": "ETH", "decimals": 18 }
-  ],
-  "tokens": [
-    { "addr": "0x0000000000000000000000000000000000000000", "name": "ETH", "decimals": 18 },
     { "addr": "0xd8912c10681d8b21fd3742244f44658dba12264e", "name": "PLU", "decimals": 18 },
     { "addr": "0x7e8539d1e5cb91d63e46b8e188403b3f262a949b", "name": "SMDX", "decimals": 18 },
    ],
