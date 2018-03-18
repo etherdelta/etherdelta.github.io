@@ -1,7 +1,7 @@
 
 # coinEstate
 
-Decentralized Ethereum token marketplace community where every Token are tradable with freedom for listing on the coinestate.
+Decentralized Ethereum token marketplace community where everyone are tradable with freedom for listing on the coinestate.
 
 
 # What is coinEstate?
