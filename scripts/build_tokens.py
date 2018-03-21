@@ -7,7 +7,7 @@ TOKEN_KEYS_MAPPING = { "addr": "addr", "symbol": "name", "decimals": "decimals" 
 def make_listing_entry(defn):
     token = { dst_key: defn[src_key] for (src_key, dst_key) in TOKEN_KEYS_MAPPING.items() }
     if "__FORKDELTA_CUSTOM_SYMBOL" in defn:
-        token["name"] = defn["__FORKDELTA_CUSTOM_SYMBOL"]
+        token["name"] = defn["__COINESTATE_CUSTOM_SYMBOL"]
     return token
 
 GUIDE_HTML_TEMPLATE = """<blockquote>
@@ -66,7 +66,7 @@ def main(tokenbase_path):
     tokens_dir = path.join(tokenbase_path, "tokens")
     token_file_filter = lambda fname: fname.startswith("0x") and fname.endswith(".yaml")
 
-    symbols = set("ETH")
+    symbols = set("eth")
     tokens = [ETH_TOKEN, ]
     for defn_fname in sorted(map(lambda s: s.lower(), filter(token_file_filter, listdir(tokens_dir)))):
         with open(path.join(tokens_dir, defn_fname), encoding="utf8") as f:
