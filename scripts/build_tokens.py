@@ -7,7 +7,7 @@ TOKEN_KEYS_MAPPING = { "addr": "addr", "symbol": "name", "decimals": "decimals" 
 def make_listing_entry(defn):
     token = { dst_key: defn[src_key] for (src_key, dst_key) in TOKEN_KEYS_MAPPING.items() }
     if "__FORKDELTA_CUSTOM_SYMBOL" in defn:
-        token["name"] = defn["__FORKDELTA_CUSTOM_SYMBOL"]
+        token["name"] = defn["__COINESTATE_CUSTOM_SYMBOL"]
     return token
 
 GUIDE_HTML_TEMPLATE = """<blockquote>
@@ -75,14 +75,14 @@ def main(tokenbase_path):
 
         listing_entry = make_listing_entry(defn)
         if listing_entry["name"] in symbols:
-            find_symbol = lambda t: t["name"] == listing_entry["name"].lower()
+            find_symbol = lambda t: t["name"] == listing_entry["name"]
             previous_assignment = next(filter(find_symbol, tokens), None)
             print("ERROR: Duplicate token symbol", listing_entry["name"],
                     "({})".format(listing_entry["addr"]),
                     "previously assigned to", previous_assignment["addr"])
             exit(2)
 
-        symbols.add(listing_entry["name"].lower())
+        symbols.add(listing_entry["name"])
         tokens.append(listing_entry)
 
         guide = make_description_html(defn)
