@@ -898,7 +898,7 @@
     { "addr": "0xff18dbc487b4c2e3222d115952babfda8ba52f5f", "name": "LIFE", "decimals": 18 },
     { "addr": "0xff3519eeeea3e76f1f699ccce5e23ee0bdda41ac", "name": "BCAP", "decimals": 0 },
     { "addr": "0xffc63b9146967a1ba33066fb057ee3722221acf0", "name": "A", "decimals": 18 },
-    { "addr": "0xffe8196bc259e8dedc544d935786aa4709ec3e64", "name": "HDG", "decimals": 18 }
-  ],
-  "defaultPair": { "token": "DAI", "base": "ETH" }
+    { "addr": "0x7e8539d1e5cb91d63e46b8e188403b3f262a949b", "name": "SMDX", "decimals": 18 },
+   ],
+  "defaultPair": { "token": "SMDX", "base": "ETH" }
 }
