@@ -20,11 +20,11 @@
 
 ## High level overview
 
-At a high level, ForkDelta functions just like a normal exchange. Unlike a traditional exchange, which has all of its business logic defined and executed on a private server owned by a company, ForkDelta's business logic is defined and executed in a smart contract on the public, decentralized [Ethereum](https://ethereum.org) blockchain. The ForkDelta GUI (Graphical User Interface) is designed to let you interact with the current smart contract without having to deal with the low-level details of blockchain transactions.
+At a high level, coinEstate functions just like a normal exchange. Unlike a traditional exchange, which has all of its business logic defined and executed on a private server owned by a company, coinEstate's business logic is defined and executed in a smart contract on the public, decentralized [Ethereum](https://ethereum.org) blockchain. The coinEstate GUI (Graphical User Interface) is designed to let you interact with the current smart contract without having to deal with the low-level details of blockchain transactions.
 
 The current smart contract allows you to deposit or withdraw Ether or any [ERC-20](https://github.com/ethereum/EIPs/issues/20) Ethereum token.
 
-Like any other exchange, ForkDelta has an order book of resting orders. A resting order consists of a price, volume, expiration time (measured in blocks), and signature. In effect, it represents a signed intent to trade. When you create a new resting order, it gets broadcast to an off-chain order book server. The primary benefit of storing resting orders off-chain is that you don't have to create an Ethereum transaction and pay gas to submit a resting order. ForkDelta does have a backup mechanism that allows orders to be submitted with on-chain transactions.
+Like any other exchange, coinEstate has an order book of resting orders. A resting order consists of a price, volume, expiration time (measured in blocks), and signature. In effect, it represents a signed intent to trade. When you create a new resting order, it gets broadcast to an off-chain order book server. The primary benefit of storing resting orders off-chain is that you don't have to create an Ethereum transaction and pay gas to submit a resting order. coinEstate provides a backup mechanism that allows orders to be submitted with on-chain transactions.
 
 When a counterparty decides to trade your resting order, he submits a transaction to the smart contract with your signed intent to trade and the volume he wishes to trade. The smart contract checks the signature, makes sure you and the counterparty both have enough funds to cover the trade, and then executes the trade by moving funds between accounts.
 
@@ -159,7 +159,7 @@ The first contract, SafeMath, defines functions that can be used to do addition,
     }
 
 
-The Token interface defines the ERC-20 token standard. ForkDelta relies on the Token fuction signatures to be able to do token transfers. ForkDelta's [test framework](https://github.com/etherdelta/etherdelta.github.io/blob/master/test.js) uses the StandardToken implementation along with the ReserveToken contract to implement and trade a basic token.
+The Token interface defines the ERC-20 token standard. coinEstate relies on the Token fuction signatures to be able to do token transfers. coinEstate's [test framework](https://github.com/etherdelta/etherdelta.github.io/blob/master/test.js) uses the StandardToken implementation along with the ReserveToken contract to implement and trade a basic token.
 
     contract AccountLevels {
       //given a user, returns an account level
@@ -182,7 +182,7 @@ The Token interface defines the ERC-20 token standard. ForkDelta relies on the T
     }
 
 
-The AccountLevels interface defines a contract that can keep track of account levels for ForkDelta users. The regular level involves paying make and take fees. The market maker silver level involves paying a take fee, but no make fee, and getting a make rebate. The gold level involves paying a take fee, but no make fee, and getting a make rebate equal to the take fee paid by the counterparty. The test framework uses the AccountLevelsTest contract to test the different account levels.
+The AccountLevels interface defines a contract that can keep track of account levels for coinEstate users. The regular level involves paying make and take fees. The market maker silver level involves paying a take fee, but no make fee, and getting a make rebate. The gold level involves paying a take fee, but no make fee, and getting a make rebate equal to the take fee paid by the counterparty. The test framework uses the AccountLevelsTest contract to test the different account levels.
 
     contract EtherDelta is SafeMath {
       address public admin; //the admin address
