@@ -119,23 +119,23 @@
                   <div role="tabpanel" class="tab-pane active" id="important">
                     <div style="margin: 12px;">
                       <p>
-                        <a href="https://www.reddit.com/u/somidax" target="_blank"><img alt="Join us on Reddit" src="https://img.shields.io/twitter/url/https/www.reddit.com/user/somidax/.svg?style=social" /></a>
+                        <a href="#" target="_blank"><img alt="Join us on Reddit" src="https://img.shields.io/badge/reddit-somidax-red.svg" /></a>
                       </p>
                       <p style="color: #f00; font-weight: bold;">URL & Status</p>
                       <p style="font-size: 12px;">
-                        The URL of this project is <a href="https://coinestate.somidax.net">https://coinestate.somidax.net</a>. Bookmark it once and use the bookmark.
+                        The URL of this project is <a href="https://coinEstate.somidax.net">https://coinEstate.somidax.net</a>. Bookmark it once and use the bookmark.
                       </p>
                       <p style="font-size: 12px;">
-                        This interface is a fork of <a href="https://etherdelta.com">EtherDelta</a> with a ton of improvements including a much faster order processing system.
-                        It interacts with ForkDelta's revamped API and EtherDelta's original contract.
+                        This interface is a fork of <a href="https://etherdelta.github.io">etherDelta</a> with a ton of improvements including a much faster order processing system.
+                        It interacts with omnidex's revamped API and EtherDelta's original contract.
                       </p>
                       <p style="color: #f00; font-weight: bold;">How to Start Trading</p>
                       <p style="font-size: 12px;">
-                        <strong>Use the Deposit form (upper left) to put your funds (ETH and tokens) on the exchange.</strong> Do not send your tokens directly to the smart contract, or they will be lost and unrecoverable. ForkDelta cannot help you with funds incorrectly deposited to the trading smart contract.
+                        <strong>Use the Deposit form (upper left) to put your funds (ETH and tokens) on the exchange.</strong> Do not send your tokens directly to the smart contract, or they will be lost and unrecoverable. Omnidex cannot help you with funds incorrectly deposited to the trading smart contract.
                       </p>
                       <p style="color: #f00; font-weight: bold;">coinEstate Disclaimer</p>
                       <p style="font-size: 12px;">
-                        coinEstate is a decentralized trading platform that lets
+                         coinEstate is a decentralized trading platform that lets
                         you trade Ether and Ethereum-based tokens directly with other users.
                         You are responsible for your own account, funds, and private keys.
                         You are responsible for your own trading decisions, and the details
@@ -191,15 +191,16 @@
     <script src="/js/ledger.min.js" type="text/javascript"></script>
     <script src="/js/main.js" type="text/javascript"></script>
 
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create',  'UA-109254084-1', 'auto');
-      ga('send', 'pageview');
-    </script>
-
+    <!----Google Analytics Here------>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-86742531-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-86742531-1');
+</script>
+<!------End Google Analytics----->
     <script>window.twttr = (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0],
         t = window.twttr || {};
@@ -208,16 +209,13 @@
       js.id = id;
       js.src = "https://platform.twitter.com/widgets.js";
       fjs.parentNode.insertBefore(js, fjs);
-
       t._e = [];
       t.ready = function(f) {
         t._e.push(f);
       };
-
       return t;
       }(document, "script", "twitter-wjs"));
     </script>
-
     <script>
       function embedTwitter(theme) {
         $('.twitter-timeline').remove();
@@ -238,4 +236,4 @@
       })
     </script>
   </body>
-</html>
+</html> 
