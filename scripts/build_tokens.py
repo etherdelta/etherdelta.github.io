@@ -6,8 +6,8 @@ import yaml
 TOKEN_KEYS_MAPPING = { "addr": "addr", "symbol": "name", "decimals": "decimals" }
 def make_listing_entry(defn):
     token = { dst_key: defn[src_key] for (src_key, dst_key) in TOKEN_KEYS_MAPPING.items() }
-    if "__COINESTATE_CUSTOM_SYMBOL" in defn:
-        token["name"] = defn["__COINESTATE_CUSTOM_SYMBOL"]
+    if "__FORKDELTA_CUSTOM_SYMBOL" in defn:
+        token["name"] = defn["__FORKDELTA_CUSTOM_SYMBOL"]
     return token
 
 GUIDE_HTML_TEMPLATE = """<blockquote>
@@ -62,11 +62,11 @@ def inject_tokens(config_filename, tokens):
 
 CONFIG_FILE = "config/main.json"
 ETH_TOKEN = { "addr": "0x0000000000000000000000000000000000000000", "name": "ETH", "decimals": 18 }
-def main(baseHub_path):
+def main(tokenbase_path):
     tokens_dir = path.join(tokenbase_path, "tokens")
     token_file_filter = lambda fname: fname.startswith("0x") and fname.endswith(".yaml")
 
-    symbols = set("ETH")
+    symbols = set("eth")
     tokens = [ETH_TOKEN, ]
     for defn_fname in sorted(map(lambda s: s.lower(), filter(token_file_filter, listdir(tokens_dir)))):
         with open(path.join(tokens_dir, defn_fname), encoding="utf8") as f:
@@ -75,14 +75,14 @@ def main(baseHub_path):
 
         listing_entry = make_listing_entry(defn)
         if listing_entry["name"] in symbols:
-            find_symbol = lambda t: t["name"] == listing_entry["name"]
+            find_symbol = lambda t: t["name"] == listing_entry["name"].lower()
             previous_assignment = next(filter(find_symbol, tokens), None)
             print("ERROR: Duplicate token symbol", listing_entry["name"],
                     "({})".format(listing_entry["addr"]),
                     "previously assigned to", previous_assignment["addr"])
             exit(2)
 
-        symbols.add(listing_entry["name"])
+        symbols.add(listing_entry["name"].lower())
         tokens.append(listing_entry)
 
         guide = make_description_html(defn)
@@ -97,6 +97,6 @@ def main(baseHub_path):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: build_tokens.py <baseHub working copy path>")
+        print("Usage: build_tokens.py <tokenbase working copy path>")
         exit()
     main(sys.argv[1])
