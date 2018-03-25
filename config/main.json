@@ -12,7 +12,7 @@
   "ethTestnet": false,
   "ethChainId": 1,
   "ethProvider": "http://localhost:8545",
-  "ethGasPrice": 500500000000,
+  "ethGasPrice": 4000000000,
   "ethAddr": "0x0000000000000000000000000000000000000000",
   "ethAddrPrivateKey": "",
   "gasApprove": 250000,
@@ -21,12 +21,11 @@
   "gasTrade": 250000,
   "gasOrder": 250000,
   "minOrderSize": 0.001,
-
-  "socketServer": ["https://socket01.etherdelta.com","https://socket02.etherdelta.com","https://socket03.etherdelta.com","https://socket04.etherdelta.com","https://socket05.etherdelta.com","https://socket06.etherdelta.com"],
-  "userCookie": "RyxEx",
-  "eventsCacheCookie": "coinEstate_eventsCache",
-  "ordersCacheCookie": "coinEstate_ordersCache",
-  "etherscanAPIKey": "J61KH6J4RNH89TNID6N1B2QMPMX2VYD574",
+  "socketServer": "https://api.forkdelta.com",
+  "userCookie": "EtherDelta",
+  "eventsCacheCookie": "EtherDelta_eventsCache",
+  "ordersCacheCookie": "EtherDelta_ordersCache",
+  "etherscanAPIKey": "GCGR1C9I17TYIRNYUDDEIJH1K5BRPH4UDE",
   "ledgerPath": "m/44'/60'/0'/0",
   "bases": [
     { "addr": "0x0000000000000000000000000000000000000000", "name": "ETH", "decimals": 18 }
