@@ -9,7 +9,7 @@ coinEstate currently acts as an open source, updated interface for EtherDelta's 
 
 
 # How does coinEstate Work?
-It currently interfaces with  original smart contract (described in more detail which allows coinEstate users to trade utilizing coinEstate volume.
+It currently interfaces with  the exchange smart contract  which allows coinEstate users to trade utilizing coinEstate volume.
 
 
 # What is the Roadmap for coinEstate?
