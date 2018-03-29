@@ -17,6 +17,6 @@ The Roadmap is maintained at [https://tradewallet.somidax.net](https://tradewall
 
 
 # Contribute
-We welcome contributions from the community. You can contribute by improving the code, documentation, or donating or by collaborating. coinEstate currently interfaces with its exchange smart contract which allows its users to trade utilizing coinestate volume. However, coinEstate development costs come entirely from SOMIDAX DIGITAL LAB FOUNDATION. If you are interested in the coinEstate project and would like to contribute to its future, please consider sending an email to [coinestate@somidax.net](coinestate@somidax.net)
+We welcome contributions from the community. You can contribute by improving the code, documentation, or donating or by collaborating. coinEstate currently interfaces with its exchange smart contract which allows its users to trade utilizing coinestate volume. However, coinEstate development costs come entirely from SOMIDAX DIGITAL LAB FOUNDATION. If you are interested in the coinEstate project and would like to contribute to its future, please consider sending an email to [coinestate@somidax.net](mailto:coinestate@somidax.net)
 
 As this is a project by the community, for the community, transactions to and from the donations address will be public and can be viewed on the blockchain. We will also keep a public ledger of how the donations are distributed. That way, donors can see exactly how their donations are helping!
