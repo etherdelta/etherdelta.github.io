@@ -1,4 +1,6 @@
 
+[![Known Vulnerabilities](https://snyk.io/test/github/somidax/coinestate/badge.svg?targetFile=js%2Fpackage.json)](https://snyk.io/test/github/somidax/coinestate?targetFile=js%2Fpackage.json)
+
 # coinEstate
 
 Decentralized Ethereum token marketplace community where everyone are tradable with freedom for listing on the coinestate.
