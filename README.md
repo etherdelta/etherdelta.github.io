@@ -13,7 +13,7 @@ It currently interfaces with  the exchange smart contract  which allows coinEsta
 
 
 # What is the Roadmap for coinEstate?
-The Roadmap is maintained at https://tradewallet.somidax.net  
+The Roadmap is maintained at [https://tradewallet.somidax.net](https://tradewallet.somidax.net)  
 
 
 # Contribute
