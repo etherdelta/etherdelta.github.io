@@ -11,3 +11,4 @@ report*
 
 # Node
 node_modules
+composer require matthiasmullie/minify
