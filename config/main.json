@@ -21,7 +21,7 @@
   "gasTrade": 250000,
   "gasOrder": 250000,
   "minOrderSize": 0.001,
-  "socketServer": ["https://socket01.etherdelta.com","https://socket02.etherdelta.com","https://socket03.etherdelta.com","https://socket04.etherdelta.com","https://socket05.etherdelta.com","https://socket06.etherdelta.com"],
+  "socketServer": ["https://api.forkdelta.com", "https://socket01.etherdelta.com","https://socket02.etherdelta.com","https://socket03.etherdelta.com","https://socket04.etherdelta.com","https://socket05.etherdelta.com","https://socket06.etherdelta.com"],
   "userCookie": "EtherDelta",
   "eventsCacheCookie": "EtherDelta_eventsCache",
   "ordersCacheCookie": "EtherDelta_ordersCache",
@@ -732,7 +732,10 @@
     { "addr": "0x85e076361cc813a908ff672f9bad1541474402b2", "name": "TEL", "decimals": 2 },
     { "addr": "0x4cc19356f2d37338b9802aa8e8fc58b0373296e7", "name": "SELFKEY", "decimals": 18 },
     { "addr": "0x9b7593aae6b48d02668808c2dfbfc4bef35ef957", "name": "DVN", "decimals": 18 },
-    { "addr": "0xa5F8fC0921880Cb7342368BD128eb8050442B1a1", "name": "ARY", "decimals": 18 }
+    { "addr": "0xa5F8fC0921880Cb7342368BD128eb8050442B1a1", "name": "ARY", "decimals": 18 } 
+    { "addr": "0x7e8539d1e5cb91d63e46b8e188403b3f262a949b", "name": "SMDX", "decimals": 18 },
+    { "addr": "0xff3519eeeea3e76f1f699ccce5e23ee0bdda41ac", "name": "BCAP", "decimals": 0 },
+    { "addr": "0xffc63b9146967a1ba33066fb057ee3722221acf0", "name": "A", "decimals": 18 },
+    { "addr": "0xffe8196bc259e8dedc544d935786aa4709ec3e64", "name": "HDG", "decimals": 18 }
   ],
-  "defaultPair": { "token": "PPT", "base": "ETH" }
-}
+  "defaultPair": { "token": "SMDX", "base": "ETH" },
