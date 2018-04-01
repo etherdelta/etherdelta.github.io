@@ -97,6 +97,6 @@ def main(tokenbase_path):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: build_tokens.py <tokenbase working copy path>")
+        print("Usage: build_tokens.py <baseHub working copy path>")
         exit()
     main(sys.argv[1])
