@@ -1,0 +1,19 @@
+---
+language: python
+python: "3.6"
+before_install:
+  - |
+    git diff --name-only --diff-filter=d $TRAVIS_COMMIT_RANGE | grep -q tokens/ || {
+      echo "No updates to token files, skipping build."
+      exit
+    }
+  - git diff --name-only --diff-filter=d $TRAVIS_COMMIT_RANGE | grep tokens/
+
+install:
+  - pip install yamllint
+  - pip install -r scripts/requirements.txt
+cache: pip
+
+script:
+  - git diff --name-only --diff-filter=d $TRAVIS_COMMIT_RANGE | grep tokens/ | xargs python scripts/test.py
+  - git diff --name-only --diff-filter=d $TRAVIS_COMMIT_RANGE | grep tokens/ | xargs yamllint -c .yamllint
