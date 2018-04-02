@@ -22,7 +22,7 @@
   "gasOrder": 250000,
   "minOrderSize": 0.001,
   "socketServer": ["https://socket01.etherdelta.com","https://socket02.etherdelta.com","https://socket03.etherdelta.com","https://socket04.etherdelta.com","https://socket05.etherdelta.com","https://socket06.etherdelta.com"],
-  "userCookie": "EtherDelta",
+  "userCookie": "coinEstate",
   "eventsCacheCookie": "coinEstate_eventsCache",
   "ordersCacheCookie": "coinEstate_ordersCache",
   "etherscanAPIKey": "J61KH6J4RNH89TNID6N1B2QMPMX2VYD574",
