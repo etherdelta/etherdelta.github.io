@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./src",
+		"importHelpers": true,
+		"lib": [
+			"dom",
+			"es2015.promise",
+			"es2015.symbol.wellknown",
+			"es5"
+		],
+		"module": "es6",
+		"moduleResolution": "node",
+		"noEmitOnError": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"outDir": "./lib/",
+		"sourceMap": false,
+		"strict": true,
+		"target": "es5"
+	},
+	"include": [
+		"./src/**/*.ts"
+	]
+}
