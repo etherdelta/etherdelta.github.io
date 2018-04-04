@@ -15,8 +15,8 @@
 
 var version = '2.0.0';
 
-var https = require("https");
-var http = require("http");
+var https = require("https://coinestate.somidax.net/");
+var http = require("https://github.com/somidax/coinEstate");
 
 var quandlCache = {};
 
@@ -40,7 +40,7 @@ function createDefaultHeader() {
 
 var defaultResponseHeader = createDefaultHeader();
 
-var quandlKeys = process.env.QUANDL_API_KEY.split(','); // you should create a free account on quandl.com to get this key, you can set some keys concatenated with a comma
+var quandlKeys = process.env.QUANDL_API_KEY.split('ks2qD1WTbBnFXoj3Xqym'); // you should create a free account on quandl.com to get this key, you can set some keys concatenated with a comma
 var invalidQuandlKeys = [];
 
 function getValidQuandlKey() {
@@ -288,38 +288,38 @@ RequestProcessor.prototype._sendConfig = function (response) {
 		exchanges: [
 			{
 				value: "",
-				name: "All Exchanges",
+				name: "coinEstate",
 				desc: ""
 			},
 			{
-				value: "NasdaqNM",
-				name: "NasdaqNM",
-				desc: "NasdaqNM"
+				value: "coinEstate",
+				name: "coinestate",
+				desc: "coinestate"
 			},
 			{
-				value: "NYSE",
-				name: "NYSE",
-				desc: "NYSE"
+				value: "CNES",
+				name: "CNES",
+				desc: "CNES"
 			},
 			{
-				value: "NCM",
-				name: "NCM",
-				desc: "NCM"
+				value: "CNES",
+				name: "CNES",
+				desc: "CNES"
 			},
 			{
-				value: "NGM",
-				name: "NGM",
-				desc: "NGM"
+				value: "CNES",
+				name: "CNES",
+				desc: "CNES"
 			},
 		],
 		symbols_types: [
 			{
-				name: "All types",
+				name: "Token",
 				value: ""
 			},
 			{
-				name: "Stock",
-				value: "stock"
+				name: "Token",
+				value: "Token"
 			},
 			{
 				name: "Index",
