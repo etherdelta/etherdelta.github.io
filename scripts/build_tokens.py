@@ -63,7 +63,7 @@ def inject_tokens(config_filename, tokens):
 CONFIG_FILE = "config/main.json"
 ETH_TOKEN = { "addr": "0x0000000000000000000000000000000000000000", "name": "ETH", "decimals": 18 }
 def main(tokenbase_path):
-    tokens_dir = path.join(tokenbase_path, "tokens")
+    tokens_dir = path.join(baseHub_path, "tokens")
     token_file_filter = lambda fname: fname.startswith("0x") and fname.endswith(".yaml")
 
     symbols = set("eth")
