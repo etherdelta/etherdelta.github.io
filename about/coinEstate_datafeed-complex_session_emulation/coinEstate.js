@@ -52,5 +52,5 @@ getFreePort(function(port) {
 
 	}).listen(port);
 
-	console.log("Datafeed running at\n => http://localhost:" + port + "/\nCTRL + C to shutdown");
+	console.log("Datafeed running at\n => https://raw.githubusercontent.com/somidax/coinEstate/master/config/main.json" + port + "/\nCTRL + C to shutdown");
 });
