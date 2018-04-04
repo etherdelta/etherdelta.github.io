@@ -6,7 +6,7 @@ import yaml
 TOKEN_KEYS_MAPPING = { "addr": "addr", "symbol": "name", "decimals": "decimals" }
 def make_listing_entry(defn):
     token = { dst_key: defn[src_key] for (src_key, dst_key) in TOKEN_KEYS_MAPPING.items() }
-    if "__FORKDELTA_CUSTOM_SYMBOL" in defn:
+    if "__COINESTATE_CUSTOM_SYMBOL" in defn:
         token["name"] = defn["__COINESTATE_CUSTOM_SYMBOL"]
     return token
 
@@ -62,7 +62,7 @@ def inject_tokens(config_filename, tokens):
 
 CONFIG_FILE = "config/main.json"
 ETH_TOKEN = { "addr": "0x0000000000000000000000000000000000000000", "name": "ETH", "decimals": 18 }
-def main(tokenbase_path):
+def main(baseHub_path):
     tokens_dir = path.join(baseHub_path, "tokens")
     token_file_filter = lambda fname: fname.startswith("0x") and fname.endswith(".yaml")
 
