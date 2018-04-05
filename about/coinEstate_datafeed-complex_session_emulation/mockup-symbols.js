@@ -39,7 +39,7 @@ exports.symbols = [
 		name: "M-24X7",
 		symbolInfoPatch: {
 			session: "24x7",
-			timezone: "Europe/Moscow",
+			timezone: "Europe/London",
 			supported_resolutions: ["1", "15", "60", "D", "W", "3W", "M", "6M"],
 			intraday_multipliers: ["1", "15", "60"],
 			has_empty_bars: false,
