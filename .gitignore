@@ -1,13 +1,8 @@
 .DS_Store
+node_modules
 .node*
 storage_*
 report*
 .project
 .pydevproject
 .vscode
-
-# jetbrains IDE
-.idea
-
-# Node
-node_modules
