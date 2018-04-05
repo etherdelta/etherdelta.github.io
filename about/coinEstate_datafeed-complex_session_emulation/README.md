@@ -1,10 +1,8 @@
-UDF-compatible Quandl/Yahoo datafeed
+coinEstate_datafeed-complex_session_emulation
 ==============
 
-This repository contains a sample implementation of server-side UDF-compatible data source.
+This repository contains  implementation of server-side data source.
 
-Register for free at www.quandl.com to get your free API key.
 
-Set QUANDL_API_KEY environment variable to your Quandl key before starting the feed.
 
-Use NodeJS to launch yahoo.js
+Use NodeJS to launch coinEstate.js
