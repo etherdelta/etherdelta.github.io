@@ -7,7 +7,7 @@ html,body {
   height: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open+Sans', sans-serif;
   background: #ffffff;
 }
 
@@ -127,10 +127,10 @@ tr.clickable-row:hover {
 }
 
 .sell {
-  color: #f00;
+  color: #ff4d4d;
 }
 .buy {
-  color: #0f0;
+  color: #35d976;
 }
 
 .scroll {
@@ -338,6 +338,12 @@ pre code {
   background: #fff;
   text-align: center;
 }
+/**/
+.ad .ledger-img{
+  width: 600px;
+  margin-left: -16px;
+}
+
 
 .ttip {
   position: relative;

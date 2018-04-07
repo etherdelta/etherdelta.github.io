@@ -1,9 +1,9 @@
-@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,700';
+@import 'https://fonts.googleapis.com/css?family=calibri:400,700';
 
 html,body {
   margin: 0;
   padding: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'calibri', sans-serif;
   background: #fff;
 }
 

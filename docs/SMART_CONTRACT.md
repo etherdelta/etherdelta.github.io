@@ -11,7 +11,7 @@
 - The smart contract has been upgraded to `pragma solidity ^0.4.2`.
 - The only `payable` function is `deposit`.
 - The smart contract has improved on-chain order functionality. Previously, the on-chain order function would have required an off-chain signature as input. This is no longer necessary. Order hashes that have been submitted on-chain are now stored in a separate mapping, and the order details are stored in the event log. This is meant to be a fallback in the event that the off-chain order system is no longer feasible.
-- Because the smart contract is now an order parameter, orders are only valid on one smart contract. Previously, they were valid on multiple EtherDelta smart contracts at a time.
+- Because the smart contract is now an order parameter, orders are only valid on one smart contract. Previously, they were valid on multiple smart contracts at a time.
 - An admin account has the ability to change the fee account, the admin account, or the fees.
 - The fees are currently the same as before (0.3% for takers, 0.0% for makers), and the admin account is only allowed to decrease the fees.
 - The smart contract allows for a market maker rebate and tiered account levels with different fee structures. These are currently not enabled.
@@ -20,11 +20,11 @@
 
 ## High level overview
 
-At a high level, EtherDelta functions just like a normal exchange. Unlike a traditional exchange, which has all of its business logic defined and executed on a private server owned by a company, EtherDelta's business logic is defined and executed in a smart contract on the public, decentralized [Ethereum](https://ethereum.org) blockchain. The EtherDelta GUI (Graphical User Interface) is designed to let you interact with the EtherDelta smart contract without having to deal with the low-level details of blockchain transactions.
+At a high level, coinEstate functions just like a normal exchange. Unlike a traditional exchange, which has all of its business logic defined and executed on a private server owned by a company, coinEstate's business logic is defined and executed in a smart contract on the public, decentralized [Ethereum](https://ethereum.org) blockchain. The coinEstate GUI (Graphical User Interface) is designed to let you interact with the current smart contract without having to deal with the low-level details of blockchain transactions.
 
-The EtherDelta smart contract allows you to deposit or withdraw Ether or any [ERC-20](https://github.com/ethereum/EIPs/issues/20) Ethereum token.
+The current smart contract allows you to deposit or withdraw Ether or any [ERC-20](https://github.com/ethereum/EIPs/issues/20) Ethereum token.
 
-Like any other exchange, EtherDelta has an order book of resting orders. A resting order consists of a price, volume, expiration time (measured in blocks), and signature. In effect, it represents a signed intent to trade. When you create a new resting order, it gets broadcast to an off-chain order book server. The primary benefit of storing resting orders off-chain is that you don't have to create an Ethereum transaction and pay gas to submit a resting order. EtherDelta does have a backup mechanism that allows orders to be submitted with on-chain transactions.
+Like any other exchange, coinEstate has an order book of resting orders. A resting order consists of a price, volume, expiration time (measured in blocks), and signature. In effect, it represents a signed intent to trade. When you create a new resting order, it gets broadcast to an off-chain order book server. The primary benefit of storing resting orders off-chain is that you don't have to create an Ethereum transaction and pay gas to submit a resting order. coinEstate provides a backup mechanism that allows orders to be submitted with on-chain transactions.
 
 When a counterparty decides to trade your resting order, he submits a transaction to the smart contract with your signed intent to trade and the volume he wishes to trade. The smart contract checks the signature, makes sure you and the counterparty both have enough funds to cover the trade, and then executes the trade by moving funds between accounts.
 
@@ -159,7 +159,7 @@ The first contract, SafeMath, defines functions that can be used to do addition,
     }
 
 
-The Token interface defines the ERC-20 token standard. EtherDelta relies on the Token fuction signatures to be able to do token transfers. EtherDelta's [test framework](https://github.com/etherdelta/etherdelta.github.io/blob/master/test.js) uses the StandardToken implementation along with the ReserveToken contract to implement and trade a basic token.
+The Token interface defines the ERC-20 token standard. coinEstate relies on the Token fuction signatures to be able to do token transfers. coinEstate's [test framework](https://github.com/etherdelta/etherdelta.github.io/blob/master/test.js) uses the StandardToken implementation along with the ReserveToken contract to implement and trade a basic token.
 
     contract AccountLevels {
       //given a user, returns an account level
@@ -182,7 +182,7 @@ The Token interface defines the ERC-20 token standard. EtherDelta relies on the 
     }
 
 
-The AccountLevels interface defines a contract that can keep track of account levels for EtherDelta users. The regular level involves paying make and take fees. The market maker silver level involves paying a take fee, but no make fee, and getting a make rebate. The gold level involves paying a take fee, but no make fee, and getting a make rebate equal to the take fee paid by the counterparty. The test framework uses the AccountLevelsTest contract to test the different account levels.
+The AccountLevels interface defines a contract that can keep track of account levels for coinEstate users. The regular level involves paying make and take fees. The market maker silver level involves paying a take fee, but no make fee, and getting a make rebate. The gold level involves paying a take fee, but no make fee, and getting a make rebate equal to the take fee paid by the counterparty. The test framework uses the AccountLevelsTest contract to test the different account levels.
 
     contract EtherDelta is SafeMath {
       address public admin; //the admin address
@@ -196,7 +196,7 @@ The AccountLevels interface defines a contract that can keep track of account le
       mapping (address => mapping (bytes32 => uint)) public orderFills; //mapping of user accounts to mapping of order hashes to uints (amount of order that has been filled)
 
 
-The first section of the main EtherDelta contract defines the storage variables.
+The first section of the current contract defines the storage variables.
 
 - The admin variable holds the account with special administrative privileges. The admin account can change the admin account, change the accountLevelsAddr, or lower the fees. The admin account cannot raise the fees.
 - The feeAccount variable holds the account to which EtherDelta trading fees are paid.
@@ -229,7 +229,7 @@ The events are emitted by similarly named transactions and stored in the blockch
     }
 
 
-The EtherDelta constructor simply initializes the admin account, fee account, account levels address, and fee percentages. The default function simply throws an error. Any Ether sent to EtherDelta without a function call will be returned to sender.
+The EtherDelta constructor simply initializes the admin account, fee account, account levels address, and fee percentages. The default function simply throws an error. Any Ether sent to ForkDelta without a function call will be returned to sender.
 
     function changeAdmin(address admin_) {
       if (msg.sender != admin) throw;
@@ -338,7 +338,7 @@ The trade function, along with its helper tradeBalances, represent the biggest c
 
 The first thing the trade function does is construct an order hash. Then it checks to make sure the signature provided matches the order hash (or the order was submitted by the user on-chain), the order hasn't expired, and the trade won't overfill the remaining volume associated with the order. If all these things are true, the tradeBalances function moves funds from one account to the other, and moves funds to the fee account. Note that all fees are paid in the tokenGet token. Then the trade function updates the orderFills variable with the amount that has been filled, and emits an event.
 
-Note that the balances of the two counterparties are never explicitly checked, because the safeSub function is used to ensure the balances don't go below zero. If the trade would result in a balance going below zero, the safeSub function would throw an error and the trade would fail. Also note that the tradeBalances function is marked as private, which means it can only be called from within the EtherDelta smart contract (specifically, from within the trade function).
+Note that the balances of the two counterparties are never explicitly checked, because the safeSub function is used to ensure the balances don't go below zero. If the trade would result in a balance going below zero, the safeSub function would throw an error and the trade would fail. Also note that the tradeBalances function is marked as private, which means it can only be called from within the smart contract (specifically, from within the trade function).
 
     function testTrade(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, address user, uint8 v, bytes32 r, bytes32 s, uint amount, address sender) constant returns(bool) {
       if (!(

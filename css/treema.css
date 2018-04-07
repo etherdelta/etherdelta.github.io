@@ -7,7 +7,7 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   position: relative;
-  font-family: Helvetica;
+  font-family: Calibri;
   clear: both;
   border-bottom: 1px solid #ccc;
   font-size: 13px;
@@ -20,7 +20,7 @@
     outline: none; }
   .treema-node input, .treema-node select {
     font-size: 13px;
-    font-family: Helvetica; }
+    font-family: Calibri; }
   .treema-node input {
     margin: -3px 0;
     width: 200px; }
@@ -229,7 +229,7 @@
 
 .treema-ace .ace_editor {
   width: 100%;
-  border: 1px solid gray; }
+  border: 1px solid blue; }
 
 .treema-long-string textarea {
   width: 100%;

@@ -2,7 +2,7 @@
 
 <h4>Changelog</h4>
 
-<h5>February 9, 2017</h5>
+<h5>February 9, 2018</h5>
 
 <ul>
   <li>In response to breaking changes in the eth_sign function, signatures now require a special prefix. See <a href="https://github.com/ethereum/go-ethereum/pull/2940">this GitHub issue</a> for technical details.</li>
@@ -14,7 +14,7 @@
   <li>The smart contract has been upgraded to <code>pragma solidity ^0.4.2</code>.</li>
   <li>The only <code>payable</code> function is <code>deposit</code>.</li>
   <li>The smart contract has improved on-chain order functionality. Previously, the on-chain order function would have required an off-chain signature as input. This is no longer necessary. Order hashes that have been submitted on-chain are now stored in a separate mapping, and the order details are stored in the event log. This is meant to be a fallback in the event that the off-chain order system is no longer feasible.</li>
-  <li>Because the smart contract is now an order parameter, orders are only valid on one smart contract. Previously, they were valid on multiple EtherDelta smart contracts at a time.</li>
+  <li>Because the smart contract is now an order parameter, orders are only valid on one smart contract. Previously, they were valid on multiple coinEstate smart contracts at a time.</li>
   <li>An admin account has the ability to change the fee account, the admin account, or the fees.</li>
   <li>The fees are currently the same as before (0.3% for takers, 0.0% for makers), and the admin account is only allowed to decrease the fees.</li>
   <li>The smart contract allows for a market maker rebate and tiered account levels with different fee structures. These are currently not enabled.</li>
@@ -24,17 +24,17 @@
 
 <h4>High level overview</h4>
 
-<p>At a high level, EtherDelta functions just like a normal exchange. Unlike a traditional exchange, which has all of its business logic defined and executed on a private server owned by a company, EtherDelta's business logic is defined and executed in a smart contract on the public, decentralized <a href="https://ethereum.org">Ethereum</a> blockchain. The EtherDelta GUI (Graphical User Interface) is designed to let you interact with the EtherDelta smart contract without having to deal with the low-level details of blockchain transactions.</p>
+<p>At a high level, coinEstate functions just like a normal exchange. Unlike a traditional exchange, which has all of its business logic defined and executed on a private server owned by a company, coinEstate's business logic is defined and executed in a smart contract on the public, decentralized <a href="https://ethereum.org">Ethereum</a> blockchain. The coinEstate GUI (Graphical User Interface) is designed to let you interact with the coinEstate smart contract without having to deal with the low-level details of blockchain transactions.</p>
 
-<p>The EtherDelta smart contract allows you to deposit or withdraw Ether or any <a href="https://github.com/ethereum/EIPs/issues/20">ERC-20</a> Ethereum token.</p>
+<p>The coinEstate smart contract allows you to deposit or withdraw Ether or any <a href="https://github.com/ethereum/EIPs/issues/20">ERC-20</a> Ethereum token.</p>
 
-<p>Like any other exchange, EtherDelta has an order book of resting orders. A resting order consists of a price, volume, expiration time (measured in blocks), and signature. In effect, it represents a signed intent to trade. When you create a new resting order, it gets broadcast to an off-chain order book server. The primary benefit of storing resting orders off-chain is that you don't have to create an Ethereum transaction and pay gas to submit a resting order. EtherDelta does have a backup mechanism that allows orders to be submitted with on-chain transactions.</p>
+<p>Like any other exchange, coinEstate has an order book of resting orders. A resting order consists of a price, volume, expiration time (measured in blocks), and signature. In effect, it represents a signed intent to trade. When you create a new resting order, it gets broadcast to an off-chain order book server. The primary benefit of storing resting orders off-chain is that you don't have to create an Ethereum transaction and pay gas to submit a resting order. coinEstate does have a backup mechanism that allows orders to be submitted with on-chain transactions.</p>
 
 <p>When a counterparty decides to trade your resting order, he submits a transaction to the smart contract with your signed intent to trade and the volume he wishes to trade. The smart contract checks the signature, makes sure you and the counterparty both have enough funds to cover the trade, and then executes the trade by moving funds between accounts.</p>
 
 <h4>Internal security review</h4>
 
-<p>The smart contract source code can be found <a href="https://github.com/etherdelta/etherdelta.github.io/blob/master/smart_contract/etherdelta.sol">on GitHub</a>. It is also verified on Etherscan.</p>
+<p>The smart contract source code can be found <https://github.com/somidax/smart_contract/blob/master/coinEstate.sol">on GitHub</a>. It is also verified on Etherscan.</p>
 
 <pre><code>pragma solidity ^0.4.2;
 
@@ -57,12 +57,12 @@ contract SafeMath {
   }
 
   function assert(bool assertion) internal {
-    if (!assertion) throw;
+    if (!assertion) revert();
   }
 }
 </code></pre>
 
-<p>The first contract, <code>SafeMath</code>, defines functions that can be used to do addition, subtraction, or multiplication and throw an error in the event of an unsigned integer overflow or underflow. The <code>safeMul</code> and <code>safeAdd</code> functions are used throughout the smart contract to prevent situations where arguments are so large that numbers overflow, causing unexpected and undesired behavior. The <code>safeSub</code> function is also used throughout the smart contract to prevent situations where a transaction would cause a user's balance to be negative.</p>
+<p>The first contract, <code>SafeMath</code>, defines functions that can be used to do addition, subtraction, or multiplication and revert() an error in the event of an unsigned integer overflow or underflow. The <code>safeMul</code> and <code>safeAdd</code> functions are used throughout the smart contract to prevent situations where arguments are so large that numbers overflow, causing unexpected and undesired behavior. The <code>safeSub</code> function is also used throughout the smart contract to prevent situations where a transaction would cause a user's balance to be negative.</p>
 
 <pre><code>contract Token {
   /// @return total amount of tokens
@@ -156,20 +156,20 @@ contract ReserveToken is StandardToken, SafeMath {
     minter = msg.sender;
   }
   function create(address account, uint amount) {
-    if (msg.sender != minter) throw;
+    if (msg.sender != minter) revert();
     balances[account] = safeAdd(balances[account], amount);
     totalSupply = safeAdd(totalSupply, amount);
   }
   function destroy(address account, uint amount) {
-    if (msg.sender != minter) throw;
-    if (balances[account] < amount) throw;
+    if (msg.sender != minter) revert();
+    if (balances[account] < amount) revert();
     balances[account] = safeSub(balances[account], amount);
     totalSupply = safeSub(totalSupply, amount);
   }
 }
 </code></pre>
 
-<p>The <code>Token</code> interface defines the ERC-20 token standard. EtherDelta relies on the <code>Token</code> fuction signatures to be able to do token transfers. EtherDelta's <a href="https://github.com/etherdelta/etherdelta.github.io/blob/master/test.js">test framework</a> uses the <code>StandardToken</code> implementation along with the <code>ReserveToken</code> contract to implement and trade a basic token.</p>
+<p>The <code>Token</code> interface defines the ERC-20 token standard. RYXEX relies on the <code>Token</code> fuction signatures to be able to do token transfers. RYXEX's <a href="https://github.com/RYXEX/RYXEX.github.io/blob/master/test.js">test framework</a> uses the <code>StandardToken</code> implementation along with the <code>ReserveToken</code> contract to implement and trade a basic token.</p>
 
 <pre><code>contract AccountLevels {
   //given a user, returns an account level
@@ -192,9 +192,9 @@ contract AccountLevelsTest is AccountLevels {
 }
 </code></pre>
 
-<p>The <code>AccountLevels</code> interface defines a contract that can keep track of account levels for EtherDelta users. The regular level involves paying make and take fees. The market maker silver level involves paying a take fee, but no make fee, and getting a make rebate. The gold level involves paying a take fee, but no make fee, and getting a make rebate equal to the take fee paid by the counterparty. The test framework uses the <code>AccountLevelsTest</code> contract to test the different account levels.</p>
+<p>The <code>AccountLevels</code> interface defines a contract that can keep track of account levels for RYXEX users. The regular level involves paying make and take fees. The market maker silver level involves paying a take fee, but no make fee, and getting a make rebate. The gold level involves paying a take fee, but no make fee, and getting a make rebate equal to the take fee paid by the counterparty. The test framework uses the <code>AccountLevelsTest</code> contract to test the different account levels.</p>
 
-<pre><code>contract EtherDelta is SafeMath {
+<pre><code>contract RYXEX is SafeMath {
   address public admin; //the admin address
   address public feeAccount; //the account that will receive fees
   address public accountLevelsAddr; //the address of the AccountLevels contract
@@ -206,11 +206,11 @@ contract AccountLevelsTest is AccountLevels {
   mapping (address => mapping (bytes32 => uint)) public orderFills; //mapping of user accounts to mapping of order hashes to uints (amount of order that has been filled)
 </code></pre>
 
-<p>The first section of the main <code>EtherDelta</code> contract defines the storage variables.</p>
+<p>The first section of the main <code>RYXEX</code> contract defines the storage variables.</p>
 
 <ul>
   <li>The <code>admin</code> variable holds the account with special administrative privileges. The admin account can change the admin account, change the <code>accountLevelsAddr</code>, or lower the fees. The admin account cannot raise the fees.</li>
-  <li>The <code>feeAccount</code> variable holds the account to which EtherDelta trading fees are paid.</li>
+  <li>The <code>feeAccount</code> variable holds the account to which RYXEX trading fees are paid.</li>
   <li>The <code>accountLevelsAddr</code> variable holds the address of the contract that specifies account levels. If the <code>accountLevelsAddr</code> is set to the zero account, then no account levels will be in effect.</li>
   <li>The <code>feeMake</code>, <code>feeTake</code>, and <code>feeRebate</code> variables hold the fee percentages, times 1 ether. For example, since 1 ether = 10^18, 10^17 would represents 10%.</li>
   <li>The <code>tokens</code> variable is where user balances are stored. For example, if your address is <code>0x123</code> and the DAO token address is <code>0xbb9</code>, then your DAO balance will be in <code>tokens[0xbb9][0x123].</code> By special case, your Ether balance will be in <code>tokens[0][0x123]</code>. Note that all Ether amounts are in Wei, and all token amounts are in the base unit of the token (which is usually Wei, but depends on the token).</li>
@@ -227,7 +227,7 @@ event Withdraw(address token, address user, uint amount, uint balance);
 
 <p>The events are emitted by similarly named transactions and stored in the blockchain. The GUI uses them to display a list of trades, deposits, and withdrawals.</p>
 
-<pre><code>function EtherDelta(address admin_, address feeAccount_, address accountLevelsAddr_, uint feeMake_, uint feeTake_, uint feeRebate_) {
+<pre><code>function RYXEX(address admin_, address feeAccount_, address accountLevelsAddr_, uint feeMake_, uint feeTake_, uint feeRebate_) {
   admin = admin_;
   feeAccount = feeAccount_;
   accountLevelsAddr = accountLevelsAddr_;
@@ -237,42 +237,42 @@ event Withdraw(address token, address user, uint amount, uint balance);
 }
 
 function() {
-  throw;
+  revert();
 }
 </code></pre>
 
-<p>The <code>EtherDelta</code> constructor simply initializes the admin account, fee account, account levels address, and fee percentages. The default function simply throws an error. Any Ether sent to EtherDelta without a function call will be returned to sender.</p>
+<p>The <code>RYXEX</code> constructor simply initializes the admin account, fee account, account levels address, and fee percentages. The default function simply revert()s an error. Any Ether sent to RYXEX without a function call will be returned to sender.</p>
 
 <pre><code>function changeAdmin(address admin_) {
-  if (msg.sender != admin) throw;
+  if (msg.sender != admin) revert();
   admin = admin_;
 }
 
 function changeAccountLevelsAddr(address accountLevelsAddr_) {
-  if (msg.sender != admin) throw;
+  if (msg.sender != admin) revert();
   accountLevelsAddr = accountLevelsAddr_;
 }
 
 function changeFeeAccount(address feeAccount_) {
-  if (msg.sender != admin) throw;
+  if (msg.sender != admin) revert();
   feeAccount = feeAccount_;
 }
 
 function changeFeeMake(uint feeMake_) {
-  if (msg.sender != admin) throw;
-  if (feeMake_ > feeMake) throw;
+  if (msg.sender != admin) revert();
+  if (feeMake_ > feeMake) revert();
   feeMake = feeMake_;
 }
 
 function changeFeeTake(uint feeTake_) {
-  if (msg.sender != admin) throw;
-  if (feeTake_ > feeTake || feeTake_ < feeRebate) throw;
+  if (msg.sender != admin) revert();
+  if (feeTake_ > feeTake || feeTake_ < feeRebate) revert();
   feeTake = feeTake_;
 }
 
 function changeFeeRebate(uint feeRebate_) {
-  if (msg.sender != admin) throw;
-  if (feeRebate_ < feeRebate || feeRebate_ > feeTake) throw;
+  if (msg.sender != admin) revert();
+  if (feeRebate_ < feeRebate || feeRebate_ > feeTake) revert();
   feeRebate = feeRebate_;
 }
 </code></pre>
@@ -285,10 +285,10 @@ function changeFeeRebate(uint feeRebate_) {
 }
 
 function withdraw(uint amount) {
-  if (msg.value>0) throw;
-  if (tokens[0][msg.sender] < amount) throw;
+  if (msg.value>0) revert();
+  if (tokens[0][msg.sender] < amount) revert();
   tokens[0][msg.sender] = safeSub(tokens[0][msg.sender], amount);
-  if (!msg.sender.call.value(amount)()) throw;
+  if (!msg.sender.call.value(amount)()) revert();
   Withdraw(0, msg.sender, amount, tokens[0][msg.sender]);
 }
 </code></pre>
@@ -297,17 +297,17 @@ function withdraw(uint amount) {
 
 <pre><code>function depositToken(address token, uint amount) {
   //remember to call Token(address).approve(this, amount) or this contract will not be able to do the transfer on your behalf.
-  if (msg.value>0 || token==0) throw;
-  if (!Token(token).transferFrom(msg.sender, this, amount)) throw;
+  if (msg.value>0 || token==0) revert();
+  if (!Token(token).transferFrom(msg.sender, this, amount)) revert();
   tokens[token][msg.sender] = safeAdd(tokens[token][msg.sender], amount);
   Deposit(token, msg.sender, amount, tokens[token][msg.sender]);
 }
 
 function withdrawToken(address token, uint amount) {
-  if (msg.value>0 || token==0) throw;
-  if (tokens[token][msg.sender] < amount) throw;
+  if (msg.value>0 || token==0) revert();
+  if (tokens[token][msg.sender] < amount) revert();
   tokens[token][msg.sender] = safeSub(tokens[token][msg.sender], amount);
-  if (!Token(token).transfer(msg.sender, amount)) throw;
+  if (!Token(token).transfer(msg.sender, amount)) revert();
   Withdraw(token, msg.sender, amount, tokens[token][msg.sender]);
 }
 </code></pre>
@@ -322,7 +322,7 @@ function withdrawToken(address token, uint amount) {
 <p>The <code>balanceOf</code> function is a helper function to get a user's balance for a particular token.</p>
 
 <pre><code>function order(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce) {
-  if (msg.value>0) throw;
+  if (msg.value>0) revert();
   bytes32 hash = sha256(this, tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
   orders[msg.sender][hash] = true;
   Order(tokenGet, amountGet, tokenGive, amountGive, expires, nonce, msg.sender);
@@ -342,13 +342,13 @@ function withdrawToken(address token, uint amount) {
 
 <pre><code>function trade(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, address user, uint8 v, bytes32 r, bytes32 s, uint amount) {
   //amount is in amountGet terms
-  if (msg.value>0) throw;
+  if (msg.value>0) revert();
   bytes32 hash = sha256(this, tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
   if (!(
     (orders[user][hash] || ecrecover(hash,v,r,s) == user) &&
     block.number <= expires &&
     safeAdd(orderFills[user][hash], amount) <= amountGet
-  )) throw;
+  )) revert();
   tradeBalances(tokenGet, amountGet, tokenGive, amountGive, user, amount);
   orderFills[user][hash] = safeAdd(orderFills[user][hash], amount);
   Trade(tokenGet, amount, tokenGive, amountGive * amount / amountGet, user, msg.sender);
@@ -375,7 +375,7 @@ function tradeBalances(address tokenGet, uint amountGet, address tokenGive, uint
 
 <p>The first thing the <code>trade</code> function does is construct an order hash. Then it checks to make sure the signature provided matches the order hash (or the order was submitted by the <code>user</code> on-chain), the order hasn't expired, and the trade won't overfill the remaining volume associated with the order. If all these things are true, the <code>tradeBalances</code> function moves funds from one account to the other, and moves funds to the fee account. Note that all fees are paid in the <code>tokenGet</code> token. Then the <code>trade</code> function updates the <code>orderFills</code> variable with the amount that has been filled, and emits an event.</p>
 
-<p>Note that the balances of the two counterparties are never explicitly checked, because the <code>safeSub</code> function is used to ensure the balances don't go below zero. If the trade would result in a balance going below zero, the <code>safeSub</code> function would throw an error and the trade would fail. Also note that the <code>tradeBalances</code> function is marked as private, which means it can only be called from within the EtherDelta smart contract (specifically, from within the <code>trade</code> function).</p>
+<p>Note that the balances of the two counterparties are never explicitly checked, because the <code>safeSub</code> function is used to ensure the balances don't go below zero. If the trade would result in a balance going below zero, the <code>safeSub</code> function would revert() an error and the trade would fail. Also note that the <code>tradeBalances</code> function is marked as private, which means it can only be called from within the RYXEX smart contract (specifically, from within the <code>trade</code> function).</p>
 
 <pre><code>function testTrade(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, address user, uint8 v, bytes32 r, bytes32 s, uint amount, address sender) constant returns(bool) {
   if (!(
@@ -406,9 +406,9 @@ function amountFilled(address tokenGet, uint amountGet, address tokenGive, uint 
 <p>The <code>testTrade</code>, <code>availableVolume</code>, and <code>amountFilled</code> functions are helper functions. The <code>testTrade</code> function tests whether a trade is still available, using the <code>availableVolume</code> function to check how much volume is available on an order, taking into account the amount that has been filled so far and the funds available in the user's account. The <code>amountFilled</code> function is a helper for accessing the <code>orderFills</code> variable to see how much of an order has been filled already.</p>
 
 <pre><code>function cancelOrder(address tokenGet, uint amountGet, address tokenGive, uint amountGive, uint expires, uint nonce, uint8 v, bytes32 r, bytes32 s) {
-  if (msg.value>0) throw;
+  if (msg.value>0) revert();
   bytes32 hash = sha256(this, tokenGet, amountGet, tokenGive, amountGive, expires, nonce);
-  if (!(orders[msg.sender][hash] || ecrecover(hash,v,r,s) == msg.sender)) throw;
+  if (!(orders[msg.sender][hash] || ecrecover(hash,v,r,s) == msg.sender)) revert();
   orderFills[msg.sender][hash] = amountGet;
   Cancel(tokenGet, amountGet, tokenGive, amountGive, expires, nonce, msg.sender, v, r, s);
 }
