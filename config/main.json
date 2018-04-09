@@ -158,7 +158,6 @@
     { "addr": "0x1beef31946fbbb40b877a72e4ae04a8d1a5cee06", "name": "PAR", "decimals": 18 },
     { "addr": "0x1c4481750daa5ff521a2a7490d9981ed46465dbd", "name": "BCPT", "decimals": 18 },
     { "addr": "0x1c65c261cb89178b02cf2aee20058b992787d770", "name": "TORQ", "decimals": 18 },
-    { "addr": "0x1c83501478f1320977047008496dacbd60bb15ef", "name": "DGTX", "decimals": 18 },
     { "addr": "0x1ccc29f9ced9d1a5ce81a7262eac8fcd7eca5788", "name": "ANTS", "decimals": 8 },
     { "addr": "0x1d10997e92011398a20612f9ee87e33449bc1fe4", "name": "1KT", "decimals": 18 },
     { "addr": "0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0", "name": "CAN", "decimals": 6 },
