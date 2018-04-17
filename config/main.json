@@ -31,7 +31,6 @@
     { "addr": "0x0000000000000000000000000000000000000000", "name": "ETH", "decimals": 18 }
   ],
   "tokens": [
-    { "addr": "0x0000000000000000000000000000000000000000", "name": "ETH", "decimals": 18 },
     { "addr": "0x006bea43baa3f7a6f765f14f10a1a1b08334ef45", "name": "STX", "decimals": 18 },
     { "addr": "0x009e864923b49263c7f10d19b7f8ab7a9a5aad33", "name": "FKX", "decimals": 18 },
     { "addr": "0x00a0cbe98e4d110b0fa82646152d77babf2951d0", "name": "EETHER", "decimals": 18 },
