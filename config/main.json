@@ -476,7 +476,7 @@
     { "addr": "0x8f070b17dd3953634e9e9c174d0f05396f681bc1", "name": "CCP", "decimals": 18 },
     { "addr": "0xe58aff48f738b4a719d1790587cdc91a3560d7e1", "name": "TMP", "decimals": 7 },
     { "addr": "0x87ae38d63a6bbb63e46219f494b549e3be7fc400", "name": "LAP", "decimals": 8 },
-    { "addr": "0x7f2176ceb16dcb648dc924eff617c3dc2befd30d", "name": "OHNI", "decimals": 0 },
+    { "addr": "0x6f539a9456a5bcb6334a1a41207c3788f5825207", "name": "OHNI", "decimals": 18 },
     { "addr": "0x2233799ee2683d75dfefacbcd2a26c78d34b470d", "name": "NTWK", "decimals": 18 },
     { "addr": "0x9b8eb7a73a3c65fc3c892b494ab29cb061cf05ae", "name": "1BIT", "decimals": 0 },
     { "addr": "0x580d69737e11cf2fb306c8fc0161b86f7c9f03ba", "name": "NEBO", "decimals": 3 },
