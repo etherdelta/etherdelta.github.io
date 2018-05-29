@@ -471,7 +471,7 @@ pre code {
 
 #bs-example-navbar-collapse-1 .navbar-nav a {
   font-weight: bold;
-  color: #15232c !important;
+  color: #15232c;
   font-size: 12px;
 }
 
@@ -606,6 +606,33 @@ fieldset[disabled] .form-control {
   transition: background-color .2s ease-in-out;
 }
 
+#bs-example-navbar-collapse-1 .navbar-nav #tokensDropdown .dropdown-menu {
+  max-width: 100%;
+  min-width: 240px;
+}
+
+#bs-example-navbar-collapse-1 .navbar-nav #tokensDropdown .dropdown-menu li {
+  max-width: 100%;
+}
+
+#bs-example-navbar-collapse-1 .navbar-nav #tokensDropdown .dropdown-menu a {
+  color: #777;
+  font-weight: normal;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#bs-example-navbar-collapse-1 .navbar-nav #tokensDropdown .dropdown-menu a span.symbol {
+  color: #15232c;
+  font-weight: bold;
+}
+
+#bs-example-navbar-collapse-1 .navbar-nav #tokensDropdown .dropdown-menu a.other {
+  color: #15232c;
+  font-weight: bold;
+}
 
 #myTrades tbody tr:nth-child(even),
 #myFunds tbody tr:nth-child(even) {
