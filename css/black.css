@@ -606,14 +606,27 @@ fieldset[disabled] .form-control {
   transition: background-color .2s ease-in-out;
 }
 
+
 #myTrades tbody tr:nth-child(even),
 #myFunds tbody tr:nth-child(even) {
   background: #1B2831;
 }
 
-#volume tr:hover,
 #trades tr:hover {
   background-color: #1B2831;
+}
+
+#volume .ticker-row {
+  cursor: pointer;
+  padding: 3px 4px;
+}
+
+#volume .ticker-row:hover {
+  background-color: #1B2831;
+}
+
+#volume .ticker-row:hover .name {
+  text-decoration: underline;
 }
 
 #trades {
