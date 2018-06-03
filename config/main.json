@@ -98,7 +98,7 @@
     {"addr":"0x0d8775f648430679a709e98d2b0cb6250d2887ef","name":"BAT","decimals":18},
     {"addr":"0xa645264c5603e96c3b0b078cdab68733794b0a71","name":"MYST","decimals":8},
     {"addr":"0x82665764ea0b58157e1e5e9bab32f68c76ec0cdf","name":"VSMOLD","decimals":0},
-    {"addr":"0x12fef5e57bf45873cd9b62e9dbd7bfb99e32d73e","name":"CFI","decimals":18},
+    {"addr":"0x12fef5e57bf45873cd9b62e9dbd7bfb99e32d73e","name":"CFI","decimals":18}
     {"addr":"0x8f3470a7388c05ee4e7af3d01d8c722b0ff52374","name":"VERI","decimals":18},
     {"addr":"0x40395044ac3c0c57051906da938b54bd6557f212","name":"MGO","decimals":8},
     {"addr":"0x8ae4bf2c33a8e667de34b54938b0ccd03eb8cc06","name":"PTOY","decimals":8},
@@ -970,7 +970,8 @@
     {"addr":"0x1a95b271b0535d15fa49932daba31ba612b52946","name":"MNE","decimals":8},
     {"addr":"0x1063ce524265d5a3a624f4914acd573dd89ce988","name":"AIX","decimals":18},
     {"addr":"0xc72fe8e3dd5bef0f9f31f259399f301272ef2a2d","name":"INSTAR","decimals":18},
-    {"addr":"0x7dc4f41294697a7903c4027f6ac528c5d14cd7eb","name":"RMC","decimals":8}
+    {"addr":"0x7dc4f41294697a7903c4027f6ac528c5d14cd7eb","name":"RMC","decimals":8},
+    {"addr":"0x5EbDBE096E54826130e00b9267677e762c52D495","name":"CREO","decimals":18}
   ],
   "defaultPair": {
     "token": "PPT",
