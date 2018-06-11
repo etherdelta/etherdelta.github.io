@@ -21,7 +21,12 @@ def make_listing_entry(defn):
     return token
 
 
-GUIDE_HTML_TEMPLATE = """<blockquote>
+NOTICE_HTML_TEMPLATE = """<p class="alert alert-warning">
+{notice}
+</p>
+"""
+
+GUIDE_HTML_TEMPLATE = """{notice_html}<blockquote>
   <p>{description_html}</p>
   <footer>{website_href}</footer>
 </blockquote>\n"""
@@ -43,8 +48,15 @@ def make_description_html(defn):
     if not description_html and not website_href:
         return ""  # No guide to write
 
+    if "notice" in defn:
+        notice_html = NOTICE_HTML_TEMPLATE.format(notice=defn["notice"])
+    else:
+        notice_html = ""
+
     return GUIDE_HTML_TEMPLATE.format(
-        description_html=description_html, website_href=website_href)
+        description_html=description_html,
+        website_href=website_href,
+        notice_html=notice_html)
 
 
 def inject_tokens(config_filename, tokens):
