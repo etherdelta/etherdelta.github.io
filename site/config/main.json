@@ -585,7 +585,6 @@
     { "addr": "0xa119f0f5fd06ebadff8883c0f3c40b2d22e7a44f", "name": "CRTM", "decimals": 8 },
     { "addr": "0xe4c07f4637df3a0354f9b42a1b3178dc573b8926", "name": "CZT", "decimals": 0 },
     { "addr": "0x1d10997e92011398a20612f9ee87e33449bc1fe4", "name": "1KT", "decimals": 18 },
-    { "addr": "0x2dbe0f03f1dddbdbc87557e86df3878ae25af855", "name": "RC", "decimals": 8 },
     { "addr": "0x164f64ef2a44444743c5472fa68fb3784060d286", "name": "T8C", "decimals": 3 },
     { "addr": "0xc324a2f6b05880503444451b8b27e6f9e63287cb", "name": "XUC", "decimals": 18 },
     { "addr": "0x37256d58e298cacaa82aa0527d56521f1b19e1f5", "name": "EALP", "decimals": 18 },
