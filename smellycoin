@@ -1,0 +1,18 @@
+Hi
+Please Add SmellyCoin token.
+ERC20-TOKEN:(SMELLY)
+Website: https://smellycoin.com
+Explorer: https://etherscan.io/token/0xc9be9f75df438df3ef40e4bab816bf30e3f14b50
+Email: admin@smellycoin.com
+Reddit: https://www.reddit.com/r/SmellyCoin/
+Bitcointalk: https://bitcointalk.org/index.php?topic=2871113.0
+Twitter: https://twitter.com/smellycoin
+
+
+
+
+main.json
+"addr": "0xc9be9f75df438df3ef40e4bab816bf30e3f14b50", "name": "SMELLY", "decimals": 0 },
+
+staging.json
+{ "addr": "0xc9be9f75df438df3ef40e4bab816bf30e3f14b50", "name": "SMELLY", "decimals": 0 },
