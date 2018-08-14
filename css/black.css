@@ -245,10 +245,10 @@ tr.clickable-row:hover {
   padding: 2px;
 }
 
-a {
+.dark-mode a {
   color: #ccc;
 }
-a:hover {
+.dark-mode a:hover {
   color: #666;
   text-decoration: none;
 }
