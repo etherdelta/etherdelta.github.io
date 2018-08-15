@@ -14,7 +14,7 @@ ForkDelta currently interfaces with EtherDelta's original smart contract (descri
 
 
 # What is the Roadmap for ForkDelta?
-The ForkDelta Roadmap is maintained at https://forkdelta.github.io/about/
+The ForkDelta Roadmap is maintained at https://forkdelta.app/about/
 
 
 # Contribute
