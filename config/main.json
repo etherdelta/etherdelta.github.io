@@ -851,6 +851,7 @@
     { "addr": "0xd0929d411954c47438dc1d871dd6081f5c5e149c", "name": "RFR", "fullName": "Refereum", "decimals": 4 },
     { "addr": "0xd0a4b8946cb52f0661273bfbc6fd0e0c75fc6433", "name": "STORM", "fullName": "Storm Token", "decimals": 18 },
     { "addr": "0xd0d6d6c5fe4a677d343cc433536bb717bae167dd", "name": "ADT", "fullName": "AdToken", "decimals": 9 },
+    { "addr": "0xd1ec43b9d44338a4e74f3f41cd1b86254cbaa874", "name": "VGLZ1", "fullName": "Ve Gold Z1", "decimals": 18 },
     { "addr": "0xd2308446536a0bad028ab8c090d62e1ea2a51f24", "name": "GNEISS", "fullName": "GNEISS Coin", "decimals": 0 },
     { "addr": "0xd234bf2410a0009df9c3c63b610c09738f18ccd7", "name": "DTR", "fullName": "Dynamic Trading Rights", "decimals": 8 },
     { "addr": "0xd248b0d48e44aaf9c49aea0312be7e13a6dc1468", "name": "SGT", "fullName": "Status Genesis Token", "decimals": 1 },
