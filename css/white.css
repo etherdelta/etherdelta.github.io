@@ -1,13 +1,14 @@
-@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,700';
+@import "https://fonts.googleapis.com/css?family=Open+Sans:400,700";
 
-html,body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   background: #ffffff;
 }
 
@@ -27,7 +28,7 @@ a.navbar-brand {
 .container {
   margin: 0;
   padding: 0;
-  display:table;
+  display: table;
   width: 100%;
   margin-top: -20px;
   box-sizing: border-box;
@@ -105,20 +106,24 @@ a.navbar-brand {
 tr.table-header {
   height: 25px;
   border-bottom: 1px solid #666;
-  vertical-align:bottom;
+  vertical-align: bottom;
 }
 tr.mid-header {
   border-top: 1px solid #666;
   border-bottom: 1px solid #666;
 }
 .table {
- border: 0;
- margin-top: 5px;
+  border: 0;
+  margin-top: 5px;
 }
-.table td,th,tr {
+.table td,
+th,
+tr {
   text-align: center;
 }
-.table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
+.table-borderless tbody tr td,
+.table-borderless tbody tr th,
+.table-borderless thead tr th {
   border: none;
 }
 tr.clickable-row:hover {
@@ -139,6 +144,7 @@ tr.clickable-row:hover {
 
 .row-box.nav-header {
   height: 35px;
+  overflow: hidden;
   border-bottom: 1px solid #666;
 }
 
@@ -150,10 +156,10 @@ tr.clickable-row:hover {
   width: 50%;
 }
 .nav-tabs.three > li {
-  width: calc(100%/3);
+  width: calc(100% / 3);
 }
 .nav-tabs.four > li {
-  width: calc(100%/4);
+  width: calc(100% / 4);
 }
 .nav-tabs.columns {
   border-bottom: 0;
@@ -187,7 +193,12 @@ tr.clickable-row:hover {
   border-radius: 3px;
 }
 
-.table-condensed>thead>tr>th, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td{
+.table-condensed > thead > tr > th,
+.table-condensed > tbody > tr > th,
+.table-condensed > tfoot > tr > th,
+.table-condensed > thead > tr > td,
+.table-condensed > tbody > tr > td,
+.table-condensed > tfoot > tr > td {
   padding: 2px;
 }
 
@@ -301,10 +312,10 @@ pre code {
 }
 
 .four-columns {
-  width: calc(100%/4);
+  width: calc(100% / 4);
 }
 .three-columns {
-  width: calc(100%/3);
+  width: calc(100% / 3);
 }
 
 .overflow-hidden {
@@ -331,7 +342,7 @@ pre code {
 }
 
 .tooltip-inner {
-  white-space:pre-wrap;
+  white-space: pre-wrap;
 }
 
 .ad {
@@ -339,11 +350,10 @@ pre code {
   text-align: center;
 }
 /**/
-.ad .ledger-img{
+.ad .ledger-img {
   width: 600px;
   margin-left: -16px;
 }
-
 
 .ttip {
   position: relative;
