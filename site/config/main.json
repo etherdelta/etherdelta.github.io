@@ -43,6 +43,7 @@
   ],
   "tokens": [
     {"addr":"0x0000000000000000000000000000000000000000","name":"ETH","decimals":18},
+    {"addr":"0x3a73f2803e3a6de4f84e09b7740926a10c65e1c6","name":"LIBRA","decimals":3},
     {"addr":"0xd8912c10681d8b21fd3742244f44658dba12264e","name":"PLU","decimals":18},
     {"addr":"0xaf30d2a7e90d7dc361c8c4585e9bb7d2f6f15bc7","name":"1ST","decimals":18},
     {"addr":"0x936f78b9852d12f5cb93177c1f84fb8513d06263","name":"GNTW","decimals":18},
