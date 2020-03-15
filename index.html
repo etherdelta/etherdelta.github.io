@@ -35,7 +35,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="/">
-            <img src="/images/title.svg" alt="I know it's not a fork, it's a trident." />
+            <img src="/images/title.png" alt="I know it's not a fork, it's a trident." />
           </a>
         </div>
 
@@ -202,7 +202,7 @@
         var bannerAlertId = "#bannerAlert_20200226"
         var $bannerAlert = $(bannerAlertId);
         var dismissed = localStorage.getItem(bannerAlertId + ":dismissed");
-        if (!dismissed) {
+        if (false && !dismissed) {
           $bannerAlert.show();
           $bannerAlert.on('closed.bs.alert', function () {
             localStorage.setItem(bannerAlertId + ":dismissed", "1");
